@@ -22,7 +22,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 ZOTERO_BASE = "http://127.0.0.1:23119/api/users/0"
 ZOTERO_HEADERS = {"Zotero-API-Version": "3"}
 BUILD_DATE = "2026-06-03"
-PROJECT_VERSION = "0.2.0"
+PROJECT_VERSION = "0.3.0"
 DATE_START = "2021-06-03"
 DATE_END = "2026-06-03"
 
@@ -1434,15 +1434,19 @@ This project is an independent Benchmark background knowledge base for recent pe
 - [Benchmark protocol v0](benchmarks/protocols/benchmark_protocol_v0.md)
 - [run.csv schema](benchmarks/protocols/run_csv_schema.md)
 - [Target set schema](benchmarks/input_sets/target_set_v0_schema.md)
+- [Candidate benchmark datasets](benchmarks/input_sets/candidate_benchmark_datasets.csv)
 - [Negative design panel schema](benchmarks/input_sets/negative_design_panel_schema.md)
 - [Scoring protocol v0](benchmarks/scoring/scoring_protocol_v0.md)
 - [Scoring output schema](benchmarks/protocols/scoring_outputs_schema.md)
 - [Method runnability audit](reports/method_runnability_audit.md)
+- [Dataset candidate audit](reports/dataset_candidate_audit.md)
+- [Method source audit](reports/method_source_audit.md)
+- [Environment feasibility audit](reports/environment_feasibility_audit.md)
 - [Benchmark manuscript outline](reports/benchmark_manuscript_outline.md)
 - [Benchmark manuscript figure/table plan](reports/benchmark_manuscript_figure_table_plan.md)
 
 ## Next Phase
-The current next phase is target/control and smoke-test readiness: freeze target/input schemas, verify method install routes, prepare minimal run plans, and keep generation/ranking/developability/leakage outputs separate without downloading large weights or running GPU benchmark tasks.
+The current next phase is v0.3 dataset/source/environment readiness: audit candidate benchmark datasets, record method source routes without cloning, assess environment feasibility, and prepare v0.4 smoke-test inputs without downloading large weights or running GPU benchmark tasks.
 """,
     )
     write_text(
@@ -1451,9 +1455,9 @@ The current next phase is target/control and smoke-test readiness: freeze target
 
 ## [{BUILD_DATE}] release | v{PROJECT_VERSION}
 - Bumped project version to `{PROJECT_VERSION}`.
-- Documented the protocol-readiness release in `RELEASE_NOTES.md` and `README.md`.
-- Release scope: Benchmark protocol, target/control schemas, runnability audit, local Zotero benchmark lessons, manuscript outline, and validator coverage.
-- Exclusions remain unchanged: no method installation, no model weights, no GPU runs, and no local reproducibility claims.
+- Documented the v0.3 dataset/source/environment readiness release in `RELEASE_NOTES.md` and `README.md`.
+- Release scope: candidate dataset audit, method source route audit, environment feasibility audit, and validator coverage.
+- Exclusions remain unchanged: no dataset download, no method source clone, no method installation, no model weights, no GPU runs, and no local reproducibility claims.
 
 ## [{BUILD_DATE}] protocol | Zotero benchmark literature revision
 - Added local Zotero benchmark/scoring/developability lessons in `reports/benchmark_literature_lessons.md` and `tables/benchmark_literature_lessons.csv`.

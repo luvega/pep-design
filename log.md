@@ -1,5 +1,11 @@
 # Project Log
 
+## [2026-06-03] release | v0.3.0
+- Bumped project version to `0.3.0`.
+- Added dataset candidate audit, method source route audit, and environment feasibility audit for the v0.3 readiness layer.
+- Added `overath_binder_success_2025` from bioRxiv/Zenodo as a high-priority scoring calibration and ranking/rescoring candidate dataset.
+- Maintained boundaries: no dataset download, no source clone, no environment creation, no model weights, no GPU tasks, and no local reproducibility claims.
+
 ## [2026-06-03] release | v0.2.0
 - Bumped project version to `0.2.0`.
 - Documented the protocol-readiness release in `RELEASE_NOTES.md` and `README.md`.

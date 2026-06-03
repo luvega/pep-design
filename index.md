@@ -1,7 +1,7 @@
 # 多肽设计方法 Benchmark 知识库
 
 ## Current Status
-- Project version: 0.2.0
+- Project version: 0.3.0
 - Build date: 2026-06-03
 - Time window: 2021-06-03 to 2026-06-03
 - Unique Zotero-derived records after dedupe: 432
@@ -21,12 +21,16 @@
 - [Benchmark protocol v0](benchmarks/protocols/benchmark_protocol_v0.md)
 - [run.csv schema](benchmarks/protocols/run_csv_schema.md)
 - [Target set schema](benchmarks/input_sets/target_set_v0_schema.md)
+- [Candidate benchmark datasets](benchmarks/input_sets/candidate_benchmark_datasets.csv)
 - [Negative design panel schema](benchmarks/input_sets/negative_design_panel_schema.md)
 - [Scoring protocol v0](benchmarks/scoring/scoring_protocol_v0.md)
 - [Scoring output schema](benchmarks/protocols/scoring_outputs_schema.md)
 - [Method runnability audit](reports/method_runnability_audit.md)
+- [Dataset candidate audit](reports/dataset_candidate_audit.md)
+- [Method source audit](reports/method_source_audit.md)
+- [Environment feasibility audit](reports/environment_feasibility_audit.md)
 - [Benchmark manuscript outline](reports/benchmark_manuscript_outline.md)
 - [Benchmark manuscript figure/table plan](reports/benchmark_manuscript_figure_table_plan.md)
 
 ## Next Phase
-The current next phase is target/control and smoke-test readiness: freeze target/input schemas, verify method install routes, prepare minimal run plans, and keep generation/ranking/developability/leakage outputs separate without downloading large weights or running GPU benchmark tasks.
+The current next phase is v0.3 dataset/source/environment readiness: audit candidate benchmark datasets, record method source routes without cloning, assess environment feasibility, and prepare v0.4 smoke-test inputs without downloading large weights or running GPU benchmark tasks.

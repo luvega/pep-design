@@ -1,5 +1,42 @@
 # Release Notes
 
+## v0.3.0 - 2026-06-03
+
+Dataset/source/environment audit release for the peptide-design Benchmark KB.
+
+### Added
+
+- Added `benchmarks/input_sets/candidate_benchmark_datasets.csv` and `reports/dataset_candidate_audit.md`.
+- Added the bioRxiv/Zenodo candidate dataset `overath_binder_success_2025` for ranking/rescoring and scoring calibration planning.
+- Added `benchmarks/method_sources/README.md`, `benchmarks/method_sources/method_source_manifest.csv`, and `reports/method_source_audit.md`.
+- Added `benchmarks/environments/README.md`, `benchmarks/environments/environment_feasibility_matrix.csv`, and `reports/environment_feasibility_audit.md`.
+
+### Changed
+
+- Updated the validator to require candidate dataset, method source, and environment feasibility coverage.
+- Updated index, README, manuscript outline, claim-evidence map, and input-set documentation for v0.3.
+- Kept Overath binder-success data as metadata-only in v0.3; it is treated as scoring calibration/ranking evidence, not as peptide-specific generation benchmark evidence.
+
+### Validation
+
+`PYTHONUTF8=1 python scripts/validate_benchmark_kb.py` is expected to pass with:
+
+- 7 candidate dataset rows
+- 10 method source rows
+- 10 environment feasibility rows
+- 10 included benchmark methods
+- 10 smoke-test README files
+- 0 validation errors
+
+### Not Included
+
+- No dataset downloads.
+- No method source clones.
+- No method installation.
+- No downloaded model weights.
+- No GPU tasks.
+- No claim of local reproducibility.
+
 ## v0.2.0 - 2026-06-03
 
 Protocol-readiness release for the peptide-design Benchmark KB.

@@ -118,6 +118,62 @@ TARGET_SET_HEADERS = [
     "notes",
 ]
 
+DATASET_CANDIDATE_HEADERS = [
+    "dataset_id",
+    "source_name",
+    "source_type",
+    "citation_key",
+    "doi",
+    "url",
+    "access_route",
+    "version",
+    "record_count",
+    "data_volume",
+    "task_fit",
+    "target_class",
+    "benchmark_track",
+    "has_structure",
+    "has_affinity",
+    "has_controls",
+    "license_status",
+    "leakage_risk",
+    "download_policy",
+    "recommended_use",
+    "next_action",
+]
+
+METHOD_SOURCE_HEADERS = [
+    "method",
+    "repo_url",
+    "repo_host",
+    "default_branch",
+    "latest_release_or_tag",
+    "commit_to_pin",
+    "license_status",
+    "code_access_status",
+    "weights_route",
+    "large_artifact_policy",
+    "clone_recommended",
+    "next_action",
+]
+
+ENVIRONMENT_HEADERS = [
+    "method",
+    "task_id",
+    "environment_type",
+    "python_version",
+    "cuda_needed",
+    "gpu_needed",
+    "estimated_gpu_memory",
+    "conda_or_pip",
+    "critical_dependencies",
+    "license_blockers",
+    "external_tools",
+    "install_risk",
+    "smoke_test_priority",
+    "next_action",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
@@ -129,9 +185,14 @@ REQUIRED_FILES = [
     "benchmarks/scoring/scoring_protocol_v0.md",
     "benchmarks/smoke_tests/README.md",
     "benchmarks/input_sets/README.md",
+    "benchmarks/input_sets/candidate_benchmark_datasets.csv",
     "benchmarks/input_sets/target_set_v0.csv",
     "benchmarks/input_sets/target_set_v0_schema.md",
     "benchmarks/input_sets/negative_design_panel_schema.md",
+    "benchmarks/method_sources/README.md",
+    "benchmarks/method_sources/method_source_manifest.csv",
+    "benchmarks/environments/README.md",
+    "benchmarks/environments/environment_feasibility_matrix.csv",
     "benchmarks/results/README.md",
     "raw_sources/_index.md",
     "references/references.bib",
@@ -147,6 +208,9 @@ REQUIRED_FILES = [
     "reports/literature_scope_report.md",
     "reports/candidate_methods_shortlist.md",
     "reports/method_runnability_audit.md",
+    "reports/dataset_candidate_audit.md",
+    "reports/method_source_audit.md",
+    "reports/environment_feasibility_audit.md",
     "reports/benchmark_literature_lessons.md",
     "reports/benchmark_manuscript_outline.md",
     "reports/benchmark_manuscript_claim_evidence_map.csv",
@@ -287,6 +351,21 @@ def main() -> int:
         BENCHMARK_LITERATURE_HEADERS,
     )
     target_set_rows = check_headers(errors, "benchmarks/input_sets/target_set_v0.csv", TARGET_SET_HEADERS)
+    dataset_candidate_rows = check_headers(
+        errors,
+        "benchmarks/input_sets/candidate_benchmark_datasets.csv",
+        DATASET_CANDIDATE_HEADERS,
+    )
+    method_source_rows = check_headers(
+        errors,
+        "benchmarks/method_sources/method_source_manifest.csv",
+        METHOD_SOURCE_HEADERS,
+    )
+    environment_rows = check_headers(
+        errors,
+        "benchmarks/environments/environment_feasibility_matrix.csv",
+        ENVIRONMENT_HEADERS,
+    )
     manuscript_claim_rows = check_headers(
         errors,
         "reports/benchmark_manuscript_claim_evidence_map.csv",
@@ -336,6 +415,59 @@ def main() -> int:
     extra_runnability = sorted(set(runnability_by_method) - set(included_method_names))
     if extra_runnability:
         warnings.append("runnability rows for non-included methods: " + ", ".join(extra_runnability))
+
+    if len(dataset_candidate_rows) < 6:
+        errors.append(f"candidate_benchmark_datasets.csv should have at least 6 rows, found {len(dataset_candidate_rows)}")
+    dataset_by_id = {row.get("dataset_id", ""): row for row in dataset_candidate_rows}
+    overath = dataset_by_id.get("overath_binder_success_2025")
+    if not overath:
+        errors.append("candidate_benchmark_datasets.csv missing overath_binder_success_2025")
+    else:
+        for required_field in [
+            "doi",
+            "url",
+            "version",
+            "record_count",
+            "download_policy",
+            "benchmark_track",
+            "recommended_use",
+        ]:
+            if not overath.get(required_field):
+                errors.append(f"overath_binder_success_2025 missing {required_field}")
+        if "10.1101/2025.08.14.670059" not in overath.get("doi", ""):
+            errors.append("overath_binder_success_2025 missing bioRxiv DOI")
+        if "10.5281/zenodo.15722219" not in overath.get("doi", ""):
+            errors.append("overath_binder_success_2025 missing Zenodo DOI")
+        if "metadata_only_in_v0.3" not in overath.get("download_policy", ""):
+            errors.append("overath_binder_success_2025 must remain metadata_only_in_v0.3")
+        if "ranking_rescoring" not in overath.get("benchmark_track", ""):
+            errors.append("overath_binder_success_2025 should support ranking_rescoring")
+        if "scoring_calibration" not in overath.get("benchmark_track", ""):
+            errors.append("overath_binder_success_2025 should support scoring_calibration")
+
+    method_source_by_method = {row.get("method", ""): row for row in method_source_rows}
+    environment_by_method = {row.get("method", ""): row for row in environment_rows}
+    allowed_source_status = {"public_url_recorded_not_cloned", "public_urls_recorded_not_cloned"}
+    for method in included_method_names:
+        source_row = method_source_by_method.get(method)
+        if not source_row:
+            errors.append(f"{method}: missing method source row")
+        else:
+            if source_row.get("code_access_status") not in allowed_source_status:
+                errors.append(f"{method}: method source row must not claim cloned/installed status")
+            for required_field in ["repo_url", "license_status", "weights_route", "large_artifact_policy", "next_action"]:
+                if not source_row.get(required_field):
+                    errors.append(f"{method}: method source row missing {required_field}")
+
+        environment_row = environment_by_method.get(method)
+        if not environment_row:
+            errors.append(f"{method}: missing environment feasibility row")
+        else:
+            if environment_row.get("task_id") not in REQUIRED_PROTOCOL_TASKS:
+                errors.append(f"{method}: invalid environment task_id {environment_row.get('task_id')}")
+            for required_field in ["environment_type", "critical_dependencies", "install_risk", "next_action"]:
+                if not environment_row.get(required_field):
+                    errors.append(f"{method}: environment row missing {required_field}")
 
     if not benchmark_lesson_rows:
         errors.append("benchmark_literature_lessons.csv has no rows")
@@ -408,6 +540,9 @@ def main() -> int:
             "runnability_rows": len(runnability_rows),
             "benchmark_literature_rows": len(benchmark_lesson_rows),
             "target_set_rows": len(target_set_rows),
+            "candidate_dataset_rows": len(dataset_candidate_rows),
+            "method_source_rows": len(method_source_rows),
+            "environment_rows": len(environment_rows),
             "manuscript_claim_rows": len(manuscript_claim_rows),
             "smoke_test_readmes": len(
                 [path for path in (ROOT / "benchmarks/smoke_tests").glob("*/README.md")]
