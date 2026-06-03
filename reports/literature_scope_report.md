@@ -9,8 +9,8 @@
 ## Counts
 - Unique Zotero-derived records after DOI/PMID/arXiv/title dedupe: 432
 - Imported PD-wiki/_kb source files: 49
-- Method evidence rows: 11
-- First-wave included benchmark methods: 9
+- Method evidence rows: 12
+- First-wave included benchmark methods: 10
 
 ## Screening Status
 - background-only: 26
@@ -25,11 +25,11 @@
 - cyclic/macrocyclic peptide design: 15
 - diffusion scaffold generation plus inverse folding sequence design: 1
 - energy/search-based D-peptide design: 1
-- flow matching for hetero-chiral peptide design: 1
 - full-atom geometric latent diffusion: 1
 - full-atom multi-modal flow matching: 1
 - generative full-atom or diffusion model: 24
 - interface-predicting protein language model: 1
+- latent diffusion for cross-chirality D-peptide binder design: 1
 - miniprotein/protein binder design: 35
 - peptide/protein binder design: 70
 - protein/peptide language model: 10

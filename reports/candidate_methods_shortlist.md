@@ -9,6 +9,7 @@
 | DiffPepBuilder | 21 | include | https://github.com/YuzheWangPKU/DiffPepBuilder |
 | PepGLAD | 22 | include | https://github.com/THUNLP-MT/PepGLAD |
 | D-Flow / PeptideDesign | 21 | include | https://github.com/smiles724/PeptideDesign |
+| PepMirror | 22 | include | https://github.com/YZY010418/PepMirror |
 | AfCycDesign / ColabDesign cyclic peptide | 22 | include | https://github.com/sokrypton/ColabDesign |
 | DexDesign / OSPREY3 | 16 | include | https://github.com/donaldlab/OSPREY3 |
 | RFdiffusion + ProteinMPNN | 21 | include | https://github.com/RosettaCommons/RFdiffusion; https://github.com/dauparas/ProteinMPNN |
@@ -17,7 +18,7 @@
 | BoltzDesign1 | 19 | watchlist | https://github.com/jwohlwend/boltz |
 
 ## Include Set
-纳入数量为 9，满足 5-10 个候选方法的第一阶段要求。
+纳入数量为 10，满足 5-10 个候选方法的第一阶段要求。
 
 ## Watchlist
 PepFlow 和 BoltzDesign1 目前保留为观察名单，主要原因是可运行路线、权重位置或 peptide/miniprotein 任务适配度仍需二次确认。

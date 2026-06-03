@@ -4,7 +4,7 @@ type: concept
 status: active
 created: 2026-06-03
 wiki_role: concept_map
-source_count: 9
+source_count: 10
 last_reviewed: 2026-06-03
 claims: ["concept page summarizes routing logic rather than adding new literature claims"]
 relations: []
@@ -20,6 +20,7 @@ relations: []
 - [DiffPepBuilder](../methods/diffpepbuilder.md)
 - [PepGLAD](../methods/pepglad.md)
 - [D-Flow / PeptideDesign](../methods/d-flow-peptidedesign.md)
+- [PepMirror](../methods/pepmirror.md)
 - [AfCycDesign / ColabDesign cyclic peptide](../methods/afcycdesign-colabdesign.md)
 - [DexDesign / OSPREY3](../methods/dexdesign-osprey3.md)
 - [RFdiffusion + ProteinMPNN](../methods/rfdiffusion-proteinmpnn.md)

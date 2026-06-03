@@ -23,6 +23,7 @@
 - `PepFlow`
 - `PepGLAD`
 - `D-Flow peptide`
+- `PepMirror`
 - `DexDesign OSPREY`
 - `BindCraft peptide`
 - `BoltzDesign1`

@@ -4,7 +4,7 @@ type: concept
 status: active
 created: 2026-06-03
 wiki_role: concept_map
-source_count: 4
+source_count: 5
 last_reviewed: 2026-06-03
 claims: ["concept page summarizes routing logic rather than adding new literature claims"]
 relations: []
@@ -18,4 +18,5 @@ relations: []
 - [PepMLM](../methods/pepmlm.md)
 - [SaLT&PepPr](../methods/salt-peppr.md)
 - [DiffPepBuilder](../methods/diffpepbuilder.md)
+- [PepMirror](../methods/pepmirror.md)
 - [RFdiffusion + ProteinMPNN](../methods/rfdiffusion-proteinmpnn.md)

@@ -6,7 +6,8 @@
 | `salt-peppr.md` | method | interface-predicting protein language model | include |
 | `diffpepbuilder.md` | method | structure-conditioned diffusion model | include |
 | `pepglad.md` | method | full-atom geometric latent diffusion | include |
-| `d-flow-peptidedesign.md` | method | flow matching for hetero-chiral peptide design | include |
+| `d-flow-peptidedesign.md` | method | multi-modal flow matching for D-peptide design | include |
+| `pepmirror.md` | method | latent diffusion for cross-chirality D-peptide binder design | include |
 | `afcycdesign-colabdesign.md` | method | AlphaFold/ColabDesign cyclic peptide design | include |
 | `dexdesign-osprey3.md` | method | energy/search-based D-peptide design | include |
 | `rfdiffusion-proteinmpnn.md` | method | diffusion scaffold generation plus inverse folding sequence design | include |

@@ -3,7 +3,8 @@ PepMLM,Target sequence-conditioned design of peptide binders using masked langua
 SaLT&PepPr,SaLT&PepPr is an interface-predicting language model for designing peptide-guided protein degraders,https://github.com/programmablebio/saltnpeppr,https://huggingface.co/ubiquitx/saltnpeppr,include
 DiffPepBuilder,DiffPepBuilder: a structure-aware diffusion model for peptide binder design,https://github.com/YuzheWangPKU/DiffPepBuilder,https://zenodo.org/records/12794439,include
 PepGLAD,Full-atom peptide design with geometric latent diffusion,https://github.com/THUNLP-MT/PepGLAD,repository release; verify exact checkpoint location,include
-D-Flow / PeptideDesign,Cross-Chirality Generalization by Axial Vectors for Hetero-Chiral Protein-Peptide Interaction Design,https://github.com/smiles724/PeptideDesign,repository release; verify exact checkpoint location,include
+D-Flow / PeptideDesign,D-Flow: Multi-modality Flow Matching for D-peptide Design,https://github.com/smiles724/PeptideDesign,repository archive dflow.zip; verify exact checkpoint provenance,include
+PepMirror,Cross-Chirality Generalization by Axial Vectors for Hetero-Chiral Protein-Peptide Interaction Design,https://github.com/YZY010418/PepMirror,https://zenodo.org/records/20095187,include
 AfCycDesign / ColabDesign cyclic peptide,Cyclic peptide structure prediction and design using AlphaFold,https://github.com/sokrypton/ColabDesign,AlphaFold/ColabDesign dependencies; verify local model source,include
 DexDesign / OSPREY3,DexDesign: an OSPREY-based algorithm for designing de novo D-peptide inhibitors,https://github.com/donaldlab/OSPREY3,not applicable,include
 RFdiffusion + ProteinMPNN,Improving de novo protein binder design with deep learning,https://github.com/RosettaCommons/RFdiffusion; https://github.com/dauparas/ProteinMPNN,RFdiffusion and ProteinMPNN public model releases; verify local download route,include

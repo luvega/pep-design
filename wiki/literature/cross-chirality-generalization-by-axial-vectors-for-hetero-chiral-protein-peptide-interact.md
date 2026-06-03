@@ -23,11 +23,11 @@ relations: ["derived_from:zotero:DNKX2REN"]
 
 ## Screening
 - Status: included
-- Method family: flow matching for hetero-chiral peptide design
-- Design modality: full-atom L/D peptide generation with axial-vector chirality encoding
-- Input: protein-peptide complex context and chirality constraints
-- Output: hetero-chiral peptide structures/sequences
-- Availability: public GitHub repository to verify
+- Method family: latent diffusion for cross-chirality D-peptide binder design
+- Design modality: target-conditioned mirror-image D-peptide binder generation with axial-feature injection
+- Input: target PDB, receptor/ligand chains or pocket center, YAML generation config, and checkpoint
+- Output: D-peptide binder complex structures plus post-processing/ranking metrics
+- Availability: public GitHub repository with installation, generation, mirroring, filtering, and ranking scripts to verify
 
 ## Evidence Note
 未抽取全文；当前卡片基于 Zotero 元数据和题名级筛选。

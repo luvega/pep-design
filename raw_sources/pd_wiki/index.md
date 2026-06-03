@@ -99,6 +99,22 @@ This is an Obsidian-compatible literature wiki for AI protein, antibody, peptide
 - [V9 Language Style Audit](reports/review_language_style_audit_v9.csv)
 - [V9 Claim Evidence Alignment](reports/review_claim_evidence_alignment_v9.csv)
 
+
+- [[wiki/review/peptide-methods/review_manuscript_peptide_methods_zh_v11_nature_review_style|Peptide Methods Review V11 Nature Review Style]]
+- [[wiki/review/peptide-methods/review_manuscript_peptide_methods_zh_v12_reference_expanded|Peptide Methods Review V12 Reference Expanded]]
+- [[wiki/review/peptide-methods/review_manuscript_peptide_methods_zh_v13_fulltext_polish_checked|Peptide Methods Review V13 Fulltext Polish Checked]]
+- [V13 Dense Citation Audit](reports/review_dense_citation_audit_v13.csv)
+- [V13 Paragraph Update Audit](reports/review_paragraph_update_audit_v13.csv)
+- [V13 Language Style Audit](reports/review_language_style_audit_v13.csv)
+- [V13 Abbreviation Audit](reports/review_abbreviation_audit_v13.csv)
+- [[wiki/review/peptide-methods/review_v13_completion_audit|V13 Completion Audit]]
+
+- [V12 Reference Renumbering Map](reports/review_reference_renumbering_map_v12.csv)
+- [V12 Reference Expansion Audit](reports/review_reference_expansion_audit_v12.csv)
+- [V12 Abbreviation Audit](reports/review_abbreviation_audit_v12.csv)
+- [V12 Language Style Audit](reports/review_language_style_audit_v12.csv)
+- [[wiki/review/peptide-methods/review_v12_completion_audit|V12 Completion Audit]]
+
 - [[wiki/review/peptide-methods/review_manuscript_peptide_methods_zh_v10_evidence_expanded|Peptide Methods Review V10 Evidence Expanded]]
 - [V10 Claim to Reference Map](reports/review_claim_to_reference_map_v10.csv)
 - [V10 Key Study Examples](reports/review_key_study_examples_v10.csv)

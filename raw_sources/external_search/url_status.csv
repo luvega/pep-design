@@ -8,7 +8,9 @@ DiffPepBuilder,weights_url,https://zenodo.org/records/12794439,200,reachable
 PepGLAD,code_url,https://github.com/THUNLP-MT/PepGLAD,200,reachable
 PepGLAD,weights_url,repository release; verify exact checkpoint location,,not_checked
 D-Flow / PeptideDesign,code_url,https://github.com/smiles724/PeptideDesign,200,reachable
-D-Flow / PeptideDesign,weights_url,repository release; verify exact checkpoint location,,not_checked
+D-Flow / PeptideDesign,weights_url,repository archive dflow.zip; verify exact checkpoint provenance,,not_checked
+PepMirror,code_url,https://github.com/YZY010418/PepMirror,200,reachable
+PepMirror,weights_url,https://zenodo.org/records/20095187,200,reachable
 AfCycDesign / ColabDesign cyclic peptide,code_url,https://github.com/sokrypton/ColabDesign,200,reachable
 AfCycDesign / ColabDesign cyclic peptide,weights_url,AlphaFold/ColabDesign dependencies; verify local model source,,not_checked
 DexDesign / OSPREY3,code_url,https://github.com/donaldlab/OSPREY3,200,reachable

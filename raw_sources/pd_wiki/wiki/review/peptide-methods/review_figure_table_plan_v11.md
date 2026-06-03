@@ -7,13 +7,13 @@ version: "v11_nature_review_style"
 
 ## Figure 1. 领域评价路线图
 
-Purpose: show why the Review evaluates evidence, experience and translational boundaries rather than listing methods.
+Purpose: show why the Review evaluates evidence, design principles and developability requirements rather than listing methods.
 
 Panels:
 - A. Candidate generation: sequence-conditioned, structure-conditioned, full-atom and cross-chirality generation.
 - B. Evidence grading: affinity, experimental structure, cell function, animal or PK/PD, CMC.
-- C. Reusable heuristics: epitope definition, split design, negative design, conformational pre-organization, presentation mode, failure funnel.
-- D. Translational milestones: standard data, developability panel, HLA/antigen safety, open code and weights.
+- C. Reusable design principles: epitope definition, split design, negative design, conformational pre-organization, presentation mode, experimental testing flow.
+- D. Preclinical-development milestones: standard data, developability panel, HLA/antigen safety, open code and weights.
 
 ## Figure 2. AI 多肽设计任务地图
 
@@ -37,7 +37,7 @@ Panels:
 - E. Animal or PK/PD evidence.
 - F. Developability and CMC.
 
-## Table 1. Representative studies, evidence type and non-extrapolation boundary
+## Table 1. Representative studies, evidence type and non-extrapolation scope
 
 Use manuscript Table 1 as the core comparative table. It should remain concise and not become a literature inventory.
 

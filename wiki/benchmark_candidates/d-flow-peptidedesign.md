@@ -16,16 +16,16 @@ relations: ["derived_from:../methods/d-flow-peptidedesign.md"]
 covers D-peptide/hetero-chiral space absent from most L-peptide pipelines
 
 ## 最小 Benchmark I/O
-- 输入：protein-peptide complex context and chirality constraints
-- 输出：hetero-chiral peptide structures/sequences
-- 目标类型：protein-peptide complexes
-- 多肽类型：L/D and hetero-chiral peptides
+- 输入：protein receptor/binding context and D-peptide generation configuration
+- 输出：full-atom D-peptide sequences and structures
+- 目标类型：protein receptor structures
+- 多肽类型：D-peptides
 
 ## 执行前必须锁定
 - 代码：https://github.com/smiles724/PeptideDesign
-- 权重：repository release; verify exact checkpoint location
+- 权重：repository archive dflow.zip; verify exact checkpoint provenance
 - 参数：随机种子、采样数量、长度范围、过滤阈值、目标结构或序列预处理。
 
 ## 证据
-- 主要论文：Cross-Chirality Generalization by Axial Vectors for Hetero-Chiral Protein-Peptide Interaction Design
-- 追踪 key：yang_cross-chirality_2026
+- 主要论文：D-Flow: Multi-modality Flow Matching for D-peptide Design
+- 追踪 key：arxiv:2411.10618
