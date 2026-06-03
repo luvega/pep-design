@@ -233,11 +233,54 @@ SOURCE_PIN_HEADERS = [
     "next_action",
 ]
 
+LINK_AVAILABILITY_HEADERS = [
+    "record_id",
+    "artifact_type",
+    "artifact_id",
+    "label",
+    "url",
+    "check_method",
+    "checked_at",
+    "status",
+    "http_status",
+    "content_length",
+    "content_type",
+    "default_branch",
+    "commit_sha",
+    "license_or_access",
+    "gated_or_auth",
+    "download_performed",
+    "evidence",
+    "next_action",
+]
+
+DATA_ACCESS_HEADERS = [
+    "dataset_id",
+    "endpoint_id",
+    "source_name",
+    "url",
+    "access_type",
+    "checked_at",
+    "availability_status",
+    "http_status",
+    "content_length",
+    "license_status",
+    "gated_or_auth",
+    "direct_download_status",
+    "download_performed",
+    "recommended_use",
+    "blocking_risk",
+    "next_action",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
     "log.md",
     "benchmarks/README.md",
+    "benchmarks/availability/README.md",
+    "benchmarks/availability/link_availability_matrix_v0.5.csv",
+    "benchmarks/availability/data_access_manifest_v0.5.csv",
     "benchmarks/protocols/benchmark_protocol_v0.md",
     "benchmarks/protocols/run_csv_schema.md",
     "benchmarks/protocols/scoring_outputs_schema.md",
@@ -247,12 +290,15 @@ REQUIRED_FILES = [
     "benchmarks/input_sets/candidate_benchmark_datasets.csv",
     "benchmarks/input_sets/dataset_readiness_scorecard.csv",
     "benchmarks/input_sets/target_candidate_matrix_v0.4.csv",
+    "benchmarks/input_sets/target_candidate_matrix_v0.5.csv",
     "benchmarks/input_sets/target_set_v0.csv",
     "benchmarks/input_sets/target_set_v0_schema.md",
     "benchmarks/input_sets/negative_design_panel_schema.md",
     "benchmarks/method_sources/README.md",
     "benchmarks/method_sources/method_source_manifest.csv",
     "benchmarks/method_sources/source_pin_audit_v0.4.csv",
+    "benchmarks/method_sources/source_pin_audit_v0.5.csv",
+    "benchmarks/deployment/server_readiness_checklist_v0.5.md",
     "benchmarks/environments/README.md",
     "benchmarks/environments/environment_feasibility_matrix.csv",
     "benchmarks/results/README.md",
@@ -275,6 +321,7 @@ REQUIRED_FILES = [
     "reports/method_source_audit.md",
     "reports/environment_feasibility_audit.md",
     "reports/expert_panel_review_v0.4.md",
+    "reports/link_and_data_availability_audit_v0.5.md",
     "reports/benchmark_literature_lessons.md",
     "reports/benchmark_manuscript_outline.md",
     "reports/benchmark_manuscript_claim_evidence_map.csv",
@@ -493,10 +540,30 @@ def main() -> int:
         "benchmarks/input_sets/target_candidate_matrix_v0.4.csv",
         TARGET_CANDIDATE_HEADERS,
     )
+    target_candidate_v05_rows = check_headers(
+        errors,
+        "benchmarks/input_sets/target_candidate_matrix_v0.5.csv",
+        TARGET_CANDIDATE_HEADERS,
+    )
     source_pin_rows = check_headers(
         errors,
         "benchmarks/method_sources/source_pin_audit_v0.4.csv",
         SOURCE_PIN_HEADERS,
+    )
+    source_pin_v05_rows = check_headers(
+        errors,
+        "benchmarks/method_sources/source_pin_audit_v0.5.csv",
+        SOURCE_PIN_HEADERS,
+    )
+    link_availability_rows = check_headers(
+        errors,
+        "benchmarks/availability/link_availability_matrix_v0.5.csv",
+        LINK_AVAILABILITY_HEADERS,
+    )
+    data_access_rows = check_headers(
+        errors,
+        "benchmarks/availability/data_access_manifest_v0.5.csv",
+        DATA_ACCESS_HEADERS,
     )
     manuscript_claim_rows = check_headers(
         errors,
@@ -670,6 +737,109 @@ def main() -> int:
             if "installed" in value or "reproduced" in value or "ran_locally" in value:
                 errors.append(f"{row.get('method')} {row.get('repo_name')}: source pin row overclaims {field}")
 
+    if len(link_availability_rows) < 18:
+        errors.append(
+            "link_availability_matrix_v0.5.csv should contain method and dataset endpoint rows"
+        )
+    allowed_link_status = {"ok", "blocked", "metadata_only"}
+    method_link_methods = {
+        row.get("artifact_id", "")
+        for row in link_availability_rows
+        if row.get("artifact_type") == "method_repo" and row.get("status") in allowed_link_status
+    }
+    for method in included_method_names:
+        if method not in method_link_methods:
+            errors.append(f"{method}: missing v0.5 method repo link availability row")
+    for row in link_availability_rows:
+        if row.get("download_performed") != "no":
+            errors.append(f"{row.get('record_id')}: v0.5 link audit must not download data or artifacts")
+        if row.get("status") not in allowed_link_status:
+            errors.append(f"{row.get('record_id')}: invalid link availability status {row.get('status')}")
+        for required_field in ["record_id", "artifact_type", "artifact_id", "url", "check_method", "checked_at", "evidence", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('record_id')}: link availability row missing {required_field}")
+        for field in ["status", "evidence", "next_action"]:
+            value = row.get(field, "").lower()
+            if "installed" in value or "reproduced" in value or "ran_locally" in value:
+                errors.append(f"{row.get('record_id')}: link availability row overclaims {field}")
+
+    source_pin_v05_by_method = {row.get("method", ""): row for row in source_pin_v05_rows}
+    allowed_v05_pin_status = {"reachable_unpinned", "pinned_no_install", "blocked_metadata_only"}
+    for method in included_method_names:
+        row = source_pin_v05_by_method.get(method)
+        if not row:
+            errors.append(f"{method}: missing source_pin_audit_v0.5 row")
+            continue
+        if row.get("audit_status") not in allowed_v05_pin_status:
+            errors.append(f"{method}: invalid v0.5 source pin status {row.get('audit_status')}")
+        for required_field in ["repo_url", "default_branch", "commit_sha", "readme_entrypoint", "weights_policy", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{method}: source_pin_audit_v0.5 row missing {required_field}")
+        for field in ["audit_status", "weights_policy", "batch_route", "next_action"]:
+            value = row.get(field, "").lower()
+            if "installed" in value or "reproduced" in value or "ran_locally" in value:
+                errors.append(f"{method}: source_pin_audit_v0.5 row overclaims {field}")
+    if len(source_pin_v05_rows) < len(included_method_names):
+        errors.append(
+            f"source_pin_audit_v0.5.csv should cover all include methods, found {len(source_pin_v05_rows)}"
+        )
+
+    if len(data_access_rows) < len(dataset_candidate_rows):
+        errors.append(
+            f"data_access_manifest_v0.5.csv should cover candidate datasets, found {len(data_access_rows)}"
+        )
+    data_access_by_dataset = {row.get("dataset_id", ""): row for row in data_access_rows}
+    for dataset_id in dataset_by_id:
+        if dataset_id not in data_access_by_dataset:
+            errors.append(f"{dataset_id}: missing v0.5 data access manifest row")
+    for row in data_access_rows:
+        if row.get("download_performed") != "no":
+            errors.append(f"{row.get('dataset_id')}: v0.5 data access row must not download data")
+        for required_field in [
+            "dataset_id",
+            "endpoint_id",
+            "url",
+            "access_type",
+            "checked_at",
+            "availability_status",
+            "direct_download_status",
+            "recommended_use",
+            "blocking_risk",
+            "next_action",
+        ]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('dataset_id')}: data access row missing {required_field}")
+    overath_data_access = data_access_by_dataset.get("overath_binder_success_2025", {})
+    if overath_data_access:
+        if "81981455" not in overath_data_access.get("content_length", ""):
+            errors.append("Overath v0.5 data access must record final_dataset.csv byte size")
+        recommended_use = overath_data_access.get("recommended_use", "").lower()
+        if "generation" in recommended_use and "not_generation" not in recommended_use:
+            errors.append("Overath v0.5 data access must not recommend peptide generation performance use")
+    pepbi_data_access = data_access_by_dataset.get("pepbi_dryad_2025", {})
+    if pepbi_data_access and "401" not in pepbi_data_access.get("direct_download_status", ""):
+        errors.append("PEPBI v0.5 data access must record Dryad download HEAD 401 blocker")
+    gpcr_data_access = data_access_by_dataset.get("gpcr_peptide_design_benchmark_2026", {})
+    if gpcr_data_access and "no_external_data_route" not in gpcr_data_access.get("direct_download_status", ""):
+        errors.append("GPCR v0.5 data access must remain pending external data route")
+
+    if len(target_candidate_v05_rows) < len(target_candidate_rows):
+        errors.append(
+            "target_candidate_matrix_v0.5.csv should preserve at least the v0.4 candidate coverage"
+        )
+    for row in target_candidate_v05_rows:
+        if row.get("task_id") not in REQUIRED_PROTOCOL_TASKS:
+            errors.append(f"{row.get('candidate_id')}: invalid v0.5 target candidate task_id {row.get('task_id')}")
+        if not row.get("decision"):
+            errors.append(f"{row.get('candidate_id')}: missing v0.5 target candidate decision")
+
+    deployment_text = (ROOT / "benchmarks/deployment/server_readiness_checklist_v0.5.md").read_text(
+        encoding="utf-8"
+    )
+    for token in ["Linux CUDA Conda", "External source root", "External data root", "PyRosetta", "不下载数据", "不得纳入本仓库 git"]:
+        if token not in deployment_text:
+            errors.append(f"server_readiness_checklist_v0.5.md missing required token {token}")
+
     protocol_text = (ROOT / "benchmarks/protocols/benchmark_protocol_v0.md").read_text(encoding="utf-8")
     for task in REQUIRED_PROTOCOL_TASKS:
         if task not in protocol_text:
@@ -741,7 +911,11 @@ def main() -> int:
             "expert_review_rows": len(expert_review_rows),
             "dataset_readiness_rows": len(dataset_readiness_rows),
             "target_candidate_rows": len(target_candidate_rows),
+            "target_candidate_v05_rows": len(target_candidate_v05_rows),
             "source_pin_rows": len(source_pin_rows),
+            "source_pin_v05_rows": len(source_pin_v05_rows),
+            "link_availability_rows": len(link_availability_rows),
+            "data_access_rows": len(data_access_rows),
             "manuscript_claim_rows": len(manuscript_claim_rows),
             "smoke_test_readmes": len(
                 [path for path in (ROOT / "benchmarks/smoke_tests").glob("*/README.md")]

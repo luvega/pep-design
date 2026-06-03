@@ -1,5 +1,12 @@
 # Project Log
 
+## [2026-06-03] release | v0.5.0
+- Bumped project version to `0.5.0`.
+- Added v0.5 link availability and data access manifests for candidate method repositories and benchmark dataset routes.
+- Expanded source pin audit to all 10 include methods using GitHub API and `git ls-remote` metadata only.
+- Added target candidate matrix v0.5 and Linux CUDA Conda server readiness checklist.
+- Maintained boundaries: no third-party source clone, no dataset download, no environment creation, no model weights, no GPU tasks, and no local reproducibility claims.
+
 ## [2026-06-03] release | v0.4.0
 - Bumped project version to `0.4.0`.
 - Added expert-panel review, expert action items, dataset readiness scorecard, target candidate matrix, and source pin audit.

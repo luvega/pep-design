@@ -16,14 +16,18 @@
 - expert_review_rows: 15
 - dataset_readiness_rows: 7
 - target_candidate_rows: 9
+- target_candidate_v05_rows: 9
 - source_pin_rows: 4
+- source_pin_v05_rows: 10
+- link_availability_rows: 23
+- data_access_rows: 7
 - manuscript_claim_rows: 24
 - smoke_test_readmes: 10
 - method_cards: 12
 - literature_cards: 120
 - bibtex_entries: 432
-- markdown_links_checked: 50
-- tracked_files_checked: 274
+- markdown_links_checked: 56
+- tracked_files_checked: 281
 
 ## Errors
 - None
@@ -51,14 +55,18 @@
     "expert_review_rows": 15,
     "dataset_readiness_rows": 7,
     "target_candidate_rows": 9,
+    "target_candidate_v05_rows": 9,
     "source_pin_rows": 4,
+    "source_pin_v05_rows": 10,
+    "link_availability_rows": 23,
+    "data_access_rows": 7,
     "manuscript_claim_rows": 24,
     "smoke_test_readmes": 10,
     "method_cards": 12,
     "literature_cards": 120,
     "bibtex_entries": 432,
-    "markdown_links_checked": 50,
-    "tracked_files_checked": 274
+    "markdown_links_checked": 56,
+    "tracked_files_checked": 281
   },
   "errors": [],
   "warnings": []

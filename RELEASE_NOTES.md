@@ -1,5 +1,43 @@
 # Release Notes
 
+## v0.5.0 - 2026-06-03
+
+Availability and server-readiness audit release for the peptide-design Benchmark KB.
+
+### Added
+
+- Added `benchmarks/availability/link_availability_matrix_v0.5.csv` and `data_access_manifest_v0.5.csv`.
+- Added `reports/link_and_data_availability_audit_v0.5.md`.
+- Added `benchmarks/method_sources/source_pin_audit_v0.5.csv` covering all 10 include methods.
+- Added `benchmarks/input_sets/target_candidate_matrix_v0.5.csv`.
+- Added `benchmarks/deployment/server_readiness_checklist_v0.5.md` for Linux CUDA Conda/mamba deployment planning.
+
+### Changed
+
+- Updated validator to check v0.5 availability, data access, source pin, target candidate, and server readiness artifacts.
+- Updated project version, index, log, and README for v0.5.
+- Kept Overath as ranking/rescoring and scoring-calibration evidence, not peptide-generation performance evidence.
+
+### Validation
+
+`PYTHONUTF8=1 python scripts/validate_benchmark_kb.py` is expected to pass with:
+
+- 10 v0.5 source pin rows
+- 23 v0.5 link availability rows
+- 7 v0.5 data access rows
+- 9 v0.5 target candidate rows
+- 0 validation errors
+- 0 validation warnings
+
+### Not Included
+
+- No dataset downloads.
+- No third-party source clones.
+- No method installation.
+- No downloaded model weights.
+- No GPU tasks.
+- No claim of local reproducibility.
+
 ## v0.4.0 - 2026-06-03
 
 Expert-panel and small-file audit release for the peptide-design Benchmark KB.

@@ -1,7 +1,7 @@
 # 多肽设计方法 Benchmark 知识库
 
 ## Current Status
-- Project version: 0.4.0
+- Project version: 0.5.0
 - Build date: 2026-06-03
 - Time window: 2021-06-03 to 2026-06-03
 - Unique Zotero-derived records after dedupe: 432
@@ -31,10 +31,16 @@
 - [Dataset candidate audit](reports/dataset_candidate_audit.md)
 - [Method source audit](reports/method_source_audit.md)
 - [Source pin audit v0.4](benchmarks/method_sources/source_pin_audit_v0.4.csv)
+- [Source pin audit v0.5](benchmarks/method_sources/source_pin_audit_v0.5.csv)
+- [Link availability matrix v0.5](benchmarks/availability/link_availability_matrix_v0.5.csv)
+- [Data access manifest v0.5](benchmarks/availability/data_access_manifest_v0.5.csv)
+- [Link and data availability audit v0.5](reports/link_and_data_availability_audit_v0.5.md)
+- [Target candidate matrix v0.5](benchmarks/input_sets/target_candidate_matrix_v0.5.csv)
+- [Server readiness checklist v0.5](benchmarks/deployment/server_readiness_checklist_v0.5.md)
 - [Environment feasibility audit](reports/environment_feasibility_audit.md)
 - [Expert panel review v0.4](reports/expert_panel_review_v0.4.md)
 - [Benchmark manuscript outline](reports/benchmark_manuscript_outline.md)
 - [Benchmark manuscript figure/table plan](reports/benchmark_manuscript_figure_table_plan.md)
 
 ## Next Phase
-The current next phase is v0.4 expert-panel and small-file readiness: use expert action items, dataset readiness, target candidates, and source pins to prepare v0.5 clean data sampling and no-weight smoke-test contracts without downloading large weights or running GPU benchmark tasks.
+The current next phase is v0.6 server-prep smoke-test contracting: use v0.5 link availability, data access decisions, source pins, and Linux CUDA Conda readiness notes to prepare controlled server-side clone/download manifests without downloading data, weights, or running GPU benchmark tasks in this KB.
