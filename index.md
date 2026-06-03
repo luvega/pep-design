@@ -1,6 +1,7 @@
 # 多肽设计方法 Benchmark 知识库
 
 ## Current Status
+- Project version: 0.2.0
 - Build date: 2026-06-03
 - Time window: 2021-06-03 to 2026-06-03
 - Unique Zotero-derived records after dedupe: 432

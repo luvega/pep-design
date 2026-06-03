@@ -1,5 +1,11 @@
 # Project Log
 
+## [2026-06-03] release | v0.2.0
+- Bumped project version to `0.2.0`.
+- Documented the protocol-readiness release in `RELEASE_NOTES.md` and `README.md`.
+- Release scope: Benchmark protocol, target/control schemas, runnability audit, local Zotero benchmark lessons, manuscript outline, and validator coverage.
+- Exclusions remain unchanged: no method installation, no model weights, no GPU runs, and no local reproducibility claims.
+
 ## [2026-06-03] protocol | Zotero benchmark literature revision
 - Added local Zotero benchmark/scoring/developability lessons in `reports/benchmark_literature_lessons.md` and `tables/benchmark_literature_lessons.csv`.
 - Added target/control schema, negative-design panel schema, developability metrics, leakage/homology placeholders, and generation versus ranking/rescoring split.

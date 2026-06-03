@@ -22,6 +22,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 ZOTERO_BASE = "http://127.0.0.1:23119/api/users/0"
 ZOTERO_HEADERS = {"Zotero-API-Version": "3"}
 BUILD_DATE = "2026-06-03"
+PROJECT_VERSION = "0.2.0"
 DATE_START = "2021-06-03"
 DATE_END = "2026-06-03"
 
@@ -1413,6 +1414,7 @@ This project is an independent Benchmark background knowledge base for recent pe
         f"""# 多肽设计方法 Benchmark 知识库
 
 ## Current Status
+- Project version: {PROJECT_VERSION}
 - Build date: {BUILD_DATE}
 - Time window: {DATE_START} to {DATE_END}
 - Unique Zotero-derived records after dedupe: {len(rows)}
@@ -1446,6 +1448,12 @@ The current next phase is target/control and smoke-test readiness: freeze target
     write_text(
         "log.md",
         f"""# Project Log
+
+## [{BUILD_DATE}] release | v{PROJECT_VERSION}
+- Bumped project version to `{PROJECT_VERSION}`.
+- Documented the protocol-readiness release in `RELEASE_NOTES.md` and `README.md`.
+- Release scope: Benchmark protocol, target/control schemas, runnability audit, local Zotero benchmark lessons, manuscript outline, and validator coverage.
+- Exclusions remain unchanged: no method installation, no model weights, no GPU runs, and no local reproducibility claims.
 
 ## [{BUILD_DATE}] protocol | Zotero benchmark literature revision
 - Added local Zotero benchmark/scoring/developability lessons in `reports/benchmark_literature_lessons.md` and `tables/benchmark_literature_lessons.csv`.
