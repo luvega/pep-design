@@ -6,6 +6,7 @@ from __future__ import annotations
 import csv
 import json
 import re
+import subprocess
 from pathlib import Path
 
 
@@ -174,6 +175,64 @@ ENVIRONMENT_HEADERS = [
     "next_action",
 ]
 
+EXPERT_REVIEW_HEADERS = [
+    "reviewer_role",
+    "severity",
+    "artifact",
+    "issue",
+    "recommendation",
+    "decision",
+    "status",
+    "evidence",
+    "next_action",
+]
+
+DATASET_READINESS_HEADERS = [
+    "dataset_id",
+    "license_readiness",
+    "schema_readiness",
+    "assay_readout_readiness",
+    "controls_readiness",
+    "leakage_risk",
+    "task_fit",
+    "decision",
+    "evidence",
+    "next_action",
+]
+
+TARGET_CANDIDATE_HEADERS = [
+    "candidate_id",
+    "dataset_id",
+    "target_id",
+    "task_id",
+    "target_class",
+    "record_count",
+    "positive_control_status",
+    "negative_decoy_status",
+    "assay_evidence_status",
+    "license_status",
+    "leakage_initial",
+    "decision",
+    "evidence",
+    "next_action",
+]
+
+SOURCE_PIN_HEADERS = [
+    "method",
+    "repo_name",
+    "repo_url",
+    "external_audit_path",
+    "default_branch",
+    "commit_sha",
+    "license_file",
+    "readme_entrypoint",
+    "environment_file",
+    "batch_route",
+    "weights_policy",
+    "audit_status",
+    "next_action",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
@@ -186,11 +245,14 @@ REQUIRED_FILES = [
     "benchmarks/smoke_tests/README.md",
     "benchmarks/input_sets/README.md",
     "benchmarks/input_sets/candidate_benchmark_datasets.csv",
+    "benchmarks/input_sets/dataset_readiness_scorecard.csv",
+    "benchmarks/input_sets/target_candidate_matrix_v0.4.csv",
     "benchmarks/input_sets/target_set_v0.csv",
     "benchmarks/input_sets/target_set_v0_schema.md",
     "benchmarks/input_sets/negative_design_panel_schema.md",
     "benchmarks/method_sources/README.md",
     "benchmarks/method_sources/method_source_manifest.csv",
+    "benchmarks/method_sources/source_pin_audit_v0.4.csv",
     "benchmarks/environments/README.md",
     "benchmarks/environments/environment_feasibility_matrix.csv",
     "benchmarks/results/README.md",
@@ -204,6 +266,7 @@ REQUIRED_FILES = [
     "tables/candidate_method_scorecard.csv",
     "tables/method_runnability_matrix.csv",
     "tables/benchmark_literature_lessons.csv",
+    "tables/expert_review_action_items.csv",
     "reports/skill_selection.md",
     "reports/literature_scope_report.md",
     "reports/candidate_methods_shortlist.md",
@@ -211,6 +274,7 @@ REQUIRED_FILES = [
     "reports/dataset_candidate_audit.md",
     "reports/method_source_audit.md",
     "reports/environment_feasibility_audit.md",
+    "reports/expert_panel_review_v0.4.md",
     "reports/benchmark_literature_lessons.md",
     "reports/benchmark_manuscript_outline.md",
     "reports/benchmark_manuscript_claim_evidence_map.csv",
@@ -258,13 +322,40 @@ MANUSCRIPT_REQUIRED_TOKENS = [
     "Benchmark framework / protocol-first manuscript",
     "Main Thesis",
     "Benchmark Lessons From Local Zotero Literature",
+    "Expert review",
     "Target Set And Control Set Design",
+    "Dataset Readiness And Target Candidates",
     "Generation Benchmark Protocol",
     "Ranking And Rescoring Benchmark Protocol",
     "Data Leakage, Homology Control And Target Novelty",
     "Reverse Outline",
     "Self-Review Checklist",
 ]
+
+REQUIRED_EXPERT_ROLES = {
+    "medicinal_chemistry",
+    "computational_structural_biology",
+    "ai_benchmark",
+    "data_statistics",
+    "engineering_reproducibility",
+}
+
+FORBIDDEN_TRACKED_SUFFIXES = {
+    ".ckpt",
+    ".pt",
+    ".pth",
+    ".pdb",
+    ".zst",
+    ".zstd",
+    ".tar",
+    ".gz",
+    ".zip",
+    ".7z",
+}
+
+ALLOWED_LARGE_TRACKED_FILES = {
+    "raw_sources/zotero/seed_items_by_collection.json",
+}
 
 
 def read_csv(path: Path, delimiter: str = ",") -> tuple[list[str], list[dict[str, str]]]:
@@ -322,6 +413,31 @@ def has_unqualified_forbidden_wording(text: str, phrase: str) -> bool:
     return False
 
 
+def check_tracked_large_or_forbidden_files(errors: list[str]) -> int:
+    completed = subprocess.run(
+        ["git", "ls-files", "--cached", "--others", "--exclude-standard"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    checked = 0
+    for rel in completed.stdout.splitlines():
+        path = ROOT / rel
+        if not path.is_file():
+            continue
+        checked += 1
+        if path.stat().st_size > 5_000_000 and rel not in ALLOWED_LARGE_TRACKED_FILES:
+            errors.append(f"tracked file too large for KB release: {rel}")
+        if path.suffix.lower() in FORBIDDEN_TRACKED_SUFFIXES:
+            errors.append(f"forbidden tracked large/artifact extension: {rel}")
+        parts = set(Path(rel).parts)
+        if ".git" in parts:
+            errors.append(f"git metadata must not be tracked: {rel}")
+    return checked
+
+
 def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
@@ -365,6 +481,22 @@ def main() -> int:
         errors,
         "benchmarks/environments/environment_feasibility_matrix.csv",
         ENVIRONMENT_HEADERS,
+    )
+    expert_review_rows = check_headers(errors, "tables/expert_review_action_items.csv", EXPERT_REVIEW_HEADERS)
+    dataset_readiness_rows = check_headers(
+        errors,
+        "benchmarks/input_sets/dataset_readiness_scorecard.csv",
+        DATASET_READINESS_HEADERS,
+    )
+    target_candidate_rows = check_headers(
+        errors,
+        "benchmarks/input_sets/target_candidate_matrix_v0.4.csv",
+        TARGET_CANDIDATE_HEADERS,
+    )
+    source_pin_rows = check_headers(
+        errors,
+        "benchmarks/method_sources/source_pin_audit_v0.4.csv",
+        SOURCE_PIN_HEADERS,
     )
     manuscript_claim_rows = check_headers(
         errors,
@@ -476,6 +608,68 @@ def main() -> int:
             if not row.get(required_field):
                 errors.append(f"benchmark_literature_lessons.csv row missing {required_field}: {row.get('bibtex_key')}")
 
+    expert_roles = {row.get("reviewer_role", "") for row in expert_review_rows}
+    missing_roles = sorted(REQUIRED_EXPERT_ROLES - expert_roles)
+    if missing_roles:
+        errors.append("expert_review_action_items.csv missing expert roles: " + ", ".join(missing_roles))
+    if len(expert_review_rows) < 5:
+        errors.append("expert_review_action_items.csv must contain at least 5 rows")
+    for row in expert_review_rows:
+        if row.get("severity") not in {"critical", "major", "minor"}:
+            errors.append(f"expert review row has invalid severity: {row.get('issue')}")
+        for required_field in ["artifact", "issue", "recommendation", "decision", "status", "evidence", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"expert review row missing {required_field}: {row.get('issue')}")
+
+    if len(dataset_readiness_rows) < 7:
+        errors.append(f"dataset_readiness_scorecard.csv should have at least 7 rows, found {len(dataset_readiness_rows)}")
+    readiness_by_id = {row.get("dataset_id", ""): row for row in dataset_readiness_rows}
+    for dataset_id, row in readiness_by_id.items():
+        if not row.get("decision"):
+            errors.append(f"{dataset_id}: missing dataset readiness decision")
+    overath_readiness = readiness_by_id.get("overath_binder_success_2025")
+    if not overath_readiness:
+        errors.append("dataset_readiness_scorecard.csv missing overath_binder_success_2025")
+    else:
+        decision = overath_readiness.get("decision", "").lower()
+        evidence = overath_readiness.get("evidence", "").lower()
+        if "generation" in decision and "not_generation" not in decision:
+            errors.append("Overath readiness must not be peptide generation evidence")
+        if "3676" not in evidence or "blank target" not in evidence:
+            errors.append("Overath readiness evidence must record scanned row count and blank target rows")
+
+    if len(target_candidate_rows) == 0:
+        errors.append("target_candidate_matrix_v0.4.csv must contain target candidates")
+    if target_set_rows:
+        warnings.append("target_set_v0.csv has frozen rows; verify all controls/license/leakage fields manually")
+    blank_target_rows = [
+        row for row in target_candidate_rows if row.get("dataset_id") == "overath_binder_success_2025" and not row.get("target_id")
+    ]
+    if not blank_target_rows:
+        errors.append("target_candidate_matrix_v0.4.csv should record Overath blank target rows")
+    for row in target_candidate_rows:
+        if row.get("task_id") not in REQUIRED_PROTOCOL_TASKS:
+            errors.append(f"{row.get('candidate_id')}: invalid target candidate task_id {row.get('task_id')}")
+        if not row.get("decision"):
+            errors.append(f"{row.get('candidate_id')}: missing target candidate decision")
+
+    source_pin_methods = {row.get("method", "") for row in source_pin_rows if row.get("audit_status") == "pinned_no_install"}
+    for method in ["PepMLM", "RFdiffusion + ProteinMPNN", "PepMirror"]:
+        if method not in source_pin_methods:
+            errors.append(f"{method}: missing pinned_no_install source pin row")
+    if len(source_pin_rows) < 3:
+        errors.append("source_pin_audit_v0.4.csv must contain at least 3 priority source pins")
+    for row in source_pin_rows:
+        if row.get("audit_status") != "pinned_no_install":
+            errors.append(f"{row.get('method')} {row.get('repo_name')}: source pin audit must remain pinned_no_install")
+        for required_field in ["repo_url", "external_audit_path", "default_branch", "commit_sha", "weights_policy", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('method')} {row.get('repo_name')}: source pin row missing {required_field}")
+        for field in ["audit_status", "weights_policy", "batch_route"]:
+            value = row.get(field, "").lower()
+            if "installed" in value or "reproduced" in value or "ran_locally" in value:
+                errors.append(f"{row.get('method')} {row.get('repo_name')}: source pin row overclaims {field}")
+
     protocol_text = (ROOT / "benchmarks/protocols/benchmark_protocol_v0.md").read_text(encoding="utf-8")
     for task in REQUIRED_PROTOCOL_TASKS:
         if task not in protocol_text:
@@ -524,6 +718,7 @@ def main() -> int:
         errors.append("references.bib has no BibTeX entries")
 
     link_count = check_markdown_links(errors)
+    tracked_file_count = check_tracked_large_or_forbidden_files(errors)
 
     literature_cards = [path for path in (ROOT / "wiki/literature").glob("*.md") if path.name != "_index.md"]
     if len(literature_cards) < 10:
@@ -543,6 +738,10 @@ def main() -> int:
             "candidate_dataset_rows": len(dataset_candidate_rows),
             "method_source_rows": len(method_source_rows),
             "environment_rows": len(environment_rows),
+            "expert_review_rows": len(expert_review_rows),
+            "dataset_readiness_rows": len(dataset_readiness_rows),
+            "target_candidate_rows": len(target_candidate_rows),
+            "source_pin_rows": len(source_pin_rows),
             "manuscript_claim_rows": len(manuscript_claim_rows),
             "smoke_test_readmes": len(
                 [path for path in (ROOT / "benchmarks/smoke_tests").glob("*/README.md")]
@@ -551,6 +750,7 @@ def main() -> int:
             "literature_cards": len(literature_cards),
             "bibtex_entries": bib_entries,
             "markdown_links_checked": link_count,
+            "tracked_files_checked": tracked_file_count,
         },
         "errors": errors,
         "warnings": warnings,

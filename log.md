@@ -1,5 +1,12 @@
 # Project Log
 
+## [2026-06-03] release | v0.4.0
+- Bumped project version to `0.4.0`.
+- Added expert-panel review, expert action items, dataset readiness scorecard, target candidate matrix, and source pin audit.
+- Audited Overath `final_dataset.csv` externally and recorded the 3,676-row scanned dataset boundary, including blank target rows.
+- Shallow-cloned PepMLM, RFdiffusion, ProteinMPNN, and PepMirror outside the repository for source pinning only.
+- Maintained boundaries: no third-party source trees in git, no large data in git, no environment creation, no model weights, no GPU tasks, and no local reproducibility claims.
+
 ## [2026-06-03] release | v0.3.0
 - Bumped project version to `0.3.0`.
 - Added dataset candidate audit, method source route audit, and environment feasibility audit for the v0.3 readiness layer.

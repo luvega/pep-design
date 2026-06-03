@@ -1,5 +1,42 @@
 # Release Notes
 
+## v0.4.0 - 2026-06-03
+
+Expert-panel and small-file audit release for the peptide-design Benchmark KB.
+
+### Added
+
+- Added `reports/expert_panel_review_v0.4.md` and `tables/expert_review_action_items.csv`.
+- Added `benchmarks/input_sets/dataset_readiness_scorecard.csv` and `target_candidate_matrix_v0.4.csv`.
+- Added `benchmarks/method_sources/source_pin_audit_v0.4.csv`.
+- Performed external-only audit of Overath `final_dataset.csv` and priority source pins for PepMLM, RFdiffusion, ProteinMPNN, and PepMirror.
+
+### Changed
+
+- Updated manuscript outline and claim-evidence map with expert-panel, dataset readiness, target-candidate, and source-pinning boundaries.
+- Updated validator to check v0.4 tables, expert-role coverage, source pinning status, Overath non-generation boundary, and large-file protection.
+- Updated project version, index, log, and README for v0.4.
+
+### Validation
+
+`PYTHONUTF8=1 python scripts/validate_benchmark_kb.py` is expected to pass with:
+
+- 15 expert review action rows
+- 7 dataset readiness rows
+- 9 target candidate rows
+- 4 source pin rows
+- 0 validation errors
+- 0 validation warnings
+
+### Not Included
+
+- No full dataset downloads into git.
+- No third-party source trees in git.
+- No method installation.
+- No downloaded model weights.
+- No GPU tasks.
+- No claim of local reproducibility.
+
 ## v0.3.0 - 2026-06-03
 
 Dataset/source/environment audit release for the peptide-design Benchmark KB.
