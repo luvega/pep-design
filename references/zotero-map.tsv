@@ -1,0 +1,433 @@
+zotero_key	bibtex_key	title
+06JHA0FX	wu_integration_2023	Integration of pre-trained protein language models into geometric deep learning networks
+0YVAW0S7	zou_sccure_2023	scCURE identifies cell types responding to immunotherapy and enables outcome prediction
+176AK0KP	gou_adjuvant-free_2021	Adjuvant-free peptide vaccine targeting Clec9a on dendritic cells can induce robust antitumor immune response through Syk/IL-21 axis
+1O0OJXZF	wang_deepbio_2023	DeepBIO: an automated and interpretable deep-learning platform for high-throughput biological sequence prediction, functional annotation and visualization analysis
+1ZQDNS3D	wei_conpep_2023	ConPep: Prediction of peptide contact maps with pre-trained biological language model and multi-view feature extracting strategy
+24XGRZNJ	wicky_bim_hallucinating_2022	Hallucinating symmetric protein assemblies
+26YKGWQT	david_kim_parametrically_2025	Parametrically guided design of beta barrels and transmembrane nanopores using deep learning
+274ANUJF	enzymes_lauko_a_computational_2025	Computational design of serine hydrolases
+27CLQUXU	mout_r_novo_2023	De novo design of modular protein hydrogels with programmable intra- and extracellular viscoelasticity
+2BJVBDTQ	yang_msbooster_2023	MSBooster: improving peptide identification rates using deep learning-based features
+2FEDHKRQ	de_haas_rj_rapid_2024	Rapid and automated design of two-component protein nanomaterials using ProteinMPNN.
+2FF2UMIX	an_l_hallucination_2023	Hallucination of closed repeat proteins containing central pockets
+2GGHXKS1	brixi_saltpeppr_2023	SaLT&PepPr is an interface-predicting language model for designing peptide-guided protein degraders
+2H4W9G82	morehead_flowdock_2025	Flowdock: Geometric flow matching for generative protein-ligand docking and affinity prediction
+2JS2R6P3	watson_pr_macrocyclic_2023	Macrocyclic Octapeptide Binding and Inferences on Protein Substrate Binding to Histone Deacetylase 6.
+2M2KQ2F7	machine_learning_hiranuma_n_improved_2021	Improved protein structure refinement guided by deep learning based accuracy estimation
+2PARGXHL	lehrich_precision_2025	Precision targeting of β-catenin induces tumor reprogramming and immunity in hepatocellular cancers
+2QQIKN7B	wang_cellmemory_2025	CellMemory: hierarchical interpretation of out-of-distribution cells using bottlenecked transformer
+2RTD3NCC	lou_novel_2008	A novel peptide from alpha5 helix of Asterina pectinifera cyclin B conjugated to HIV-Tat(49-57) with cytotoxic and apoptotic effects against human cancer cells.
+2SBALQUW	householder_novo_2025	De novo design and structure of a peptide–centric TCR mimic binding module
+2SRCTRGZ	demeo_active_2025	Active learning framework leveraging transcriptomics identifies modulators of disease phenotypes
+2TBSKR5H	krishna_generalized_2024	Generalized biomolecular modeling and design with RoseTTAFold All-Atom
+2UMYTBUZ	wang_identification_2021	Identification of HLA-A2-Restricted Mutant Epitopes from Neoantigens of Esophageal Squamous Cell Carcinoma.
+2UQ84I3W	weng_peptide-based_2023	Peptide-based PET imaging agent of tumor TIGIT expression.
+2UQ90CF4	wan_machine_2024	Machine learning for antimicrobial peptide identification and design
+2UZ2BA4M	hybrid_materials_shunzhi_wang_bond-centric_2025	Bond-centric modular design of protein assemblies
+2VF7EG3C	lee_j_pan-variant_2024	A pan-variant miniprotein inhibitor protects against SARS-CoV-2 variants.
+2X8FK4JY	chen_machine_2026	Machine Learning for De Novo Molecular Generation: A Comprehensive Review
+2XD699UG	qian_development_2024	Development of LAG-3/FGL1 blocking peptide and combination with radiotherapy for cancer immunotherapy.
+2XN7X8LL	ennist_n_novo_2023	De novo design of energy transfer proteins housing excitonically coupled chlorophyll special pairs.
+33XVZ7GI	broerman_aj_design_2025	Design of facilitated dissociation enables timing of cytokine signalling
+34MKNNKD	tseng_structure-guided_2024	Structure-Guided Discovery of PD-1/PD-L1 Interaction Inhibitors: Peptide Design, Screening, and Optimization via Computation-Aided Phage Display Engineering
+3856EA4D	sun_deep_2024	A deep attention model for wide-genome protein-peptide binding affinity prediction at a sequence level
+3A2GASTV	li_usp22_2021	USP22 deficiency in melanoma mediates resistance to T cells through IFNγ-JAK1-STAT1 signal axis.
+3AYIMQW5	bennett_improving_2023	Improving de novo protein binder design with deep learning
+3EJY8RDL	deutsch_expanding_2026	Expanding the human proteome with microproteins and peptideins
+3ESUX4GD	caldwell_sj_tight_2020	Tight and specific lanthanide binding in a de novo TIM barrel with a large internal cavity designed by symmetric domain fusion
+3GT4ZZ5Z	jin_discovery_2024	Discovery of a novel small molecule as CD47/SIRPα and PD-1/PD-L1 dual inhibitor for cancer immunotherapy.
+3JBXCJR2	stone_ea_isolating_2021	Isolating Conformers to Assess Dynamics of Peptidic Catalysts Using Computationally Designed Macrocyclic Peptides.
+3LI6DPES	xie_recent_2023	Recent advances in targeting the “undruggable” proteins: from drug discovery to clinical trials
+3LXHQ9A3	yarmarkovich_targeting_2023	Targeting of intracellular oncoproteins with peptide-centric CARs
+3PE1C43J	li_cd47binder_2023	CD47Binder: Identify CD47 Binding Peptides by Combining Next-Generation Phage Display Data and Multiple Peptide Descriptors
+3PLU8IIK	xiao_covalent_2025	A covalent peptide-based lysosome-targeting protein degradation platform for cancer immunotherapy.
+3QIJZLC7	quijano-rubio_a_novo_2021	De novo design of modular and tunable protein biosensors
+3QYFKB2T	saragovi_a_novo_2025	De novo design of metal-oxide templating proteins.
+3SNZPF6B	mansoor_s_zero-shot_2023	Zero-shot mutation effect prediction on protein stability and function using RoseTTAFold
+3UJPHG6I	wu_hla-a2-restricted_2018	HLA-A2-Restricted Epitopes Identified from MTA1 Could Elicit Antigen-Specific Cytotoxic T Lymphocyte Response.
+3WZ62DT7	shi_immunogenicity_2013	The immunogenicity of a novel cytotoxic T lymphocyte epitope from tumor antigen PL2L60 could be enhanced by 4-chlorophenylalanine substitution at position 1.
+3ZL5PLLK	kim_de_novo_2023	De novo design of small beta barrel proteins
+42PGPXKW	wang_antitumor_2013	Antitumor activity of novel chimeric peptides derived from cyclinD/CDK4 and the protein transduction domain 4.
+44EHL2PX	enzymes_enzymes_kim_d_computational_2026	Computational design of metallohydrolases
+45PB37K5	chen_deep_2025	Deep lead optimization enveloped in protein pocket and its application in designing potent and selective ligands targeting LTK protein
+48FZBT8I	roy_a_novo_2023	De novo design of highly selective miniprotein inhibitors of integrins αvβ6 and αvβ8
+4EBXI8YS	wang_predicting_2022	Predicting protein–peptide binding residues via interpretable deep learning
+4EV6BYJI	chauvin_tigit_2020	TIGIT in cancer immunotherapy
+4F6SDIBQ	huang_b_novo_2024	De novo design of miniprotein antagonists of cytokine storm inducers.
+4HX3IAHM	simon_interplm_2025	InterPLM: discovering interpretable features in protein language models via sparse autoencoders
+4JFIIH6P	sun_novel_2025	A novel peptide targeting CCR7 inhibits tumor cell lymph node metastasis.
+4NLUI3DF	nijkamp_progen2_2023	ProGen2: Exploring the boundaries of protein language models
+4P8PJ3TW	pillai_a_novo_2024	De novo design of allosterically switchable protein assemblies.
+4SIP4LE7	li_development_2025	Development of a Cascade-Targeting Oral Vaccine via Glycoprotein 2 on Intestinal Microfold Cells for Cancer Immunotherapy.
+4UCS289V	dou_j_novo_2018	De novo design of a fluorescence-activating β-barrel
+4WV8A9BH	gou_metformin_2021	Metformin leads to accumulation of reactive oxygen species by inhibiting the NFE2L1 expression in human hepatocellular carcinoma cells.
+4XRCDDQ3	cao_l_novo_2020	De novo design of picomolar SARS-CoV-2 miniprotein inhibitors
+5286JS9F	chai_discovery_chai-1_2024	Chai-1: Decoding the molecular interactions of life
+548BZH8D	liu_designing_2024	Designing de novo D-protein binders
+55HPAQ9M	muratspahic_e_novo_2025	De novo design of miniprotein agonists and antagonists targeting G protein-coupled receptors.
+56KIYZ8Q	methods_rosetta_courbet_a_computational_2022	Computational design of mechanically coupled axle-rotor protein assemblies
+578ICKAU	park_h_high-accuracy_2019	High-accuracy refinement using Rosetta in CASP13
+57H66QJB	song_review_2024	Review of phage display: A jack-of-all-trades and master of most biomolecule display
+57K986LK	gu_benchmarking_2025	Benchmarking AI-powered docking methods from the perspective of virtual screening
+57YQ74QD	maute_engineering_2015	Engineering high-affinity PD-1 variants for optimized immunotherapy and immuno-PET imaging
+583EPEIY	chen_jy_novo_2025	De Novo Design of High-Performance Cortisol Luminescent Biosensors.
+5BRP9RXM	lee_j_computationally_2026	The computationally designed TRI2-2 miniprotein inhibitor protects against multiple SARS-CoV-2 Omicron variants.
+5F8YYUIV	goldbach_n_novo_2023	De novo design of monomeric helical bundles for pH-controlled membrane lysis
+5GOGPC63	akdel_structural_2022	A structural biology community assessment of AlphaFold2 applications
+5IA9AEAN	butcher_j_novo_2025	De novo Design of All-atom Biomolecular Interactions with RFdiffusion3.
+5IAM8FFH	mpnn_machine_learning_minibinders_glasscock_cj_computational_2025	Computational design of sequence-specific DNA-binding proteins
+5LBIDCJP	ben-sasson_aj_author_2021	Author Correction: Design of biologically active binary protein 2D materials
+5PINYLGR	vaccines_mpnn_minibinders_ragotte_rj_novo_2025	De novo design of potent inhibitors of clostridial family toxins
+5SKCTXQW	sumida_kh_improving_2024	Improving Protein Expression, Stability, and Function with ProteinMPNN.
+5TWVNGEY	zeng_alphapeptdeep_2022	AlphaPeptDeep: a modular deep learning framework to predict peptide properties for proteomics
+5V4XBYT9	wang_deep_2023	Deep Learning Empowers the Discovery of Self-Assembling Peptides with Over 10 Trillion Sequences
+5VXIAMU7	zhang_sequence-based_2025	Sequence-based virtual screening using transformers
+65BSI2LW	kortemme_novo_2024	De novo protein design—From new structures to programmable functions
+65CKPU2M	niu_chidamide_2025	Chidamide functions as a VISTA/PSGL-1 blocker for cancer immunotherapy.
+66QWDYLS	du_machine_2024	Machine learning-aided generative molecular design
+695L91HM	sun_extracellular_2022	Extracellular vesicle IL-32 promotes the M2 macrophage polarization and metastasis of esophageal squamous cell carcinoma via FAK/STAT3 pathway
+69X3EI94	peng_atom-level_2025	Atom-level generative foundation model for molecular interaction with pockets
+6BC8SJFK	du_design_2018	The design of high affinity human PD-1 mutants by using molecular dynamics simulations (MD).
+6C4J4KGG	meng_potn_2020	POTN: A Human Leukocyte Antigen-A2 Immunogenic Peptides Screening Model and Its Applications in Tumor Antigens Prediction
+6E2USGGC	silva_da_structures_2018	Structures and disulfide cross-linking of de novo designed therapeutic mini-proteins
+6EZHSQX7	zorine_d_novo_2024	De novo design of alpha-beta repeat proteins.
+6FCC9483	lu_p_accurate_2018	Accurate computational design of multipass transmembrane proteins
+6HFV5ITW	qian_grow_2025	Grow AI virtual cells: three data pillars and closed-loop learning
+6HKPY5JZ	cattaneo_identification_2023	Identification of patient-specific CD4+ and CD8+ T cell neoantigens through HLA-unbiased genetic screens
+6IA9C0C4	abanades_immunebuilder_2023	ImmuneBuilder: Deep-Learning models for predicting the structures of immune proteins
+6L3IXMYX	bhat_novo_2025	De novo design of peptide binders to conformationally diverse targets with contrastive language modeling
+6MB26AR7	day_al_unintended_2018	Unintended specificity of an engineered ligand-binding protein facilitated by unpredicted plasticity of the protein fold
+6Q8ACPUP	wang_j_protein_2024	Protein Design Using Structure-Prediction Networks: AlphaFold and RoseTTAFold as Protein Structure Foundation Models.
+6QHDJAVV	klima_jc_incorporation_2021	Incorporation of sensing modalities into de novo designed fluorescence-activating proteins
+6QWRT3DZ	rodriguez_structural_2023	Structural and biological characterization of pAC65, a macrocyclic peptide that blocks PD-L1 with equivalent potency to the FDA-approved antibodies
+6SKJPBA9	ben-sasson_aj_design_2021	Design of biologically active binary protein 2D materials
+6XNLXG4J	zeng_self-metallized_2024	Self-Metallized Whole Cell Vaccines Prepared by Microfluidics for Bioorthogonally Catalyzed Antitumor Immunotherapy.
+6Y566IVV	li_trustworthy_2026	Trustworthy Compound–Protein Interaction Prediction with Interpretable and Conformalized Cross-Attention Transformers
+6Z92B83M	gokce-alpkilic_g_novo_2025	De Novo Design of High-Affinity Miniprotein Binders Targeting Francisella Tularensis Virulence Factor.
+6ZXGDV4G	weitzner_bd_computational_2019	A computational method for design of connected catalytic networks in proteins
+743HQA4N	li_z_accurate_2023	Accurate computational design of three-dimensional protein crystals
+74JFNJBK	enzymes_kalvet_i_design_2023	Design of Heme Enzymes with a Tunable Substrate Binding Pocket Adjacent to an Open Metal Coordination Site
+76HHQBFC	park_h_protein_2018	Protein homology model refinement by large-scale energy optimization
+78KDKFSB	lee_latent_2025	Latent bayesian optimization via autoregressive normalizing flows
+78O1X7O7	pavlovic_immuneml_2021	The immuneML ecosystem for machine learning analysis of adaptive immune receptor repertoires
+78ZUNMQD	xiao_fe3-binding_2023	Fe3+-binding transferrin nanovesicles encapsulating sorafenib induce ferroptosis in hepatocellular carcinoma.
+79Y2GSJN	cao_design_2022	Design of protein-binding proteins from the target structure alone
+7BT4HA9E	vulovic_i_generation_2021	Generation of ordered protein assemblies using rigid three-body fusion
+7BU87VV4	zhang_artificial_2025	Artificial intelligence in drug development
+7BWEPR4D	yang_j_improved_2020	Improved protein structure prediction using predicted interresidue orientations
+7I3RUFTM	zhao_follow-up_2020	Follow-up study of the pulmonary function and related physiological characteristics of COVID-19 survivors three months after recovery.
+7I8JJMU4	ovchinnikov_s_protein_2018	Protein structure prediction using Rosetta in CASP12
+7JFL4WNW	shen_h_novo_2018	De novo design of self-assembling helical protein filaments
+7KHYAJB5	hanna_s_novo_2026	De novo design of a macrocycle-induced dimerization system for cellular control.
+7L5XKFPT	yeh_ah_novo_2023	De novo design of luciferases using deep learning.
+7OIFPUGW	yang_genecompass_2023	GeneCompass: Deciphering Universal Gene Regulatory Mechanisms with Knowledge-Informed Cross-Species Foundation Model
+7RI8ZLGZ	lajoie_mj_designed_2020	Designed protein logic to target cells with precise combinations of surface antigens
+7TJ7YU2Y	zhai_vitro_2019	In vitro assay for the development of small molecule inhibitors targeting PD-1/PD-L1.
+7X4KBQZ3	jiang_targeting_2021	Targeting CD47 for cancer immunotherapy
+7XF4SLA6	jalil_multivalent_2020	Multivalent, Soluble Nano-Self Peptides Increase Phagocytosis of Antibody-Opsonized Targets while Suppressing “Self” Signaling
+7Y5ZVT5L	liu_y_bottom-up_2025	Bottom-up design of Ca channels from defined selectivity filter geometry
+82IS8YC9	yan_novel_2016	A novel peptide targeting Clec9a on dendritic cell for cancer immunotherapy.
+87SLRCIX	capin_j_cf2h_2026	CF2H: a cell-free two-hybrid platform for rapid protein binder screening.
+89C6YRNP	gao_identification_2009	Identification of a new broad-spectrum CD8+ T cell epitope from over-expressed antigen COX-2 in esophageal carcinoma.
+8A2B6HU2	agonists_cytokines_cancer_therapeutics_chun_jh_design_2025	Design of a potent interleukin-21 mimic for cancer immunotherapy
+8EEG2YHZ	zhang_development_2021	Development of Toll-like Receptor Agonist-Loaded Nanoparticles as Precision Immunotherapy for Reprogramming Tumor-Associated Macrophages.
+8KID3CLT	yin_rational_2021	Rational Design of Potent Peptide Inhibitors of the PD-1:PD-L1 Interaction for Cancer Immunotherapy
+8LX3P9RF	masmoudi_adjusted_2025	Adjusted imbalance ratio leads to effective AI-based drug discovery against infectious disease
+8MV2SGQH	baek_accurate_2023	Accurate prediction of protein-nucleic acid complexes using RoseTTAFoldNA
+8NAYOLFP	alamdari_protein_2023	Protein generation with evolutionary diffusion: sequence is all you need
+8NLSPL4F	yang_discovery_2025	Discovery of a Novel Selective and Cell-Active N6-Methyladenosine RNA Demethylase ALKBH5 Inhibitor.
+8RWJK9F6	zhang_discovery_2025	Discovery of peptides as key regulators of metabolic and cardiovascular crosstalk
+8WVJYIDL	wang_learning_2025	Learning Protein-Ligand Binding in Hyperbolic Space
+949D84HC	strokach_deep_2022	Deep generative modeling for protein design
+965SRDDP	mulligan_vk_computational_2020	Computational design of mixed chirality peptide macrocycles with internal symmetry
+98LYP5P7	mcnutt_sprint_2024	SPRINT Enables Interpretable and Ultra-Fast Virtual Screening against Thousands of Proteomes
+99ECU1MR	hartman_interpreting_2023	Interpreting biologically informed neural networks for enhanced proteomic biomarker discovery and pathway analysis
+9AMWWF3K	yang_design_2025	Design of high-affinity binders to immune modulating receptors for cancer immunotherapy
+9AW4IDWS	koh_ai-driven_2025	AI-driven protein design
+9CX265RH	quijano-rubio_a_novo_2020	De novo design of modular and tunable allosteric biosensors.
+9GZHBILG	pingitore_v_delocalized_2024	Delocalized quinolinium-macrocyclic peptides, an atypical chemotype for CNS penetration.
+9LFKKJRP	antanasijevic_a_structural_2020	Structural and functional evaluation of de novo-designed, two-component nanoparticle carriers for HIV Env trimer immunogens.
+9PKBRCMD	gerben_sr_design_2023	Design of Diverse Asymmetric Pockets in Homo-oligomeric Proteins
+9QV82ZPZ	yang_antigen_2023	Antigen presentation in cancer — mechanisms and clinical implications for immunotherapy
+9UAILLWI	coventry_b_protein_2021	Protein sequence optimization with a pairwise decomposable penalty for buried unsatisfied hydrogen bonds
+A4QUGZP6	vert_how_2023	How will generative AI disrupt data science in drug discovery?
+A5BCID4E	bryan_cm_computational_2021	Computational design of a synthetic PD-1 agonist
+A5XA2DD3	abdin_pepnn_2022	PepNN: a deep attention model for the identification of peptide binding sites
+A7ZZ64VB	lisanza_sl_publisher_2025	Publisher Correction: Multistate and functional protein design using RoseTTAFold sequence space diffusion.
+AAFLE7MG	li_y_water_2025	Water, Solute, and Ion Transport in De Novo-Designed Membrane Protein Channels.
+AAN2ZSXB	li_design_2025	Design of linear and cyclic peptide binders from protein sequence information
+ABBVGHJ2	adams_cs_novo_2025	De novo design of protein minibinder agonists of TLR3.
+AEPOWYU0	li_orally_2021	An orally available PD-1/PD-L1 blocking peptide OPBP-1-loaded trimethyl chitosan hydrogel for cancer immunotherapy
+AMNPEAEN	chen_development_2023	Development of a novel peptide targeting GPR81 to suppress adipocyte-mediated tumor progression.
+APWMMGU6	krapp_pesto_2023	PeSTo: parameter-free geometric deep learning for accurate prediction of protein binding interfaces
+ASKCZUQK	cong_q_protein_2019	Protein interaction networks revealed by proteome coevolution
+AYC7QZ6S	hickok_beyond_2025	Beyond the native repertoire
+B7IL2EM8	niu_vista_2025	VISTA as a context-dependent immune checkpoint: Implications for tumor immunity and autoimmune pathogenesis.
+B7XEHF2L	zhou_integrated_2024	An integrated framework for prognosis prediction and drug response modeling in colorectal liver metastasis drug discovery.
+B8RXBM4U	chen_z_novo_2020	De novo design of protein logic gates
+BEJRRDMV	bryant_peptide_2023	Peptide binder design with inverse folding and protein structure prediction
+BFFWLHC4	xu_c_computational_2020	Computational design of transmembrane pores
+BG87MTYV	sui_peptide_2023	Peptide drugs: a new direction in cancer immunotherapy
+BGETGF5X	liu_research_2024	Research on Bitter Peptides in the Field of Bioinformatics: A Comprehensive Review
+BGL92H57	peng_unified_2026	Unified modeling of 3D molecular generation via atomic interactions with PocketXMol
+BH2ZBU8I	shen_h_nucleation_2025	Nucleation limited assembly and polarized growth of a de novo-designed allosterically modulatable protein filament.
+BHXFUU4Z	silva_da_novo_2019	De novo design of potent and selective mimics of IL-2 and IL-15
+BJYYHJ82	lei_deep-learning_2021	A deep-learning framework for multi-level peptide–protein interaction prediction
+BM4D4Q7K	zhang_jz_thermodynamically_2022	Thermodynamically coupled biosensors for detecting neutralizing antibodies against SARS-CoV-2 variants
+BPC4SH24	chazin-gray_a_novo_2025	De Novo Design of Miniprotein Inhibitors of Bacterial Adhesins.
+BR4AMZPF	chen_design_2024	Design of target specific peptide inhibitors using generative deep learning and molecular dynamics simulations
+BRBDQK76	zhang_pre-trained_2025	Pre-trained language models for protein and molecular design
+BRNTNU2C	koepnick_b_novo_2019	De novo protein design by citizen scientists
+BSDCU9SY	humphreys_ir_computed_2021	Computed structures of core eukaryotic protein complexes
+BSLAFJCW	bermeo_s_novo_2022	De novo design of obligate ABC-type heterotrimeric proteins
+C2S3BYTY	jiang_h_novo_2024	De novo design of buttressed loops for sculpting protein functions.
+C49WDQFF	wu_identification_2023	Identification of a novel small-molecule inhibitor targeting TIM-3 for cancer immunotherapy.
+C4LBTBS9	methods_nanoparticles_machine_learning_lutz_id_top-down_2023	Top-down design of protein architectures with reinforcement learning
+CDDNB2ZZ	chen_z_programmable_2019	Programmable design of orthogonal protein heterodimers
+CDKU6BLN	li_dietary-polysaccharide-modified_2022	Dietary-Polysaccharide-Modified Fish-Oil-Based Double Emulsion as a Functional Colloidal Formulation for Oral Drug Delivery.
+CF5Y1UOX	wayment-steele_predicting_2023	Predicting multiple conformations via sequence clustering and AlphaFold2
+CHNHZ5IQ	wei_interleukin-36_2021	Interleukin-36α inhibits colorectal cancer metastasis by enhancing the infiltration and activity of CD8+ T lymphocytes.
+CKQ9HHWM	langan_ra_novo_2019	De novo design of bioactive protein switches
+CLZ8N2SH	yang_don-loaded_2025	DON-Loaded Nanodrug-T Cell Conjugates With PD-L1 Blockade for Solid Tumor Therapy.
+CM7AWCR9	zhu_three--one_2022	A Three-In-One Assembled Nanoparticle Containing Peptide-Radio-Sensitizer Conjugate and TLR7/8 Agonist Can Initiate the Cancer-Immunity Cycle to Trigger Antitumor Immune Response.
+CRM22UDT	cho_boltzdesign1_2025	Boltzdesign1: Inverting All-Atom Structure Prediction Model for Generalized Biomolecular Binder Design
+CRT8PKH3	chang_ranking_2023	Ranking Peptide Binders by Affinity with AlphaFold**
+CSDFFJQV	de_haas_rj_novo_2023	De novo designed ice-binding proteins from twist-constrained helices.
+D5XQSGVT	kong_full-atom_2025	Full-atom peptide design with geometric latent diffusion
+D6JEVNLH	zhou_cellect_2025	CELLECT: contrastive embedding learning for large-scale efficient cell tracking.
+D9L5NZSD	walters_what_2011	What Do Medicinal Chemists Actually Make? A 50-Year Retrospective
+DEBAX25H	basanta_b_enumerative_2020	An enumerative algorithm for de novo design of proteins with diverse pocket structures
+DEW7VBH6	dang_lt_receptor_2019	Receptor subtype discrimination using extensive shape complementary designed interfaces
+DG8QNCE6	zhang_jz_novo_2025	De novo designed Hsp70 activator dissolves intracellular condensates.
+DLI9C6MJ	white_wl_design_2026	Design of solubly expressed miniaturized SMART MHCs
+DN4A2X7M	zhou_intrinsic_2018	Intrinsic Expression of Immune Checkpoint Molecule TIGIT Could Help Tumor Growth in vivo by Suppressing the Function of NK and CD8+ T Cells.
+DNA39HK4	hicks_dr_novo_2022	De novo design of protein homodimers containing tunable symmetric protein pockets
+DNKX2REN	yang_cross-chirality_2026	Cross-Chirality Generalization by Axial Vectors for Hetero-Chiral Protein-Peptide Interaction Design
+DXF7DNFJ	zhang_deep_2024	Deep Lead Optimization: Leveraging Generative AI for Structural Modification
+DXT2UDDX	lisanza_sl_multistate_2025	Multistate and functional protein design using RoseTTAFold sequence space diffusion.
+DYC97DNX	yang_machine-learning-guided_2019	Machine-learning-guided directed evolution for protein engineering
+DYRDV3SX	yin_leveraging_2024	Leveraging machine learning models for peptide–protein interaction prediction
+E2W5962T	junker_assessment_2026	Assessment of Generative De Novo Peptide Design Methods for G Protein-Coupled Receptors
+E4IUKGJG	hybrid_materials_davila-hernandez_fa_directing_2023	Directing polymorph specific calcium carbonate formation with de novo protein templates
+E8J121QC	ohta_validation_2023	Validation of a New Methodology to Create Oral Drugs beyond the Rule of 5 for Intracellular Tough Targets
+E8L4LAU9	peptides_machine_learning_vazquez_torres_s_novo_2024	De novo design of high-affinity binders of bioactive helical peptides
+E9JVG6HZ	baker_d_what_2019	What has de novo protein design taught us about protein folding and biophysics?
+E9WK6NTV	li_dual_2024	Dual targeting of TIGIT and PD-1 with a novel small molecule for cancer immunotherapy.
+EBQ7CNVI	bennett_atomically_2025	Atomically accurate de novo design of antibodies with RFdiffusion
+EC9I4X2D	mishra_p_miniprotein_2026	Miniprotein inhibitors of the Staphylococcus aureus efflux transporter NorA.
+ECMHMDE9	nicholas_b_woodall_novo_2021	De Novo Design of Tyrosine and Serine Kinase Drive Protein Switches
+EDCVUQET	ebrahimi_engineering_2023	Engineering protein-based therapeutics through structural and chemical design
+EF2T9FF2	zhao_proteinpeptide_2025	Protein–peptide docking with a rational and accurate diffusion generative model
+EFFY5WSW	qian_bispecific_2026	A Bispecific Peptide-Drug Conjugate Targeting LAG-3 and PD-L1 Harnesses Antitumor Immunity of Macrophages and T Cells.
+EFSYJFZZ	liu_design_2025	Design of high-specificity binders for peptide–MHC-I complexes
+EG9TVYKR	jiao_pd-l1_2022	A PD-L1 and VEGFR2 dual targeted peptide and its combination with irradiation for cancer immunotherapy
+EH59NIH7	xiao_engineered_2026	An Engineered Nanovesicles-Based Lysosome-Targeting Protein Degradation Platform (NV-TACs) for Cancer Immunotherapy.
+EHUEQYXK	anishchenko_i_novo_2021	De novo protein design by deep network hallucination
+ELKFLLVU	case_jb_ultrapotent_2021	Ultrapotent miniproteins targeting the receptor-binding domain protect against SARS-CoV-2 infection and disease in mice.
+EMVI3MCB	shen_h_novo_2025	De novo design of inducibly assembling multi-component filaments.
+EN3TNHYU	xie_targeting_2025	Targeting FOXM1 condensates reduces breast tumour growth and metastasis
+EQUWMUNI	zhang_identification_2025	Identification of Epinastine as CD96/PVR inhibitor for cancer immunotherapy.
+ERFWX4FY	machine_learning_small_molecules_enzymes_anishchenko_i_modeling_2025	Modeling protein-small molecule conformational ensembles with PLACER
+ERTFQCNK	chowdhury_single-sequence_2022	Single-sequence protein structure prediction using a language model and deep learning
+ET7FKSI5	lyu_identification_2021	Identification of Phelligridin-Based Compounds as Novel Human CD73 Inhibitors.
+EW0UQWVO	fang_knowledge_2023	Knowledge graph-enhanced molecular contrastive learning with functional prompt
+EZ4E74LB	sui_integrative_2023	Integrative analysis of bulk and single-cell gene expression profiles to identify tumor-associated macrophage-derived CCL18 as a therapeutic target of esophageal squamous cell carcinoma.
+F44R6C9X	chang_blocking_2015	Blocking of the PD-1/PD-L1 Interaction by a D-Peptide Antagonist for Cancer Immunotherapy
+F5F5TQPE	chen_self-assembled_2025	Self-assembled Palmitic Acid-modified Thymopentin Functions as a Delivery System of Nanovaccine for Cancer Immunotherapy.
+F6R4XSH8	zhu_dual_2018	The dual effects of a novel peptibody on angiogenesis inhibition and M2 macrophage polarization on sarcoma.
+F6UUSFKY	brunette_tj_modular_2020	Modular repeat protein sculpting using rigid helical junctions
+F730GVN3	kacen_post-translational_2023	Post-translational modifications reshape the antigenic landscape of the MHC I immunopeptidome in tumors
+FC5AP2TC	wei_ky_computational_2020	Computational design of closely related proteins that adopt two well-defined but structurally divergent folds
+FD2Q5R6Z	ragotte_rj_designed_2025	Designed miniproteins potently inhibit and protect against MERS-CoV
+FEZDZKQW	an_l_novo_2023	De novo design of diverse small molecule binders and sensors using Shape Complementary Pseudocycles.
+FF4V8LYV	passaro_boltz-2_2025	Boltz-2: Towards Accurate and Efficient Binding Affinity Prediction
+FFXHBHGQ	zhang_advances_2025	Advances in cancer immunotherapy: historical perspectives, current developments, and future directions
+FJBRZKRX	rettie_accurate_2025	Accurate de novo design of high-affinity protein-binding macrocycles using deep learning
+FLPPWOLK	jiang_pharmacophoric-constrained_2023	Pharmacophoric-constrained heterogeneous graph transformer model for molecular property prediction
+FLY7ANYZ	advani_cd47_2018	CD47 Blockade by Hu5F9-G4 and Rituximab in Non-Hodgkin's Lymphoma
+FMBIDNCY	li_4-hydroxyisoleucine_2022	4-Hydroxyisoleucine inhibits tumor growth by triggering endoplasmic reticulum stress and autophagy.
+FN3ANCL8	madani_large_2023	Large language models generate functional protein sequences across diverse families
+FQX2XTJ7	wang_intelligent_2022	Intelligent Biomimetic Nanoplatform for Systemic Treatment of Metastatic Triple-Negative Breast Cancer via Enhanced EGFR-Targeted Therapy and Immunotherapy.
+FRFY0EFS	hudson_can_2023	Can we predict T cell specificity with digital biology and machine learning?
+FUGDHA4D	koga_n_role_2021	Role of backbone strain in de novo design of complex α/β protein structures.
+FWD7WL66	zhao_tryptophan_2021	Tryptophan 2,3-dioxygenase 2 controls M2 macrophages polarization to promote esophageal squamous cell carcinoma progression via AKT/GSK3beta/IL-8 signaling pathway
+G3TSIVRB	yang_w_past_2026	The past, present and future of de novo protein design
+GFNDHZY7	bethel_np_precisely_2023	Precisely patterned nanofibres made from extendable protein multiplexes
+GI4BQLRK	gregorio_ne_stimuli-triggered_2026	Stimuli-triggered formation of de novo-designed protein biomaterials.
+GJ4NRYDR	nanoparticles_antibodies_divine_r_designed_2021	Designed proteins assemble antibodies into modular nanocages
+GUYZRRBL	minibinders_wang_x_novo_2025	De Novo Design of Integrin α5β1 Modulating Proteins to Enhance Biomaterial Properties
+H5YV5GF9	peng_characterizing_2023	Characterizing the interaction conformation between T-cell receptors and epitopes with deep learning
+H8EBSP14	he_pdl1binder_2022	PDL1Binder: Identifying programmed cell death ligand 1 binding peptides by incorporating next-generation phage display data and different peptide descriptors
+HA4XF84S	shi_screening_2022	Screening and identification of HLA-A2-restricted neoepitopes for immunotherapy of non-microsatellite instability-high colorectal cancer.
+HBDBCPWL	wang_x_novo_2024	De Novo Design of Integrin α5β1 Modulating Proteins for Regenerative Medicine.
+HBJNMSLD	edin_muratspahic_novo_2026	De novo design of miniproteins targeting GPCRs
+HFJQ8R9Y	zhai_artificial_2025	Artificial intelligence in peptide-based drug design
+HGHY6ZUY	salveson_pj_expansive_2024	Expansive discovery of chemically diverse structured macrocyclic oligoamides.
+HGSUELUX	zhang_jz_novo_2026	De novo design of Ras isoform selective binders
+HHPV1WW7	rettie_cyclic_2023	Cyclic peptide structure prediction and design using AlphaFold
+HLD229NR	praetorius_f_design_2023	Design of stimulus-responsive two-state hinge proteins
+HRRL9NWY	zou_z_novo_2025	De novo design and evolution of an artificial metathase for cytoplasmic olefin metathesis.
+HS5W34PU	baek_m_protein_2021	Protein oligomer modeling guided by predicted interchain contacts in CASP14
+I0RABXHY	hellinger_peptidomics_2023	Peptidomics
+I6ESBC7D	ellrott_classification_2025	Classification of non-TCGA cancer samples to TCGA molecular subtypes using compact feature sets
+IAADWHHA	shunzhi_wang_novo_2026	De novo design of quasisymmetric two-component protein cages
+IDIBC3A2	harkos_using_2025	Using mathematical modelling and AI to improve delivery and efficacy of therapies in cancer
+IFCTGJ74	bhardwaj_g_accurate_2022	Accurate de novo design of membrane-traversing macrocycles.
+IQDDE7T6	methods_nanoparticles_lab-led_sheffler_w_fast_2023	Fast and versatile sequence-independent protein docking for nanomaterials design using RPXDock
+IT7LQC8S	misc_methods_rosetta_boyken_se_novo_2019	De novo design of tunable, pH-driven conformational changes
+IVXFZTJV	zhou_repositioning_2020	Repositioning liothyronine for cancer immunotherapy by blocking the interaction of immune checkpoint TIGIT/PVR.
+IYYZPJI4	zhung_3d_2024	3D molecular generative framework for interaction-guided drug design
+IZPEWFF6	su_targeted_2023	Targeted Degradation of PD-L1 and Activation of the STING Pathway by Carbon-Dot-Based PROTACs for Cancer Immunotherapy.
+J2D3MJUC	jaroszewicz_phage_2022	Phage display and other peptide display technologies
+J2HDMTRA	wang_cd47sirp_2020	CD47/SIRPα blocking peptide identification and synergistic effect with irradiation for cancer immunotherapy
+J2V7062H	gao_hierarchical_2023	Hierarchical graph learning for protein–protein interaction
+J35CSGND	vaccines_nanoparticles_methods_hiv_lab-led_ueda_g_tailored_2020	Tailored design of protein nanoparticle scaffolds for multivalent presentation of viral glycoprotein antigens
+J3IJ8MWD	zhao_identification_2021	Identification of novel P2X7R antagonists by using structure-based virtual screening and cell-based assays.
+J84H7VNA	nguyen_sequence_2024	Sequence modeling and design from molecular to genome scale with Evo
+J8FL29Q2	baek_accurate_2021	Accurate prediction of protein structures and interactions using a three-track neural network
+J9YW359B	gupta_design_2022	Design of Protein Segments and Peptides for Binding to Protein Targets
+JJSJ8Q9X	favor_a_novo_2025	De novo design of RNA and nucleoprotein complexes.
+JL8MQZKQ	chen_design_2026	Design of a bispecific peptide-nanozyme conjugate for cancer immunotherapy.
+JWRV5TFH	sahtoe_dd_reconfigurable_2022	Reconfigurable asymmetric protein assemblies through implicit negative design
+JXUCNA85	fu_enhancing_2023	Enhancing the anticancer immune response with the assistance of drug repurposing and delivery systems.
+K3PIANFG	zhang_universal_2023	A universal framework for accurate and efficient geometric deep learning of molecular systems
+K6NUR4XK	du_targeting_2025	Targeting peptide antigens using a multiallelic MHC I-binding system
+K7S73OJK	gaudreault_enhanced_2023	Enhanced antibody-antigen structure prediction from molecular docking using AlphaFold2
+KE3CUKPW	butterfield_immunotherapy_2024	Immunotherapy combination approaches: mechanisms, biomarkers and clinical observations
+KER7KW8G	yaman_my_alignment_2021	Alignment of Au nanorods along de novo designed protein nanofibers studied with automated image analysis.
+KFZ8GB8D	rube_prediction_2022	Prediction of protein–ligand binding affinity from sequencing data with interpretable machine learning
+KIJKNY8R	gou_engineered_2021	Engineered Nanovaccine Targeting Clec9a+ Dendritic Cells Remarkably Enhances the Cancer Immunotherapy Effects of STING Agonist.
+KR8ZJMZ8	jin_tpeppro_2024	TPepPro: a deep learning model for predicting peptide–protein interactions
+KSICHDWR	webb_resolving_2025	Resolving spatial subclonal genomic heterogeneity of loss of heterozygosity and extrachromosomal DNA in gliomas
+KZKCY6WW	vorobieva_aa_novo_2021	De novo design of transmembrane β barrels
+KZZ2WNMF	yu_computing_2023	Computing the relative binding affinity of ligands based on a pairwise binding comparison network
+L60X4QOP	ingraham_illuminating_2023	Illuminating protein space with a programmable generative model
+L9ATBXPY	cao_surfdock_2025	SurfDock is a surface-informed diffusion generative model for reliable and accurate protein–ligand complex prediction
+LBDWP83M	xu_y_novo_2026	De Novo Design of Miniature and Efficient Metallo-Ketoreductases.
+LCQPVR9S	zou_structure-based_2025	A structure-based framework for selective inhibitor design and optimization
+LGSGY5XH	oeller_sequence-based_2023	Sequence-based prediction of the intrinsic solubility of peptides containing non-natural amino acids
+LK9B8PRX	zhai_blocking_2021	Blocking of the PD-1/PD-L1 interaction by a novel cyclic peptide inhibitor for cancer immunotherapy
+LM4GSALG	bauer_ms_novo_2025	De novo design of phospho-tyrosine peptide binders.
+LN2FGUUS	hosseinzadeh_p_anchor_2021	Anchor extension: a structure-guided approach to design cyclic peptides targeting enzyme active sites
+LQU7LV35	yao_s_novo_2022	De novo design and directed folding of disulfide-bridged peptide heterodimers.
+LT89UFNQ	goles_peptide-based_2024	Peptide-based drug discovery through artificial intelligence: towards an autonomous design of therapeutic peptides
+LW7PLX7X	wu_k_novo_2023	De novo design of modular peptide-binding proteins by superhelical matching
+LZ84JVMN	zheng_identification_2024	Identification of a novel DEC-205 binding peptide to develop dendritic cell-targeting nanovaccine for cancer immunotherapy.
+M4H2VM3J	machine_learning_anishchenko_i_protein_2021	Protein tertiary structure prediction and refinement using deep learning and Rosetta in CASP14
+M4UVCHKU	he_vitro_2024	In vitro screening methods of novel immune checkpoint inhibitors related to T cell infiltration and anti-PD-1 resistance.
+MB92X37S	minibinders_minibinders_machine_learning_mpnn_library_selection_sappington_i_improved_2026	Improved protein binder design using β-pairing targeted RFdiffusion
+MJQ8V85I	fu_foundation_2025	A foundation model of transcription across human cell types
+MS8TJSEY	motmaen_a_targeting_2025	Targeting peptide-MHC complexes with designed T cell receptors and antibodies.
+N8HAMELG	lee_s_design_2026	Design of one-component quasisymmetric protein nanocages.
+NJEPZ8IT	pan_recent_2021	Recent advance of peptide-based molecules and nonpeptidic small-molecules modulating PD-1/PD-L1 protein-protein interaction or targeting PD-L1 protein degradation
+NMY4RLP5	sun_accurate_2024	Accurate de novo design of heterochiral protein–protein interactions
+NT34ZVHF	newcombe_stereochemistry_2024	Stereochemistry in the disorder–order continuum of protein interactions
+NTNPR4R0	tubiana_scannet_2022	ScanNet: an interpretable geometric deep learning model for structure-based protein binding site prediction
+NTTM7PBW	wang_toward_2025	Toward deep learning sequence–structure co-generation for protein design
+NUKNC32I	hsia_y_design_2021	Design of multi-scale protein complexes by hierarchical building block fusion
+NVR2G4FN	valiente_computational_2021	Computational Design of Potent D-Peptide Inhibitors of SARS-CoV-2
+NWMVDKYT	lu_novo_2024	De novo design of drug-binding proteins with predictable binding energy and specificity
+OS1QGM61	obrien_laramy_delivering_2023	Delivering on the promise of protein degraders
+OWHKZMFS	hekkelman_alphafill_2023	AlphaFill: enriching AlphaFold models with ligands and cofactors
+P38U4PND	zhou_novel_2020	A Novel d-Peptide Identified by Mirror-Image Phage Display Blocks TIGIT/PVR for Cancer Immunotherapy
+PBKQLKAD	berger_s_computational_2025	Computational design of potent and selective binders of BAK and BAX
+PBVDZZF7	song_toward_2024	Toward AI-Driven Digital Organism: Multiscale Foundation Models for Predicting, Simulating and Programming Biology at All Levels
+PBZILT7H	pang_development_2026	Development of a lymph node-homing peptide vaccine targeting C-C chemokine receptor 7-positive dendritic cells with enhanced antitumor immunity.
+PDABLLTT	estrada_pabon_jd_role_2021	The Role of Configurational Entropy in Miniprotein Stability.
+PE42AXJX	abramson_accurate_2024	Accurate structure prediction of biomolecular interactions with AlphaFold 3
+PGS4PWCF	ye_building_2023	Building on the backbone of CD47-based therapy in cancer: Combination strategies, mechanisms, and future perspectives
+PHCC9Q88	dalseno_cell_2025	Cell death and cancer: Metabolic interconnections
+PKFGARA8	niu_identification_2023	Identification and optimization of peptide inhibitors to block VISTA/PSGL-1 interaction for cancer immunotherapy.
+PMSDNRAM	dowling_qm_hierarchical_2025	Hierarchical design of pseudosymmetric protein nanocages.
+PS8B62KN	liu_identification_2012	Identification of a novel HLA-A2-restricted cytotoxic T lymphocyte epitope from cancer-testis antigen PLAC1 in breast cancer.
+PZZKHRDG	akcapinar_computational_2017	Computational approaches for de novo design and redesign of metal-binding sites on proteins
+Q559RLP2	gan_network_2023	Network medicine framework reveals generic herb-symptom effectiveness of traditional Chinese medicine
+Q7DHRI36	agonists_zhang_jz_designed_2023	designed Hsp70 activator dissolves intracellular condensates
+Q82CYIRJ	wang_mvil6_2023	MVIL6: Accurate identification of IL-6-induced peptides using multi-view feature learning
+QCD2DXXI	pacesa_bindcraft_2024	BindCraft: one-shot design of functional protein binders
+QLSCX6MW	park_j_novo_2019	De novo design of a homo-trimeric amantadine-binding protein
+QMCRE3BN	zhou_hemin_2024	Hemin blocks TIGIT/PVR interaction and induces ferroptosis to elicit synergistic effects of cancer immunotherapy.
+QNT4CAFU	liu_dendritic_2019	Dendritic Cell Targeting Peptide-Based Nanovaccines for Enhanced Cancer Immunotherapy.
+QT8VPS79	berger_s_preclinical_2024	Preclinical proof of principle for orally delivered Th17 antagonist miniproteins.
+QTU3CV2H	ennist_nm_novo_2024	De novo design of proteins housing excitonically coupled chlorophyll special pairs.
+QYLMPMM6	wang_oral_2026	An oral vaccine based on stable peptide-chitosan conjugate targeting DEC-205 for cancer immunotherapy.
+QZX9XTPN	lee_s_four-component_2025	Four-component protein nanocages designed by programmed symmetry breaking.
+R0FKH217	chen_dual_2021	Dual Blockade of Lactate/GPR81 and PD-1/PD-L1 Pathways Enhances the Anti-Tumor Effects of Metformin
+R6EX4F4F	wu_design_2025	Design of intrinsically disordered region binding proteins
+R7J2ZMTF	garton_method_2018	Method to generate highly stable D-amino acid analogs of bioactive helical peptides using a mirror image of the entire PDB
+RAJCT3KP	machine_learning_baek_m_deep_2022	Deep learning and protein structure modeling
+RCQKUMZR	clark_enhancing_2023	Enhancing antibody affinity through experimental sampling of non-deleterious CDR mutations predicted by machine learning
+RDME442W	coassolo_prohormone_2025	Prohormone cleavage prediction uncovers a non-incretin anti-obesity peptide
+RE5A5SJP	qi_mirror-image_2024	Mirror-image protein and peptide drug discovery through mirror-image phage display
+RGPZWZTE	thafar_affinity2vec_2022	Affinity2Vec: drug-target binding affinity prediction through representation learning, graph mining, and machine learning
+RH3JTCFH	liu_diffusing_2025	Diffusing protein binders to intrinsically disordered proteins
+RKD929FM	motmaen_peptide-binding_2023	Peptide-binding specificity prediction using fine-tuned protein structure prediction networks
+S1T0QATP	kurtzhals_derivatization_2023	Derivatization with fatty acids in peptide and protein drug discovery
+S8CDQ8F7	said_my_exploration_2022	Exploration of Structured Symmetric Cyclic Peptides as Ligands for Metal-Organic Frameworks
+SI4X7V8P	johansen_novo-designed_2025	De novo-designed pMHC binders facilitate T cell–mediated cytotoxicity toward cancer cells
+SMVB78WP	chen_identification_2022	Identification of natural product 3, 5-diiodotyrosine as APOBEC3B inhibitor to prevent somatic mutation accumulation and cancer progression.
+SPNSPZM8	chen_identification_2022	Identification of a novel GLUT1 inhibitor with in vitro and in vivo anti-tumor activity.
+SVYR8UQJ	atz_geometric_2021	Geometric deep learning on molecular representations
+T2O1ECSF	agrawal_benchmarking_2019	Benchmarking of different molecular docking methods for protein-peptide docking
+TG4VGFRK	lang_identification_2022	Identification of neoantigens for individualized therapeutic cancer vaccines
+TGNQ4DG9	gao_pan-peptide_2023	Pan-Peptide Meta Learning for T-cell receptor–antigen binding recognition
+TL6GE8QR	shen_h_novo_2024	De novo design of pH-responsive self-assembling helical protein filaments.
+TLA6P7KX	jeong_nanoparticle_2020	Nanoparticle Conjugation Stabilizes and Multimerizes β-Hairpin Peptides To Effectively Target PD-1/PD-L1 β-Sheet-Rich Interfaces
+TR7LDPKG	yang_bioorthogonal_2023	Bioorthogonal Reaction-Mediated Tumor-Selective Delivery of CRISPR/Cas9 System for Dual-Targeted Cancer Immunotherapy.
+TSFCPTXD	lin_identification_2021	Identification of CTL Epitopes on Efflux Pumps of the ATP-Binding Cassette and the Major Facilitator Superfamily of Mycobacterium tuberculosis.
+U2VXH3ID	chen_target_2025	Target sequence-conditioned design of peptide binders using masked language modeling
+U4OQOZ8S	katkar_macrophage_2023	Macrophage states: there's a method in the madness
+U6WP5CUQ	yang_alphafold2_2023	AlphaFold2 and its applications in the fields of biology and medicine
+UFEUDYAU	xie_neoantigens_2023	Neoantigens: promising targets for cancer therapy
+UG4YJI6J	kiriyama_d-amino_2016	D-Amino Acids in the Nervous and Endocrine Systems
+UIPWC5CR	pacesa_one-shot_2025	One-shot design of functional protein binders with BindCraft
+UJ8AGPJ3	zhou_novel_2022	A Novel CTLA-4 affinity peptide for cancer immunotherapy by increasing the integrin αvβ3 targeting.
+UKX5E6IB	watson_novo_2023	De novo design of protein structure and function with RFdiffusion
+ULVDDJ6Z	guerin_dexdesign_2024	DexDesign: an OSPREY-based algorithm for designing de novo D-peptide inhibitors
+UMMZH862	li_knowledge-guided_2023	A knowledge-guided pre-training framework for improving molecular representation learning
+UN6R4C6J	dauparas_atomic_2025	Atomic context-conditioned protein sequence design using LigandMPNN
+USFCUNU7	chidyausiku_tm_novo_2022	De novo design of immunoglobulin-like domains.
+UTT6JQAJ	han_characterization_2020	Characterization of CD103+ CD8+ tissue-resident T cells in esophageal squamous cell carcinoma: may be tumor reactive and resurrected by anti-PD-1 blockade.
+UY3XRABU	hu_design_2023	Design of a novel chimeric peptide via dual blockade of CD47/SIRPα and PD-1/PD-L1 for cancer immunotherapy
+UYRXX2U2	jumper_highly_2021	Highly accurate protein structure prediction with AlphaFold
+V2WLND5M	dauparas_robust_2022	Robust deep learning–based protein sequence design using ProteinMPNN
+V4IVL33C	shi_peptide_2023	Peptide vaccine from cancer-testis antigen ODF2 can potentiate the cytotoxic T lymphocyte infiltration through IL-15 in non-MSI-H colorectal cancer.
+V6Y5EEZL	zhu_novo_2026	De novo design of binder proteins targeting Helicobacter pylori adhesin BabA
+VBFEXRCH	case_jb_ultrapotent_2021	Ultrapotent miniproteins targeting the SARS-CoV-2 receptor-binding domain protect against infection and disease.
+VJBXWQV8	agonists_vazquez_torres_s_novo_2025	De novo designed proteins neutralize lethal snake venom toxins
+VKKT2HE0	mcdonald_benchmarking_2023	Benchmarking AlphaFold2 on peptide structure prediction
+VRMHDQGR	mulligan_vk_computationally_2021	Computationally designed peptide macrocycle inhibitors of New Delhi metallo-β-lactamase 1
+VT9D6YHX	wang_x_tuning_2025	Tuning insulin receptor signaling using de novo-designed agonists
+VVVIQ9KZ	escobar-rosales_m_design_2025	Design of Peptide Masks Enables Rapid Generation of Conditionally-Active Miniprotein Binders
+VYPXG2J7	feng_gene-editable_2023	A Gene-Editable Palladium-Based Bioorthogonal Nanoplatform Facilitates Macrophage Phagocytosis for Tumor Therapy.
+VZHBHKKA	lee_gr_small-molecule_2026	Small-molecule binding and sensing with a designed protein family.
+WA59C5TI	jiahan_li_full-atom_2024	Full-atom peptide design based on multi-modal flow matching
+WDNFGXEN	li_yeast_2024	Yeast surface display technology: Mechanisms, applications, and perspectives
+WED6GECA	mirdita_colabfold_2022	ColabFold: making protein folding accessible to all
+WGBQ83EI	mastropietro_learning_2023	Learning characteristics of graph neural networks predicting protein–ligand affinities
+WKXIMTGE	johnson_induction_2013	Induction of IL-17 and nonclassical T-cell activation by HIV-Tat protein
+WQS0BUR5	wang_therapeutic_2022	Therapeutic peptides: current applications and future directions
+WRN9AEIG	zhou_computer-aided_2021	Computer-aided design of PVR mutants with enhanced binding affinity to TIGIT.
+WUQTVXKM	pyles_h_controlling_2019	Controlling protein assembly on inorganic crystals through designed protein interfaces
+WY7FNIEM	li_graph-structured_2025	Graph-structured Small Molecule Drug Discovery Through Deep Learning: Progress, Challenges, and Opportunities
+X2ECW56B	hu_evolution_2026	The evolution of computation-driven paradigms in targeted peptide drug design: From predictive modeling to generative AI and clinical translation
+X5D2XQC9	zhou_repositioning_2021	Repositioning Azelnidipine as a Dual Inhibitor Targeting CD47/SIRPα and TIGIT/PVR Pathways for Cancer Immuno-Therapy.
+X76V8WRA	bryant_evobind_2022	EvoBind: <em>in silico</em> directed evolution of peptide binders with AlphaFold
+XKF7KN2B	chen_dual_2018	Dual TGF-β and PD-1 blockade synergistically enhances MAGE-A3-specific CD8+ T cell response in esophageal squamous cell carcinoma.
+XPIELSIM	marcos_e_novo_2018	De novo design of a non-local β-sheet protein with high stability and accuracy
+XUSU8YGI	wang_peptide_2026	A peptide immunomodulator activates MST1 to expand and stabilize murine and human regulatory T cells for immune tolerance
+Y9WEJHE3	fan_assessing_2026	Assessing conformation validity and rationality of deep learning-generated 3D molecules
+YBB3PXTB	wu_novel_2017	A Novel Recombinant Multi-Epitope Vaccine Could Induce Specific Cytotoxic T Lymphocyte Response In Vitro and In Vivo.
+YIV9AVT4	romero-molina_ppi-affinity_2022	PPI-Affinity: A Web Tool for the Prediction and Optimization of Protein–Peptide and Protein–Protein Binding Affinity
+YKPUQAA6	ling_identification_2022	Identification of Immune Subtypes of Esophageal Adenocarcinoma to Predict Prognosis and Immunotherapy Response
+Z8PIBUQ3	qin_systems_2025	Systems and synthetic biology for plant natural product pathway elucidation
+ZE3W4E7F	wang_scaffolding_2022	Scaffolding protein functional sites using deep learning
+ZE4MK59G	shen_discovery_2023	Discovery of a novel dual-targeting D-peptide to block CD24/Siglec-10 and PD-1/PD-L1 interaction and synergize with radiotherapy for cancer immunotherapy
+ZEFTQC3C	zhao_identification_2022	Identification of Novel CD39 Inhibitors Based on Virtual Screening and Enzymatic Assays.
+ZF7F5FXN	sadri_is_2023	Is Target-Based Drug Discovery Efficient? Discovery and “Off-Target” Mechanisms of All Drugs
+ZHFA9A2E	zhai_novel_2020	A novel cyclic peptide targeting LAG-3 for cancer immunotherapy by activating antigen-specific CD8+ T cell responses
+ZHT8LPD6	yang_fish_2024	Fish oil-based microemulsion can efficiently deliver oral peptide blocking PD-1/PD-L1 and simultaneously induce ferroptosis for cancer immunotherapy.
+ZWHMJEXJ	mardikoraem_generative_2023	Generative models for protein sequence modeling: recent advances and future directions
+ZYFCZKMH	ahern_atom_2025	Atom level enzyme active site scaffolding using RFdiffusion2
+ZYXEHKID	childs_cck_2025	CCK * (Convex Closure K *): A Suite of Algorithms for the De Novo Design of L- and D-peptide Binders

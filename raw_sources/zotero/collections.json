@@ -1,0 +1,654 @@
+[
+  {
+    "key": "NHUTYMB3",
+    "version": 1383,
+    "library": {
+      "type": "user",
+      "id": 20681558,
+      "name": "我的文库",
+      "links": {
+        "self": {
+          "href": "http://localhost:23119/api/users/20681558",
+          "type": "application/json"
+        },
+        "alternate": {
+          "href": "https://www.zotero.org/users/20681558",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "http://localhost:23119/api/users/20681558/collections/NHUTYMB3",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/users/20681558/collections/NHUTYMB3",
+        "type": "text/html"
+      }
+    },
+    "meta": {
+      "numCollections": 0,
+      "numItems": 1
+    },
+    "data": {
+      "key": "NHUTYMB3",
+      "version": 1383,
+      "name": "10.1038_s41586-026-10459-x-citation",
+      "parentCollection": false,
+      "relations": {}
+    }
+  },
+  {
+    "key": "X4R2W1JV",
+    "version": 0,
+    "library": {
+      "type": "user",
+      "id": 20681558,
+      "name": "我的文库",
+      "links": {
+        "self": {
+          "href": "http://localhost:23119/api/users/20681558",
+          "type": "application/json"
+        },
+        "alternate": {
+          "href": "https://www.zotero.org/users/20681558",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "http://localhost:23119/api/users/20681558/collections/X4R2W1JV",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/users/20681558/collections/X4R2W1JV",
+        "type": "text/html"
+      }
+    },
+    "meta": {
+      "numCollections": 8,
+      "numItems": 0
+    },
+    "data": {
+      "key": "X4R2W1JV",
+      "version": 0,
+      "name": "EndNote主题文献库",
+      "parentCollection": false,
+      "relations": {}
+    }
+  },
+  {
+    "key": "UA8J8PM4",
+    "version": 0,
+    "library": {
+      "type": "user",
+      "id": 20681558,
+      "name": "我的文库",
+      "links": {
+        "self": {
+          "href": "http://localhost:23119/api/users/20681558",
+          "type": "application/json"
+        },
+        "alternate": {
+          "href": "https://www.zotero.org/users/20681558",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "http://localhost:23119/api/users/20681558/collections/UA8J8PM4",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/users/20681558/collections/UA8J8PM4",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "http://localhost:23119/api/users/20681558/collections/X4R2W1JV",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "numCollections": 0,
+      "numItems": 905
+    },
+    "data": {
+      "key": "UA8J8PM4",
+      "version": 0,
+      "name": "单细胞与空间组学方法数据库",
+      "parentCollection": "X4R2W1JV",
+      "relations": {}
+    }
+  },
+  {
+    "key": "88EMJGYW",
+    "version": 0,
+    "library": {
+      "type": "user",
+      "id": 20681558,
+      "name": "我的文库",
+      "links": {
+        "self": {
+          "href": "http://localhost:23119/api/users/20681558",
+          "type": "application/json"
+        },
+        "alternate": {
+          "href": "https://www.zotero.org/users/20681558",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "http://localhost:23119/api/users/20681558/collections/88EMJGYW",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/users/20681558/collections/88EMJGYW",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "http://localhost:23119/api/users/20681558/collections/X4R2W1JV",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "numCollections": 0,
+      "numItems": 33
+    },
+    "data": {
+      "key": "88EMJGYW",
+      "version": 0,
+      "name": "非肿瘤疾病单细胞专题",
+      "parentCollection": "X4R2W1JV",
+      "relations": {}
+    }
+  },
+  {
+    "key": "FO4J25V8",
+    "version": 0,
+    "library": {
+      "type": "user",
+      "id": 20681558,
+      "name": "我的文库",
+      "links": {
+        "self": {
+          "href": "http://localhost:23119/api/users/20681558",
+          "type": "application/json"
+        },
+        "alternate": {
+          "href": "https://www.zotero.org/users/20681558",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "http://localhost:23119/api/users/20681558/collections/FO4J25V8",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/users/20681558/collections/FO4J25V8",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "http://localhost:23119/api/users/20681558/collections/X4R2W1JV",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "numCollections": 0,
+      "numItems": 156
+    },
+    "data": {
+      "key": "FO4J25V8",
+      "version": 0,
+      "name": "结直肠癌药物图谱与AI药物筛选",
+      "parentCollection": "X4R2W1JV",
+      "relations": {}
+    }
+  },
+  {
+    "key": "MC918162",
+    "version": 0,
+    "library": {
+      "type": "user",
+      "id": 20681558,
+      "name": "我的文库",
+      "links": {
+        "self": {
+          "href": "http://localhost:23119/api/users/20681558",
+          "type": "application/json"
+        },
+        "alternate": {
+          "href": "https://www.zotero.org/users/20681558",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "http://localhost:23119/api/users/20681558/collections/MC918162",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/users/20681558/collections/MC918162",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "http://localhost:23119/api/users/20681558/collections/X4R2W1JV",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "numCollections": 0,
+      "numItems": 174
+    },
+    "data": {
+      "key": "MC918162",
+      "version": 0,
+      "name": "免疫靶点与炎症通路",
+      "parentCollection": "X4R2W1JV",
+      "relations": {}
+    }
+  },
+  {
+    "key": "OVRF3MRK",
+    "version": 0,
+    "library": {
+      "type": "user",
+      "id": 20681558,
+      "name": "我的文库",
+      "links": {
+        "self": {
+          "href": "http://localhost:23119/api/users/20681558",
+          "type": "application/json"
+        },
+        "alternate": {
+          "href": "https://www.zotero.org/users/20681558",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "http://localhost:23119/api/users/20681558/collections/OVRF3MRK",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/users/20681558/collections/OVRF3MRK",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "http://localhost:23119/api/users/20681558/collections/X4R2W1JV",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "numCollections": 0,
+      "numItems": 1824
+    },
+    "data": {
+      "key": "OVRF3MRK",
+      "version": 0,
+      "name": "肿瘤核心机制与肿瘤免疫",
+      "parentCollection": "X4R2W1JV",
+      "relations": {}
+    }
+  },
+  {
+    "key": "WOJHNDDE",
+    "version": 0,
+    "library": {
+      "type": "user",
+      "id": 20681558,
+      "name": "我的文库",
+      "links": {
+        "self": {
+          "href": "http://localhost:23119/api/users/20681558",
+          "type": "application/json"
+        },
+        "alternate": {
+          "href": "https://www.zotero.org/users/20681558",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "http://localhost:23119/api/users/20681558/collections/WOJHNDDE",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/users/20681558/collections/WOJHNDDE",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "http://localhost:23119/api/users/20681558/collections/X4R2W1JV",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "numCollections": 1,
+      "numItems": 593
+    },
+    "data": {
+      "key": "WOJHNDDE",
+      "version": 0,
+      "name": "AI药物设计_蛋白与多肽",
+      "parentCollection": "X4R2W1JV",
+      "relations": {}
+    }
+  },
+  {
+    "key": "0T22MGK6",
+    "version": 0,
+    "library": {
+      "type": "user",
+      "id": 20681558,
+      "name": "我的文库",
+      "links": {
+        "self": {
+          "href": "http://localhost:23119/api/users/20681558",
+          "type": "application/json"
+        },
+        "alternate": {
+          "href": "https://www.zotero.org/users/20681558",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "http://localhost:23119/api/users/20681558/collections/0T22MGK6",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/users/20681558/collections/0T22MGK6",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "http://localhost:23119/api/users/20681558/collections/WOJHNDDE",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "numCollections": 4,
+      "numItems": 428
+    },
+    "data": {
+      "key": "0T22MGK6",
+      "version": 0,
+      "name": "PD-wiki_多肽从头设计工具方法综述",
+      "parentCollection": "WOJHNDDE",
+      "relations": {}
+    }
+  },
+  {
+    "key": "WWSP0HLC",
+    "version": 0,
+    "library": {
+      "type": "user",
+      "id": 20681558,
+      "name": "我的文库",
+      "links": {
+        "self": {
+          "href": "http://localhost:23119/api/users/20681558",
+          "type": "application/json"
+        },
+        "alternate": {
+          "href": "https://www.zotero.org/users/20681558",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "http://localhost:23119/api/users/20681558/collections/WWSP0HLC",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/users/20681558/collections/WWSP0HLC",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "http://localhost:23119/api/users/20681558/collections/0T22MGK6",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "numCollections": 0,
+      "numItems": 170
+    },
+    "data": {
+      "key": "WWSP0HLC",
+      "version": 0,
+      "name": "01_Baker_IPD_2018至今",
+      "parentCollection": "0T22MGK6",
+      "relations": {}
+    }
+  },
+  {
+    "key": "YVPXPS9B",
+    "version": 0,
+    "library": {
+      "type": "user",
+      "id": 20681558,
+      "name": "我的文库",
+      "links": {
+        "self": {
+          "href": "http://localhost:23119/api/users/20681558",
+          "type": "application/json"
+        },
+        "alternate": {
+          "href": "https://www.zotero.org/users/20681558",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "http://localhost:23119/api/users/20681558/collections/YVPXPS9B",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/users/20681558/collections/YVPXPS9B",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "http://localhost:23119/api/users/20681558/collections/0T22MGK6",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "numCollections": 0,
+      "numItems": 196
+    },
+    "data": {
+      "key": "YVPXPS9B",
+      "version": 0,
+      "name": "02_本地蛋白多肽设计",
+      "parentCollection": "0T22MGK6",
+      "relations": {}
+    }
+  },
+  {
+    "key": "4C6697JS",
+    "version": 0,
+    "library": {
+      "type": "user",
+      "id": 20681558,
+      "name": "我的文库",
+      "links": {
+        "self": {
+          "href": "http://localhost:23119/api/users/20681558",
+          "type": "application/json"
+        },
+        "alternate": {
+          "href": "https://www.zotero.org/users/20681558",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "http://localhost:23119/api/users/20681558/collections/4C6697JS",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/users/20681558/collections/4C6697JS",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "http://localhost:23119/api/users/20681558/collections/0T22MGK6",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "numCollections": 0,
+      "numItems": 79
+    },
+    "data": {
+      "key": "4C6697JS",
+      "version": 0,
+      "name": "03_Gao_Zhou_Sui_肿瘤免疫多肽",
+      "parentCollection": "0T22MGK6",
+      "relations": {}
+    }
+  },
+  {
+    "key": "H075SCN7",
+    "version": 0,
+    "library": {
+      "type": "user",
+      "id": 20681558,
+      "name": "我的文库",
+      "links": {
+        "self": {
+          "href": "http://localhost:23119/api/users/20681558",
+          "type": "application/json"
+        },
+        "alternate": {
+          "href": "https://www.zotero.org/users/20681558",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "http://localhost:23119/api/users/20681558/collections/H075SCN7",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/users/20681558/collections/H075SCN7",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "http://localhost:23119/api/users/20681558/collections/0T22MGK6",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "numCollections": 0,
+      "numItems": 22
+    },
+    "data": {
+      "key": "H075SCN7",
+      "version": 0,
+      "name": "04_待补PDF_人工核验",
+      "parentCollection": "0T22MGK6",
+      "relations": {}
+    }
+  },
+  {
+    "key": "D3ZZH4XW",
+    "version": 0,
+    "library": {
+      "type": "user",
+      "id": 20681558,
+      "name": "我的文库",
+      "links": {
+        "self": {
+          "href": "http://localhost:23119/api/users/20681558",
+          "type": "application/json"
+        },
+        "alternate": {
+          "href": "https://www.zotero.org/users/20681558",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "http://localhost:23119/api/users/20681558/collections/D3ZZH4XW",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/users/20681558/collections/D3ZZH4XW",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "http://localhost:23119/api/users/20681558/collections/X4R2W1JV",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "numCollections": 0,
+      "numItems": 58
+    },
+    "data": {
+      "key": "D3ZZH4XW",
+      "version": 0,
+      "name": "BRCA_TNBC空间与微环境",
+      "parentCollection": "X4R2W1JV",
+      "relations": {}
+    }
+  },
+  {
+    "key": "08H5Q8G9",
+    "version": 0,
+    "library": {
+      "type": "user",
+      "id": 20681558,
+      "name": "我的文库",
+      "links": {
+        "self": {
+          "href": "http://localhost:23119/api/users/20681558",
+          "type": "application/json"
+        },
+        "alternate": {
+          "href": "https://www.zotero.org/users/20681558",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "http://localhost:23119/api/users/20681558/collections/08H5Q8G9",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/users/20681558/collections/08H5Q8G9",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "http://localhost:23119/api/users/20681558/collections/X4R2W1JV",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "numCollections": 0,
+      "numItems": 19
+    },
+    "data": {
+      "key": "08H5Q8G9",
+      "version": 0,
+      "name": "PDAC单细胞与空间图谱",
+      "parentCollection": "X4R2W1JV",
+      "relations": {}
+    }
+  }
+]

@@ -1,0 +1,5 @@
+{
+  "source": "Zotero local API",
+  "base": "http://127.0.0.1:23119/api/users/0",
+  "build_date": "2026-06-03"
+}

@@ -1,0 +1,41 @@
+# Python/runtime caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environments
+.venv/
+venv/
+env/
+.env
+.env.*
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Benchmark execution outputs for later phases
+benchmark_runs/
+checkpoints/
+models/
+weights/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.pdb
+*.cif
+*.mmcif
+
+# Large local source files should not be committed directly.
+*.pdf
+*.docx
+*.pptx
+*.xlsx
+*.enl
+*.Data/

@@ -1,0 +1,12 @@
+method,primary_paper,code_url,weights_url,status
+PepMLM,Target sequence-conditioned design of peptide binders using masked language modeling,https://github.com/programmablebio/pepmlm,https://huggingface.co/ChatterjeeLab/PepMLM-650M,include
+SaLT&PepPr,SaLT&PepPr is an interface-predicting language model for designing peptide-guided protein degraders,https://github.com/programmablebio/saltnpeppr,https://huggingface.co/ubiquitx/saltnpeppr,include
+DiffPepBuilder,DiffPepBuilder: a structure-aware diffusion model for peptide binder design,https://github.com/YuzheWangPKU/DiffPepBuilder,https://zenodo.org/records/12794439,include
+PepGLAD,Full-atom peptide design with geometric latent diffusion,https://github.com/THUNLP-MT/PepGLAD,repository release; verify exact checkpoint location,include
+D-Flow / PeptideDesign,Cross-Chirality Generalization by Axial Vectors for Hetero-Chiral Protein-Peptide Interaction Design,https://github.com/smiles724/PeptideDesign,repository release; verify exact checkpoint location,include
+AfCycDesign / ColabDesign cyclic peptide,Cyclic peptide structure prediction and design using AlphaFold,https://github.com/sokrypton/ColabDesign,AlphaFold/ColabDesign dependencies; verify local model source,include
+DexDesign / OSPREY3,DexDesign: an OSPREY-based algorithm for designing de novo D-peptide inhibitors,https://github.com/donaldlab/OSPREY3,not applicable,include
+RFdiffusion + ProteinMPNN,Improving de novo protein binder design with deep learning,https://github.com/RosettaCommons/RFdiffusion; https://github.com/dauparas/ProteinMPNN,RFdiffusion and ProteinMPNN public model releases; verify local download route,include
+BindCraft,BindCraft: one-shot design of functional protein binders,https://github.com/martinpacesa/BindCraft,AlphaFold/MPNN/PyRosetta dependencies; verify local setup,include
+PepFlow,Full-atom peptide design based on multi-modal flow matching,https://huggingface.co/Irwiny/PepFlow,https://huggingface.co/Irwiny/PepFlow,watchlist
+BoltzDesign1,BoltzDesign1: Inverting All-Atom Structure Prediction Model for Generalized Biomolecular Binder Design,https://github.com/jwohlwend/boltz,Boltz model releases; verify design-specific route,watchlist

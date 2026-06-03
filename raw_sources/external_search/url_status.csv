@@ -1,0 +1,23 @@
+method,field,url,http_status,check_status
+PepMLM,code_url,https://github.com/programmablebio/pepmlm,200,reachable
+PepMLM,weights_url,https://huggingface.co/ChatterjeeLab/PepMLM-650M,200,reachable
+SaLT&PepPr,code_url,https://github.com/programmablebio/saltnpeppr,200,reachable
+SaLT&PepPr,weights_url,https://huggingface.co/ubiquitx/saltnpeppr,200,reachable
+DiffPepBuilder,code_url,https://github.com/YuzheWangPKU/DiffPepBuilder,200,reachable
+DiffPepBuilder,weights_url,https://zenodo.org/records/12794439,200,reachable
+PepGLAD,code_url,https://github.com/THUNLP-MT/PepGLAD,200,reachable
+PepGLAD,weights_url,repository release; verify exact checkpoint location,,not_checked
+D-Flow / PeptideDesign,code_url,https://github.com/smiles724/PeptideDesign,200,reachable
+D-Flow / PeptideDesign,weights_url,repository release; verify exact checkpoint location,,not_checked
+AfCycDesign / ColabDesign cyclic peptide,code_url,https://github.com/sokrypton/ColabDesign,200,reachable
+AfCycDesign / ColabDesign cyclic peptide,weights_url,AlphaFold/ColabDesign dependencies; verify local model source,,not_checked
+DexDesign / OSPREY3,code_url,https://github.com/donaldlab/OSPREY3,200,reachable
+DexDesign / OSPREY3,weights_url,not applicable,,not_checked
+RFdiffusion + ProteinMPNN,code_url,https://github.com/RosettaCommons/RFdiffusion; https://github.com/dauparas/ProteinMPNN,200; 200,reachable; reachable
+RFdiffusion + ProteinMPNN,weights_url,RFdiffusion and ProteinMPNN public model releases; verify local download route,,not_checked
+BindCraft,code_url,https://github.com/martinpacesa/BindCraft,200,reachable
+BindCraft,weights_url,AlphaFold/MPNN/PyRosetta dependencies; verify local setup,,not_checked
+PepFlow,code_url,https://huggingface.co/Irwiny/PepFlow,200,reachable
+PepFlow,weights_url,https://huggingface.co/Irwiny/PepFlow,200,reachable
+BoltzDesign1,code_url,https://github.com/jwohlwend/boltz,200,reachable
+BoltzDesign1,weights_url,Boltz model releases; verify design-specific route,,not_checked

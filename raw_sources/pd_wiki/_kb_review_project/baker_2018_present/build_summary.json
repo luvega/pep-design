@@ -1,0 +1,13 @@
+{
+  "baker_lab_candidates": 108,
+  "pubmed_candidates": 120,
+  "merged_candidates": 170,
+  "present_in_zotero": 17,
+  "missing_candidate": 153,
+  "output_dir": "E:\\Endnote参考文献\\_kb\\review_projects\\03_ai_drug_design_protein_peptide_methods\\baker_2018_present",
+  "sources": {
+    "baker_lab_publications": "https://www.bakerlab.org/publications/",
+    "pubmed_query": "((Baker D[Author]) OR (Baker DA[Author]) OR (\"Institute for Protein Design\"[Affiliation] AND protein design[Title/Abstract])) AND (\"2018/01/01\"[Date - Publication] : \"3000\"[Date - Publication]) AND (protein design OR de novo design OR RFdiffusion OR RFantibody OR RoseTTAFold OR ProteinMPNN OR LigandMPNN OR antibody OR peptide OR binder OR miniprotein OR macrocycle OR enzyme design OR protein cage OR sensor OR vaccine OR MHC OR TCR OR GPCR)",
+    "zotero_db": "C:\\Users\\xsui\\Zotero\\zotero.sqlite"
+  }
+}
