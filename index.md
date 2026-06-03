@@ -16,12 +16,16 @@
 - [Benchmark candidates](wiki/benchmark_candidates/_index.md)
 - [Candidate shortlist](reports/candidate_methods_shortlist.md)
 - [Literature scope report](reports/literature_scope_report.md)
+- [Benchmark literature lessons](reports/benchmark_literature_lessons.md)
 - [Benchmark protocol v0](benchmarks/protocols/benchmark_protocol_v0.md)
 - [run.csv schema](benchmarks/protocols/run_csv_schema.md)
+- [Target set schema](benchmarks/input_sets/target_set_v0_schema.md)
+- [Negative design panel schema](benchmarks/input_sets/negative_design_panel_schema.md)
 - [Scoring protocol v0](benchmarks/scoring/scoring_protocol_v0.md)
+- [Scoring output schema](benchmarks/protocols/scoring_outputs_schema.md)
 - [Method runnability audit](reports/method_runnability_audit.md)
 - [Benchmark manuscript outline](reports/benchmark_manuscript_outline.md)
 - [Benchmark manuscript figure/table plan](reports/benchmark_manuscript_figure_table_plan.md)
 
 ## Next Phase
-The current next phase is smoke-test readiness: freeze target/input schemas, verify method install routes, and prepare minimal run plans without downloading large weights or running GPU benchmark tasks.
+The current next phase is target/control and smoke-test readiness: freeze target/input schemas, verify method install routes, prepare minimal run plans, and keep generation/ranking/developability/leakage outputs separate without downloading large weights or running GPU benchmark tasks.

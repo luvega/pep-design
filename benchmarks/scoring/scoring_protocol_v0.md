@@ -10,6 +10,9 @@
 | `interface_geometry` | contacts, interface area, H-bonds, clash count | complex structures |
 | `structure_similarity` | DockQ, backbone RMSD, interface RMSD | tasks with reference structures |
 | `design_feasibility` | length, chain validity, chirality flag, cyclic flag, output parseability | all methods |
+| `developability` | length, molecular weight proxy, net charge, hydrophobicity, aromaticity, cysteine/disulfide flags, cyclic flag, D/L/mixed chirality, non-natural residue flag, aggregation-risk proxy, synthesis complexity flag | all peptide outputs at metadata level |
+| `negative_design` | off-target panel score, similarity to target, expected nonbinder status, cross-reactivity flag | peptide binder, pMHC/TCR-like and degrader/interface tasks |
+| `leakage_homology` | sequence identity cluster, structural cluster, motif overlap, train leakage risk | all targets and reference binders |
 
 ## External Scoring Modules
 
@@ -22,6 +25,14 @@
 | PyRosetta / Rosetta | optional | license required |
 | DockQ | optional | reference complex needed |
 | PyMOL metrics | optional | open-source PyMOL installation needed |
+
+## Developability Boundary
+
+Current `developability` metrics are metadata-level proxies. Later experimental-level fields may include solubility, serum stability, protease stability, plasma protein binding, PAMPA/Caco-2, microsomal stability, hemolysis, immunogenicity, purity and yield. These later fields must remain blank or `not_available` until measured or extracted from an explicit source.
+
+## Generation Versus Ranking
+
+Generation metrics assess whether a method produces parseable, valid and task-compatible outputs. Ranking/rescoring metrics assess whether existing or generated candidates can be prioritised against affinity, structure or developability evidence. These tracks must be reported separately because a strong ranker does not imply strong de novo generation, and a generator can produce valid candidates without calibrated affinity ranking.
 
 ## Merge Rule
 

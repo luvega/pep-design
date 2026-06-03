@@ -12,6 +12,9 @@
 | `rmsd.csv` | `design_id` | `design_id,reference_id,backbone_rmsd,interface_rmsd,alignment_notes,status,not_applicable_reason` | 结构相似性 |
 | `dockq.csv` | `design_id` | `design_id,reference_id,dockq,fnat,irms,lrms,status,not_applicable_reason` | DockQ 或等价指标 |
 | `rosetta_metrics.csv` | `design_id` | `design_id,source,total_score,interface_delta_sasa,shape_complementarity,ddg,status,not_applicable_reason` | Rosetta/PyRosetta 指标 |
+| `developability_metrics.csv` | `design_id` | `design_id,length,molecular_weight_proxy,net_charge,hydrophobicity,aromaticity,cysteine_disulfide_flags,cyclic_flag,chirality,non_natural_residue_flag,aggregation_risk_proxy,synthesis_complexity_flag,status,not_applicable_reason` | metadata-level 可开发性代理指标 |
+| `negative_design_metrics.csv` | `design_id` | `design_id,off_target_id,similarity_to_target,expected_nonbinder_reason,healthy_tissue_or_related_protein_flag,scoring_result,status,not_applicable_reason` | negative/off-target panel |
+| `leakage_homology_assessment.csv` | `target_id` | `target_id,method,sequence_identity_cluster,structural_cluster,motif_overlap,train_leakage_risk,status,notes` | target/reference leakage and homology checks |
 | `merged_run.csv` | `design_id` | `run.csv` columns plus metric columns | 最终合并表 |
 
 ## Missing Metrics
@@ -20,6 +23,8 @@
 
 - `status=not_applicable`
 - `not_applicable_reason=sequence_only_output` or another explicit reason
+
+Developability, negative-design and leakage/homology fields may also be `not_applicable`, `not_available`, or `unknown`. Unknown leakage risk cannot be interpreted as independent validation.
 
 ## Version Fields
 

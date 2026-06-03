@@ -67,6 +67,8 @@ RUNNABILITY_HEADERS = [
     "method",
     "task_id",
     "tier",
+    "scientific_priority",
+    "engineering_readiness",
     "repo_url",
     "license_status",
     "weights_route",
@@ -89,6 +91,33 @@ MANUSCRIPT_CLAIM_HEADERS = [
     "next_check",
 ]
 
+BENCHMARK_LITERATURE_HEADERS = [
+    "zotero_key",
+    "bibtex_key",
+    "title",
+    "year",
+    "benchmark_lesson",
+    "limitation",
+    "planned_use",
+]
+
+TARGET_SET_HEADERS = [
+    "target_id",
+    "task_id",
+    "target_class",
+    "pdb_id",
+    "chain_ids",
+    "apo_or_holo",
+    "known_binder",
+    "negative_controls",
+    "experimental_affinity",
+    "assay_type",
+    "sequence_identity_cluster",
+    "train_leakage_risk",
+    "license",
+    "notes",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
@@ -100,6 +129,9 @@ REQUIRED_FILES = [
     "benchmarks/scoring/scoring_protocol_v0.md",
     "benchmarks/smoke_tests/README.md",
     "benchmarks/input_sets/README.md",
+    "benchmarks/input_sets/target_set_v0.csv",
+    "benchmarks/input_sets/target_set_v0_schema.md",
+    "benchmarks/input_sets/negative_design_panel_schema.md",
     "benchmarks/results/README.md",
     "raw_sources/_index.md",
     "references/references.bib",
@@ -110,10 +142,12 @@ REQUIRED_FILES = [
     "tables/method_evidence_matrix.csv",
     "tables/candidate_method_scorecard.csv",
     "tables/method_runnability_matrix.csv",
+    "tables/benchmark_literature_lessons.csv",
     "reports/skill_selection.md",
     "reports/literature_scope_report.md",
     "reports/candidate_methods_shortlist.md",
     "reports/method_runnability_audit.md",
+    "reports/benchmark_literature_lessons.md",
     "reports/benchmark_manuscript_outline.md",
     "reports/benchmark_manuscript_claim_evidence_map.csv",
     "reports/benchmark_manuscript_figure_table_plan.md",
@@ -150,12 +184,20 @@ REQUIRED_SCORING_OUTPUTS = [
     "rmsd.csv",
     "dockq.csv",
     "rosetta_metrics.csv",
+    "developability_metrics.csv",
+    "negative_design_metrics.csv",
+    "leakage_homology_assessment.csv",
     "merged_run.csv",
 ]
 
 MANUSCRIPT_REQUIRED_TOKENS = [
     "Benchmark framework / protocol-first manuscript",
     "Main Thesis",
+    "Benchmark Lessons From Local Zotero Literature",
+    "Target Set And Control Set Design",
+    "Generation Benchmark Protocol",
+    "Ranking And Rescoring Benchmark Protocol",
+    "Data Leakage, Homology Control And Target Novelty",
     "Reverse Outline",
     "Self-Review Checklist",
 ]
@@ -239,6 +281,12 @@ def main() -> int:
     evidence_rows = check_headers(errors, "tables/method_evidence_matrix.csv", EVIDENCE_HEADERS)
     score_rows = check_headers(errors, "tables/candidate_method_scorecard.csv", SCORE_HEADERS)
     runnability_rows = check_headers(errors, "tables/method_runnability_matrix.csv", RUNNABILITY_HEADERS)
+    benchmark_lesson_rows = check_headers(
+        errors,
+        "tables/benchmark_literature_lessons.csv",
+        BENCHMARK_LITERATURE_HEADERS,
+    )
+    target_set_rows = check_headers(errors, "benchmarks/input_sets/target_set_v0.csv", TARGET_SET_HEADERS)
     manuscript_claim_rows = check_headers(
         errors,
         "reports/benchmark_manuscript_claim_evidence_map.csv",
@@ -271,6 +319,10 @@ def main() -> int:
             continue
         if runnability.get("tier") not in {"Tier 1", "Tier 2", "Tier 3"}:
             errors.append(f"{method}: invalid runnability tier {runnability.get('tier')}")
+        if runnability.get("scientific_priority") not in {"high", "medium", "low"}:
+            errors.append(f"{method}: invalid scientific_priority {runnability.get('scientific_priority')}")
+        if runnability.get("engineering_readiness") not in {"ready", "needs_mapping", "heavy_dependency"}:
+            errors.append(f"{method}: invalid engineering_readiness {runnability.get('engineering_readiness')}")
         if runnability.get("task_id") not in REQUIRED_PROTOCOL_TASKS:
             errors.append(f"{method}: invalid task_id {runnability.get('task_id')}")
         for required_field in ["repo_url", "expected_inputs", "expected_outputs", "next_action"]:
@@ -285,15 +337,29 @@ def main() -> int:
     if extra_runnability:
         warnings.append("runnability rows for non-included methods: " + ", ".join(extra_runnability))
 
+    if not benchmark_lesson_rows:
+        errors.append("benchmark_literature_lessons.csv has no rows")
+    for row in benchmark_lesson_rows:
+        for required_field in ["zotero_key", "bibtex_key", "title", "year", "benchmark_lesson", "limitation"]:
+            if not row.get(required_field):
+                errors.append(f"benchmark_literature_lessons.csv row missing {required_field}: {row.get('bibtex_key')}")
+
     protocol_text = (ROOT / "benchmarks/protocols/benchmark_protocol_v0.md").read_text(encoding="utf-8")
     for task in REQUIRED_PROTOCOL_TASKS:
         if task not in protocol_text:
             errors.append(f"benchmark_protocol_v0.md missing task {task}")
+    for token in ["Generation Versus Ranking Tracks", "Target Set And Controls", "Leakage And Homology Control"]:
+        if token not in protocol_text:
+            errors.append(f"benchmark_protocol_v0.md missing required section {token}")
 
     scoring_schema = (ROOT / "benchmarks/protocols/scoring_outputs_schema.md").read_text(encoding="utf-8")
     for filename in REQUIRED_SCORING_OUTPUTS:
         if filename not in scoring_schema:
             errors.append(f"scoring_outputs_schema.md missing output table {filename}")
+    scoring_protocol = (ROOT / "benchmarks/scoring/scoring_protocol_v0.md").read_text(encoding="utf-8")
+    for family in ["developability", "negative_design", "leakage_homology"]:
+        if family not in scoring_protocol:
+            errors.append(f"scoring_protocol_v0.md missing metric family {family}")
 
     manuscript_outline = (ROOT / "reports/benchmark_manuscript_outline.md").read_text(encoding="utf-8")
     for token in MANUSCRIPT_REQUIRED_TOKENS:
@@ -304,6 +370,8 @@ def main() -> int:
             errors.append(f"benchmark_manuscript_outline.md contains unsupported claim wording: {forbidden}")
     if not manuscript_claim_rows:
         errors.append("benchmark_manuscript_claim_evidence_map.csv has no claim rows")
+    if len(manuscript_claim_rows) < 12:
+        errors.append("benchmark_manuscript_claim_evidence_map.csv should cover revised benchmark claims")
 
     method_files = sorted((ROOT / "wiki/methods").glob("*.md"))
     method_files = [path for path in method_files if path.name != "_index.md"]
@@ -338,6 +406,8 @@ def main() -> int:
             "score_rows": len(score_rows),
             "included_methods": len(included_methods),
             "runnability_rows": len(runnability_rows),
+            "benchmark_literature_rows": len(benchmark_lesson_rows),
+            "target_set_rows": len(target_set_rows),
             "manuscript_claim_rows": len(manuscript_claim_rows),
             "smoke_test_readmes": len(
                 [path for path in (ROOT / "benchmarks/smoke_tests").glob("*/README.md")]

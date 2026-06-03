@@ -17,15 +17,17 @@
 
 ## Included Methods
 
-| method | slug | tier |
-|:---|:---|:---|
-| PepMLM | `pepmlm` | Tier 1 |
-| PepMirror | `pepmirror` | Tier 1 |
-| RFdiffusion + ProteinMPNN | `rfdiffusion-proteinmpnn` | Tier 1 |
-| DiffPepBuilder | `diffpepbuilder` | Tier 2 |
-| PepGLAD | `pepglad` | Tier 2 |
-| D-Flow / PeptideDesign | `d-flow-peptidedesign` | Tier 2 |
-| AfCycDesign / ColabDesign cyclic peptide | `afcycdesign-colabdesign` | Tier 2 |
-| BindCraft | `bindcraft` | Tier 2 |
-| SaLT&PepPr | `salt-peppr` | Tier 3 |
-| DexDesign / OSPREY3 | `dexdesign-osprey3` | Tier 3 |
+| method | slug | tier | scientific_priority | engineering_readiness |
+|:---|:---|:---|:---|:---|
+| PepMLM | `pepmlm` | Tier 1 | high | ready |
+| PepMirror | `pepmirror` | Tier 1 | high | heavy_dependency |
+| RFdiffusion + ProteinMPNN | `rfdiffusion-proteinmpnn` | Tier 1 | high | needs_mapping |
+| DiffPepBuilder | `diffpepbuilder` | Tier 2 | high | needs_mapping |
+| PepGLAD | `pepglad` | Tier 2 | medium | needs_mapping |
+| D-Flow / PeptideDesign | `d-flow-peptidedesign` | Tier 2 | high | needs_mapping |
+| AfCycDesign / ColabDesign cyclic peptide | `afcycdesign-colabdesign` | Tier 2 | high | heavy_dependency |
+| BindCraft | `bindcraft` | Tier 2 | medium | heavy_dependency |
+| SaLT&PepPr | `salt-peppr` | Tier 3 | medium | needs_mapping |
+| DexDesign / OSPREY3 | `dexdesign-osprey3` | Tier 3 | medium | heavy_dependency |
+
+Tier is a scheduling shorthand. `scientific_priority` and `engineering_readiness` are the fields used for interpretation.

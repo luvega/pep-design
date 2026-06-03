@@ -1,5 +1,11 @@
 # Project Log
 
+## [2026-06-03] protocol | Zotero benchmark literature revision
+- Added local Zotero benchmark/scoring/developability lessons in `reports/benchmark_literature_lessons.md` and `tables/benchmark_literature_lessons.csv`.
+- Added target/control schema, negative-design panel schema, developability metrics, leakage/homology placeholders, and generation versus ranking/rescoring split.
+- Split candidate interpretation into `scientific_priority` and `engineering_readiness` while keeping `tier` only as a smoke-test scheduling shorthand.
+- Did not write Zotero items, modify EndNote/PD-wiki source layers, install methods, download weights, or run GPU tasks.
+
 ## [2026-06-03] protocol | benchmark v0.2 readiness layer
 - Added Benchmark protocol, run.csv schema, scoring-output schema, runnability audit, and smoke-test planning layer.
 - Followed `de_novo_binder_scoring` as a scoring-pipeline reference for standard inputs, independent metrics, and merged CSV outputs.

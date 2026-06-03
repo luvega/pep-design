@@ -1,0 +1,1 @@
+target_id,task_id,target_class,pdb_id,chain_ids,apo_or_holo,known_binder,negative_controls,experimental_affinity,assay_type,sequence_identity_cluster,train_leakage_risk,license,notes
