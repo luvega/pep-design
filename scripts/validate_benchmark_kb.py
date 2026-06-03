@@ -63,10 +63,35 @@ SCORE_HEADERS = [
     "decision",
 ]
 
+RUNNABILITY_HEADERS = [
+    "method",
+    "task_id",
+    "tier",
+    "repo_url",
+    "license_status",
+    "weights_route",
+    "install_route",
+    "batch_inference",
+    "expected_inputs",
+    "expected_outputs",
+    "scoring_compatible",
+    "hardware_notes",
+    "blocking_risks",
+    "next_action",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
     "log.md",
+    "benchmarks/README.md",
+    "benchmarks/protocols/benchmark_protocol_v0.md",
+    "benchmarks/protocols/run_csv_schema.md",
+    "benchmarks/protocols/scoring_outputs_schema.md",
+    "benchmarks/scoring/scoring_protocol_v0.md",
+    "benchmarks/smoke_tests/README.md",
+    "benchmarks/input_sets/README.md",
+    "benchmarks/results/README.md",
     "raw_sources/_index.md",
     "references/references.bib",
     "references/zotero-map.tsv",
@@ -75,9 +100,11 @@ REQUIRED_FILES = [
     "tables/master_literature_manifest.csv",
     "tables/method_evidence_matrix.csv",
     "tables/candidate_method_scorecard.csv",
+    "tables/method_runnability_matrix.csv",
     "reports/skill_selection.md",
     "reports/literature_scope_report.md",
     "reports/candidate_methods_shortlist.md",
+    "reports/method_runnability_audit.md",
     "wiki/literature/_index.md",
     "wiki/methods/_index.md",
     "wiki/concepts/_index.md",
@@ -92,6 +119,26 @@ METHOD_REQUIRED_TOKENS = [
     "## 原始论文",
     "## 候选评分",
     "## 复现风险",
+]
+
+METHOD_SLUG_OVERRIDES = {
+    "AfCycDesign / ColabDesign cyclic peptide": "afcycdesign-colabdesign",
+}
+
+REQUIRED_PROTOCOL_TASKS = [
+    "T1_sequence_binder",
+    "T2_structure_peptide_binder",
+    "T3_miniprotein_binder_baseline",
+]
+
+REQUIRED_SCORING_OUTPUTS = [
+    "run.csv",
+    "confidence_metrics.csv",
+    "interface_metrics.csv",
+    "rmsd.csv",
+    "dockq.csv",
+    "rosetta_metrics.csv",
+    "merged_run.csv",
 ]
 
 
@@ -134,6 +181,12 @@ def check_markdown_links(errors: list[str]) -> int:
     return checked
 
 
+def method_slug(method: str) -> str:
+    if method in METHOD_SLUG_OVERRIDES:
+        return METHOD_SLUG_OVERRIDES[method]
+    return re.sub(r"[^a-z0-9]+", "-", method.lower()).strip("-")
+
+
 def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
@@ -156,6 +209,7 @@ def main() -> int:
     master_rows = check_headers(errors, "tables/master_literature_manifest.csv", MASTER_HEADERS)
     evidence_rows = check_headers(errors, "tables/method_evidence_matrix.csv", EVIDENCE_HEADERS)
     score_rows = check_headers(errors, "tables/candidate_method_scorecard.csv", SCORE_HEADERS)
+    runnability_rows = check_headers(errors, "tables/method_runnability_matrix.csv", RUNNABILITY_HEADERS)
     _map_rows = check_headers(errors, "references/zotero-map.tsv", ["zotero_key", "bibtex_key", "title"], delimiter="\t")
 
     included_master = [row for row in master_rows if row.get("screening_status") == "included"]
@@ -173,6 +227,39 @@ def main() -> int:
         total = int(row.get("total_score") or 0)
         if total < 15:
             errors.append(f"{row.get('method')}: total_score below minimum screening threshold")
+
+    runnability_by_method = {row.get("method", ""): row for row in runnability_rows}
+    included_method_names = [row.get("method", "") for row in included_methods]
+    for method in included_method_names:
+        runnability = runnability_by_method.get(method)
+        if not runnability:
+            errors.append(f"{method}: missing runnability row")
+            continue
+        if runnability.get("tier") not in {"Tier 1", "Tier 2", "Tier 3"}:
+            errors.append(f"{method}: invalid runnability tier {runnability.get('tier')}")
+        if runnability.get("task_id") not in REQUIRED_PROTOCOL_TASKS:
+            errors.append(f"{method}: invalid task_id {runnability.get('task_id')}")
+        for required_field in ["repo_url", "expected_inputs", "expected_outputs", "next_action"]:
+            if not runnability.get(required_field):
+                errors.append(f"{method}: runnability row missing {required_field}")
+
+        smoke_path = ROOT / "benchmarks/smoke_tests" / method_slug(method) / "README.md"
+        if not smoke_path.exists():
+            errors.append(f"{method}: missing smoke-test README at {smoke_path.relative_to(ROOT)}")
+
+    extra_runnability = sorted(set(runnability_by_method) - set(included_method_names))
+    if extra_runnability:
+        warnings.append("runnability rows for non-included methods: " + ", ".join(extra_runnability))
+
+    protocol_text = (ROOT / "benchmarks/protocols/benchmark_protocol_v0.md").read_text(encoding="utf-8")
+    for task in REQUIRED_PROTOCOL_TASKS:
+        if task not in protocol_text:
+            errors.append(f"benchmark_protocol_v0.md missing task {task}")
+
+    scoring_schema = (ROOT / "benchmarks/protocols/scoring_outputs_schema.md").read_text(encoding="utf-8")
+    for filename in REQUIRED_SCORING_OUTPUTS:
+        if filename not in scoring_schema:
+            errors.append(f"scoring_outputs_schema.md missing output table {filename}")
 
     method_files = sorted((ROOT / "wiki/methods").glob("*.md"))
     method_files = [path for path in method_files if path.name != "_index.md"]
@@ -206,6 +293,10 @@ def main() -> int:
             "evidence_rows": len(evidence_rows),
             "score_rows": len(score_rows),
             "included_methods": len(included_methods),
+            "runnability_rows": len(runnability_rows),
+            "smoke_test_readmes": len(
+                [path for path in (ROOT / "benchmarks/smoke_tests").glob("*/README.md")]
+            ),
             "method_cards": len(method_files),
             "literature_cards": len(literature_cards),
             "bibtex_entries": bib_entries,

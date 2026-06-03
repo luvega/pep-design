@@ -1392,6 +1392,7 @@ This project is an independent Benchmark background knowledge base for recent pe
 - Do not edit `E:\\Endnote参考文献`, EndNote `.enl` files, Zotero items, or the upstream `PD-wiki`.
 - Treat `raw_sources/` as a local read-only mirror/snapshot layer.
 - Treat `wiki/`, `tables/`, `references/`, and `reports/` as generated project artifacts.
+- Treat `benchmarks/` as the Benchmark protocol, smoke-test planning, and future run-result interface layer.
 
 ## Language And Claims
 - Reader-facing prose is Chinese by default.
@@ -1427,14 +1428,23 @@ This project is an independent Benchmark background knowledge base for recent pe
 - [Benchmark candidates](wiki/benchmark_candidates/_index.md)
 - [Candidate shortlist](reports/candidate_methods_shortlist.md)
 - [Literature scope report](reports/literature_scope_report.md)
+- [Benchmark protocol v0](benchmarks/protocols/benchmark_protocol_v0.md)
+- [run.csv schema](benchmarks/protocols/run_csv_schema.md)
+- [Scoring protocol v0](benchmarks/scoring/scoring_protocol_v0.md)
+- [Method runnability audit](reports/method_runnability_audit.md)
 
 ## Next Phase
-The next phase is Benchmark protocol design: define targets, inputs, metrics, environment setup, resource budget, and per-method smoke tests.
+The current next phase is smoke-test readiness: freeze target/input schemas, verify method install routes, and prepare minimal run plans without downloading large weights or running GPU benchmark tasks.
 """,
     )
     write_text(
         "log.md",
         f"""# Project Log
+
+## [{BUILD_DATE}] protocol | benchmark v0.2 readiness layer
+- Added Benchmark protocol, run.csv schema, scoring-output schema, runnability audit, and smoke-test planning layer.
+- Followed `de_novo_binder_scoring` as a scoring-pipeline reference for standard inputs, independent metrics, and merged CSV outputs.
+- Did not download model weights, install candidate methods, run GPU tasks, or claim local reproducibility.
 
 ## [{BUILD_DATE}] bootstrap | peptide design benchmark KB
 - Built independent raw/wiki/schema project structure under `E:\\Codex_Projects\\Pep_design`.

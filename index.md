@@ -16,6 +16,10 @@
 - [Benchmark candidates](wiki/benchmark_candidates/_index.md)
 - [Candidate shortlist](reports/candidate_methods_shortlist.md)
 - [Literature scope report](reports/literature_scope_report.md)
+- [Benchmark protocol v0](benchmarks/protocols/benchmark_protocol_v0.md)
+- [run.csv schema](benchmarks/protocols/run_csv_schema.md)
+- [Scoring protocol v0](benchmarks/scoring/scoring_protocol_v0.md)
+- [Method runnability audit](reports/method_runnability_audit.md)
 
 ## Next Phase
-The next phase is Benchmark protocol design: define targets, inputs, metrics, environment setup, resource budget, and per-method smoke tests.
+The current next phase is smoke-test readiness: freeze target/input schemas, verify method install routes, and prepare minimal run plans without downloading large weights or running GPU benchmark tasks.

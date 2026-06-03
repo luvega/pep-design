@@ -7,6 +7,7 @@ This project is an independent Benchmark background knowledge base for recent pe
 - Do not edit `E:\Endnote参考文献`, EndNote `.enl` files, Zotero items, or the upstream `PD-wiki`.
 - Treat `raw_sources/` as a local read-only mirror/snapshot layer.
 - Treat `wiki/`, `tables/`, `references/`, and `reports/` as generated project artifacts.
+- Treat `benchmarks/` as the Benchmark protocol, smoke-test planning, and future run-result interface layer.
 
 ## Language And Claims
 - Reader-facing prose is Chinese by default.

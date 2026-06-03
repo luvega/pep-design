@@ -1,5 +1,10 @@
 # Project Log
 
+## [2026-06-03] protocol | benchmark v0.2 readiness layer
+- Added Benchmark protocol, run.csv schema, scoring-output schema, runnability audit, and smoke-test planning layer.
+- Followed `de_novo_binder_scoring` as a scoring-pipeline reference for standard inputs, independent metrics, and merged CSV outputs.
+- Did not download model weights, install candidate methods, run GPU tasks, or claim local reproducibility.
+
 ## [2026-06-03] bootstrap | peptide design benchmark KB
 - Built independent raw/wiki/schema project structure under `E:\Codex_Projects\Pep_design`.
 - Read Zotero through local API only; no Zotero writes were performed.
