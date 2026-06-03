@@ -1432,6 +1432,8 @@ This project is an independent Benchmark background knowledge base for recent pe
 - [run.csv schema](benchmarks/protocols/run_csv_schema.md)
 - [Scoring protocol v0](benchmarks/scoring/scoring_protocol_v0.md)
 - [Method runnability audit](reports/method_runnability_audit.md)
+- [Benchmark manuscript outline](reports/benchmark_manuscript_outline.md)
+- [Benchmark manuscript figure/table plan](reports/benchmark_manuscript_figure_table_plan.md)
 
 ## Next Phase
 The current next phase is smoke-test readiness: freeze target/input schemas, verify method install routes, and prepare minimal run plans without downloading large weights or running GPU benchmark tasks.
@@ -1445,6 +1447,11 @@ The current next phase is smoke-test readiness: freeze target/input schemas, ver
 - Added Benchmark protocol, run.csv schema, scoring-output schema, runnability audit, and smoke-test planning layer.
 - Followed `de_novo_binder_scoring` as a scoring-pipeline reference for standard inputs, independent metrics, and merged CSV outputs.
 - Did not download model weights, install candidate methods, run GPU tasks, or claim local reproducibility.
+
+## [{BUILD_DATE}] writing | benchmark manuscript outline
+- Drafted the protocol-first Benchmark manuscript outline, claim-evidence map, and figure/table plan.
+- Framed the article as Benchmark framework/design rather than completed performance ranking.
+- Preserved claim boundaries: no method is described as locally reproduced or superior before smoke tests.
 
 ## [{BUILD_DATE}] bootstrap | peptide design benchmark KB
 - Built independent raw/wiki/schema project structure under `E:\\Codex_Projects\\Pep_design`.

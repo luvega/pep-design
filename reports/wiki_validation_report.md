@@ -8,11 +8,12 @@
 - score_rows: 12
 - included_methods: 10
 - runnability_rows: 10
+- manuscript_claim_rows: 8
 - smoke_test_readmes: 10
 - method_cards: 12
 - literature_cards: 120
 - bibtex_entries: 432
-- markdown_links_checked: 36
+- markdown_links_checked: 38
 
 ## Errors
 - None
@@ -32,11 +33,12 @@
     "score_rows": 12,
     "included_methods": 10,
     "runnability_rows": 10,
+    "manuscript_claim_rows": 8,
     "smoke_test_readmes": 10,
     "method_cards": 12,
     "literature_cards": 120,
     "bibtex_entries": 432,
-    "markdown_links_checked": 36
+    "markdown_links_checked": 38
   },
   "errors": [],
   "warnings": []

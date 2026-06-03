@@ -20,6 +20,8 @@
 - [run.csv schema](benchmarks/protocols/run_csv_schema.md)
 - [Scoring protocol v0](benchmarks/scoring/scoring_protocol_v0.md)
 - [Method runnability audit](reports/method_runnability_audit.md)
+- [Benchmark manuscript outline](reports/benchmark_manuscript_outline.md)
+- [Benchmark manuscript figure/table plan](reports/benchmark_manuscript_figure_table_plan.md)
 
 ## Next Phase
 The current next phase is smoke-test readiness: freeze target/input schemas, verify method install routes, and prepare minimal run plans without downloading large weights or running GPU benchmark tasks.

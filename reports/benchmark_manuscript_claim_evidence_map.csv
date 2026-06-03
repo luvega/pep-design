@@ -1,0 +1,9 @@
+claim,evidence,status,allowed_wording,forbidden_wording,next_check
+"本项目已建立可查询的多肽设计 Benchmark KB","reports/literature_scope_report.md; reports/wiki_validation_report.md","supported","已建立; 已整理; 支持后续检索","全面覆盖所有文献; 完成系统综述","抽查 Zotero/外部元数据一致性"
+"第一轮 include 方法为 10 个","tables/candidate_method_scorecard.csv; tables/method_runnability_matrix.csv","supported","第一轮纳入 10 个候选方法","最终入选 10 个最佳方法","如果新增方法需重新验证 include 数量"
+"本文提出三类 Benchmark 任务接口","benchmarks/protocols/benchmark_protocol_v0.md","supported","定义; 映射; 拟用于后续 smoke test","已经完成三类任务 Benchmark","真实运行前保持 planned 表述"
+"run.csv 和 metric CSVs 构成统一评分数据流","benchmarks/protocols/run_csv_schema.md; benchmarks/protocols/scoring_outputs_schema.md","supported","设计为; 用于; 后续可合并","已经产生完整 merged_run.csv 结果","实现评分脚本后更新 evidence"
+"PepMLM、PepMirror、RFdiffusion + ProteinMPNN 可优先进入 smoke-test 设计","reports/method_runnability_audit.md","supported as planning judgement","优先进入 smoke-test 设计; 工程准备度相对明确","已复现; 性能领先","完成安装和最小运行后再调整"
+"具体方法优于其他方法","none","unsupported","不可写入当前初稿","A 方法最佳; B 方法显著优于 C","真实 Benchmark 后用指标支持"
+"任何候选方法已本地复现","none","unsupported","当前尚未本地复现","已跑通; 已验证; 已复现","记录环境、命令、输入输出和日志后才可改写"
+"计算评分可替代实验验证","none","unsupported","计算评分支持候选排序和结构假设","计算指标证明生物学成功","需要实验亲和力、结构、细胞功能或 PK/PD 证据"

@@ -80,6 +80,15 @@ RUNNABILITY_HEADERS = [
     "next_action",
 ]
 
+MANUSCRIPT_CLAIM_HEADERS = [
+    "claim",
+    "evidence",
+    "status",
+    "allowed_wording",
+    "forbidden_wording",
+    "next_check",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
@@ -105,6 +114,9 @@ REQUIRED_FILES = [
     "reports/literature_scope_report.md",
     "reports/candidate_methods_shortlist.md",
     "reports/method_runnability_audit.md",
+    "reports/benchmark_manuscript_outline.md",
+    "reports/benchmark_manuscript_claim_evidence_map.csv",
+    "reports/benchmark_manuscript_figure_table_plan.md",
     "wiki/literature/_index.md",
     "wiki/methods/_index.md",
     "wiki/concepts/_index.md",
@@ -139,6 +151,13 @@ REQUIRED_SCORING_OUTPUTS = [
     "dockq.csv",
     "rosetta_metrics.csv",
     "merged_run.csv",
+]
+
+MANUSCRIPT_REQUIRED_TOKENS = [
+    "Benchmark framework / protocol-first manuscript",
+    "Main Thesis",
+    "Reverse Outline",
+    "Self-Review Checklist",
 ]
 
 
@@ -187,6 +206,16 @@ def method_slug(method: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", method.lower()).strip("-")
 
 
+def has_unqualified_forbidden_wording(text: str, phrase: str) -> bool:
+    for line in text.splitlines():
+        if phrase not in line:
+            continue
+        if any(marker in line for marker in ["避免", "不", "不能", "不得", "未", "尚未", "forbidden"]):
+            continue
+        return True
+    return False
+
+
 def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
@@ -210,6 +239,11 @@ def main() -> int:
     evidence_rows = check_headers(errors, "tables/method_evidence_matrix.csv", EVIDENCE_HEADERS)
     score_rows = check_headers(errors, "tables/candidate_method_scorecard.csv", SCORE_HEADERS)
     runnability_rows = check_headers(errors, "tables/method_runnability_matrix.csv", RUNNABILITY_HEADERS)
+    manuscript_claim_rows = check_headers(
+        errors,
+        "reports/benchmark_manuscript_claim_evidence_map.csv",
+        MANUSCRIPT_CLAIM_HEADERS,
+    )
     _map_rows = check_headers(errors, "references/zotero-map.tsv", ["zotero_key", "bibtex_key", "title"], delimiter="\t")
 
     included_master = [row for row in master_rows if row.get("screening_status") == "included"]
@@ -261,6 +295,16 @@ def main() -> int:
         if filename not in scoring_schema:
             errors.append(f"scoring_outputs_schema.md missing output table {filename}")
 
+    manuscript_outline = (ROOT / "reports/benchmark_manuscript_outline.md").read_text(encoding="utf-8")
+    for token in MANUSCRIPT_REQUIRED_TOKENS:
+        if token not in manuscript_outline:
+            errors.append(f"benchmark_manuscript_outline.md missing required token {token}")
+    for forbidden in ["性能最佳", "已复现", "已经完成性能排名"]:
+        if has_unqualified_forbidden_wording(manuscript_outline, forbidden):
+            errors.append(f"benchmark_manuscript_outline.md contains unsupported claim wording: {forbidden}")
+    if not manuscript_claim_rows:
+        errors.append("benchmark_manuscript_claim_evidence_map.csv has no claim rows")
+
     method_files = sorted((ROOT / "wiki/methods").glob("*.md"))
     method_files = [path for path in method_files if path.name != "_index.md"]
     if len(method_files) < len(score_rows):
@@ -294,6 +338,7 @@ def main() -> int:
             "score_rows": len(score_rows),
             "included_methods": len(included_methods),
             "runnability_rows": len(runnability_rows),
+            "manuscript_claim_rows": len(manuscript_claim_rows),
             "smoke_test_readmes": len(
                 [path for path in (ROOT / "benchmarks/smoke_tests").glob("*/README.md")]
             ),
