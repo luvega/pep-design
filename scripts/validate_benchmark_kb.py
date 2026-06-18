@@ -273,6 +273,217 @@ DATA_ACCESS_HEADERS = [
     "next_action",
 ]
 
+ARS_REVIEW_ACTION_HEADERS = [
+    "reviewer_role",
+    "severity",
+    "artifact",
+    "issue",
+    "recommendation",
+    "decision",
+    "status",
+    "evidence",
+    "next_action",
+    "gate",
+]
+
+DATASET_SUPPLEMENT_WATCHLIST_HEADERS = [
+    "candidate_id",
+    "source_name",
+    "source_url",
+    "source_type",
+    "task_relevance",
+    "current_evidence",
+    "readiness_decision",
+    "risks",
+    "next_action",
+]
+
+RUN_CSV_HEADERS = [
+    "design_id",
+    "method",
+    "task_id",
+    "target_id",
+    "binder_id",
+    "input_mode",
+    "target_sequence",
+    "target_pdb",
+    "target_chains",
+    "binder_chain",
+    "pocket_definition",
+    "peptide_type",
+    "chirality",
+    "cyclic",
+    "status",
+    "notes",
+]
+
+DOWNLOAD_MANIFEST_HEADERS = [
+    "artifact_id",
+    "artifact_type",
+    "method_or_dataset",
+    "source_url",
+    "version_or_commit",
+    "expected_size",
+    "license_status",
+    "checksum_status",
+    "local_destination",
+    "download_status",
+    "download_performed",
+    "next_action",
+]
+
+DATASET_SCHEMA_REVIEW_HEADERS = [
+    "candidate_id",
+    "source_name",
+    "task_relevance",
+    "license_status",
+    "schema_status",
+    "controls_status",
+    "leakage_status",
+    "download_route_status",
+    "decision",
+    "next_action",
+]
+
+DATASET_SCHEMA_REVIEW_V08_HEADERS = [
+    "candidate_id",
+    "source_name",
+    "task_relevance",
+    "license_status",
+    "schema_status",
+    "controls_status",
+    "leakage_status",
+    "download_route_status",
+    "audit_evidence",
+    "decision",
+    "next_action",
+]
+
+METHOD_READINESS_REVIEW_HEADERS = [
+    "method",
+    "component",
+    "current_gate",
+    "license_status",
+    "license_evidence",
+    "input_contract_status",
+    "environment_status",
+    "weights_or_checkpoint_status",
+    "download_manifest_status",
+    "blocking_items",
+    "decision",
+    "next_action",
+]
+
+METHOD_LANDSCAPE_HEADERS = [
+    "method",
+    "representative_paper",
+    "generation_paradigm",
+    "peptide_topology",
+    "target_conditioning",
+    "mapped_task_id",
+    "project_pool_status",
+    "benchmark_relevance",
+    "coverage_gap",
+    "risks",
+    "next_action",
+]
+
+BILINGUAL_SYNC_HEADERS = [
+    "section_id",
+    "zh_section",
+    "en_section",
+    "shared_artifacts",
+    "claim_ids",
+    "status",
+    "next_action",
+]
+
+METHOD_CLASSIFICATION_HEADERS = [
+    "method",
+    "pool_status",
+    "task_id",
+    "method_family",
+    "design_paradigm",
+    "peptide_type",
+    "input_requirement",
+    "output_type",
+    "code_url",
+    "source_status",
+    "weights_route",
+    "current_gate",
+    "next_action",
+]
+
+REFERENCE_DATASET_SOURCE_HEADERS = [
+    "dataset_id",
+    "source_name",
+    "task_fit",
+    "source_url",
+    "license_status",
+    "schema_status",
+    "assay_readout",
+    "positive_controls",
+    "negative_controls",
+    "leakage_risk",
+    "download_status",
+    "planned_use",
+    "next_action",
+]
+
+MANUSCRIPT_TODO_HEADERS = [
+    "todo_id",
+    "priority",
+    "artifact",
+    "task",
+    "status",
+    "evidence",
+    "next_action",
+    "blocking_issue",
+]
+
+SUPPLEMENTARY_MATERIAL_HEADERS = [
+    "source_id",
+    "source_path",
+    "material_type",
+    "reference_value",
+    "key_structure",
+    "borrowable_content",
+    "benchmark_use",
+    "evidence_boundary",
+    "target_artifact",
+    "action",
+    "priority",
+    "status",
+    "next_action",
+]
+
+SCORING_RATIONALE_HEADERS = [
+    "metric_or_check",
+    "metric_family",
+    "why_needed",
+    "source_support",
+    "applicable_tasks",
+    "applicable_outputs",
+    "not_applicable_reason",
+    "claim_boundary",
+    "next_action",
+]
+
+METHOD_LANDSCAPE_PATCH_HEADERS = [
+    "method",
+    "patch_status",
+    "proposed_pool_status",
+    "related_task_id",
+    "design_paradigm",
+    "peptide_scope",
+    "code_or_source_route",
+    "source_materials",
+    "primary_source_status",
+    "evidence_boundary",
+    "target_artifact",
+    "next_action",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
@@ -291,6 +502,10 @@ REQUIRED_FILES = [
     "benchmarks/input_sets/dataset_readiness_scorecard.csv",
     "benchmarks/input_sets/target_candidate_matrix_v0.4.csv",
     "benchmarks/input_sets/target_candidate_matrix_v0.5.csv",
+    "benchmarks/input_sets/dataset_supplement_watchlist_v0.6.csv",
+    "benchmarks/input_sets/dataset_supplement_schema_review_v0.7.csv",
+    "benchmarks/input_sets/dataset_supplement_schema_review_v0.8.csv",
+    "benchmarks/input_sets/example_run.csv",
     "benchmarks/input_sets/target_set_v0.csv",
     "benchmarks/input_sets/target_set_v0_schema.md",
     "benchmarks/input_sets/negative_design_panel_schema.md",
@@ -299,6 +514,13 @@ REQUIRED_FILES = [
     "benchmarks/method_sources/source_pin_audit_v0.4.csv",
     "benchmarks/method_sources/source_pin_audit_v0.5.csv",
     "benchmarks/deployment/server_readiness_checklist_v0.5.md",
+    "benchmarks/deployment/server_smoke_test_contract_v0.6.md",
+    "benchmarks/deployment/download_manifest_template_v0.7.csv",
+    "benchmarks/deployment/download_manifest_v0.8.csv",
+    "benchmarks/deployment/method_readiness_review_v0.8.csv",
+    "benchmarks/deployment/method_contracts/pepmlm_server_contract_v0.7.md",
+    "benchmarks/deployment/method_contracts/rfdiffusion_proteinmpnn_server_contract_v0.7.md",
+    "benchmarks/deployment/method_contracts/pepmirror_dependency_contract_v0.7.md",
     "benchmarks/environments/README.md",
     "benchmarks/environments/environment_feasibility_matrix.csv",
     "benchmarks/results/README.md",
@@ -313,6 +535,7 @@ REQUIRED_FILES = [
     "tables/method_runnability_matrix.csv",
     "tables/benchmark_literature_lessons.csv",
     "tables/expert_review_action_items.csv",
+    "tables/ars_review_action_items_v0.6.csv",
     "reports/skill_selection.md",
     "reports/literature_scope_report.md",
     "reports/candidate_methods_shortlist.md",
@@ -322,10 +545,39 @@ REQUIRED_FILES = [
     "reports/environment_feasibility_audit.md",
     "reports/expert_panel_review_v0.4.md",
     "reports/link_and_data_availability_audit_v0.5.md",
+    "reports/academic_research_suite_review_v0.6.md",
+    "reports/updated_plan_v0.6.md",
+    "reports/updated_plan_v0.9.md",
+    "reports/license_schema_input_contract_review_v0.8.md",
+    "reports/supervisor_skills_idea_evaluation.md",
+    "reports/benchmark_template_audit.md",
+    "reports/benchmark_intro_logic_chain.md",
+    "reports/review_draft_benchmark_reference_value.md",
+    "reports/review_synthesis_benchmark_framework_supplement.md",
     "reports/benchmark_literature_lessons.md",
     "reports/benchmark_manuscript_outline.md",
+    "reports/benchmark_manuscript_outline_zh_v1.md",
+    "reports/benchmark_manuscript_outline_en_v1.md",
+    "reports/assets/figures/benchmark_figure1_overview_v1.png",
+    "reports/assets/figures/benchmark_figure2_task_method_matrix_v1.png",
+    "reports/assets/figures/benchmark_figure3_dual_track_v1.png",
+    "reports/assets/figures/benchmark_figure4_scoring_architecture_v1.png",
+    "reports/assets/figures/imagegen_prompt_record_v1.md",
+    "reports/benchmark_manuscript_sync_map_v1.csv",
+    "reports/benchmark_test_design_v1.md",
+    "reports/benchmark_reference_bibliography_v1.md",
+    "reports/benchmark_manuscript_todo_v1.csv",
     "reports/benchmark_manuscript_claim_evidence_map.csv",
     "reports/benchmark_manuscript_figure_table_plan.md",
+    "reports/supplementary_materials_reference_value_v1.1.md",
+    "reports/short_peptide_scoring_rationale_v1.1.md",
+    "reports/cyclic_peptide_benchmark_supplement_v1.1.md",
+    "tables/candidate_method_classification_v1.csv",
+    "tables/supplementary_materials_action_matrix_v1.1.csv",
+    "tables/scoring_metric_rationale_matrix_v1.1.csv",
+    "tables/method_landscape_patch_candidates_v1.1.csv",
+    "benchmarks/input_sets/reference_dataset_sources_v1.csv",
+    "benchmarks/method_sources/method_landscape_watchlist_v0.9.csv",
     "wiki/literature/_index.md",
     "wiki/methods/_index.md",
     "wiki/concepts/_index.md",
@@ -454,7 +706,21 @@ def has_unqualified_forbidden_wording(text: str, phrase: str) -> bool:
     for line in text.splitlines():
         if phrase not in line:
             continue
-        if any(marker in line for marker in ["避免", "不", "不能", "不得", "未", "尚未", "forbidden"]):
+        if any(
+            marker in line
+            for marker in [
+                "避免",
+                "不",
+                "不能",
+                "不得",
+                "未",
+                "尚未",
+                "forbidden",
+                "not",
+                "does not",
+                "no ",
+            ]
+        ):
             continue
         return True
     return False
@@ -503,6 +769,22 @@ def main() -> int:
         )
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 1
+
+    agents_text = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+    for token in [
+        "reports/updated_plan_v0.9.md",
+        "Skill Routing",
+        "building-llm-wiki",
+        "academic-research-suite",
+        "benchmark-paper-template",
+        "Execution Gates",
+        "download_performed=no",
+        "not_real_benchmark",
+        "PYTHONUTF8",
+        "scripts/validate_benchmark_kb.py",
+    ]:
+        if token not in agents_text:
+            errors.append(f"AGENTS.md missing required local operating token {token}")
 
     master_rows = check_headers(errors, "tables/master_literature_manifest.csv", MASTER_HEADERS)
     evidence_rows = check_headers(errors, "tables/method_evidence_matrix.csv", EVIDENCE_HEADERS)
@@ -565,10 +847,90 @@ def main() -> int:
         "benchmarks/availability/data_access_manifest_v0.5.csv",
         DATA_ACCESS_HEADERS,
     )
+    ars_action_rows = check_headers(
+        errors,
+        "tables/ars_review_action_items_v0.6.csv",
+        ARS_REVIEW_ACTION_HEADERS,
+    )
+    dataset_watchlist_rows = check_headers(
+        errors,
+        "benchmarks/input_sets/dataset_supplement_watchlist_v0.6.csv",
+        DATASET_SUPPLEMENT_WATCHLIST_HEADERS,
+    )
+    example_run_rows = check_headers(
+        errors,
+        "benchmarks/input_sets/example_run.csv",
+        RUN_CSV_HEADERS,
+    )
+    download_manifest_rows = check_headers(
+        errors,
+        "benchmarks/deployment/download_manifest_template_v0.7.csv",
+        DOWNLOAD_MANIFEST_HEADERS,
+    )
+    dataset_schema_review_rows = check_headers(
+        errors,
+        "benchmarks/input_sets/dataset_supplement_schema_review_v0.7.csv",
+        DATASET_SCHEMA_REVIEW_HEADERS,
+    )
+    dataset_schema_review_v08_rows = check_headers(
+        errors,
+        "benchmarks/input_sets/dataset_supplement_schema_review_v0.8.csv",
+        DATASET_SCHEMA_REVIEW_V08_HEADERS,
+    )
+    download_manifest_v08_rows = check_headers(
+        errors,
+        "benchmarks/deployment/download_manifest_v0.8.csv",
+        DOWNLOAD_MANIFEST_HEADERS,
+    )
+    method_readiness_v08_rows = check_headers(
+        errors,
+        "benchmarks/deployment/method_readiness_review_v0.8.csv",
+        METHOD_READINESS_REVIEW_HEADERS,
+    )
+    method_landscape_rows = check_headers(
+        errors,
+        "benchmarks/method_sources/method_landscape_watchlist_v0.9.csv",
+        METHOD_LANDSCAPE_HEADERS,
+    )
+    manuscript_sync_rows = check_headers(
+        errors,
+        "reports/benchmark_manuscript_sync_map_v1.csv",
+        BILINGUAL_SYNC_HEADERS,
+    )
+    method_classification_rows = check_headers(
+        errors,
+        "tables/candidate_method_classification_v1.csv",
+        METHOD_CLASSIFICATION_HEADERS,
+    )
+    reference_dataset_source_rows = check_headers(
+        errors,
+        "benchmarks/input_sets/reference_dataset_sources_v1.csv",
+        REFERENCE_DATASET_SOURCE_HEADERS,
+    )
+    manuscript_todo_rows = check_headers(
+        errors,
+        "reports/benchmark_manuscript_todo_v1.csv",
+        MANUSCRIPT_TODO_HEADERS,
+    )
     manuscript_claim_rows = check_headers(
         errors,
         "reports/benchmark_manuscript_claim_evidence_map.csv",
         MANUSCRIPT_CLAIM_HEADERS,
+    )
+    supplementary_material_rows = check_headers(
+        errors,
+        "tables/supplementary_materials_action_matrix_v1.1.csv",
+        SUPPLEMENTARY_MATERIAL_HEADERS,
+    )
+    scoring_rationale_rows = check_headers(
+        errors,
+        "tables/scoring_metric_rationale_matrix_v1.1.csv",
+        SCORING_RATIONALE_HEADERS,
+    )
+    method_landscape_patch_rows = check_headers(
+        errors,
+        "tables/method_landscape_patch_candidates_v1.1.csv",
+        METHOD_LANDSCAPE_PATCH_HEADERS,
     )
     _map_rows = check_headers(errors, "references/zotero-map.tsv", ["zotero_key", "bibtex_key", "title"], delimiter="\t")
 
@@ -840,6 +1202,248 @@ def main() -> int:
         if token not in deployment_text:
             errors.append(f"server_readiness_checklist_v0.5.md missing required token {token}")
 
+    if len(ars_action_rows) < 8:
+        errors.append("ars_review_action_items_v0.6.csv should contain multi-role ARS action items")
+    ars_roles = {row.get("reviewer_role", "") for row in ars_action_rows}
+    for role in [
+        "editor_in_chief",
+        "methodology_reviewer",
+        "domain_reviewer",
+        "engineering_reproducibility",
+        "devils_advocate",
+        "data_statistics",
+        "writing_claims",
+    ]:
+        if role not in ars_roles:
+            errors.append(f"ars_review_action_items_v0.6.csv missing reviewer role {role}")
+    allowed_ars_status = {"open", "done", "defer"}
+    required_gates = {
+        "metadata_ready",
+        "source_pinned",
+        "license_checked",
+        "weights_manifested",
+        "input_contract_ready",
+        "dry_run_ready",
+        "smoke_test_ready",
+        "claim_gate",
+    }
+    observed_gates = set()
+    for row in ars_action_rows:
+        if row.get("severity") not in {"critical", "major", "minor"}:
+            errors.append(f"ARS action has invalid severity: {row.get('issue')}")
+        if row.get("status") not in allowed_ars_status:
+            errors.append(f"ARS action has invalid status: {row.get('issue')}")
+        observed_gates.add(row.get("gate", ""))
+        for required_field in ["artifact", "issue", "recommendation", "decision", "evidence", "next_action", "gate"]:
+            if not row.get(required_field):
+                errors.append(f"ARS action row missing {required_field}: {row.get('issue')}")
+    if "claim_gate" not in observed_gates or "dry_run_ready" not in observed_gates:
+        errors.append("ARS action items must include claim_gate and dry_run_ready gates")
+
+    if len(dataset_watchlist_rows) < 5:
+        errors.append("dataset_supplement_watchlist_v0.6.csv should contain supplemental dataset candidates")
+    watchlist_ids = {row.get("candidate_id", "") for row in dataset_watchlist_rows}
+    for candidate_id in ["gpcr_peptide_benchmark_2026", "pepbenchmark_2026", "tcrtransbench_2026"]:
+        if candidate_id not in watchlist_ids:
+            errors.append(f"dataset_supplement_watchlist_v0.6.csv missing {candidate_id}")
+    for row in dataset_watchlist_rows:
+        for required_field in ["source_name", "source_url", "task_relevance", "readiness_decision", "risks", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('candidate_id')}: dataset watchlist row missing {required_field}")
+        decision = row.get("readiness_decision", "").lower()
+        if "frozen" in decision or "ready_for_benchmark" in decision:
+            errors.append(f"{row.get('candidate_id')}: watchlist decision must not imply frozen benchmark readiness")
+
+    server_contract = (ROOT / "benchmarks/deployment/server_smoke_test_contract_v0.6.md").read_text(
+        encoding="utf-8"
+    )
+    for token in required_gates:
+        if token not in server_contract:
+            errors.append(f"server_smoke_test_contract_v0.6.md missing gate {token}")
+    for forbidden in ["code confirmed problem-free", "benchmark completed", "method A outperforms method B"]:
+        if forbidden not in server_contract:
+            errors.append(f"server_smoke_test_contract_v0.6.md missing forbidden wording guard {forbidden}")
+
+    ars_review_text = (ROOT / "reports/academic_research_suite_review_v0.6.md").read_text(
+        encoding="utf-8"
+    )
+    for token in ["Material Passport", "Major Revision Before Execution", "Devil's Advocate Review", "Web Refresh Notes"]:
+        if token not in ars_review_text:
+            errors.append(f"academic_research_suite_review_v0.6.md missing required section {token}")
+    updated_plan_text = (ROOT / "reports/updated_plan_v0.6.md").read_text(encoding="utf-8")
+    for token in ["Revised Execution Gates", "Updated Dataset Policy", "Updated Method Policy", "Out Of Scope"]:
+        if token not in updated_plan_text:
+            errors.append(f"updated_plan_v0.6.md missing required section {token}")
+
+    if len(example_run_rows) < 2:
+        errors.append("example_run.csv should contain placeholder rows for PepMLM and RFdiffusion + ProteinMPNN")
+    for row in example_run_rows:
+        if row.get("status") != "not_real_benchmark":
+            errors.append(f"{row.get('design_id')}: example_run status must be not_real_benchmark")
+        if row.get("method") not in {"PepMLM", "RFdiffusion + ProteinMPNN"}:
+            errors.append(f"{row.get('design_id')}: example_run should only cover v0.7 priority methods")
+        if "placeholder" not in row.get("target_id", "").lower():
+            errors.append(f"{row.get('design_id')}: example_run target_id must remain placeholder")
+        if "not a benchmark" not in row.get("notes", "").lower() and "not_real" not in row.get("notes", "").lower():
+            errors.append(f"{row.get('design_id')}: example_run notes must state it is not benchmark evidence")
+
+    if not download_manifest_rows:
+        errors.append("download_manifest_template_v0.7.csv should contain a placeholder row")
+    for row in download_manifest_rows:
+        if row.get("download_performed") != "no":
+            errors.append(f"{row.get('artifact_id')}: download manifest must not record downloads")
+        if row.get("local_destination") != "server_path_placeholder":
+            errors.append(f"{row.get('artifact_id')}: download manifest local_destination must remain placeholder")
+        if row.get("source_url").startswith("http"):
+            errors.append(f"{row.get('artifact_id')}: v0.7 download manifest must not contain actionable download URLs")
+
+    if len(dataset_schema_review_rows) < 6:
+        errors.append("dataset_supplement_schema_review_v0.7.csv should review all v0.6 watchlist entries")
+    schema_review_ids = {row.get("candidate_id", "") for row in dataset_schema_review_rows}
+    for candidate_id in ["overath_binder_success_2025", "pepbi_dryad_2025", "pepbenchmark_2026", "gpcr_peptide_benchmark_2026", "tcrtransbench_2026", "chang_af2_ranking_cases_2023"]:
+        if candidate_id not in schema_review_ids:
+            errors.append(f"dataset_supplement_schema_review_v0.7.csv missing {candidate_id}")
+    for row in dataset_schema_review_rows:
+        decision = row.get("decision", "").lower()
+        if "frozen" in decision or "ready_for_target_set" in decision:
+            errors.append(f"{row.get('candidate_id')}: schema review must not imply target-set promotion")
+        for required_field in ["license_status", "schema_status", "controls_status", "leakage_status", "download_route_status", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('candidate_id')}: schema review row missing {required_field}")
+
+    if len(dataset_schema_review_v08_rows) < 6:
+        errors.append("dataset_supplement_schema_review_v0.8.csv should review all v0.6 watchlist entries")
+    schema_review_v08_ids = {row.get("candidate_id", "") for row in dataset_schema_review_v08_rows}
+    for candidate_id in [
+        "overath_binder_success_2025",
+        "pepbi_dryad_2025",
+        "pepbenchmark_2026",
+        "gpcr_peptide_benchmark_2026",
+        "tcrtransbench_2026",
+        "chang_af2_ranking_cases_2023",
+    ]:
+        if candidate_id not in schema_review_v08_ids:
+            errors.append(f"dataset_supplement_schema_review_v0.8.csv missing {candidate_id}")
+    for row in dataset_schema_review_v08_rows:
+        decision = row.get("decision", "").lower()
+        if "frozen" in decision or "ready_for_target_set" in decision:
+            errors.append(f"{row.get('candidate_id')}: v0.8 schema review must not imply target-set promotion")
+        if not row.get("audit_evidence", "").startswith("http"):
+            errors.append(f"{row.get('candidate_id')}: v0.8 schema review must cite external audit evidence URL")
+        for required_field in ["license_status", "schema_status", "controls_status", "leakage_status", "download_route_status", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('candidate_id')}: v0.8 schema review row missing {required_field}")
+
+    if len(download_manifest_v08_rows) < 5:
+        errors.append("download_manifest_v0.8.csv should record future routes for datasets and priority method weights")
+    for row in download_manifest_v08_rows:
+        if row.get("download_performed") != "no":
+            errors.append(f"{row.get('artifact_id')}: v0.8 download manifest must not record completed downloads")
+        if not row.get("local_destination", "").startswith("/srv/pep_design/"):
+            errors.append(f"{row.get('artifact_id')}: v0.8 download destination should be an external /srv/pep_design path")
+        if not row.get("source_url", "").startswith("http"):
+            errors.append(f"{row.get('artifact_id')}: v0.8 download manifest rows should cite an HTTP source route")
+
+    method_readiness_keys = {(row.get("method", ""), row.get("component", "")) for row in method_readiness_v08_rows}
+    for method in ["PepMLM", "RFdiffusion", "ProteinMPNN", "PepMirror"]:
+        if not any(key[0] == method for key in method_readiness_keys):
+            errors.append(f"method_readiness_review_v0.8.csv missing {method}")
+    for row in method_readiness_v08_rows:
+        gate = row.get("current_gate", "")
+        if gate == "smoke_test_ready":
+            errors.append(f"{row.get('method')}: v0.8 method readiness must not mark smoke_test_ready")
+        for required_field in ["license_status", "license_evidence", "input_contract_status", "environment_status", "blocking_items", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('method')}: v0.8 method readiness row missing {required_field}")
+
+    if len(method_landscape_rows) < 25:
+        errors.append("method_landscape_watchlist_v0.9.csv should contain the review-derived method landscape")
+    allowed_pool_status = {"included", "candidate_watchlist", "review_only"}
+    allowed_paradigms = {"sequence_driven", "structure_driven", "function_property_driven"}
+    allowed_landscape_tasks = set(REQUIRED_PROTOCOL_TASKS) | {"ranking_developability", "ranking_rescoring"}
+    landscape_by_method = {row.get("method", ""): row for row in method_landscape_rows}
+    for method in included_method_names:
+        row = landscape_by_method.get(method)
+        if not row:
+            errors.append(f"method_landscape_watchlist_v0.9.csv missing included method {method}")
+        elif row.get("project_pool_status") != "included":
+            errors.append(f"{method}: v0.9 method landscape must keep included methods labelled included")
+    for method in ["PepFlow", "BoltzDesign1"]:
+        if landscape_by_method.get(method, {}).get("project_pool_status") != "candidate_watchlist":
+            errors.append(f"{method}: v0.9 method landscape must keep scorecard watchlist methods as candidate_watchlist")
+    for method in ["PepMimic", "PPFlow", "CpSDE", "CP-Composer", "PepINVENT", "HELM-GPT", "NCFlow"]:
+        if landscape_by_method.get(method, {}).get("project_pool_status") != "review_only":
+            errors.append(f"{method}: v0.9 landscape additions must remain review_only")
+    for row in method_landscape_rows:
+        if row.get("project_pool_status") not in allowed_pool_status:
+            errors.append(f"{row.get('method')}: invalid v0.9 project_pool_status {row.get('project_pool_status')}")
+        if row.get("generation_paradigm") not in allowed_paradigms:
+            errors.append(f"{row.get('method')}: invalid generation_paradigm {row.get('generation_paradigm')}")
+        if row.get("mapped_task_id") not in allowed_landscape_tasks:
+            errors.append(f"{row.get('method')}: invalid mapped_task_id {row.get('mapped_task_id')}")
+        for required_field in ["representative_paper", "peptide_topology", "target_conditioning", "benchmark_relevance", "risks", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('method')}: v0.9 method landscape row missing {required_field}")
+
+    current_plan_text = (ROOT / "reports/updated_plan_v0.9.md").read_text(encoding="utf-8")
+    for token in ["Current Authoritative Plan Files", "Benchmark Paper Template", "v0.9 Method Landscape Policy", "Next Work Package", "Claim Gate"]:
+        if token not in current_plan_text:
+            errors.append(f"updated_plan_v0.9.md missing required section {token}")
+    for forbidden in ["download_performed=yes", "smoke_test_ready | reached", "target_set_v0.csv 已冻结"]:
+        if forbidden in current_plan_text:
+            errors.append(f"updated_plan_v0.9.md contains overclaim boundary violation: {forbidden}")
+
+    benchmark_template_text = (ROOT / "reports/benchmark_template_audit.md").read_text(encoding="utf-8")
+    for token in ["Five-Pillar Completeness Table", "Introduction Six-Part Logic Chain", "Pre-Submission Self-Check", "NOT READY"]:
+        if token not in benchmark_template_text:
+            errors.append(f"benchmark_template_audit.md missing Benchmark template token {token}")
+    intro_logic_text = (ROOT / "reports/benchmark_intro_logic_chain.md").read_text(encoding="utf-8")
+    for token in ["Background + Running Example", "Existing-Benchmark Limitations", "Research Questions", "Design Considerations", "Our Proposal", "Contributions"]:
+        if token not in intro_logic_text:
+            errors.append(f"benchmark_intro_logic_chain.md missing six-part Introduction token {token}")
+    review_synthesis_text = (ROOT / "reports/review_synthesis_benchmark_framework_supplement.md").read_text(
+        encoding="utf-8"
+    )
+    for token in ["生成范式分类轴", "方法覆盖图与缺口", "PepMimic ≠ PepMirror", "PPFlow ≠ PepFlow", "Claim Boundary"]:
+        if token not in review_synthesis_text:
+            errors.append(f"review_synthesis_benchmark_framework_supplement.md missing v0.9 synthesis token {token}")
+    supplementary_text = (ROOT / "reports/supplementary_materials_reference_value_v1.1.md").read_text(
+        encoding="utf-8"
+    )
+    for token in ["source discovery", "docking score", "topology-aware", "Flow matching", "patch candidate"]:
+        if token not in supplementary_text:
+            errors.append(f"supplementary_materials_reference_value_v1.1.md missing v1.1 token {token}")
+    short_scoring_text = (ROOT / "reports/short_peptide_scoring_rationale_v1.1.md").read_text(encoding="utf-8")
+    for token in ["binding region", "N/C orientation", "key residue", "comparability", "不得写"]:
+        if token not in short_scoring_text:
+            errors.append(f"short_peptide_scoring_rationale_v1.1.md missing v1.1 scoring token {token}")
+    cyclic_supplement_text = (ROOT / "reports/cyclic_peptide_benchmark_supplement_v1.1.md").read_text(
+        encoding="utf-8"
+    )
+    for token in ["Topology-Aware Fields", "cyclization_mode", "chirality_detail", "HELM", "CHUCKLES", "patch_candidate"]:
+        if token not in cyclic_supplement_text:
+            errors.append(f"cyclic_peptide_benchmark_supplement_v1.1.md missing v1.1 cyclic token {token}")
+
+    server_contract_paths = [
+        ROOT / "benchmarks/deployment/method_contracts/pepmlm_server_contract_v0.7.md",
+        ROOT / "benchmarks/deployment/method_contracts/rfdiffusion_proteinmpnn_server_contract_v0.7.md",
+    ]
+    for path in server_contract_paths:
+        text = path.read_text(encoding="utf-8")
+        for token in ["current_gate", "repo", "External Roots", "Failure States", "planning_only"]:
+            if token not in text:
+                errors.append(f"{path.relative_to(ROOT)} missing method contract token {token}")
+        if "smoke_test_ready" in text and "max_allowed_gate_in_kb | `dry_run_ready`" not in text:
+            errors.append(f"{path.relative_to(ROOT)} must not promote a method to smoke_test_ready")
+    pepmirror_contract = (ROOT / "benchmarks/deployment/method_contracts/pepmirror_dependency_contract_v0.7.md").read_text(
+        encoding="utf-8"
+    )
+    if "current_gate | `source_pinned`" not in pepmirror_contract:
+        errors.append("PepMirror dependency contract must remain source_pinned")
+    for token in ["Blocking Dependencies", "PyRosetta", "Zenodo checkpoint", "dependency_contract_only_no_run"]:
+        if token not in pepmirror_contract:
+            errors.append(f"pepmirror_dependency_contract_v0.7.md missing dependency token {token}")
+
     protocol_text = (ROOT / "benchmarks/protocols/benchmark_protocol_v0.md").read_text(encoding="utf-8")
     for task in REQUIRED_PROTOCOL_TASKS:
         if task not in protocol_text:
@@ -868,6 +1472,229 @@ def main() -> int:
         errors.append("benchmark_manuscript_claim_evidence_map.csv has no claim rows")
     if len(manuscript_claim_rows) < 12:
         errors.append("benchmark_manuscript_claim_evidence_map.csv should cover revised benchmark claims")
+
+    zh_outline = (ROOT / "reports/benchmark_manuscript_outline_zh_v1.md").read_text(encoding="utf-8")
+    en_outline = (ROOT / "reports/benchmark_manuscript_outline_en_v1.md").read_text(encoding="utf-8")
+    zh_required = ["题名", "摘要", "候选方法分类与代码位置", "参考数据集来源与靶点集计划", "待办清单", "参考文献与引用边界"]
+    en_required = ["Title", "Abstract", "Candidate Method Taxonomy and Code Routes", "Reference Dataset Sources and Target-Set Planning", "TODO List", "References and Citation Boundary"]
+    for token in zh_required:
+        if token not in zh_outline:
+            errors.append(f"benchmark_manuscript_outline_zh_v1.md missing token {token}")
+    for token in en_required:
+        if token not in en_outline:
+            errors.append(f"benchmark_manuscript_outline_en_v1.md missing token {token}")
+    for token in ["v1.1 补充资料驱动的评分边界", "对接评分", "拓扑感知评价", "补丁候选"]:
+        if token not in zh_outline:
+            errors.append(f"benchmark_manuscript_outline_zh_v1.md missing v1.1 token {token}")
+    for token in [
+        "图表草稿与嵌入表格",
+        "assets/figures/benchmark_figure1_overview_v1.png",
+        "assets/figures/benchmark_figure2_task_method_matrix_v1.png",
+        "assets/figures/benchmark_figure3_dual_track_v1.png",
+        "assets/figures/benchmark_figure4_scoring_architecture_v1.png",
+        "tables/candidate_method_classification_v1.csv",
+        "benchmarks/input_sets/reference_dataset_sources_v1.csv",
+        "tables/scoring_metric_rationale_matrix_v1.1.csv",
+        "benchmarks/deployment/method_readiness_review_v0.8.csv",
+        "不代表真实 benchmark 结果",
+    ]:
+        if token not in zh_outline:
+            errors.append(f"benchmark_manuscript_outline_zh_v1.md missing embedded figure/table token {token}")
+    for token in ["v1.1 Supplementary-source scoring boundary", "docking score", "topology-aware", "patch candidates"]:
+        if token not in en_outline:
+            errors.append(f"benchmark_manuscript_outline_en_v1.md missing v1.1 token {token}")
+    for forbidden in ["性能最佳", "已复现", "已经完成性能排名"]:
+        if has_unqualified_forbidden_wording(zh_outline, forbidden):
+            errors.append(f"benchmark_manuscript_outline_zh_v1.md contains unsupported claim wording: {forbidden}")
+    for forbidden in ["outperforms", "locally reproduced", "benchmark has been completed"]:
+        if has_unqualified_forbidden_wording(en_outline, forbidden):
+            errors.append(f"benchmark_manuscript_outline_en_v1.md contains unsupported claim wording: {forbidden}")
+
+    sync_ids = [row.get("section_id", "") for row in manuscript_sync_rows]
+    if len(sync_ids) < 15:
+        errors.append("benchmark_manuscript_sync_map_v1.csv should cover the full bilingual outline")
+    if "S10A" not in sync_ids:
+        errors.append("benchmark_manuscript_sync_map_v1.csv missing v1.1 supplementary scoring section S10A")
+    if len(sync_ids) != len(set(sync_ids)):
+        errors.append("benchmark_manuscript_sync_map_v1.csv contains duplicate section_id values")
+    for row in manuscript_sync_rows:
+        if row.get("status") != "aligned":
+            errors.append(f"{row.get('section_id')}: bilingual sync row must be aligned")
+        for required_field in ["zh_section", "en_section", "shared_artifacts", "claim_ids", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('section_id')}: bilingual sync row missing {required_field}")
+
+    classification_by_method = {row.get("method", ""): row for row in method_classification_rows}
+    if len(method_classification_rows) < len(method_landscape_rows):
+        errors.append("candidate_method_classification_v1.csv should cover all v0.9 landscape methods")
+    for method in included_method_names:
+        row = classification_by_method.get(method)
+        if not row:
+            errors.append(f"candidate_method_classification_v1.csv missing included method {method}")
+        elif row.get("pool_status") != "included":
+            errors.append(f"{method}: candidate classification must mark included methods as included")
+    for method in ["PepFlow", "BoltzDesign1"]:
+        row = classification_by_method.get(method)
+        if not row:
+            errors.append(f"candidate_method_classification_v1.csv missing watchlist method {method}")
+        elif row.get("pool_status") != "candidate_watchlist":
+            errors.append(f"{method}: candidate classification must keep watchlist status")
+    for row in method_classification_rows:
+        if row.get("pool_status") not in {"included", "candidate_watchlist", "review_only"}:
+            errors.append(f"{row.get('method')}: invalid pool_status {row.get('pool_status')}")
+        for required_field in ["task_id", "method_family", "design_paradigm", "peptide_type", "input_requirement", "output_type", "code_url", "source_status", "current_gate", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('method')}: candidate classification row missing {required_field}")
+        if row.get("pool_status") in {"included", "candidate_watchlist"} and row.get("code_url") == "pending_source_audit":
+            errors.append(f"{row.get('method')}: include/watchlist method must have a concrete code route or explicit pending public route")
+        if "installed" in row.get("source_status", "").lower() or "reproduced" in row.get("source_status", "").lower():
+            errors.append(f"{row.get('method')}: classification source_status must not imply installation or reproduction")
+
+    expected_supplementary_sources = {
+        "short_peptide_docking_score_note",
+        "wang_liang_peptide_review_draft",
+        "jmc2025_cyclic_peptide_review",
+        "cas_insights_cyclic_peptide_trends",
+        "flow_matching_life_science_note",
+        "cyclic_ai_methods_review_note",
+    }
+    observed_supplementary_sources = {row.get("source_id", "") for row in supplementary_material_rows}
+    missing_sources = sorted(expected_supplementary_sources - observed_supplementary_sources)
+    if missing_sources:
+        errors.append("supplementary_materials_action_matrix_v1.1.csv missing sources: " + ", ".join(missing_sources))
+    if len(supplementary_material_rows) < 6:
+        errors.append("supplementary_materials_action_matrix_v1.1.csv should cover all six supplementary materials")
+    for row in supplementary_material_rows:
+        if not row.get("source_path", "").startswith("G:\\Downloads\\Markdown笔记\\"):
+            errors.append(f"{row.get('source_id')}: supplementary source_path must remain an external read-only note path")
+        if row.get("priority") not in {"high", "medium", "low"}:
+            errors.append(f"{row.get('source_id')}: invalid supplementary priority {row.get('priority')}")
+        if row.get("status") not in {"integrated_v1.1", "integrated_existing_plus_v1.1", "pending"}:
+            errors.append(f"{row.get('source_id')}: invalid supplementary status {row.get('status')}")
+        if (
+            "primary_source" not in row.get("evidence_boundary", "")
+            and "framing" not in row.get("evidence_boundary", "")
+            and "not_benchmark" not in row.get("evidence_boundary", "")
+            and "background" not in row.get("evidence_boundary", "")
+        ):
+            errors.append(f"{row.get('source_id')}: supplementary evidence boundary should state source/framing/non-benchmark limits")
+
+    scoring_checks = {row.get("metric_or_check", "") for row in scoring_rationale_rows}
+    for metric in [
+        "binding_region_correctness",
+        "terminal_orientation_status",
+        "key_residue_match_status",
+        "conformational_plausibility",
+        "score_comparability_group",
+        "cyclization_mode",
+        "chirality_detail",
+        "non_natural_residue_representation",
+        "metadata_level_developability",
+        "flow_matching_paradigm_label",
+    ]:
+        if metric not in scoring_checks:
+            errors.append(f"scoring_metric_rationale_matrix_v1.1.csv missing metric/check {metric}")
+    for row in scoring_rationale_rows:
+        if row.get("metric_family") not in {
+            "interface_geometry",
+            "design_feasibility",
+            "structure_similarity",
+            "ranking_rescoring",
+            "developability",
+            "method_landscape",
+        }:
+            errors.append(f"{row.get('metric_or_check')}: invalid v1.1 metric_family {row.get('metric_family')}")
+        for required_field in ["why_needed", "source_support", "claim_boundary", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('metric_or_check')}: scoring rationale row missing {required_field}")
+
+    expected_patch_methods = {
+        "RFpeptides",
+        "CyclicMPNN",
+        "PPFlow",
+        "PepMimic",
+        "PocketXMol",
+        "BoltzGen",
+        "PepINVENT",
+        "HELM-GPT",
+    }
+    observed_patch_methods = {row.get("method", "") for row in method_landscape_patch_rows}
+    missing_patch_methods = sorted(expected_patch_methods - observed_patch_methods)
+    if missing_patch_methods:
+        errors.append("method_landscape_patch_candidates_v1.1.csv missing methods: " + ", ".join(missing_patch_methods))
+    for row in method_landscape_patch_rows:
+        if row.get("patch_status") != "patch_candidate":
+            errors.append(f"{row.get('method')}: v1.1 method patch status must remain patch_candidate")
+        if row.get("proposed_pool_status") == "included":
+            errors.append(f"{row.get('method')}: v1.1 patch candidates must not be promoted to included")
+        if row.get("primary_source_status") != "needs_primary_source_verification":
+            errors.append(f"{row.get('method')}: v1.1 patch candidate must require primary-source verification")
+        if row.get("related_task_id") not in {"T1_sequence_binder", "T2_structure_peptide_binder", "T3_miniprotein_binder_baseline", "method_landscape_only"}:
+            errors.append(f"{row.get('method')}: invalid v1.1 related_task_id {row.get('related_task_id')}")
+
+    dataset_source_ids = {row.get("dataset_id", "") for row in reference_dataset_source_rows}
+    for dataset_id in ["overath_binder_success_2025", "pepbi_dryad_2025", "pepbenchmark_2026", "gpcr_peptide_benchmark_2026", "tcrtransbench_2026", "chang_af2_ranking_cases_2023"]:
+        if dataset_id not in dataset_source_ids:
+            errors.append(f"reference_dataset_sources_v1.csv missing {dataset_id}")
+    if len(reference_dataset_source_rows) < 7:
+        errors.append("reference_dataset_sources_v1.csv should include at least seven reference dataset sources")
+    for row in reference_dataset_source_rows:
+        for required_field in ["source_name", "task_fit", "source_url", "license_status", "schema_status", "assay_readout", "positive_controls", "negative_controls", "leakage_risk", "download_status", "planned_use", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('dataset_id')}: reference dataset source row missing {required_field}")
+        download_status = row.get("download_status", "").lower()
+        if "download_performed" not in download_status and "pending" not in download_status:
+            errors.append(f"{row.get('dataset_id')}: download_status must record no-download or pending status")
+        if "frozen" in row.get("planned_use", "").lower():
+            errors.append(f"{row.get('dataset_id')}: reference dataset planned_use must not imply frozen target promotion")
+
+    test_design_text = (ROOT / "reports/benchmark_test_design_v1.md").read_text(encoding="utf-8")
+    for token in [
+        "Generation Benchmark",
+        "Ranking / Rescoring Benchmark",
+        "T1_sequence_binder",
+        "T2_structure_peptide_binder",
+        "T3_miniprotein_binder_baseline",
+        "No performance values",
+        "v1.1 Supplementary Scoring Rationale",
+        "binding region",
+        "cyclization mode",
+    ]:
+        if token not in test_design_text:
+            errors.append(f"benchmark_test_design_v1.md missing token {token}")
+
+    todo_ids = {row.get("todo_id", "") for row in manuscript_todo_rows}
+    if len(todo_ids) < 10:
+        errors.append("benchmark_manuscript_todo_v1.csv should contain manuscript and readiness TODO items")
+    for row in manuscript_todo_rows:
+        if row.get("priority") not in {"high", "medium", "low"}:
+            errors.append(f"{row.get('todo_id')}: invalid TODO priority {row.get('priority')}")
+        if row.get("status") not in {"open", "done", "deferred"}:
+            errors.append(f"{row.get('todo_id')}: invalid TODO status {row.get('status')}")
+        for required_field in ["artifact", "task", "evidence", "next_action", "blocking_issue"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('todo_id')}: TODO row missing {required_field}")
+
+    bibliography_text = (ROOT / "reports/benchmark_reference_bibliography_v1.md").read_text(encoding="utf-8")
+    for token in ["Core Method References", "Benchmark, Ranking and Scoring References", "Dataset and Benchmark Source References", "needs_bibtex_verification", "Citation Safety Rules"]:
+        if token not in bibliography_text:
+            errors.append(f"benchmark_reference_bibliography_v1.md missing token {token}")
+
+    claim_texts = {row.get("claim", "") for row in manuscript_claim_rows}
+    for claim in [
+        "v1.0 中英文分稿是 manuscript outline artifacts 不是完整论文",
+        "v1.0 候选方法分类表记录代码路线但不是安装证明",
+        "v1.0 参考数据集来源表是 no-download 数据源计划",
+        "v1.0 测试设计只定义 generation 与 ranking/rescoring 协议",
+        "v1.0 参考文献计划包含待校验外部条目",
+        "v1.1 补充资料综合是 source discovery 和 framing 不是 primary-source verified evidence",
+        "短肽 docking score 不足以单独支持稳定结合或方法优劣结论",
+        "环肽和非天然肽补充资料支持 topology-aware evaluation 但不支持 target-set 晋升",
+        "flow matching 补充资料是方法范式背景不是源码可运行性证据",
+        "v1.1 method landscape patch candidates 不是 include scorecard",
+    ]:
+        if claim not in claim_texts:
+            errors.append(f"benchmark_manuscript_claim_evidence_map.csv missing claim boundary: {claim}")
 
     method_files = sorted((ROOT / "wiki/methods").glob("*.md"))
     method_files = [path for path in method_files if path.name != "_index.md"]
@@ -916,7 +1743,23 @@ def main() -> int:
             "source_pin_v05_rows": len(source_pin_v05_rows),
             "link_availability_rows": len(link_availability_rows),
             "data_access_rows": len(data_access_rows),
+            "ars_review_action_rows": len(ars_action_rows),
+            "dataset_watchlist_v06_rows": len(dataset_watchlist_rows),
+            "example_run_rows": len(example_run_rows),
+            "download_manifest_rows": len(download_manifest_rows),
+            "dataset_schema_review_v07_rows": len(dataset_schema_review_rows),
+            "dataset_schema_review_v08_rows": len(dataset_schema_review_v08_rows),
+            "download_manifest_v08_rows": len(download_manifest_v08_rows),
+            "method_readiness_v08_rows": len(method_readiness_v08_rows),
+            "method_landscape_v09_rows": len(method_landscape_rows),
+            "bilingual_sync_rows": len(manuscript_sync_rows),
+            "method_classification_v1_rows": len(method_classification_rows),
+            "reference_dataset_sources_v1_rows": len(reference_dataset_source_rows),
+            "manuscript_todo_v1_rows": len(manuscript_todo_rows),
             "manuscript_claim_rows": len(manuscript_claim_rows),
+            "supplementary_material_rows": len(supplementary_material_rows),
+            "scoring_rationale_rows": len(scoring_rationale_rows),
+            "method_landscape_patch_v11_rows": len(method_landscape_patch_rows),
             "smoke_test_readmes": len(
                 [path for path in (ROOT / "benchmarks/smoke_tests").glob("*/README.md")]
             ),

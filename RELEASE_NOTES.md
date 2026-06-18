@@ -1,5 +1,210 @@
 # Release Notes
 
+## v1.2.0 Chinese Manuscript Figure/Table Embedding Layer - 2026-06-18
+
+Manuscript presentation update on top of the v0.9.0 current plan, v1.0 bilingual manuscript-outline layer, and v1.1 supplementary-source synthesis layer.
+
+### Added
+
+- Added four project-local manuscript figure assets under `reports/assets/figures/`.
+- Added `reports/assets/figures/imagegen_prompt_record_v1.md` to record figure-generation intent and claim boundaries.
+- Embedded four conceptual figures into `reports/benchmark_manuscript_outline_zh_v1.md`.
+- Embedded four CSV-derived Markdown tables into the Chinese manuscript outline:
+  - `tables/candidate_method_classification_v1.csv`
+  - `benchmarks/input_sets/reference_dataset_sources_v1.csv`
+  - `tables/scoring_metric_rationale_matrix_v1.1.csv`
+  - `benchmarks/deployment/method_readiness_review_v0.8.csv`
+
+### Changed
+
+- Updated the Chinese manuscript outline from a figure/table plan list to a reader-facing draft section with figure captions, CSV provenance notes, and translated table display fields.
+- Updated validator coverage for manuscript figure assets, figure prompt record, embedded table source references, and the "not real benchmark result" boundary.
+- Bumped project version to `1.2.0`.
+
+### Boundaries
+
+- No benchmark execution.
+- No new include methods.
+- No data download, source clone, environment install, model-weight fetch, or GPU task.
+- Figure assets are conceptual manuscript schematics, not experimental results or local reproducibility evidence.
+- Embedded tables are generated from existing project CSV artifacts; complete evidence remains in the source CSV files.
+
+## v1.1 Supplementary-Source Synthesis Layer - 2026-06-18
+
+Supplementary-source synthesis update on top of the v0.9.0 plan and v1.0 bilingual manuscript-outline layer.
+
+### Added
+
+- Added `reports/supplementary_materials_reference_value_v1.1.md`.
+- Added `reports/short_peptide_scoring_rationale_v1.1.md`.
+- Added `reports/cyclic_peptide_benchmark_supplement_v1.1.md`.
+- Added `tables/supplementary_materials_action_matrix_v1.1.csv`.
+- Added `tables/scoring_metric_rationale_matrix_v1.1.csv`.
+- Added `tables/method_landscape_patch_candidates_v1.1.csv`.
+
+### Changed
+
+- Updated Chinese and English manuscript outlines with v1.1 supplementary-source scoring boundaries.
+- Updated sync map, TODO list, claim-evidence map, README, index, and validator expectations.
+
+### Boundaries
+
+- No include-method changes.
+- No target-set promotion.
+- No data download, source clone, environment install, model-weight fetch, GPU task, or Benchmark result.
+
+## v0.9.0 - 2026-06-18
+
+Plan and Benchmark manuscript synchronization release.
+
+### Added
+
+- Added `reports/updated_plan_v0.9.md` as the current authoritative plan.
+- Added validator coverage for v0.9 plan, Benchmark template artifacts, review synthesis artifacts, and method landscape watchlist.
+- Added claim boundaries for review-driven method landscape mapping and manuscript planning.
+
+### Changed
+
+- Synchronized `VERSION`, `README.md`, `index.md`, `log.md`, manuscript outline, claim-evidence map, and validation report with v0.9.
+- Promoted `reports/updated_plan_v0.9.md` as the current plan entry point while preserving `reports/updated_plan_v0.6.md` as historical context.
+- Kept `benchmarks/method_sources/method_landscape_watchlist_v0.9.csv` as a landscape/watchlist artifact, not an include-method scorecard.
+
+### Validation
+
+`PYTHONUTF8=1 python scripts/validate_benchmark_kb.py` is expected to pass with:
+
+- 27 method landscape rows
+- 6 v0.8 dataset schema review rows
+- 8 v0.8 download manifest rows
+- 4 v0.8 method readiness rows
+- 46 manuscript claim rows
+- 0 validation errors
+- 0 validation warnings
+
+### Not Included
+
+- No dataset downloads.
+- No third-party source clones.
+- No method installation.
+- No downloaded model weights.
+- No GPU tasks.
+- No frozen target set promotion.
+- No claim of local reproducibility or method performance.
+
+## v0.8.0 - 2026-06-09
+
+License, schema, and input-contract readiness release.
+
+### Added
+
+- Added `benchmarks/input_sets/dataset_supplement_schema_review_v0.8.csv`.
+- Added `benchmarks/deployment/method_readiness_review_v0.8.csv`.
+- Added `benchmarks/deployment/download_manifest_v0.8.csv`.
+- Added `reports/license_schema_input_contract_review_v0.8.md`.
+
+### Changed
+
+- Updated priority method contracts with v0.8 license, environment, checkpoint, and blocker evidence.
+- Updated validator coverage for v0.8 readiness artifacts.
+- Kept all future download rows at `download_performed=no`.
+
+### Validation
+
+`PYTHONUTF8=1 python scripts/validate_benchmark_kb.py` is expected to pass with:
+
+- 6 v0.8 dataset schema review rows
+- 8 v0.8 download manifest rows
+- 4 v0.8 method readiness rows
+- 0 validation errors
+- 0 validation warnings
+
+### Not Included
+
+- No dataset downloads.
+- No third-party source clones.
+- No method installation.
+- No downloaded model weights.
+- No GPU tasks.
+- No target-set promotion.
+- No claim of local reproducibility.
+
+## v0.7.0 - 2026-06-06
+
+Server dry-run contract and placeholder input release.
+
+### Added
+
+- Added method-level contracts for PepMLM and RFdiffusion + ProteinMPNN.
+- Added a dependency-only PepMirror contract.
+- Added artificial `benchmarks/input_sets/example_run.csv` rows with `status=not_real_benchmark`.
+- Added `benchmarks/deployment/download_manifest_template_v0.7.csv`.
+- Added `benchmarks/input_sets/dataset_supplement_schema_review_v0.7.csv`.
+
+### Changed
+
+- Updated `run_csv_schema.md` to allow `not_real_benchmark` for placeholder rows only.
+- Updated manuscript outline and claim-evidence map with v0.7 dry-run contract boundaries.
+- Updated ARS action-item statuses for outline, claim-gate, and example-run work.
+- Updated validator, project version, index, log, and README for v0.7.
+
+### Validation
+
+`PYTHONUTF8=1 python scripts/validate_benchmark_kb.py` is expected to pass with:
+
+- 2 example run rows
+- 1 download manifest placeholder row
+- 6 dataset schema review rows
+- 11 ARS action rows
+- 33 manuscript claim rows
+- 0 validation errors
+- 0 validation warnings
+
+### Not Included
+
+- No dataset downloads.
+- No third-party source clones.
+- No method installation.
+- No downloaded model weights.
+- No GPU tasks.
+- No claim of local reproducibility.
+
+## v0.6.0 - 2026-06-06
+
+Academic Research Suite review and server dry-run planning release.
+
+### Added
+
+- Added `reports/academic_research_suite_review_v0.6.md`.
+- Added `reports/updated_plan_v0.6.md`.
+- Added `tables/ars_review_action_items_v0.6.csv`.
+- Added `benchmarks/input_sets/dataset_supplement_watchlist_v0.6.csv`.
+- Added `benchmarks/deployment/server_smoke_test_contract_v0.6.md`.
+
+### Changed
+
+- Updated manuscript outline and claim-evidence map with v0.6 ARS review, dataset watchlist, and server dry-run boundaries.
+- Updated validator to check ARS action items, dataset supplement watchlist, server gate contract, and v0.6 review/plan sections.
+- Updated project version, index, log, and README for v0.6.
+
+### Validation
+
+`PYTHONUTF8=1 python scripts/validate_benchmark_kb.py` is expected to pass with:
+
+- 10 ARS review action rows
+- 6 dataset supplement watchlist rows
+- 29 manuscript claim rows
+- 0 validation errors
+- 0 validation warnings
+
+### Not Included
+
+- No dataset downloads.
+- No third-party source clones.
+- No method installation.
+- No downloaded model weights.
+- No GPU tasks.
+- No claim of local reproducibility.
+
 ## v0.5.0 - 2026-06-03
 
 Availability and server-readiness audit release for the peptide-design Benchmark KB.

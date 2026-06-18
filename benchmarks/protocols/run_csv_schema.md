@@ -20,7 +20,7 @@
 | `peptide_type` | yes | `linear`, `cyclic`, `D-peptide`, `heterochiral`, `miniprotein`, or `protein_binder` |
 | `chirality` | yes | `L`, `D`, `mixed`, or `not_applicable` |
 | `cyclic` | yes | `yes`, `no`, or `unknown` |
-| `status` | yes | `planned`, `generated`, `scored`, `failed`, `not_applicable`, or `deferred` |
+| `status` | yes | `planned`, `generated`, `scored`, `failed`, `not_applicable`, `deferred`, or `not_real_benchmark` |
 | `notes` | no | 简短人工说明 |
 
 ## Chain Convention
@@ -43,3 +43,7 @@
 ## Merge Key
 
 所有评分输出必须包含 `design_id`。如果外部工具只能输出 `binder_id`，适配层必须先映射回 `design_id`，再参与 `merged_run.csv` 合并。
+
+## Placeholder Rows
+
+`not_real_benchmark` 只允许用于 schema、server contract 或 dry-run planning 的人工示例行。该状态不得出现在真实 benchmark result 中，也不得被写作模型输出或性能证据。

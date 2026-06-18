@@ -1,0 +1,2 @@
+artifact_id,artifact_type,method_or_dataset,source_url,version_or_commit,expected_size,license_status,checksum_status,local_destination,download_status,download_performed,next_action
+placeholder_future_server_download,template_placeholder,not_applicable,not_applicable,not_applicable,not_applicable,not_applicable,not_recorded,server_path_placeholder,not_requested,no,Replace this row only after license approval and server-side download planning

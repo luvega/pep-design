@@ -25,6 +25,30 @@
 | RFdiffusion + ProteinMPNN | `T3_miniprotein_binder_baseline` | established miniprotein/protein binder baseline |
 | BindCraft | `T3_miniprotein_binder_baseline` | integrated binder-design pipeline comparator |
 
+## Generation Paradigm Taxonomy
+
+任务轴（T1/T2/T3）描述输入/输出形态；本节补充一条正交的**生成范式轴**，描述条件化与优化机制。范式标签用于方法理解与分层呈现，不得据此对方法做公平性能排名，且单一方法可同时落入多个范式。详细方法映射见 [`../method_sources/method_landscape_watchlist_v0.9.csv`](../method_sources/method_landscape_watchlist_v0.9.csv) 与 [`../../reports/review_synthesis_benchmark_framework_supplement.md`](../../reports/review_synthesis_benchmark_framework_supplement.md)。
+
+| paradigm | conditioning core | benchmark implication |
+|:---|:---|:---|
+| structure_driven | 以靶点 3D 结构/口袋为条件 | 需要结构/界面指标与 pocket/chain 约定 |
+| sequence_driven | 仅以靶点序列为条件（pLM 先验） | 结构指标默认 `not_applicable`，可选下游结构预测层 |
+| function_property_driven | 以多属性/界面相似性为优化目标 | 支撑 developability 与 ranking/rescoring 的独立评分轴 |
+
+## Cross-Cutting Topology And Chirality Constraints
+
+cyclic、D-peptide、unnatural-residue 是横向约束，不是普通 linear peptide 的小变体，必须独立记录拓扑、手性与评分适用性，且不并入同一 leaderboard。
+
+| 约束类别 | 子类 | run.csv 字段 | 评分适用性 |
+|:---|:---|:---|:---|
+| 环化拓扑 | head-to-tail、disulfide、side-chain crosslink、heterocyclic/ncAA 锁定 | `cyclic` + `peptide_type` + `notes` 记录环化模式 | 计入 design_feasibility/developability；结构指标视 reference 而定 |
+| 手性 | L / D / mixed(heterochiral) | `chirality` + `peptide_type` | 需 stereochemistry-aware parsing；D-肽-L-靶能量评分标注 `needs_validation` |
+| 非天然残基 | ncAA、N-methylation、glycosylation、lipidation、backbone modification | `peptide_type` + non-natural residue flag | 仅 metadata-level 代理；表示方案（CHUCKLES/HELM）作未来扩展 |
+
+## Representativeness Gaps
+
+下列内容写作 Benchmark 代表性缺口，而非已解决项：peptide-protein 复合物数据稀缺与偏置；构象不确定性（构象集合/诱导结合）；cyclic/D/ncAA 的表示与评分适用性；affinity 单指标不足需 developability 独立层。function-oriented/multi-target 设计属未来工作，不作为当前 readiness 完成证据。
+
 ## Target Set And Controls
 
 Future benchmark targets are defined by `benchmarks/input_sets/target_set_v0.csv`. Each target row must record target class, chain/structure provenance, positive control, negative or decoy controls, experimental affinity or assay evidence status, sequence/structure homology cluster and train-leakage risk.

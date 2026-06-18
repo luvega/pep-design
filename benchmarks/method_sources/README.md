@@ -13,3 +13,7 @@ Source pinning means commit/license/README/environment route inspection only. It
 ## v0.5 Source Pin Audit
 
 `source_pin_audit_v0.5.csv` extends source pinning to all 10 include methods using GitHub API and `git ls-remote` metadata only. No third-party repository is cloned into this KB. `pinned_no_install` means the remote repository and commit are recorded; it does not mean dependency resolution, checkpoint access, batch inference, or local execution has been confirmed.
+
+## v0.9 Method Landscape Watchlist
+
+`method_landscape_watchlist_v0.9.csv` records review-derived method coverage across generation paradigms, peptide topology, target conditioning and coverage gaps. It is not a source pin audit and does not change `candidate_method_scorecard.csv`; `review_only` rows must go through source/license/runnability/input-contract review before they can be considered for a future candidate-pool change.

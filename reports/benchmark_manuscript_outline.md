@@ -2,13 +2,13 @@
 
 ## Working Title
 
-**面向近期 AI 多肽设计方法的 Benchmark 框架：专家审查、任务分层、数据集 readiness、靶点候选与统一评分校准**
+**面向近期 AI 多肽设计方法的 Benchmark 框架：专家审查、可用性审计、任务分层、数据集 readiness 与服务器 dry-run 协议**
 
-English working title: **A benchmark framework for recent AI peptide design methods: expert review, task stratification, dataset readiness, target candidates and calibrated scoring**
+English working title: **A benchmark framework for recent AI peptide design methods: expert review, availability auditing, task stratification, dataset readiness and server dry-run contracts**
 
 ## Manuscript Positioning
 
-本文定位为 Benchmark framework / protocol-first manuscript。文章核心问题不是“哪个方法当前最好”，而是“如何在任务、靶点、对照、输入输出、可运行性、可开发性和评分校准层面公平比较近期 AI 多肽设计方法”。因此，本文只陈述由本项目 KB 支持的事实：2021-06-03 至 2026-06-03 文献范围、10 个 first-wave candidate methods、三类任务协议、专家团审查、候选数据集 readiness、靶点候选矩阵、源码 pinning、可运行性审计、generation/ranking 双轨协议和统一评分 schema。
+本文定位为 Benchmark framework / protocol-first manuscript。文章核心问题不是“哪个方法当前最好”，而是“如何在任务、靶点、对照、输入输出、可运行性、可开发性和评分校准层面公平比较近期 AI 多肽设计方法”。因此，本文只陈述由本项目 KB 支持的事实：2021-06-03 至 2026-06-03 文献范围、10 个 first-wave candidate methods、三类任务协议、专家团审查、候选数据集 readiness、靶点候选矩阵、源码 pinning、link/data availability、server readiness、ARS 综合评审、generation/ranking 双轨协议和统一评分 schema。
 
 写作风格采用中文学术初稿，保留英文方法名、模型名、论文题名、BibTeX key、Zotero item key、文件名和命令名。论证动词优先使用“提示、支持、表明、拟评估、仍需验证”；避免“证明、最佳、全面优于”等当前证据不能支持的表述。所有 performance、hit rate、experimental success 和 local reproducibility 相关结论必须保留为后续真实 Benchmark 阶段的待评估内容。
 
@@ -16,7 +16,7 @@ English working title: **A benchmark framework for recent AI peptide design meth
 
 生成式模型、蛋白基础模型和结构设计方法正在进入多肽设计领域，覆盖 linear peptide binder、cyclic peptide、D-peptide、miniprotein binder、protein-peptide interaction 和 pMHC/TCR-like recognition 等任务。然而，不同方法的输入、输出、依赖、代码、权重、手性约束和可开发性边界差异较大，直接建立统一 leaderboard 容易混淆生成能力、排序能力、工程可运行性和生物学证据。
 
-为解决这一问题，我们基于本地 Zotero/PD-wiki 知识库整理 2021-06-03 至 2026-06-03 的近期多肽设计方法文献，并结合本地 Benchmark/评分/affinity prediction 文献建立 protocol-first 框架。该框架包含 10 个 first-wave candidate methods、三类任务、专家团审查、候选 benchmark dataset readiness、靶点候选矩阵、标准靶点集和对照集 schema、可运行性矩阵、generation benchmark 与 ranking/rescoring benchmark 双轨协议，以及 `run.csv -> metric CSVs -> merged_run.csv` 的统一评分数据流。
+为解决这一问题，我们基于本地 Zotero/PD-wiki 知识库整理 2021-06-03 至 2026-06-03 的近期多肽设计方法文献，并结合本地 Benchmark/评分/affinity prediction 文献建立 protocol-first 框架。该框架包含 10 个 first-wave candidate methods、三类任务、专家团审查、候选 benchmark dataset readiness、靶点候选矩阵、标准靶点集和对照集 schema、可运行性矩阵、link/data availability、server dry-run contract、generation benchmark 与 ranking/rescoring benchmark 双轨协议，以及 `run.csv -> metric CSVs -> merged_run.csv` 的统一评分数据流。
 
 本文强调，AlphaFold-style ranking、protein-peptide affinity prediction 和 peptide developability 文献可用于设计评分与校准策略，但不能在未运行真实 benchmark 前支持方法优劣结论。当前版本提供的是可复用 Benchmark 协议和写作框架，不声明候选方法已完成本地复现，也不比较最终性能或实验成功率。
 
@@ -26,21 +26,36 @@ AI 多肽设计 Benchmark 应先建立任务分层、靶点/对照集、泄漏�
 
 ## 1. Introduction
 
-### Paragraph Role: Opening Context
+### Benchmark Part 1: Background And Running Example
 
 多肽设计正在从经验筛选和结构启发优化，扩展到由 protein language models、diffusion models、full-atom generative models 和 AF2/MPNN-style pipelines 支持的条件生成。PepMLM 代表 sequence-conditioned peptide binder 方向，RFdiffusion + ProteinMPNN 和 BindCraft 代表 miniprotein/protein binder baseline，PepMirror、D-Flow 和 DexDesign 代表 D-peptide 或 chirality-aware design，AfCycDesign / ColabDesign cyclic peptide 代表 cyclic peptide structure/design 路线。建议引用：`chen_target_2025`, `bennett_improving_2023`, `pacesa_bindcraft_2024`, `yang_cross-chirality_2026`, `guerin_dexdesign_2024`, `rettie_cyclic_2023`。
 
-### Paragraph Role: Challenge
+Figure 1 的 running example 应展示同一 peptide-binding target 在三类路线中的差异：`PepMLM`-like sequence-conditioned route 接收 target sequence 并输出 peptide sequences；`PepMirror` 或其他 structure-conditioned peptide method 需要 target structure、binding context 与 chirality-aware handling；`RFdiffusion + ProteinMPNN` 或 `BindCraft` 依赖 target structure / hotspot 路线并输出 miniprotein/protein-binder candidates。该例子的重点不是展示哪个方法更好，而是说明输入、输出、chain convention、scoring applicability 和 failure state 不同，不能直接进入同一无分层 leaderboard。
 
-现有方法能否生成候选，不等同于候选是否可运行、可批处理、可评估、可排序或可进入实验漏斗。sequence-only 方法可能输出 peptide sequences，但需要下游结构或结合验证；structure-conditioned 方法依赖 target PDB、pocket definition 和 checkpoint；D-peptide 与 cyclic peptide 方法还需要显式处理 chirality、cycle constraint 和结构解析边界。该差异提示，一个单一分数或单一 leaderboard 难以覆盖所有多肽设计任务。
+### Benchmark Part 2: Existing-Benchmark Limitations
 
-### Paragraph Role: Gap
+当前 Benchmark 的主要缺口可以压缩为三类。第一，task mismatch：sequence-only peptide output、peptide complex structure output 和 miniprotein binder output 往往不能在未分层接口下公平比较。第二，readiness mismatch：code URL、source pin、server contract 或权重路线可能被误读为已安装、已复现或已可批处理。第三，evidence mismatch：structure confidence、affinity prediction、developability proxy、negative/off-target specificity 和 biological validation 是不同证据层，不能被折叠成一个笼统分数。
 
-当前 Benchmark 的主要缺口在于靶点选择、对照设计、工程接口和证据边界。不同仓库可能使用不同输入格式、chain convention、batch route、model weights 和 scoring outputs；不同论文也可能使用不同训练集、示例集和 benchmark target。若不记录 target novelty、positive/negative controls、assay context 和 train leakage risk，后续分数很难解释为真实泛化能力。
+### Benchmark Part 3: Research Questions
 
-### Paragraph Role: Contribution
+RQ1: How can recent AI peptide-design methods be stratified into task-compatible benchmark interfaces before performance comparison? RQ2: What target/control, leakage, runnability and scoring metadata are required before generation and ranking outputs become interpretable? RQ3: Which methods and dataset sources are currently at metadata/source/dry-run readiness gates, and what evidence is required before smoke-test or performance claims?
 
-本文提出一个 protocol-first Benchmark 框架：从 432 条去重文献记录中筛选 10 个 first-wave include methods，将方法映射到三类任务，建立靶点/对照集 schema、runnability audit、developability proxies、negative-design panel 和 `run.csv -> metric CSVs -> merged_run.csv` 的统一数据流。该框架的贡献是为后续真实 Benchmark 提供可复用工程协议，而不是在未运行方法前给出性能排名。
+这些 RQs 分别对应任务分层、证据/评分边界和执行 readiness。当前稿件可以回答 protocol design 和 readiness state；真实模型能力边界、top-k enrichment、failure rate、runtime 和 calibration error 必须等服务器端 smoke test 或正式 Benchmark 后再报告。
+
+### Benchmark Part 4: Design Considerations
+
+一个合格的 AI 多肽设计 Benchmark 协议应满足五个设计要求。G1 task compatibility：先在 T1/T2/T3 内比较，再解释跨任务差异。G2 evidence provenance：target、positive/negative controls、assay type、license 和 leakage status 必须先于 independent-test wording。G3 execution gating：方法状态应从 `metadata_ready`、`source_pinned`、`license_checked`、`weights_manifested`、`input_contract_ready`、`dry_run_ready` 到 `smoke_test_ready` 逐级推进。G4 metric applicability：sequence-only、chirality-aware、cyclic peptide 和 miniprotein 输出需要显式记录 `not_applicable_reason`。G5 claim safety：protocol readiness、server planning、local reproducibility 和 biological validation 必须保持不同 claim state。
+
+### Benchmark Part 5: Our Proposal
+
+本文提出一个 protocol-first Benchmark 框架：从 432 条去重文献记录中筛选 10 个 first-wave include methods，将方法映射到 T1 sequence binder、T2 structure peptide binder 和 T3 miniprotein binder baseline，建立靶点/对照集 schema、dataset watchlist、runnability/source audits、server dry-run contracts、developability proxies、negative-design panel 和 `run.csv -> metric CSVs -> merged_run.csv` 的统一数据流。该框架的贡献是为后续真实 Benchmark 提供可复用工程协议，而不是在未运行方法前给出性能排名。
+
+### Benchmark Part 6: Contributions
+
+1. 本文定义一个 task-aware Benchmark protocol，用于比较 recent AI peptide-design methods，同时避免把 sequence binder、structure peptide binder 和 miniprotein binder baseline 混为同一任务。
+2. 本文构建 evidence-backed readiness artifacts，覆盖 method selection、dataset/watchlist governance、target/control schema、runnability audit、source pinning 和 server dry-run contracts。
+3. 本文将 generation、ranking/rescoring、developability、negative-design 和 leakage-aware scoring 拆分为独立 reporting layers，并通过 `run.csv` 与 metric CSVs 连接。
+4. 本文提供 claim-gated manuscript framework，明确 protocol readiness 不等于 future performance、local reproducibility 或 experimental validation。
 
 ## 2. Benchmark Lessons From Local Zotero Literature
 
@@ -61,6 +76,10 @@ v0.4 进一步新增 `reports/expert_panel_review_v0.4.md`、`tables/expert_revi
 ### Paragraph Role: Developability Lesson
 
 `oeller_sequence-based_2023`、`pingitore_v_delocalized_2024` 和 `rettie_accurate_2025` 支持将 peptide developability 作为独立证据层。可计算 metadata-level proxies 可以用于初筛，但 solubility、serum stability、protease stability、permeability、hemolysis、immunogenicity、purity/yield 等实验层指标必须等真实数据或明确文献来源后再填写。
+
+### Paragraph Role: v1.1 Supplementary-Source Boundary
+
+v1.1 新增 `reports/supplementary_materials_reference_value_v1.1.md`、`reports/short_peptide_scoring_rationale_v1.1.md` 和 `reports/cyclic_peptide_benchmark_supplement_v1.1.md`，把 6 份外部 Markdown 补充材料转化为 source discovery 和 protocol framing。短肽对接材料支持“docking score 不能单独解释短肽结合”的评分边界；环肽/JMC/CAS/环肽 AI 材料支持 topology-aware、chirality-aware、ncAA-aware 和 developability-aware 的协议补强；流匹配材料只支持 method paradigm 背景。新增 RFpeptides、CyclicMPNN、PPFlow、PepMimic、PocketXMol、BoltzGen、PepINVENT 和 HELM-GPT 仅为 patch candidates，不进入当前 include set，也不构成源码可运行或性能证据。
 
 ## 3. Literature Scope And Candidate Method Selection
 
@@ -196,6 +215,26 @@ v0.4 只对 PepMLM、RFdiffusion、ProteinMPNN 和 PepMirror 做外部 shallow c
 
 在真实 smoke test 和 Benchmark 运行前，任何“方法 A 优于方法 B”的结论都不应写入 Results、Abstract 或 Discussion。可以写“拟评估”“计划记录”“当前工程准备度提示”“metadata-level proxy”，但不能写“已验证”“性能最佳”或“全面优于”。
 
+### Paragraph Role: ARS Review And v0.6 Readiness
+
+v0.6 新增 `reports/academic_research_suite_review_v0.6.md`、`reports/updated_plan_v0.6.md`、`tables/ars_review_action_items_v0.6.csv`、`dataset_supplement_watchlist_v0.6.csv` 和 `server_smoke_test_contract_v0.6.md`。这些材料应写入 planned Results 或 Methods 的 readiness 部分，用于说明本文如何进行研究完整性审查、外部数据 watchlist 管理和服务器执行门槛设计。它们不应写成实验结果、性能排序或复现证据。
+
+### Paragraph Role: v0.7 Dry-Run Contracts
+
+v0.7 进一步将 ARS 评审意见落实为服务器 dry-run 输入合同。PepMLM 与 RFdiffusion + ProteinMPNN 获得方法级 server contract，用于记录 repo pin、外部路径占位、最小 `run.csv` 字段、命令形状、预期输出和 failure states；PepMirror 仅保留 dependency contract，因为 PyRosetta、Vina、OpenMM 和 Zenodo checkpoint 仍未解决。`example_run.csv` 只包含人工 placeholder rows，`download_manifest_template_v0.7.csv` 只包含模板或 placeholder；二者都不得写作真实输入、真实下载或真实结果。
+
+### Paragraph Role: Supervisor-Skills Audit
+
+本轮新增 `reports/supervisor_skills_idea_evaluation.md`、`reports/benchmark_template_audit.md` 和 `reports/benchmark_intro_logic_chain.md`。这些材料应写作 manuscript-planning evidence：`idea-evaluator` 给出 Accept with Revisions，指出主要风险是 unverifiable claim 和 scope creep；`benchmark-paper-template` 确认 Research Gap、Evaluation Framework 和 protocol construction 已具备基础，但 Empirical Findings 仍只能写为 planned/readiness findings；`intro-drafter` 仅用于检查 Introduction 逻辑连续性，不替代 Benchmark 六段链。
+
+### Paragraph Role: v0.8 License / Schema / Input-Contract Readiness
+
+v0.8 新增 `benchmarks/input_sets/dataset_supplement_schema_review_v0.8.csv`、`benchmarks/deployment/method_readiness_review_v0.8.csv`、`benchmarks/deployment/download_manifest_v0.8.csv` 和 `reports/license_schema_input_contract_review_v0.8.md`。这些材料可写作 readiness findings：Overath、PEPBI、PepBenchmark、GPCR peptide benchmark、TCRTransBench 和 Chang AF2 ranking cases 已完成不同程度的 license/schema/input-route metadata 审计；PepMLM、RFdiffusion、ProteinMPNN 和 PepMirror 已完成优先级方法的 license/env/checkpoint/input-contract 审计。它们仍不代表数据下载、方法安装、服务器运行、target-set 晋升或性能结果。
+
+### Paragraph Role: v0.9 Plan And Method Landscape Synchronization
+
+v0.9 新增 `reports/updated_plan_v0.9.md` 作为当前权威计划，并将 `reports/review_draft_benchmark_reference_value.md`、`reports/review_synthesis_benchmark_framework_supplement.md` 和 `benchmarks/method_sources/method_landscape_watchlist_v0.9.csv` 纳入 manuscript-planning evidence。该层用于说明：本稿的 Benchmark 逻辑应同时包含 T1/T2/T3 任务轴和 structure/sequence/function-property 生成范式轴；cyclic、D-peptide 与 ncAA 是横向拓扑/手性/化学约束；review_only 方法只能作为 coverage gap、Related Work 或后续 source/license 审计候选，不能写作新增 include 方法或已运行方法。
+
 ## 12. Discussion
 
 ### Paragraph Role: Main Interpretation
@@ -210,9 +249,13 @@ v0.4 只对 PepMLM、RFdiffusion、ProteinMPNN 和 PepMirror 做外部 shallow c
 
 计算评分只能支持候选排序和结构假设，不能替代实验亲和力、实验结构、细胞功能、PK/PD 或 CMC 证据。药物化学可开发性也不能被 binding score 代替；sequence-level proxies 只适合作为 metadata-level 初筛。D-peptide、cyclic peptide 和 miniprotein binder 尤其需要区分可生成性、结构可信度、手性/环化约束、实验可合成性和生物学功能。
 
+### Paragraph Role: Skill-Gated Writing Boundary
+
+Supervisor-Skills 的本轮评估支持继续推进 protocol-first manuscript，但不支持把稿件升级为 completed Benchmark-results paper。`benchmark-paper-template` 要求的 Running Example、Benchmark Comparison Table、pipeline figure 和 Finding-style performance summaries 仍需分阶段处理：前两者可在写作阶段补齐，performance findings 必须等真实服务器运行和结果表存在后再写入。
+
 ### Paragraph Role: Limitations And Next Steps
 
-当前限制包括：真实 target set 尚未冻结，候选 benchmark dataset 只有 Overath 完成小文件字段级审计，Overath 行数差异和 blank target rows 需要清洗日志，部分候选方法权重和 license 待确认，部分方法需要 heavy dependency stack，D-peptide 和 cyclic peptide 的评分需要更明确的 stereochemistry-aware validation，affinity/ranking 指标仍需 assay-aware calibration。下一步应完成 Overath 清洗日志、PepMLM model-card/license 审计、RFdiffusion + ProteinMPNN no-weight command contract、PepMirror license/dependency 审计和小规模 smoke-test 设计。
+当前限制包括：真实 target set 尚未冻结，候选 benchmark dataset 只有 Overath 完成小文件字段级审计，Overath 行数差异和 blank target rows 需要清洗日志，部分候选方法权重和 license 待确认，部分方法需要 heavy dependency stack，D-peptide 和 cyclic peptide 的评分需要更明确的 stereochemistry-aware validation，affinity/ranking 指标仍需 assay-aware calibration。v0.6 ARS 综合评审进一步指出，新增 GPCR peptide benchmark、PepBenchmark 和 TCRTransBench 等来源只能先进入 watchlist，不能直接补入 frozen target set。v0.7 已建立 server dry-run contracts、artificial example_run 和 download manifest template，但这些仍是 execution planning artifacts，不是方法运行结果。v0.8 完成 license/schema/input-contract readiness 审计，v0.9 完成当前计划与方法地形图同步；二者仍不等同于数据下载、方法安装、target freeze 或 performance findings。下一步应进入 v0.10 server-side preflight package：关闭 PepMLM model-card/license 与 batch wrapper、RFdiffusion + ProteinMPNN checkpoint/contig/handoff、PepMirror PyRosetta license、Overath 清洗计划和 cyclic/ncAA review_only 方法 source/license metadata 审计。
 
 ## 13. Methods
 
@@ -235,6 +278,18 @@ v0.4 只对 PepMLM、RFdiffusion、ProteinMPNN 和 PepMirror 做外部 shallow c
 ### Paragraph Role: Expert Panel And Source Pinning
 
 专家团审查使用 `expert_review_action_items.csv`，每条意见必须记录 reviewer role、severity、artifact、issue、recommendation、decision、status、evidence 和 next action。源码 pinning 使用 `source_pin_audit_v0.4.csv`，只记录外部 shallow clone 的 commit 和入口线索；任何 `pinned_no_install` 行都不能写作已安装或已复现。
+
+### Paragraph Role: Server Contract Methods
+
+服务器 dry-run 合同使用 `server_smoke_test_contract_v0.6.md` 和 `benchmarks/deployment/method_contracts/`。每个方法合同必须记录 method、task_id、current gate、repo pin、license blocker、外部 source/data/weights/results root 占位、最小输入、命令形状、预期输出和 failure states。合同中的 `current_gate` 不能超过现有证据：PepMLM 与 RFdiffusion + ProteinMPNN 仅可作为 input contract / dry-run planning；PepMirror 仍停留在 dependency/source-pinned 层。
+
+### Paragraph Role: License / Schema / Input-Contract Audit
+
+v0.8 审计使用公开 API、论文 metadata 和既有本地外部 shallow clone 的只读文件，记录数据源 license/schema/controls/leakage/download-route 状态以及方法 license/environment/weights-or-checkpoint/input-contract 状态。`download_manifest_v0.8.csv` 可以包含未来服务器 URL 和 checksum plan，但所有行必须保持 `download_performed=no`，直到服务器端批准下载并生成日志。
+
+### Paragraph Role: Method Landscape And Review-Driven Coverage Audit
+
+v0.9 方法地形图使用 `method_landscape_watchlist_v0.9.csv` 将 include、candidate_watchlist 和 review_only 方法分开记录，并增加 structure/sequence/function-property 生成范式、peptide topology、target conditioning 和 coverage gap 字段。该表用于 Related Work、代表性缺口和后续 source/license 审计优先级，不用于替代 `candidate_method_scorecard.csv`，也不改变 10 个 first-wave include 方法。
 
 ### Paragraph Role: Positive And Negative Controls
 
