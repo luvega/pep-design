@@ -6,9 +6,9 @@
 
 ## Manuscript Positioning
 
-This manuscript is a protocol-first Benchmark outline. Its goal is to define how recent AI peptide design methods should be compared in a fair, reproducible and auditable way. It does not claim that the full Benchmark has been run, that any candidate method has been installed locally, or that one method outperforms another.
+This protocol-first Benchmark outline defines a fair, reproducible and auditable way to compare recent AI peptide design methods. It does not claim that the full Benchmark has been run, that any candidate method has been installed locally, or that one method outperforms another.
 
-The evidence base comes from the project KB covering literature from 2021-06-03 to 2026-06-03, 10 first-wave include methods, 2 watchlist methods, the v0.9 method landscape, dataset readiness audits, server dry-run contracts, runnability matrices, the manuscript claim-evidence map and local Zotero-derived Benchmark/scoring lessons.
+The evidence base combines the project KB literature window from 2021-06-03 to 2026-06-03, 10 first-wave include methods, 2 watchlist methods, the v0.9 method landscape, dataset readiness audits, server dry-run contracts, runnability matrices, the manuscript claim-evidence map and local Zotero-derived Benchmark/scoring lessons.
 
 ## Keywords
 
@@ -16,11 +16,11 @@ AI peptide design; benchmark; peptide binder; cyclic peptide; D-peptide; minipro
 
 ## Abstract
 
-Generative models, protein foundation models and structure-based design pipelines are rapidly entering peptide design, spanning linear peptide binders, cyclic peptides, D-peptides, heterochiral peptides, miniprotein binders and protein-peptide interaction tasks. However, these methods differ substantially in their inputs, outputs, dependencies, code and weight availability, stereochemical constraints and scoring applicability. A single undifferentiated leaderboard would therefore conflate generation ability, ranking ability, engineering runnability and biological evidence.
+Generative models, protein foundation models and structure-based design pipelines now cover linear peptide binders, cyclic peptides, D-peptides, heterochiral peptides, miniprotein binders and protein-peptide interaction tasks. These methods differ in inputs, outputs, dependencies, code and weight availability, stereochemical constraints and scoring applicability. A single undifferentiated leaderboard would conflate generation ability, ranking ability, engineering runnability and biological evidence.
 
 We propose a protocol-first Benchmark framework for recent AI peptide design methods based on a local Zotero/PD-wiki knowledge base and external metadata audits. The framework defines three task interfaces, 10 first-wave include methods, 2 watchlist methods, reference dataset sources, target/control schemas, separate generation and ranking/rescoring tracks, method runnability and server dry-run gates, and a unified `run.csv -> metric CSVs -> merged_run.csv` scoring data flow.
 
-We emphasize that AlphaFold-style peptide binder ranking, protein-peptide affinity prediction and peptide developability literature can inform scoring and calibration design, but they do not support method superiority claims before a real Benchmark is executed. The current contribution is a reusable manuscript structure, evidence boundary, test design and execution TODO layer, not a completed performance ranking or experimental success analysis.
+AlphaFold-style peptide binder ranking, protein-peptide affinity prediction and peptide developability literature can inform scoring and calibration design, but they do not support method superiority claims before a real Benchmark is executed. This release provides a reusable manuscript structure, evidence boundary, test design and execution TODO layer, not a completed performance ranking or experimental success analysis.
 
 ## 1. Introduction
 
@@ -28,11 +28,11 @@ We emphasize that AlphaFold-style peptide binder ranking, protein-peptide affini
 
 Peptide design is moving from empirical screening and structure-inspired optimization toward conditional generation using protein language models, diffusion models, full-atom generative models and AF2/MPNN-style pipelines. PepMLM represents target sequence-conditioned peptide binder design. DiffPepBuilder, PepGLAD, D-Flow / PeptideDesign, PepMirror and AfCycDesign / ColabDesign cyclic peptide represent structure-conditioned peptide design. RFdiffusion + ProteinMPNN and BindCraft represent miniprotein/protein binder baseline pipelines.
 
-Figure 1 should use a single peptide-binding target to show why task stratification matters. A sequence-only route takes a target sequence and returns peptide sequences. A structure-conditioned route requires a target PDB, pocket or reference binder and returns a peptide structure or complex. A miniprotein baseline route returns a binder backbone and sequence. The figure should communicate task-interface differences, not performance differences.
+Figure 1 uses a single peptide-binding target to show why task stratification matters. A sequence-only route takes a target sequence and returns peptide sequences. A structure-conditioned route requires a target PDB, pocket or reference binder and returns a peptide structure or complex. A miniprotein baseline route returns a binder backbone and sequence. The figure communicates task-interface differences, not performance differences.
 
 ### 1.2 Evaluation gap
 
-Current comparisons face three recurring gaps. First, task mismatch: sequence-only peptide outputs, structure-conditioned peptide outputs and miniprotein binder outputs are not directly comparable in an unstratified leaderboard. Second, readiness mismatch: a code URL, source pin, server contract or download route can be mistaken for installation or reproducibility evidence. Third, evidence mismatch: structure confidence, affinity prediction, developability proxies, negative/off-target specificity and biological validation are separate layers of evidence.
+Current comparisons face three recurring gaps. Task mismatch places sequence-only peptide outputs, structure-conditioned peptide outputs and miniprotein binder outputs in the same unstratified leaderboard. Readiness mismatch treats a code URL, source pin, server contract or download route as installation or reproducibility evidence. Evidence mismatch folds structure confidence, affinity prediction, developability proxies, negative/off-target specificity and biological validation into one score.
 
 ### 1.3 Research questions
 
@@ -48,7 +48,7 @@ The Benchmark follows five design principles. G1 task compatibility: compare met
 
 ### 1.5 Contributions
 
-This manuscript contributes: (1) a task-aware Benchmark protocol separating T1/T2/T3 peptide-design interfaces; (2) a first-wave method classification with code routes and readiness gates; (3) reference dataset source and target/control schemas with no-download boundaries; (4) a split generation and ranking/rescoring test design; and (5) synchronized Chinese and English manuscript outlines, TODOs and claim gates for later full manuscript drafting.
+The contribution has five parts: (1) a task-aware Benchmark protocol separating T1/T2/T3 peptide-design interfaces; (2) a first-wave method classification with code routes and readiness gates; (3) reference dataset source and target/control schemas with no-download boundaries; (4) a split generation and ranking/rescoring test design; and (5) synchronized Chinese and English manuscript outlines, TODOs and claim gates for later full manuscript drafting.
 
 ## 2. Benchmark Lessons From Local Zotero Literature
 
@@ -62,7 +62,7 @@ Inclusion requires a public code or service route, batchable inputs and outputs,
 
 ## 4. Candidate Method Taxonomy and Code Routes
 
-Table 1 should be generated from `tables/candidate_method_classification_v1.csv`. Methods are grouped into three pools:
+Table 1 comes from `tables/candidate_method_classification_v1.csv`. Methods are grouped into three pools:
 
 - `included`: 10 first-wave candidate methods used in the current protocol and smoke-test planning.
 - `candidate_watchlist`: PepFlow and BoltzDesign1, retained for later replacement or task expansion.
@@ -72,7 +72,7 @@ Code routes are external repository, Hugging Face, Zenodo or pending routes. The
 
 ## 5. Reference Dataset Sources and Target-Set Planning
 
-Table 2 should be generated from `benchmarks/input_sets/reference_dataset_sources_v1.csv`. Candidate sources include the Overath binder-success dataset, PEPBI, PepMerge/PepBDB/Q-BioLip, PepMirror resources, Chang AF2 ranking cases, PepBenchmark/PepBenchData, a GPCR peptide design benchmark and TCRTransBench.
+Table 2 comes from `benchmarks/input_sets/reference_dataset_sources_v1.csv`. Candidate sources include the Overath binder-success dataset, PEPBI, PepMerge/PepBDB/Q-BioLip, PepMirror resources, Chang AF2 ranking cases, PepBenchmark/PepBenchData, a GPCR peptide design benchmark and TCRTransBench.
 
 These sources support target-candidate discovery, ranking calibration, schema design or Related Work. `target_set_v0.csv` remains schema-only. No dataset source or target candidate is a frozen Benchmark target. All dataset entries retain no-download or pending-verification status.
 
@@ -88,13 +88,13 @@ Cross-task comparisons should be restricted to engineering runnability, output e
 
 ## 7. Generation Benchmark Protocol
 
-The generation benchmark asks whether a method can produce parseable, valid and task-compatible outputs from standardized inputs. Core records include output completeness, sequence/PDB parseability, length validity, chain validity, chirality flags, cyclic flags, non-natural residue flags, failure state, runtime and resource metadata.
+The generation benchmark records whether a method can produce parseable, valid and task-compatible outputs from standardized inputs. Core fields include output completeness, sequence/PDB parseability, length validity, chain validity, chirality flags, cyclic flags, non-natural residue flags, failure state, runtime and resource metadata.
 
 The primary index is `run.csv`. For structure tasks, binder chain defaults to `A` and target chain defaults to `B`; multi-chain targets are recorded as `B,C,D...`. Method-specific chain conventions must be preserved through an adapter mapping from original chains to standard chains.
 
 ## 8. Ranking and Rescoring Benchmark Protocol
 
-The ranking/rescoring benchmark asks whether existing or generated candidates can be prioritized using affinity, structure, interface and developability evidence. This track is reported separately from generation because a ranker does not demonstrate de novo generation ability, and a generator may produce parseable candidates without calibrated ranking.
+The ranking/rescoring benchmark records whether affinity, structure, interface and developability evidence can prioritize existing or generated candidates. This track is reported separately from generation because a ranker does not demonstrate de novo generation ability, and a generator may produce parseable candidates without calibrated ranking.
 
 Planned metrics include known binder rank, negative control separation, top-k enrichment, calibration error and not-applicable reasons. No performance values are filled in at the current phase.
 
@@ -121,7 +121,7 @@ Cyclic and non-natural peptides also require topology-aware records. `cyclic=yes
 
 The readiness gates are metadata_ready, source_pinned, license_checked, weights_manifested, input_contract_ready, dry_run_ready and smoke_test_ready. PepMLM and RFdiffusion + ProteinMPNN have v0.7 server contracts and v0.8 input-contract readiness evidence. PepMirror remains at dependency-contract level because PyRosetta, Vina, OpenMM and checkpoint routes still require resolution.
 
-These gates are scheduling and governance tools for later server-side preflight. They do not prove local reproducibility. Future server execution must use external clone, data and weight roots, and must not place third-party source code, datasets, weights or GPU results inside the KB.
+These gates schedule later server-side preflight and governance work. They do not prove local reproducibility. Future server execution must use external clone, data and weight roots, and must not place third-party source code, datasets, weights or GPU results inside the KB.
 
 ## 11. Data Leakage, Homology Control and Target Novelty
 
@@ -143,9 +143,9 @@ No method superiority, hit rate, experimental success rate or local reproducibil
 
 ## 13. Discussion
 
-The main claim is that peptide design Benchmarking should first solve task definition, target/control governance, leakage control, engineering runnability and metric applicability before performance ranking. Computational scores can support candidate prioritization and structural hypotheses, but they do not replace experimental affinity, experimental structures, cellular function, PK/PD or CMC evidence. Medicinal chemistry developability should not be reduced to a binding score.
+The main claim is that peptide design Benchmarking should first solve task definition, target/control governance, leakage control, engineering runnability and metric applicability before performance ranking. Computational scores can support candidate prioritization and structural hypotheses, but they do not replace experimental affinity, experimental structures, cellular function, PK/PD or CMC evidence. A binding score also cannot substitute for medicinal chemistry developability evidence.
 
-Current limitations include the absence of a frozen target set, unresolved license/schema/control/leakage fields for some datasets, unresolved weights or dependencies for some methods, the need for stereochemistry-aware validation of D-peptide, cyclic peptide and ncAA outputs, and the absence of real smoke-test and performance reports. The next phase should be a server-side preflight package, not a performance-results manuscript.
+Current limitations include the absence of a frozen target set, unresolved license/schema/control/leakage fields for some datasets, unresolved weights or dependencies for some methods, the need for stereochemistry-aware validation of D-peptide, cyclic peptide and ncAA outputs, and the absence of real smoke-test and performance reports. The next phase should prepare a server-side preflight package, not a performance-results manuscript.
 
 ## 14. Methods
 

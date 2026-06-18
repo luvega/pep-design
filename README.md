@@ -1,8 +1,8 @@
 # Pep Design Benchmark Knowledge Base
 
-This repository contains a peptide-design method benchmark background knowledge base and protocol-first benchmark design layer.
+This repository hosts a peptide-design method knowledge base and a protocol-first benchmark design layer.
 
-The current release focuses on synchronized protocol-first Benchmark planning: Academic Research Suite review, Benchmark paper template alignment, manuscript claim gates, method landscape coverage, server dry-run input contracts, license/schema/input-contract readiness, artificial run.csv examples, future download manifests, dataset supplement schema review, link availability, metadata-only data access auditing, all-method source pinning, target/control schema design, scoring protocol design, a v1.0 bilingual manuscript-outline layer, a v1.1 supplementary-source synthesis layer, and a v1.2 Chinese manuscript figure/table embedding layer. It does not run benchmark jobs. It builds a project-local knowledge layer from Zotero metadata, selected existing PD-wiki evidence cards, local benchmark/scoring literature lessons, external dataset metadata, review-derived method landscape mapping, external repository/model route checks, read-only supplementary Markdown notes, and project-local manuscript figure assets.
+Release `1.2.0` packages the protocol and manuscript layer rather than benchmark results. It includes Academic Research Suite review, Benchmark paper template alignment, claim gates, method landscape coverage, server dry-run input contracts, license/schema/input-contract readiness, artificial `run.csv` examples, future download manifests, dataset schema review, link availability, metadata-only data access audits, source pinning, target/control schema design, scoring protocol design, bilingual manuscript outlines, supplementary-source synthesis, and Chinese manuscript figure/table embedding. The release draws from Zotero metadata, selected PD-wiki evidence cards, benchmark/scoring literature lessons, external dataset metadata, method route checks, read-only supplementary Markdown notes, and project-local figure assets.
 
 ## Current Version
 
@@ -52,7 +52,7 @@ python scripts/build_benchmark_kb.py
 python scripts/validate_benchmark_kb.py
 ```
 
-Expected validation for v1.2.0, covering the v0.9 current plan, v1.0 manuscript-outline layer, v1.1 supplementary-source synthesis layer, and v1.2 Chinese manuscript figure/table embedding layer:
+Expected validation for v1.2.0 covers the v0.9 current plan, v1.0 manuscript-outline layer, v1.1 supplementary-source synthesis layer, and v1.2 Chinese manuscript figure/table embedding layer:
 
 - `status`: `pass`
 - `master_rows`: 432
@@ -96,4 +96,4 @@ Expected validation for v1.2.0, covering the v0.9 current plan, v1.0 manuscript-
 
 This repository is the working project layer. Zotero, EndNote, and the prior PD-wiki remain upstream source systems. The files under `raw_sources/` are local project snapshots used for provenance and should be treated as read-only.
 
-No model weights, downloaded PDFs, EndNote libraries, third-party source trees, large datasets, or benchmark execution outputs are included in this release. v0.5 source pinning and data availability checks are metadata-only snapshots; v1.1 supplementary-source synthesis is source discovery and framing, not primary-source verified evidence or runnability evidence; v1.2 manuscript figures and embedded Markdown tables are planning/reporting artifacts, not benchmark results. Future server-side downloads/clones must live outside this repository or in gitignored paths.
+This release excludes model weights, downloaded PDFs, EndNote libraries, third-party source trees, large datasets and benchmark execution outputs. v0.5 source pinning and data availability checks are metadata-only snapshots. v1.1 supplementary-source synthesis provides source discovery and framing, not primary-source verified evidence or runnability evidence. v1.2 manuscript figures and embedded Markdown tables are planning/reporting artifacts, not benchmark results. Future server-side downloads and clones must live outside this repository or in gitignored paths.

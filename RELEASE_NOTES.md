@@ -2,7 +2,7 @@
 
 ## v1.2.0 Chinese Manuscript Figure/Table Embedding Layer - 2026-06-18
 
-Manuscript presentation update on top of the v0.9.0 current plan, v1.0 bilingual manuscript-outline layer, and v1.1 supplementary-source synthesis layer.
+This release adds a manuscript presentation layer on top of the v0.9.0 current plan, v1.0 bilingual outlines and v1.1 supplementary-source synthesis.
 
 ### Added
 
@@ -27,7 +27,7 @@ Manuscript presentation update on top of the v0.9.0 current plan, v1.0 bilingual
 - No new include methods.
 - No data download, source clone, environment install, model-weight fetch, or GPU task.
 - Figure assets are conceptual manuscript schematics, not experimental results or local reproducibility evidence.
-- Embedded tables are generated from existing project CSV artifacts; complete evidence remains in the source CSV files.
+- Embedded tables come from existing project CSV artifacts; the source CSV files remain the complete evidence records.
 
 ## v1.1 Supplementary-Source Synthesis Layer - 2026-06-18
 
