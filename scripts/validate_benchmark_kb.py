@@ -715,6 +715,41 @@ ADAPTER_PREFLIGHT_HEADERS = [
     "next_action",
 ]
 
+RUN_PREFLIGHT_RESULTS_V015_HEADERS = [
+    "target",
+    "check_scope",
+    "status",
+    "exit_code",
+    "image_tag",
+    "image_id",
+    "external_log_path",
+    "torch_version",
+    "torch_cuda",
+    "torch_cuda_available",
+    "import_notes",
+    "evidence_boundary",
+    "next_action",
+]
+
+BATCH_A_SMOKE_TEST_RESULTS_V015_HEADERS = [
+    "method",
+    "smoke_test_id",
+    "status",
+    "exit_code",
+    "duration_seconds",
+    "image_tag",
+    "source_commit",
+    "input_summary",
+    "output_summary",
+    "external_method_dir",
+    "output_file_count",
+    "output_bytes",
+    "model_or_weight_event",
+    "evidence_boundary",
+    "next_gate",
+    "next_action",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
@@ -759,6 +794,8 @@ REQUIRED_FILES = [
     "benchmark/deployment/source_clone_manifest_v0.12.csv",
     "benchmark/deployment/docker_image_inventory_v0.13.csv",
     "benchmark/deployment/method_environment_assignment_v0.13.csv",
+    "benchmark/deployment/run_preflight_results_v0.15.csv",
+    "benchmark/deployment/batch_a_smoke_test_results_v0.15.csv",
     "benchmark/deployment/method_readiness_review_v0.8.csv",
     "benchmark/deployment/method_preflight_status_v0.10.csv",
     "benchmark/deployment/adapter_preflight_status_v0.11.csv",
@@ -796,6 +833,7 @@ REQUIRED_FILES = [
     "ops/audits/source_code_clone_audit_v0.12.md",
     "ops/audits/docker_environment_assignment_audit_v0.13.md",
     "ops/audits/target_candidate_academic_search_audit_v0.14.md",
+    "ops/audits/batch_a_execution_audit_v0.15.md",
     "ops/plans/updated_plan_v0.6.md",
     "ops/plans/updated_plan_v0.9.md",
     "ops/plans/updated_plan_v1.3.md",
@@ -1184,6 +1222,16 @@ def main() -> int:
         errors,
         "benchmark/input_sets/target_candidate_academic_search_v0.14.csv",
         TARGET_ACADEMIC_SEARCH_V014_HEADERS,
+    )
+    run_preflight_v015_rows = check_headers(
+        errors,
+        "benchmark/deployment/run_preflight_results_v0.15.csv",
+        RUN_PREFLIGHT_RESULTS_V015_HEADERS,
+    )
+    batch_a_smoke_test_v015_rows = check_headers(
+        errors,
+        "benchmark/deployment/batch_a_smoke_test_results_v0.15.csv",
+        BATCH_A_SMOKE_TEST_RESULTS_V015_HEADERS,
     )
     method_readiness_v08_rows = check_headers(
         errors,
@@ -2400,6 +2448,140 @@ def main() -> int:
         if token not in target_search_audit_text:
             errors.append(f"target_candidate_academic_search_audit_v0.14.md missing token {token}")
 
+    expected_v015_preflight_targets = {
+        "PepMLM",
+        "DiffPepBuilder",
+        "PepGLAD",
+        "D-Flow / PeptideDesign",
+        "AfCycDesign / ColabDesign cyclic peptide",
+    }
+    observed_v015_preflight_targets = {row.get("target", "") for row in run_preflight_v015_rows}
+    missing_v015_preflight_targets = sorted(expected_v015_preflight_targets - observed_v015_preflight_targets)
+    if missing_v015_preflight_targets:
+        errors.append(
+            "run_preflight_results_v0.15.csv missing targets: " + ", ".join(missing_v015_preflight_targets)
+        )
+    if len(run_preflight_v015_rows) != len(expected_v015_preflight_targets):
+        errors.append(
+            f"run_preflight_results_v0.15.csv should contain {len(expected_v015_preflight_targets)} rows, "
+            f"found {len(run_preflight_v015_rows)}"
+        )
+    allowed_v015_run_status = {"passed", "failed", "blocked"}
+    for row in run_preflight_v015_rows:
+        target = row.get("target", "")
+        if row.get("status") not in allowed_v015_run_status:
+            errors.append(f"{target}: invalid v0.15 preflight status {row.get('status')}")
+        try:
+            int(row.get("exit_code", ""))
+        except ValueError:
+            errors.append(f"{target}: v0.15 preflight exit_code must be integer-like")
+        if row.get("image_tag") != "pd-benchmark-methods-gpu:0.13":
+            errors.append(f"{target}: v0.15 preflight image_tag must be pd-benchmark-methods-gpu:0.13")
+        if not row.get("image_id", "").startswith("sha256:"):
+            errors.append(f"{target}: v0.15 preflight image_id must start with sha256:")
+        if not row.get("external_log_path", "").startswith(
+            "/data/protein-design/data/outputs/benchmark_v0.15/preflight/"
+        ):
+            errors.append(f"{target}: v0.15 preflight log path must remain under external workbench outputs")
+        for required_field in RUN_PREFLIGHT_RESULTS_V015_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{target}: v0.15 preflight row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "benchmark_completed",
+            "best_performing",
+            "experimentally_validated",
+            "problem-free",
+            "smoke_test_ready",
+            "benchmark_ready",
+            "ready_for_target_set",
+            "download_performed=yes",
+        ]:
+            if forbidden in text:
+                errors.append(f"{target}: v0.15 preflight row overclaims {forbidden}")
+
+    expected_v015_batch_methods = {"PepMLM", "ProteinMPNN", "RFpeptide/RFdiffusion"}
+    observed_v015_batch_methods = {row.get("method", "") for row in batch_a_smoke_test_v015_rows}
+    missing_v015_batch_methods = sorted(expected_v015_batch_methods - observed_v015_batch_methods)
+    if missing_v015_batch_methods:
+        errors.append(
+            "batch_a_smoke_test_results_v0.15.csv missing methods: " + ", ".join(missing_v015_batch_methods)
+        )
+    if len(batch_a_smoke_test_v015_rows) != len(expected_v015_batch_methods):
+        errors.append(
+            f"batch_a_smoke_test_results_v0.15.csv should contain {len(expected_v015_batch_methods)} rows, "
+            f"found {len(batch_a_smoke_test_v015_rows)}"
+        )
+    allowed_v015_batch_status = {"passed", "failed", "blocked"}
+    allowed_v015_next_gates = {"minimal_smoke_observed", "minimal_smoke_observed_with_cpu_caveat"}
+    for row in batch_a_smoke_test_v015_rows:
+        method = row.get("method", "")
+        if row.get("status") not in allowed_v015_batch_status:
+            errors.append(f"{method}: invalid v0.15 Batch A status {row.get('status')}")
+        try:
+            int(row.get("exit_code", ""))
+            duration_seconds = int(row.get("duration_seconds", ""))
+            output_file_count = int(row.get("output_file_count", ""))
+            output_bytes = int(row.get("output_bytes", ""))
+        except ValueError:
+            errors.append(f"{method}: v0.15 Batch A numeric fields must be integer-like")
+            duration_seconds = 0
+            output_file_count = 0
+            output_bytes = 0
+        if row.get("status") == "passed" and (duration_seconds <= 0 or output_file_count <= 0 or output_bytes <= 0):
+            errors.append(f"{method}: passed v0.15 Batch A row must record positive runtime and output size")
+        if not row.get("external_method_dir", "").startswith(
+            "/data/protein-design/data/outputs/benchmark_v0.15/batch_a/"
+        ):
+            errors.append(f"{method}: v0.15 Batch A output path must remain under external workbench outputs")
+        if not re.fullmatch(r"[0-9a-f]{40}", row.get("source_commit", "")):
+            errors.append(f"{method}: v0.15 Batch A source_commit must be a 40-character git SHA")
+        if row.get("next_gate") not in allowed_v015_next_gates:
+            errors.append(f"{method}: invalid v0.15 Batch A next_gate {row.get('next_gate')}")
+        if method == "PepMLM" and "cpu" not in " ".join(row.values()).lower():
+            errors.append("PepMLM v0.15 Batch A row must retain the CPU-only caveat")
+        for required_field in BATCH_A_SMOKE_TEST_RESULTS_V015_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{method}: v0.15 Batch A row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "benchmark_completed",
+            "best_performing",
+            "experimentally_validated",
+            "problem-free",
+            "smoke_test_ready",
+            "benchmark_ready",
+            "ready_for_target_set",
+            "download_performed=yes",
+        ]:
+            if forbidden in text:
+                errors.append(f"{method}: v0.15 Batch A row overclaims {forbidden}")
+
+    batch_a_audit_text = (ROOT / "ops/audits/batch_a_execution_audit_v0.15.md").read_text(encoding="utf-8")
+    for token in [
+        "Batch A Execution Audit v0.15",
+        "pd-benchmark-methods-gpu:0.13",
+        "run_preflight_results_v0.15.csv",
+        "batch_a_smoke_test_results_v0.15.csv",
+        "CPU-only smoke test",
+        "Boundaries And Next Actions",
+        "minimal smoke-test observed",
+        "/data/protein-design",
+    ]:
+        if token not in batch_a_audit_text:
+            errors.append(f"batch_a_execution_audit_v0.15.md missing token {token}")
+    batch_a_audit_lower = batch_a_audit_text.lower()
+    for forbidden_phrase in [
+        "benchmark completed",
+        "best-performing",
+        "experimentally validated",
+        "problem-free",
+        "smoke_test_ready",
+        "benchmark_ready",
+    ]:
+        if has_unqualified_forbidden_wording(batch_a_audit_lower, forbidden_phrase):
+            errors.append(f"batch_a_execution_audit_v0.15.md contains overclaim phrase {forbidden_phrase}")
+
     adapter_methods = {row.get("method", ""): row for row in adapter_preflight_rows}
     for method in ["PepMLM", "RFdiffusion + ProteinMPNN", "PepMirror"]:
         if method not in adapter_methods:
@@ -2600,6 +2782,8 @@ def main() -> int:
             "method_environment_assignment_v013_rows": len(method_environment_assignment_rows),
             "method_paper_case_v014_rows": len(method_paper_case_v014_rows),
             "target_academic_search_v014_rows": len(target_academic_search_v014_rows),
+            "run_preflight_v015_rows": len(run_preflight_v015_rows),
+            "batch_a_smoke_test_v015_rows": len(batch_a_smoke_test_v015_rows),
             "method_readiness_v08_rows": len(method_readiness_v08_rows),
             "method_preflight_v010_rows": len(method_preflight_rows),
             "adapter_preflight_v011_rows": len(adapter_preflight_rows),

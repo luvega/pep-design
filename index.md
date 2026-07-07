@@ -1,7 +1,7 @@
 # 多肽设计方法 Benchmark 知识库
 
 ## Current Status
-- Project version: 1.2.3
+- Project version: 1.2.4
 - Manuscript outline layer: v1.0
 - Supplementary-source synthesis layer: v1.1
 - Chinese manuscript figure/table embedding layer: v1.2
@@ -9,7 +9,8 @@
 - Source-code clone audit layer: v0.12 external checkout supplement
 - Docker image/environment assignment layer: v0.13 workbench scaffold supplement
 - Academic-search target/case planning layer: v0.14 candidate supplement
-- Repository checkpoint: v1.2.3
+- Run preflight and Batch A evidence layer: v0.15 external minimal smoke supplement
+- Repository checkpoint: v1.2.4
 - Build date: 2026-07-07
 - Time window: 2021-06-03 to 2026-06-03
 - Unique Zotero-derived records after dedupe: 432
@@ -70,6 +71,8 @@
 - [Source clone manifest v0.12](benchmark/deployment/source_clone_manifest_v0.12.csv)
 - [Docker image inventory v0.13](benchmark/deployment/docker_image_inventory_v0.13.csv)
 - [Method environment assignment v0.13](benchmark/deployment/method_environment_assignment_v0.13.csv)
+- [Run preflight results v0.15](benchmark/deployment/run_preflight_results_v0.15.csv)
+- [Batch A smoke-test results v0.15](benchmark/deployment/batch_a_smoke_test_results_v0.15.csv)
 - [Adapter preflight status v0.11](benchmark/deployment/adapter_preflight_status_v0.11.csv)
 - [Target/control freeze checklist v0.10](benchmark/input_sets/target_control_freeze_checklist_v0.10.md)
 - [File role map v0.10](ops/migration/file_role_map_v0.10.csv)
@@ -87,6 +90,7 @@
 - [Source code clone audit v0.12](ops/audits/source_code_clone_audit_v0.12.md)
 - [Docker environment assignment audit v0.13](ops/audits/docker_environment_assignment_audit_v0.13.md)
 - [Protein-design image consolidation plan v0.13](ops/plans/protein_design_image_consolidation_plan_v0.13.md)
+- [Batch A execution audit v0.15](ops/audits/batch_a_execution_audit_v0.15.md)
 - [Target candidate academic-search audit v0.14](ops/audits/target_candidate_academic_search_audit_v0.14.md)
 - [Target candidate academic-search plan v0.14](ops/plans/target_candidate_academic_search_plan_v0.14.md)
 - [Dataset supplement schema review v0.8](benchmark/input_sets/dataset_supplement_schema_review_v0.8.csv)
@@ -117,6 +121,6 @@
 - [Method landscape patch candidates v1.1](kb/tables/method_landscape_patch_candidates_v1.1.csv)
 
 ## Next Phase
-`ops/plans/updated_plan_v0.9.md` remains the current plan. The manuscript layer now contains separate Chinese and English v1.0 outlines, v1.1 supplementary-source synthesis, v1.2 Chinese figure/table embedding, and v1.3 grant-style mock review planning. v1.1 converts six read-only Markdown notes into scoring rationale, cyclic/D/ncAA protocol boundaries, method-landscape patch candidates, TODOs and claim gates. v1.2 embeds four conceptual figures and four CSV-derived Markdown tables into the Chinese outline; the four figures have now been regenerated as built-in `$imagegen` PNG schematics with a QC record. v1.3 converts `research-grants` style review findings into NIH/NSF-like strengths, weaknesses, action items and v0.10 preflight planning gates. v0.12 records external source-only checkouts for 11 first-wave method repositories. v0.13 records existing Docker image reuse and a shared multi-conda benchmark image scaffold for methods without dedicated images. v0.14 records academic-search-derived method-paper cases and candidate target/panel suggestions. These layers keep the 10-method include set unchanged, leave `target_set_v0.csv` unfrozen, run no benchmark jobs, and make no local reproducibility claim.
+`ops/plans/updated_plan_v0.9.md` remains the current plan. The manuscript layer now contains separate Chinese and English v1.0 outlines, v1.1 supplementary-source synthesis, v1.2 Chinese figure/table embedding, and v1.3 grant-style mock review planning. v1.1 converts six read-only Markdown notes into scoring rationale, cyclic/D/ncAA protocol boundaries, method-landscape patch candidates, TODOs and claim gates. v1.2 embeds four conceptual figures and four CSV-derived Markdown tables into the Chinese outline; the four figures have now been regenerated as built-in `$imagegen` PNG schematics with a QC record. v1.3 converts `research-grants` style review findings into NIH/NSF-like strengths, weaknesses, action items and v0.10 preflight planning gates. v0.12 records external source-only checkouts for 11 first-wave method repositories. v0.13 records existing Docker image reuse and a shared multi-conda benchmark image scaffold for methods without dedicated images. v0.14 records academic-search-derived method-paper cases and candidate target/panel suggestions. v0.15 records external import-level preflight and three minimal Batch A smoke-test summaries. These layers keep the 10-method include set unchanged, leave `target_set_v0.csv` unfrozen, perform no scoring or performance comparison, and make no full local reproducibility claim.
 
-The next execution phase is v0.10 server-side preflight package planning. That phase should close target/control governance, statistical analysis planning, broader impacts/reuse planning, and license/model-card/checkpoint/input-contract items for PepMLM, RFdiffusion + ProteinMPNN and PepMirror; keep Overath, PepBenchmark, GPCR, TCRTransBench, Chang cases and v1.1 target directions outside `target_set_v0.csv`; and prepare server-only clone/download manifests without placing data, weights, third-party source or GPU outputs in this KB.
+The next execution phase is v0.16 adapter/parser hardening and controlled Batch B planning. That phase should close target/control governance, statistical analysis planning, broader impacts/reuse planning, and license/model-card/checkpoint/input-contract items for PepMLM, RFdiffusion + ProteinMPNN and PepMirror; repair PepMLM/DiffPepBuilder/PepGLAD GPU or extension caveats; keep Overath, PepBenchmark, GPCR, TCRTransBench, Chang cases and v1.1 target directions outside `target_set_v0.csv`; and prepare standardized adapter/parser manifests without placing data, weights, third-party source or GPU outputs in this KB.

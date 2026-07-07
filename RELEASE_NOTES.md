@@ -1,5 +1,45 @@
 # Release Notes
 
+## v1.2.4 External Preflight And Batch A Minimal Smoke Evidence - 2026-07-07
+
+This checkpoint adds the v0.15 execution-evidence layer for the external
+`/data/protein-design` workbench. It records one built shared benchmark image,
+five import-level preflight checks and three minimal Batch A smoke tests as
+readiness evidence only.
+
+### Added
+
+- Added `benchmark/deployment/run_preflight_results_v0.15.csv`.
+- Added `benchmark/deployment/batch_a_smoke_test_results_v0.15.csv`.
+- Added `ops/audits/batch_a_execution_audit_v0.15.md`.
+
+### Changed
+
+- Bumped project version to `1.2.4`.
+- Updated validator coverage for v0.15 preflight and Batch A smoke-test
+  summaries.
+- Updated index, README, Benchmark README, AGENTS and project log for the
+  external minimal execution-evidence layer.
+
+### Notification
+
+- `pd-benchmark-methods-gpu:0.13` was built externally as
+  `sha256:affbdab88d8a4f017701e60a0538682b43a27e15bcd0c9f9add3dac8c4b93710`.
+- Import-level checks passed for PepMLM, DiffPepBuilder, PepGLAD,
+  D-Flow / PeptideDesign and AfCycDesign / ColabDesign cyclic peptide, with
+  CPU or extension caveats retained where observed.
+- Minimal Batch A smoke tests passed for PepMLM, ProteinMPNN and
+  RFpeptide/RFdiffusion using external workbench inputs and caches.
+
+### Boundaries
+
+- No `target_set_v0.csv` promotion.
+- No scoring or performance ranking.
+- No complete Benchmark result.
+- No biological or experimental validation claim.
+- No raw logs, model caches, Docker layers, PDB/TRB/trajectory files, weights,
+  third-party source trees or large outputs are stored in the KB.
+
 ## v1.2.3 Academic-Search Target Candidate And Method Case Planning - 2026-07-07
 
 This checkpoint adds the v0.14 academic-search layer for candidate peptide

@@ -1,5 +1,13 @@
 # Project Log
 
+## [2026-07-07] release | v1.2.4 external preflight and Batch A smoke evidence
+- Bumped project version to `1.2.4`.
+- Added `benchmark/deployment/run_preflight_results_v0.15.csv` to record import-level preflight results for PepMLM, DiffPepBuilder, PepGLAD, D-Flow / PeptideDesign and AfCycDesign / ColabDesign cyclic peptide in the externally built `pd-benchmark-methods-gpu:0.13` image.
+- Added `benchmark/deployment/batch_a_smoke_test_results_v0.15.csv` with minimal smoke-test summaries for PepMLM, ProteinMPNN and RFpeptide/RFdiffusion.
+- Added `ops/audits/batch_a_execution_audit_v0.15.md` to summarize image build evidence, external logs/output locations, caveats and no-overclaim boundaries.
+- Updated validator, README, index, Benchmark README, release notes and AGENTS for v0.15.
+- Maintained boundaries: no Zotero/EndNote/PD-wiki writes, no raw logs or generated structures stored in the KB, no `target_set_v0.csv` promotion, no scoring, no performance comparison, no complete Benchmark result, and no biological-validation claim.
+
 ## [2026-07-07] release | v1.2.3 academic-search target candidate planning
 - Bumped project version to `1.2.3`.
 - Added `benchmark/method_sources/method_paper_case_matrix_v0.14.csv` to map PepMLM, DiffPepBuilder, PepGLAD, D-Flow and RFdiffusion + ProteinMPNN pMHC literature cases to Benchmark task roles.
