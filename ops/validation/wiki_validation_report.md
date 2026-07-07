@@ -38,6 +38,8 @@
 - target_academic_search_v014_rows: 16
 - run_preflight_v015_rows: 5
 - batch_a_smoke_test_v015_rows: 3
+- adapter_parser_hardening_v016_rows: 8
+- batch_b_target_review_v016_rows: 6
 - method_readiness_v08_rows: 4
 - method_preflight_v010_rows: 3
 - adapter_preflight_v011_rows: 3
@@ -48,7 +50,7 @@
 - method_classification_v1_rows: 27
 - reference_dataset_sources_v1_rows: 8
 - manuscript_todo_v1_rows: 18
-- manuscript_claim_rows: 63
+- manuscript_claim_rows: 66
 - supplementary_material_rows: 6
 - scoring_rationale_rows: 10
 - method_landscape_patch_v11_rows: 8
@@ -58,8 +60,8 @@
 - method_cards: 12
 - literature_cards: 120
 - bibtex_entries: 432
-- markdown_links_checked: 140
-- tracked_files_checked: 354
+- markdown_links_checked: 144
+- tracked_files_checked: 358
 
 ## Errors
 - None
@@ -109,6 +111,8 @@
     "target_academic_search_v014_rows": 16,
     "run_preflight_v015_rows": 5,
     "batch_a_smoke_test_v015_rows": 3,
+    "adapter_parser_hardening_v016_rows": 8,
+    "batch_b_target_review_v016_rows": 6,
     "method_readiness_v08_rows": 4,
     "method_preflight_v010_rows": 3,
     "adapter_preflight_v011_rows": 3,
@@ -119,7 +123,7 @@
     "method_classification_v1_rows": 27,
     "reference_dataset_sources_v1_rows": 8,
     "manuscript_todo_v1_rows": 18,
-    "manuscript_claim_rows": 63,
+    "manuscript_claim_rows": 66,
     "supplementary_material_rows": 6,
     "scoring_rationale_rows": 10,
     "method_landscape_patch_v11_rows": 8,
@@ -129,8 +133,8 @@
     "method_cards": 12,
     "literature_cards": 120,
     "bibtex_entries": 432,
-    "markdown_links_checked": 140,
-    "tracked_files_checked": 354
+    "markdown_links_checked": 144,
+    "tracked_files_checked": 358
   },
   "errors": [],
   "warnings": []

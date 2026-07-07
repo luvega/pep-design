@@ -750,6 +750,40 @@ BATCH_A_SMOKE_TEST_RESULTS_V015_HEADERS = [
     "next_action",
 ]
 
+ADAPTER_PARSER_HARDENING_V016_HEADERS = [
+    "method",
+    "batch",
+    "current_evidence",
+    "adapter_scope",
+    "input_adapter_status",
+    "command_contract_status",
+    "output_parser_status",
+    "required_raw_outputs",
+    "external_roots",
+    "replay_inputs",
+    "next_gate",
+    "blocking_items",
+    "next_action",
+]
+
+BATCH_B_TARGET_REVIEW_V016_HEADERS = [
+    "candidate_id",
+    "target_or_panel",
+    "evidence_lane",
+    "source_anchor",
+    "pdb_or_panel",
+    "task_id",
+    "benchmark_role",
+    "structure_chain_status",
+    "known_binder_status",
+    "assay_readout_status",
+    "license_status",
+    "leakage_status",
+    "control_status",
+    "readiness_decision",
+    "next_action",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
@@ -763,6 +797,7 @@ REQUIRED_FILES = [
     "benchmark/protocols/scoring_outputs_schema.md",
     "benchmark/protocols/job_manifest_schema_v0.11.md",
     "benchmark/protocols/adapter_output_schema_v0.11.md",
+    "benchmark/protocols/adapter_replay_contract_v0.16.md",
     "benchmark/scoring/scoring_protocol_v0.md",
     "benchmark/smoke_tests/README.md",
     "benchmark/input_sets/README.md",
@@ -771,6 +806,7 @@ REQUIRED_FILES = [
     "benchmark/input_sets/target_candidate_matrix_v0.4.csv",
     "benchmark/input_sets/target_candidate_matrix_v0.5.csv",
     "benchmark/input_sets/target_candidate_academic_search_v0.14.csv",
+    "benchmark/input_sets/batch_b_target_review_queue_v0.16.csv",
     "benchmark/input_sets/dataset_supplement_watchlist_v0.6.csv",
     "benchmark/input_sets/dataset_supplement_schema_review_v0.7.csv",
     "benchmark/input_sets/dataset_supplement_schema_review_v0.8.csv",
@@ -796,6 +832,7 @@ REQUIRED_FILES = [
     "benchmark/deployment/method_environment_assignment_v0.13.csv",
     "benchmark/deployment/run_preflight_results_v0.15.csv",
     "benchmark/deployment/batch_a_smoke_test_results_v0.15.csv",
+    "benchmark/deployment/adapter_parser_hardening_matrix_v0.16.csv",
     "benchmark/deployment/method_readiness_review_v0.8.csv",
     "benchmark/deployment/method_preflight_status_v0.10.csv",
     "benchmark/deployment/adapter_preflight_status_v0.11.csv",
@@ -842,6 +879,7 @@ REQUIRED_FILES = [
     "ops/plans/source_io_smoke_test_plan_v0.11.md",
     "ops/plans/protein_design_image_consolidation_plan_v0.13.md",
     "ops/plans/target_candidate_academic_search_plan_v0.14.md",
+    "ops/plans/adapter_parser_hardening_plan_v0.16.md",
     "ops/migration/file_role_map_v0.10.csv",
     "ops/audits/license_schema_input_contract_review_v0.8.md",
     "ops/audits/supervisor_skills_idea_evaluation.md",
@@ -1232,6 +1270,16 @@ def main() -> int:
         errors,
         "benchmark/deployment/batch_a_smoke_test_results_v0.15.csv",
         BATCH_A_SMOKE_TEST_RESULTS_V015_HEADERS,
+    )
+    adapter_parser_hardening_v016_rows = check_headers(
+        errors,
+        "benchmark/deployment/adapter_parser_hardening_matrix_v0.16.csv",
+        ADAPTER_PARSER_HARDENING_V016_HEADERS,
+    )
+    batch_b_target_review_v016_rows = check_headers(
+        errors,
+        "benchmark/input_sets/batch_b_target_review_queue_v0.16.csv",
+        BATCH_B_TARGET_REVIEW_V016_HEADERS,
     )
     method_readiness_v08_rows = check_headers(
         errors,
@@ -2582,6 +2630,157 @@ def main() -> int:
         if has_unqualified_forbidden_wording(batch_a_audit_lower, forbidden_phrase):
             errors.append(f"batch_a_execution_audit_v0.15.md contains overclaim phrase {forbidden_phrase}")
 
+    expected_v016_adapter_methods = {
+        "PepMLM",
+        "ProteinMPNN",
+        "RFpeptide/RFdiffusion",
+        "RFdiffusion + ProteinMPNN handoff",
+        "DiffPepBuilder",
+        "PepGLAD",
+        "D-Flow / PeptideDesign",
+        "AfCycDesign / ColabDesign cyclic peptide",
+    }
+    observed_v016_adapter_methods = {row.get("method", "") for row in adapter_parser_hardening_v016_rows}
+    missing_v016_adapter_methods = sorted(expected_v016_adapter_methods - observed_v016_adapter_methods)
+    if missing_v016_adapter_methods:
+        errors.append(
+            "adapter_parser_hardening_matrix_v0.16.csv missing methods: "
+            + ", ".join(missing_v016_adapter_methods)
+        )
+    if len(adapter_parser_hardening_v016_rows) != len(expected_v016_adapter_methods):
+        errors.append(
+            f"adapter_parser_hardening_matrix_v0.16.csv should contain "
+            f"{len(expected_v016_adapter_methods)} rows, found {len(adapter_parser_hardening_v016_rows)}"
+        )
+    allowed_v016_next_gates = {
+        "adapter_contract_ready",
+        "parser_contract_ready",
+        "handoff_contract_ready",
+        "preflight_caveat_queue",
+        "dependency_repair_queue",
+        "checkpoint_manifest_queue",
+        "cli_route_queue",
+    }
+    for row in adapter_parser_hardening_v016_rows:
+        method = row.get("method", "")
+        if row.get("next_gate") not in allowed_v016_next_gates:
+            errors.append(f"{method}: invalid v0.16 adapter next_gate {row.get('next_gate')}")
+        if "/data/protein-design/" not in row.get("external_roots", ""):
+            errors.append(f"{method}: v0.16 adapter external_roots must remain under /data/protein-design")
+        for required_field in ADAPTER_PARSER_HARDENING_V016_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{method}: v0.16 adapter row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "benchmark_completed",
+            "best_performing",
+            "experimentally_validated",
+            "problem-free",
+            "smoke_test_ready",
+            "benchmark_ready",
+            "ready_for_target_set",
+            "download_performed=yes",
+            "performance_ranking",
+        ]:
+            if forbidden in text:
+                errors.append(f"{method}: v0.16 adapter row overclaims {forbidden}")
+
+    expected_v016_target_ids = {
+        "mdm2_p53_3eqs_batch_b_review",
+        "mhcii_hiv_1sjh_batch_b_review",
+        "pdl1_workbench_example_batch_b_review",
+        "rfdiffusion_pmhc_panel_batch_b_review",
+        "pepbench_lnr_panel_batch_b_review",
+        "pepmerge_panel_batch_b_review",
+    }
+    observed_v016_target_ids = {row.get("candidate_id", "") for row in batch_b_target_review_v016_rows}
+    missing_v016_target_ids = sorted(expected_v016_target_ids - observed_v016_target_ids)
+    if missing_v016_target_ids:
+        errors.append(
+            "batch_b_target_review_queue_v0.16.csv missing candidates: "
+            + ", ".join(missing_v016_target_ids)
+        )
+    if len(batch_b_target_review_v016_rows) != len(expected_v016_target_ids):
+        errors.append(
+            f"batch_b_target_review_queue_v0.16.csv should contain {len(expected_v016_target_ids)} rows, "
+            f"found {len(batch_b_target_review_v016_rows)}"
+        )
+    allowed_v016_lanes = {
+        "protein_structure_and_mechanism",
+        "literature_and_dataset_discovery",
+    }
+    for row in batch_b_target_review_v016_rows:
+        candidate_id = row.get("candidate_id", "")
+        if row.get("task_id") not in REQUIRED_PROTOCOL_TASKS:
+            errors.append(f"{candidate_id}: invalid v0.16 target task_id {row.get('task_id')}")
+        if row.get("evidence_lane") not in allowed_v016_lanes:
+            errors.append(f"{candidate_id}: invalid v0.16 evidence_lane {row.get('evidence_lane')}")
+        if row.get("readiness_decision") != "review_queue_not_frozen":
+            errors.append(f"{candidate_id}: v0.16 readiness_decision must be review_queue_not_frozen")
+        for required_field in BATCH_B_TARGET_REVIEW_V016_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{candidate_id}: v0.16 target review row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "download_performed=yes",
+            "ready_for_target_set",
+            "smoke_test_ready",
+            "benchmark_completed",
+            "best_performing",
+            "installed",
+            "reproduced",
+            "ran_locally",
+            "target_set_v0.csv 已冻结",
+        ]:
+            if forbidden in text:
+                errors.append(f"{candidate_id}: v0.16 target review row overclaims {forbidden}")
+
+    adapter_plan_text = (ROOT / "ops/plans/adapter_parser_hardening_plan_v0.16.md").read_text(
+        encoding="utf-8"
+    )
+    for token in [
+        "Adapter Parser Hardening Plan v0.16",
+        "adapter",
+        "parser",
+        "Batch B",
+        "target/control",
+        "PepMLM",
+        "ProteinMPNN",
+        "RFpeptide/RFdiffusion",
+        "target_set_v0.csv",
+        "不新增任何运行证据",
+    ]:
+        if token not in adapter_plan_text:
+            errors.append(f"adapter_parser_hardening_plan_v0.16.md missing token {token}")
+    adapter_replay_contract_text = (ROOT / "benchmark/protocols/adapter_replay_contract_v0.16.md").read_text(
+        encoding="utf-8"
+    )
+    for token in [
+        "Adapter Replay Contract v0.16",
+        "Required Replay Fields",
+        "Parser Contract",
+        "Batch B Gate",
+        "candidate_outputs.csv",
+        "run.csv",
+        "smoke_test_ready",
+    ]:
+        if token not in adapter_replay_contract_text:
+            errors.append(f"adapter_replay_contract_v0.16.md missing token {token}")
+    for text_name, text_value in [
+        ("adapter_parser_hardening_plan_v0.16.md", adapter_plan_text.lower()),
+        ("adapter_replay_contract_v0.16.md", adapter_replay_contract_text.lower()),
+    ]:
+        for forbidden_phrase in [
+            "benchmark completed",
+            "best-performing",
+            "experimentally validated",
+            "problem-free",
+            "benchmark_ready | reached",
+            "smoke_test_ready | reached",
+        ]:
+            if has_unqualified_forbidden_wording(text_value, forbidden_phrase):
+                errors.append(f"{text_name} contains overclaim phrase {forbidden_phrase}")
+
     adapter_methods = {row.get("method", ""): row for row in adapter_preflight_rows}
     for method in ["PepMLM", "RFdiffusion + ProteinMPNN", "PepMirror"]:
         if method not in adapter_methods:
@@ -2716,6 +2915,9 @@ def main() -> int:
         "v1.1 method landscape patch candidates 不是 include scorecard",
         "v1.3 grant-style mock review 是模拟评审和更新计划不是资助决定或执行证据",
         "v1.3 行动项表支持 v0.10 preflight planning 但不支持本地安装复现或代码无问题",
+        "v0.15 外部预检和 Batch A 只支持 minimal smoke-test observed readiness evidence",
+        "v0.16 adapter/parser hardening 是接口计划层不是新增运行证据",
+        "v0.16 Batch B target review queue 不是 frozen target set",
     ]:
         if claim not in claim_texts:
             errors.append(f"benchmark_manuscript_claim_evidence_map.csv missing claim boundary: {claim}")
@@ -2784,6 +2986,8 @@ def main() -> int:
             "target_academic_search_v014_rows": len(target_academic_search_v014_rows),
             "run_preflight_v015_rows": len(run_preflight_v015_rows),
             "batch_a_smoke_test_v015_rows": len(batch_a_smoke_test_v015_rows),
+            "adapter_parser_hardening_v016_rows": len(adapter_parser_hardening_v016_rows),
+            "batch_b_target_review_v016_rows": len(batch_b_target_review_v016_rows),
             "method_readiness_v08_rows": len(method_readiness_v08_rows),
             "method_preflight_v010_rows": len(method_preflight_rows),
             "adapter_preflight_v011_rows": len(adapter_preflight_rows),

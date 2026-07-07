@@ -1,5 +1,13 @@
 # Project Log
 
+## [2026-07-07] release | v1.2.5 adapter parser hardening and Batch B review planning
+- Bumped project version to `1.2.5`.
+- Added `benchmark/deployment/adapter_parser_hardening_matrix_v0.16.csv` to convert v0.15 minimal smoke evidence into adapter/parser hardening requirements and caveat queues.
+- Added `benchmark/input_sets/batch_b_target_review_queue_v0.16.csv` for MDM2/p53, MHCII/HIV, PDL1, pMHC, PepBench/LNR and PepMerge review candidates without freezing `target_set_v0.csv`.
+- Added `benchmark/protocols/adapter_replay_contract_v0.16.md` and `ops/plans/adapter_parser_hardening_plan_v0.16.md`.
+- Added v0.15/v0.16 claim boundaries and validator coverage for v0.16 rows, required files, external path boundaries and no-overclaim rules.
+- Maintained boundaries: no Zotero/EndNote/PD-wiki writes, no new clone/download/install/build/run, no raw logs or generated structures stored in the KB, no scoring, no performance comparison, no `target_set_v0.csv` promotion, and no `smoke_test_ready` claim.
+
 ## [2026-07-07] release | v1.2.4 external preflight and Batch A smoke evidence
 - Bumped project version to `1.2.4`.
 - Added `benchmark/deployment/run_preflight_results_v0.15.csv` to record import-level preflight results for PepMLM, DiffPepBuilder, PepGLAD, D-Flow / PeptideDesign and AfCycDesign / ColabDesign cyclic peptide in the externally built `pd-benchmark-methods-gpu:0.13` image.

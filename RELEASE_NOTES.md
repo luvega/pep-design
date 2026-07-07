@@ -1,5 +1,45 @@
 # Release Notes
 
+## v1.2.5 Adapter Parser Hardening And Batch B Review Planning - 2026-07-07
+
+This checkpoint adds the v0.16 planning layer that turns v0.15 minimal
+smoke-test evidence into adapter/parser hardening requirements and a controlled
+Batch B target review queue. It is an interface and governance update only.
+
+### Added
+
+- Added `benchmark/deployment/adapter_parser_hardening_matrix_v0.16.csv`.
+- Added `benchmark/input_sets/batch_b_target_review_queue_v0.16.csv`.
+- Added `benchmark/protocols/adapter_replay_contract_v0.16.md`.
+- Added `ops/plans/adapter_parser_hardening_plan_v0.16.md`.
+
+### Changed
+
+- Bumped project version to `1.2.5`.
+- Added v0.15/v0.16 claim boundaries to
+  `manuscript/support/benchmark_manuscript_claim_evidence_map.csv`.
+- Updated validator coverage for v0.16 adapter/parser rows, target review rows,
+  required plan/contract files and no-overclaim boundaries.
+- Updated index, README, Benchmark README, AGENTS and project log for v0.16.
+
+### Notification
+
+- v0.16 prioritizes PepMLM, ProteinMPNN, RFpeptide/RFdiffusion and the
+  RFdiffusion-to-ProteinMPNN handoff for adapter/parser hardening.
+- DiffPepBuilder, PepGLAD, D-Flow / PeptideDesign and AfCycDesign /
+  ColabDesign remain in preflight caveat queues until dependency, checkpoint or
+  CLI-route blockers are resolved.
+- Batch B target candidates are now represented as a review queue, not as
+  frozen targets.
+
+### Boundaries
+
+- No new method execution.
+- No new model, data or checkpoint download.
+- No `target_set_v0.csv` promotion.
+- No scoring, performance ranking or complete Benchmark result.
+- No method promotion to `smoke_test_ready` or `benchmark_ready`.
+
 ## v1.2.4 External Preflight And Batch A Minimal Smoke Evidence - 2026-07-07
 
 This checkpoint adds the v0.15 execution-evidence layer for the external

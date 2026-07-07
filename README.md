@@ -2,11 +2,11 @@
 
 This repository hosts a peptide-design method knowledge base and a protocol-first benchmark design layer.
 
-Release `1.2.4` packages a repository checkpoint for the protocol, manuscript, preflight control, and minimal execution-evidence layers rather than benchmark results. It includes Academic Research Suite review, Benchmark paper template alignment, claim gates, method landscape coverage, server dry-run input contracts, license/schema/input-contract readiness, artificial `run.csv` examples, future download manifests, dataset schema review, link availability, metadata-only data access audits, source pinning, target/control schema design, scoring protocol design, bilingual manuscript outlines, supplementary-source synthesis, Chinese manuscript figure/table embedding, v1.3 grant-style mock review planning, v0.10 preflight preparation, v0.11 source/I/O/smoke-test interface planning, v0.12 external source-code clone auditing, v0.13 Docker image/environment assignment planning, v0.14 academic-search target/case candidate planning, and v0.15 external preflight plus Batch A minimal smoke-test summaries. The release draws from Zotero metadata, selected PD-wiki evidence cards, benchmark/scoring literature lessons, external dataset metadata, method route checks, read-only supplementary Markdown notes, project-local `$imagegen` figure assets, planning-level grant review criteria, external source checkouts kept outside the KB, observed local Docker image inventory under `/mnt/ssd4t/protein-design`, academic-search evidence from PubMed, Crossref, RCSB PDB, Dryad, Zenodo, arXiv and publisher pages, and small execution summaries from `/data/protein-design`.
+Release `1.2.5` packages a repository checkpoint for the protocol, manuscript, preflight control, minimal execution-evidence, and adapter/parser planning layers rather than benchmark results. It includes Academic Research Suite review, Benchmark paper template alignment, claim gates, method landscape coverage, server dry-run input contracts, license/schema/input-contract readiness, artificial `run.csv` examples, future download manifests, dataset schema review, link availability, metadata-only data access audits, source pinning, target/control schema design, scoring protocol design, bilingual manuscript outlines, supplementary-source synthesis, Chinese manuscript figure/table embedding, v1.3 grant-style mock review planning, v0.10 preflight preparation, v0.11 source/I/O/smoke-test interface planning, v0.12 external source-code clone auditing, v0.13 Docker image/environment assignment planning, v0.14 academic-search target/case candidate planning, v0.15 external preflight plus Batch A minimal smoke-test summaries, and v0.16 adapter/parser hardening with Batch B target review planning. The release draws from Zotero metadata, selected PD-wiki evidence cards, benchmark/scoring literature lessons, external dataset metadata, method route checks, read-only supplementary Markdown notes, project-local `$imagegen` figure assets, planning-level grant review criteria, external source checkouts kept outside the KB, observed local Docker image inventory under `/mnt/ssd4t/protein-design`, academic-search evidence from PubMed, Crossref, RCSB PDB, Dryad, Zenodo, arXiv and publisher pages, small execution summaries from `/data/protein-design`, and v0.16 interface planning artifacts.
 
 ## Current Version
 
-- Version: `1.2.4`
+- Version: `1.2.5`
 - Manuscript outline layer: `v1.0`
 - Supplementary-source synthesis layer: `v1.1`
 - Chinese manuscript figure/table embedding layer: `v1.2`
@@ -16,7 +16,8 @@ Release `1.2.4` packages a repository checkpoint for the protocol, manuscript, p
 - Docker image/environment assignment layer: `v0.13` workbench scaffold supplement
 - Academic-search target/case planning layer: `v0.14` candidate supplement
 - Run preflight and Batch A evidence layer: `v0.15` external minimal smoke supplement
-- Repository checkpoint: `v1.2.4`
+- Adapter/parser hardening layer: `v0.16` planning supplement
+- Repository checkpoint: `v1.2.5`
 - Build date: 2026-07-07
 - Literature window: 2021-06-03 to 2026-06-03
 - Included first-wave candidate methods: 10
@@ -33,6 +34,7 @@ Release `1.2.4` packages a repository checkpoint for the protocol, manuscript, p
 - v0.13 adds Docker image inventory and method-environment assignment manifests for reusing existing `/mnt/ssd4t/protein-design` images and defining a shared multi-conda benchmark image scaffold.
 - v0.14 adds method-paper case and academic-search target candidate matrices for NCAM1, AMHR2, DiffPepBuilder PDB cases, pMHC, PepBench/LNR, PepMerge, PEPBI, GPCR and Chang ranking sources.
 - v0.15 adds import-level shared-image preflight results and three external minimal Batch A smoke-test summaries for PepMLM, ProteinMPNN and RFpeptide/RFdiffusion.
+- v0.16 adds adapter/parser hardening and Batch B target-control review planning through an adapter matrix, replay contract and target review queue.
 - `sources/raw_snapshots/`: read-only local snapshots copied into the project for provenance.
 - `manuscript/`: Benchmark outlines, claim map, figure/table plan, bibliography planning, manuscript figures, and manuscript-facing support reports.
 - `ops/`: current and historical plans, audits, validation report, build summary, migration records, and project log.
@@ -46,7 +48,7 @@ Release `1.2.4` packages a repository checkpoint for the protocol, manuscript, p
 - `manuscript/`: paper outlines, figures, claim gates, citation planning, and manuscript-facing support.
 - `ops/`: plans, audits, migration records, validation outputs, build summaries, and the project log.
 
-v0.10/v0.11 preflight planning adds approval/status/source-freshness/adapter files for future server execution, v0.12 records source-only external checkouts, v0.13 records Docker image/environment assignment, v0.14 records academic-search target/case candidates, and v0.15 records small external preflight/smoke-test summaries. Model weights, datasets, installations, built image layers, raw logs, generated structures, GPU outputs and large run artifacts remain outside the KB.
+v0.10/v0.11 preflight planning adds approval/status/source-freshness/adapter files for future server execution, v0.12 records source-only external checkouts, v0.13 records Docker image/environment assignment, v0.14 records academic-search target/case candidates, v0.15 records small external preflight/smoke-test summaries, and v0.16 records adapter/parser plus target-control review planning. Model weights, datasets, installations, built image layers, raw logs, generated structures, GPU outputs and large run artifacts remain outside the KB.
 
 ## First-Wave Candidate Methods
 
@@ -75,7 +77,7 @@ python scripts/build_benchmark_kb.py
 python scripts/validate_benchmark_kb.py
 ```
 
-Expected validation for the current working layer covers the v0.9 current plan, v1.0 manuscript-outline layer, v1.1 supplementary-source synthesis layer, v1.2 Chinese manuscript figure/table embedding layer, v1.3 grant-style mock review planning layer, v0.11 source/I-O/smoke-test interface planning layer, v0.13 image/environment assignment layer, v0.14 academic-search target/case planning layer, and v0.15 external preflight plus Batch A minimal smoke-test evidence layer:
+Expected validation for the current working layer covers the v0.9 current plan, v1.0 manuscript-outline layer, v1.1 supplementary-source synthesis layer, v1.2 Chinese manuscript figure/table embedding layer, v1.3 grant-style mock review planning layer, v0.11 source/I-O/smoke-test interface planning layer, v0.13 image/environment assignment layer, v0.14 academic-search target/case planning layer, v0.15 external preflight plus Batch A minimal smoke-test evidence layer, and v0.16 adapter/parser hardening plus Batch B target review planning layer:
 
 - `status`: `pass`
 - `master_rows`: 432
@@ -112,6 +114,8 @@ Expected validation for the current working layer covers the v0.9 current plan, 
 - `target_academic_search_v014_rows`: 16
 - `run_preflight_v015_rows`: 5
 - `batch_a_smoke_test_v015_rows`: 3
+- `adapter_parser_hardening_v016_rows`: 8
+- `batch_b_target_review_v016_rows`: 6
 - `example_job_manifest_v011_rows`: 2
 - `method_output_manifest_v011_rows`: 2
 - `candidate_output_v011_rows`: 2
@@ -120,7 +124,7 @@ Expected validation for the current working layer covers the v0.9 current plan, 
 - `method_classification_v1_rows`: 27
 - `reference_dataset_sources_v1_rows`: 8
 - `manuscript_todo_v1_rows`: 18
-- `manuscript_claim_rows`: 63
+- `manuscript_claim_rows`: 66
 - `supplementary_material_rows`: 6
 - `scoring_rationale_rows`: 10
 - `method_landscape_patch_v11_rows`: 8
@@ -134,4 +138,4 @@ Expected validation for the current working layer covers the v0.9 current plan, 
 
 This repository is the working project layer. Zotero, EndNote, and the prior PD-wiki remain upstream source systems. The files under `sources/raw_snapshots/` are local project snapshots used for provenance and should be treated as read-only.
 
-This release excludes model weights, downloaded PDFs, EndNote libraries, third-party source trees, large datasets and raw benchmark execution outputs. v0.5 source pinning and data availability checks are metadata-only snapshots. v1.1 supplementary-source synthesis provides source discovery and framing, not primary-source verified evidence or runnability evidence. v1.2 manuscript figures and embedded Markdown tables are planning/reporting artifacts, not benchmark results. v1.3 grant-style mock review is a simulated review and preflight-planning layer, not a funding decision, execution record, code-quality confirmation, or local reproducibility claim. v0.12 source-code clone evidence records external Git checkouts only; it is not installation, environment validation, smoke-test execution, model-weight download, or local reproducibility evidence. v0.13 image/environment assignment records observed existing images and a workbench Dockerfile scaffold; it is not by itself proof that a method is runnable. v0.14 academic-search target/case matrices record literature-derived candidates only; they are not target-set promotion, data-download, assay validation, leakage clearance, or Benchmark performance evidence. v0.15 records one external shared-image import preflight layer and three minimal smoke tests only; it is not complete Benchmark evidence, target-set evidence, scoring evidence, or method-performance evidence. Future server-side downloads and large artifacts must live outside this repository or in gitignored paths.
+This release excludes model weights, downloaded PDFs, EndNote libraries, third-party source trees, large datasets and raw benchmark execution outputs. v0.5 source pinning and data availability checks are metadata-only snapshots. v1.1 supplementary-source synthesis provides source discovery and framing, not primary-source verified evidence or runnability evidence. v1.2 manuscript figures and embedded Markdown tables are planning/reporting artifacts, not benchmark results. v1.3 grant-style mock review is a simulated review and preflight-planning layer, not a funding decision, execution record, code-quality confirmation, or local reproducibility claim. v0.12 source-code clone evidence records external Git checkouts only; it is not installation, environment validation, smoke-test execution, model-weight download, or local reproducibility evidence. v0.13 image/environment assignment records observed existing images and a workbench Dockerfile scaffold; it is not by itself proof that a method is runnable. v0.14 academic-search target/case matrices record literature-derived candidates only; they are not target-set promotion, data-download, assay validation, leakage clearance, or Benchmark performance evidence. v0.15 records one external shared-image import preflight layer and three minimal smoke tests only; it is not complete Benchmark evidence, target-set evidence, scoring evidence, or method-performance evidence. v0.16 records adapter/parser hardening and Batch B target review planning only; it is not a new run, target freeze, scoring result, or performance finding. Future server-side downloads and large artifacts must live outside this repository or in gitignored paths.

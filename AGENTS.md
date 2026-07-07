@@ -6,9 +6,9 @@ This project is an independent protocol-first Benchmark knowledge base for recen
 
 Current authoritative plan: `ops/plans/updated_plan_v0.9.md`.
 
-Current version: `1.2.4`.
+Current version: `1.2.5`.
 
-Next planned phase: v0.16 adapter/parser hardening and controlled Batch B planning. Do not start additional clone, download, install, or GPU execution unless the user explicitly requests that later phase.
+Next planned phase: v0.17 controlled Batch B dry-run preparation after adapter/parser and target/control review. Do not start additional clone, download, install, or GPU execution unless the user explicitly requests that later phase.
 
 ## Source Boundaries
 
@@ -49,7 +49,11 @@ For broad research-to-paper or multi-stage review tasks, route through `academic
 | `benchmark/deployment/method_environment_assignment_v0.13.csv` | method-to-image/environment assignment | scaffold/readiness evidence only; not installation or smoke-test evidence |
 | `benchmark/deployment/run_preflight_results_v0.15.csv` | external shared-image import preflight results | import-level evidence only; not checkpoint inference or method reproducibility evidence |
 | `benchmark/deployment/batch_a_smoke_test_results_v0.15.csv` | Batch A minimal smoke-test summary | minimal example execution evidence only; not target-set, scoring, performance, or benchmark-completion evidence |
+| `benchmark/deployment/adapter_parser_hardening_matrix_v0.16.csv` | adapter/parser hardening matrix | interface planning only; not new execution evidence |
+| `benchmark/input_sets/batch_b_target_review_queue_v0.16.csv` | Batch B target/control review queue | review queue only; not frozen target set |
+| `benchmark/protocols/adapter_replay_contract_v0.16.md` | adapter replay metadata contract | future replay contract only; not a run log |
 | `ops/plans/protein_design_image_consolidation_plan_v0.13.md` | image consolidation plan | planning artifact only |
+| `ops/plans/adapter_parser_hardening_plan_v0.16.md` | adapter/parser hardening plan | planning artifact only |
 | `ops/audits/docker_environment_assignment_audit_v0.13.md` | Docker/environment assignment audit | readiness finding only; not local reproducibility evidence |
 | `ops/audits/batch_a_execution_audit_v0.15.md` | external preflight and Batch A execution audit | small evidence summary only; large logs, caches and generated structures stay outside the KB |
 | `benchmark/method_sources/method_paper_case_matrix_v0.14.csv` | method-paper case matrix | literature case evidence only; not target freeze or run evidence |
@@ -76,7 +80,7 @@ Method and dataset readiness must move through explicit gates:
 6. `dry_run_ready`
 7. `smoke_test_ready`
 
-Current v0.15 KB artifacts support only `minimal_smoke_observed` evidence for selected external examples. They do not support promotion to `smoke_test_ready` without standardized inputs, adapter commands, parser outputs, validation artifacts, and target/control governance. PepMirror remains dependency-blocked until PyRosetta/license and checkpoint/dependency routes are resolved.
+Current v0.15/v0.16 KB artifacts support only `minimal_smoke_observed` and interface-planning evidence for selected external examples. They do not support promotion to `smoke_test_ready` without standardized inputs, adapter commands, parser outputs, validation artifacts, and target/control governance. PepMirror remains dependency-blocked until PyRosetta/license and checkpoint/dependency routes are resolved.
 
 ## Language And Claim Rules
 
@@ -86,6 +90,7 @@ Current v0.15 KB artifacts support only `minimal_smoke_observed` evidence for se
 - Do not write that a method is installed, reproduced, runnable, benchmark-completed, problem-free, best-performing, or experimentally validated unless a later phase records environment, commit, command, input, output, runtime, logs, parser result, and validation artifacts.
 - Do not treat source pinning, source checkouts, method contracts, availability checks, download manifests, or schema reviews as installation, smoke-test, Benchmark-result, or local-reproducibility evidence.
 - Do not treat v0.15 minimal smoke tests as complete benchmark runs, target-set evidence, scoring evidence, performance ranking, or proof that broader method environments are problem-free.
+- Do not treat v0.16 adapter/parser hardening or Batch B target review queue rows as new run evidence, frozen targets, scoring evidence, or performance findings.
 - Do not treat watchlist datasets, target candidates, review-only methods, or literature examples as frozen Benchmark targets.
 - Generation ability, ranking/rescoring ability, developability proxies, structural confidence, and biological validation are separate evidence layers.
 
