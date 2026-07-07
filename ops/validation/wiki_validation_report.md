@@ -40,6 +40,13 @@
 - batch_a_smoke_test_v015_rows: 3
 - adapter_parser_hardening_v016_rows: 8
 - batch_b_target_review_v016_rows: 6
+- batch_b_pilot_target_gate_v017_rows: 4
+- batch_b_pilot_method_scope_v017_rows: 8
+- batch_b_pilot_job_manifest_v017_rows: 5
+- adapter_replay_fixture_v018_rows: 3
+- batch_a_replay_method_output_v018_rows: 3
+- batch_a_replay_candidate_v018_rows: 3
+- batch_a_replay_run_v018_rows: 3
 - method_readiness_v08_rows: 4
 - method_preflight_v010_rows: 3
 - adapter_preflight_v011_rows: 3
@@ -50,7 +57,7 @@
 - method_classification_v1_rows: 27
 - reference_dataset_sources_v1_rows: 8
 - manuscript_todo_v1_rows: 18
-- manuscript_claim_rows: 66
+- manuscript_claim_rows: 68
 - supplementary_material_rows: 6
 - scoring_rationale_rows: 10
 - method_landscape_patch_v11_rows: 8
@@ -60,8 +67,8 @@
 - method_cards: 12
 - literature_cards: 120
 - bibtex_entries: 432
-- markdown_links_checked: 144
-- tracked_files_checked: 358
+- markdown_links_checked: 154
+- tracked_files_checked: 369
 
 ## Errors
 - None
@@ -113,6 +120,13 @@
     "batch_a_smoke_test_v015_rows": 3,
     "adapter_parser_hardening_v016_rows": 8,
     "batch_b_target_review_v016_rows": 6,
+    "batch_b_pilot_target_gate_v017_rows": 4,
+    "batch_b_pilot_method_scope_v017_rows": 8,
+    "batch_b_pilot_job_manifest_v017_rows": 5,
+    "adapter_replay_fixture_v018_rows": 3,
+    "batch_a_replay_method_output_v018_rows": 3,
+    "batch_a_replay_candidate_v018_rows": 3,
+    "batch_a_replay_run_v018_rows": 3,
     "method_readiness_v08_rows": 4,
     "method_preflight_v010_rows": 3,
     "adapter_preflight_v011_rows": 3,
@@ -123,7 +137,7 @@
     "method_classification_v1_rows": 27,
     "reference_dataset_sources_v1_rows": 8,
     "manuscript_todo_v1_rows": 18,
-    "manuscript_claim_rows": 66,
+    "manuscript_claim_rows": 68,
     "supplementary_material_rows": 6,
     "scoring_rationale_rows": 10,
     "method_landscape_patch_v11_rows": 8,
@@ -133,8 +147,8 @@
     "method_cards": 12,
     "literature_cards": 120,
     "bibtex_entries": 432,
-    "markdown_links_checked": 144,
-    "tracked_files_checked": 358
+    "markdown_links_checked": 154,
+    "tracked_files_checked": 369
   },
   "errors": [],
   "warnings": []

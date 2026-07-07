@@ -1,5 +1,13 @@
 # Project Log
 
+## [2026-07-07] release | v1.2.6 Batch B pilot gates and adapter replay fixtures
+- Bumped project version to `1.2.6`.
+- Added v0.17 Batch B pilot gates for target fixtures, method scope and planned fixture jobs without promoting `target_set_v0.csv`.
+- Added v0.18 adapter replay fixture manifest and parser-generated small replay tables for method output manifest, candidate outputs and run rows.
+- Added `scripts/parse_batch_a_replay_fixtures.py` to regenerate v0.18 replay fixture CSVs from external v0.15 Batch A smoke outputs.
+- Updated claim boundaries, validator coverage, README, index, Benchmark README, AGENTS and release notes for v0.17/v0.18.
+- Maintained boundaries: no new method execution, model download, data download, scoring, performance ranking, `target_set_v0.csv` promotion or `smoke_test_ready` claim.
+
 ## [2026-07-07] release | v1.2.5 adapter parser hardening and Batch B review planning
 - Bumped project version to `1.2.5`.
 - Added `benchmark/deployment/adapter_parser_hardening_matrix_v0.16.csv` to convert v0.15 minimal smoke evidence into adapter/parser hardening requirements and caveat queues.

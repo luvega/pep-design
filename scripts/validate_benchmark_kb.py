@@ -784,10 +784,63 @@ BATCH_B_TARGET_REVIEW_V016_HEADERS = [
     "next_action",
 ]
 
+BATCH_B_PILOT_TARGET_GATE_V017_HEADERS = [
+    "target_gate_id",
+    "source_candidate_id",
+    "target_or_fixture",
+    "pdb_or_local_ref",
+    "task_id",
+    "target_class",
+    "receptor_chains",
+    "peptide_chains",
+    "known_peptide_sequence",
+    "structure_status",
+    "assay_control_status",
+    "license_status",
+    "leakage_status",
+    "pilot_decision",
+    "allowed_use",
+    "source_evidence",
+    "next_action",
+]
+
+BATCH_B_PILOT_METHOD_SCOPE_V017_HEADERS = [
+    "method",
+    "pilot_track",
+    "current_status",
+    "image_tag",
+    "source_commit_or_route",
+    "adapter_status",
+    "parser_status",
+    "allowed_pilot_use",
+    "blocking_items",
+    "next_action",
+]
+
+ADAPTER_REPLAY_FIXTURE_V018_HEADERS = [
+    "fixture_id",
+    "method",
+    "source_stage",
+    "external_method_dir",
+    "command_path",
+    "stdout_log",
+    "stderr_log",
+    "runtime_json",
+    "primary_output",
+    "parser_name",
+    "parser_version",
+    "expected_candidate_outputs",
+    "expected_run_csv",
+    "fixture_status",
+    "evidence_boundary",
+    "next_action",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
     "ops/log.md",
+    "scripts/parse_batch_a_replay_fixtures.py",
     "benchmark/README.md",
     "benchmark/availability/README.md",
     "benchmark/availability/link_availability_matrix_v0.5.csv",
@@ -807,6 +860,8 @@ REQUIRED_FILES = [
     "benchmark/input_sets/target_candidate_matrix_v0.5.csv",
     "benchmark/input_sets/target_candidate_academic_search_v0.14.csv",
     "benchmark/input_sets/batch_b_target_review_queue_v0.16.csv",
+    "benchmark/input_sets/batch_b_pilot_target_gate_v0.17.csv",
+    "benchmark/input_sets/batch_b_pilot_job_manifest_v0.17.csv",
     "benchmark/input_sets/dataset_supplement_watchlist_v0.6.csv",
     "benchmark/input_sets/dataset_supplement_schema_review_v0.7.csv",
     "benchmark/input_sets/dataset_supplement_schema_review_v0.8.csv",
@@ -833,6 +888,8 @@ REQUIRED_FILES = [
     "benchmark/deployment/run_preflight_results_v0.15.csv",
     "benchmark/deployment/batch_a_smoke_test_results_v0.15.csv",
     "benchmark/deployment/adapter_parser_hardening_matrix_v0.16.csv",
+    "benchmark/deployment/batch_b_pilot_method_scope_v0.17.csv",
+    "benchmark/deployment/adapter_replay_fixture_manifest_v0.18.csv",
     "benchmark/deployment/method_readiness_review_v0.8.csv",
     "benchmark/deployment/method_preflight_status_v0.10.csv",
     "benchmark/deployment/adapter_preflight_status_v0.11.csv",
@@ -845,6 +902,9 @@ REQUIRED_FILES = [
     "benchmark/results/README.md",
     "benchmark/results/example_method_output_manifest_v0.11.csv",
     "benchmark/results/example_candidate_outputs_v0.11.csv",
+    "benchmark/results/batch_a_replay_method_output_manifest_v0.18.csv",
+    "benchmark/results/batch_a_replay_candidate_outputs_v0.18.csv",
+    "benchmark/results/batch_a_replay_run_v0.18.csv",
     "sources/raw_snapshots/_index.md",
     "kb/references/references.bib",
     "kb/references/zotero-map.tsv",
@@ -871,6 +931,8 @@ REQUIRED_FILES = [
     "ops/audits/docker_environment_assignment_audit_v0.13.md",
     "ops/audits/target_candidate_academic_search_audit_v0.14.md",
     "ops/audits/batch_a_execution_audit_v0.15.md",
+    "ops/audits/batch_b_pilot_readiness_audit_v0.17.md",
+    "ops/audits/adapter_replay_fixture_audit_v0.18.md",
     "ops/plans/updated_plan_v0.6.md",
     "ops/plans/updated_plan_v0.9.md",
     "ops/plans/updated_plan_v1.3.md",
@@ -880,6 +942,7 @@ REQUIRED_FILES = [
     "ops/plans/protein_design_image_consolidation_plan_v0.13.md",
     "ops/plans/target_candidate_academic_search_plan_v0.14.md",
     "ops/plans/adapter_parser_hardening_plan_v0.16.md",
+    "ops/plans/batch_b_pilot_execution_plan_v0.17.md",
     "ops/migration/file_role_map_v0.10.csv",
     "ops/audits/license_schema_input_contract_review_v0.8.md",
     "ops/audits/supervisor_skills_idea_evaluation.md",
@@ -1280,6 +1343,41 @@ def main() -> int:
         errors,
         "benchmark/input_sets/batch_b_target_review_queue_v0.16.csv",
         BATCH_B_TARGET_REVIEW_V016_HEADERS,
+    )
+    batch_b_pilot_target_gate_v017_rows = check_headers(
+        errors,
+        "benchmark/input_sets/batch_b_pilot_target_gate_v0.17.csv",
+        BATCH_B_PILOT_TARGET_GATE_V017_HEADERS,
+    )
+    batch_b_pilot_method_scope_v017_rows = check_headers(
+        errors,
+        "benchmark/deployment/batch_b_pilot_method_scope_v0.17.csv",
+        BATCH_B_PILOT_METHOD_SCOPE_V017_HEADERS,
+    )
+    batch_b_pilot_job_manifest_v017_rows = check_headers(
+        errors,
+        "benchmark/input_sets/batch_b_pilot_job_manifest_v0.17.csv",
+        JOB_MANIFEST_HEADERS,
+    )
+    adapter_replay_fixture_v018_rows = check_headers(
+        errors,
+        "benchmark/deployment/adapter_replay_fixture_manifest_v0.18.csv",
+        ADAPTER_REPLAY_FIXTURE_V018_HEADERS,
+    )
+    batch_a_replay_method_output_v018_rows = check_headers(
+        errors,
+        "benchmark/results/batch_a_replay_method_output_manifest_v0.18.csv",
+        METHOD_OUTPUT_MANIFEST_HEADERS,
+    )
+    batch_a_replay_candidate_v018_rows = check_headers(
+        errors,
+        "benchmark/results/batch_a_replay_candidate_outputs_v0.18.csv",
+        CANDIDATE_OUTPUT_HEADERS,
+    )
+    batch_a_replay_run_v018_rows = check_headers(
+        errors,
+        "benchmark/results/batch_a_replay_run_v0.18.csv",
+        RUN_CSV_HEADERS,
     )
     method_readiness_v08_rows = check_headers(
         errors,
@@ -2781,6 +2879,275 @@ def main() -> int:
             if has_unqualified_forbidden_wording(text_value, forbidden_phrase):
                 errors.append(f"{text_name} contains overclaim phrase {forbidden_phrase}")
 
+    expected_v017_target_gate_ids = {
+        "mdm2_p53_3eqs_fixture",
+        "mhcii_hiv_1sjh_fixture",
+        "gabarap_7zkr_fixture",
+        "pdl1_workbench_fixture",
+    }
+    observed_v017_target_gate_ids = {row.get("target_gate_id", "") for row in batch_b_pilot_target_gate_v017_rows}
+    missing_v017_target_gate_ids = sorted(expected_v017_target_gate_ids - observed_v017_target_gate_ids)
+    if missing_v017_target_gate_ids:
+        errors.append(
+            "batch_b_pilot_target_gate_v0.17.csv missing target gates: "
+            + ", ".join(missing_v017_target_gate_ids)
+        )
+    if len(batch_b_pilot_target_gate_v017_rows) != len(expected_v017_target_gate_ids):
+        errors.append(
+            f"batch_b_pilot_target_gate_v0.17.csv should contain {len(expected_v017_target_gate_ids)} rows, "
+            f"found {len(batch_b_pilot_target_gate_v017_rows)}"
+        )
+    allowed_v017_pilot_decisions = {
+        "fixture_ready_not_frozen",
+        "review_blocked_not_frozen",
+        "parser_fixture_only_not_frozen",
+    }
+    for row in batch_b_pilot_target_gate_v017_rows:
+        target_gate_id = row.get("target_gate_id", "")
+        if row.get("task_id") not in REQUIRED_PROTOCOL_TASKS:
+            errors.append(f"{target_gate_id}: invalid v0.17 target task_id {row.get('task_id')}")
+        if row.get("pilot_decision") not in allowed_v017_pilot_decisions:
+            errors.append(f"{target_gate_id}: invalid v0.17 pilot decision {row.get('pilot_decision')}")
+        if "not_frozen" not in row.get("pilot_decision", ""):
+            errors.append(f"{target_gate_id}: v0.17 target gate must retain not_frozen boundary")
+        for required_field in BATCH_B_PILOT_TARGET_GATE_V017_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{target_gate_id}: v0.17 target gate row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "download_performed=yes",
+            "ready_for_target_set",
+            "smoke_test_ready",
+            "benchmark_completed",
+            "best_performing",
+            "reproduced",
+            "target_set_v0.csv 已冻结",
+            "performance_ranking",
+        ]:
+            if forbidden in text:
+                errors.append(f"{target_gate_id}: v0.17 target gate row overclaims {forbidden}")
+
+    expected_v017_method_scope = expected_v016_adapter_methods
+    observed_v017_method_scope = {row.get("method", "") for row in batch_b_pilot_method_scope_v017_rows}
+    missing_v017_method_scope = sorted(expected_v017_method_scope - observed_v017_method_scope)
+    if missing_v017_method_scope:
+        errors.append(
+            "batch_b_pilot_method_scope_v0.17.csv missing methods: "
+            + ", ".join(missing_v017_method_scope)
+        )
+    if len(batch_b_pilot_method_scope_v017_rows) != len(expected_v017_method_scope):
+        errors.append(
+            f"batch_b_pilot_method_scope_v0.17.csv should contain {len(expected_v017_method_scope)} rows, "
+            f"found {len(batch_b_pilot_method_scope_v017_rows)}"
+        )
+    allowed_v017_allowed_use = {"fixture_parser_only", "deferred"}
+    for row in batch_b_pilot_method_scope_v017_rows:
+        method = row.get("method", "")
+        if row.get("allowed_pilot_use") not in allowed_v017_allowed_use:
+            errors.append(f"{method}: invalid v0.17 allowed_pilot_use {row.get('allowed_pilot_use')}")
+        for required_field in BATCH_B_PILOT_METHOD_SCOPE_V017_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{method}: v0.17 method scope row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "benchmark_completed",
+            "best_performing",
+            "experimentally_validated",
+            "problem-free",
+            "smoke_test_ready",
+            "benchmark_ready",
+            "ready_for_target_set",
+            "performance_ranking",
+        ]:
+            if forbidden in text:
+                errors.append(f"{method}: v0.17 method scope row overclaims {forbidden}")
+
+    expected_v017_job_ids = {
+        "batch_b_pilot_pepmlm_seq_fixture_seed101",
+        "batch_b_pilot_rfpeptide_7zkr_fixture_seed101",
+        "batch_b_pilot_proteinmpnn_pdl1_fixture_seed101",
+        "batch_b_pilot_handoff_7zkr_fixture_seed101",
+        "batch_b_pilot_diffpepbuilder_3eqs_seed101",
+    }
+    observed_v017_job_ids = {row.get("job_id", "") for row in batch_b_pilot_job_manifest_v017_rows}
+    missing_v017_job_ids = sorted(expected_v017_job_ids - observed_v017_job_ids)
+    if missing_v017_job_ids:
+        errors.append(
+            "batch_b_pilot_job_manifest_v0.17.csv missing job ids: " + ", ".join(missing_v017_job_ids)
+        )
+    if len(batch_b_pilot_job_manifest_v017_rows) != len(expected_v017_job_ids):
+        errors.append(
+            f"batch_b_pilot_job_manifest_v0.17.csv should contain {len(expected_v017_job_ids)} rows, "
+            f"found {len(batch_b_pilot_job_manifest_v017_rows)}"
+        )
+    for row in batch_b_pilot_job_manifest_v017_rows:
+        job_id = row.get("job_id", "")
+        if row.get("status") not in {"planned_fixture_only", "deferred"}:
+            errors.append(f"{job_id}: invalid v0.17 pilot job status {row.get('status')}")
+        if row.get("n_designs_requested") != "5" or row.get("random_seed") != "101":
+            errors.append(f"{job_id}: v0.17 pilot job must use n_designs=5 and seed=101")
+        if row.get("task_id") not in REQUIRED_PROTOCOL_TASKS:
+            errors.append(f"{job_id}: invalid v0.17 pilot job task_id {row.get('task_id')}")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "generated",
+            "scored",
+            "smoke_test_ready",
+            "benchmark_completed",
+            "best_performing",
+            "target_set_v0.csv 已冻结",
+        ]:
+            if forbidden in text:
+                errors.append(f"{job_id}: v0.17 pilot job row overclaims {forbidden}")
+
+    expected_v018_fixture_ids = {
+        "batch_a_pepmlm_cpu_smoke_replay",
+        "batch_a_proteinmpnn_pdl1_replay",
+        "batch_a_rfpeptide_macrocycle_replay",
+    }
+    observed_v018_fixture_ids = {row.get("fixture_id", "") for row in adapter_replay_fixture_v018_rows}
+    missing_v018_fixture_ids = sorted(expected_v018_fixture_ids - observed_v018_fixture_ids)
+    if missing_v018_fixture_ids:
+        errors.append(
+            "adapter_replay_fixture_manifest_v0.18.csv missing fixtures: "
+            + ", ".join(missing_v018_fixture_ids)
+        )
+    if len(adapter_replay_fixture_v018_rows) != len(expected_v018_fixture_ids):
+        errors.append(
+            f"adapter_replay_fixture_manifest_v0.18.csv should contain {len(expected_v018_fixture_ids)} rows, "
+            f"found {len(adapter_replay_fixture_v018_rows)}"
+        )
+    for row in adapter_replay_fixture_v018_rows:
+        fixture_id = row.get("fixture_id", "")
+        if not row.get("external_method_dir", "").startswith(
+            "/data/protein-design/data/outputs/benchmark_v0.15/batch_a/"
+        ):
+            errors.append(f"{fixture_id}: v0.18 fixture external_method_dir must remain under external Batch A root")
+        if row.get("parser_name") != "parse_batch_a_replay_fixtures.py":
+            errors.append(f"{fixture_id}: v0.18 fixture parser_name must be parse_batch_a_replay_fixtures.py")
+        if row.get("parser_version") != "v0.18":
+            errors.append(f"{fixture_id}: v0.18 fixture parser_version must be v0.18")
+        for required_field in ADAPTER_REPLAY_FIXTURE_V018_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{fixture_id}: v0.18 adapter replay fixture row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "benchmark_completed",
+            "best_performing",
+            "experimentally_validated",
+            "problem-free",
+            "smoke_test_ready",
+            "benchmark_ready",
+            "performance_ranking",
+        ]:
+            if forbidden in text:
+                errors.append(f"{fixture_id}: v0.18 adapter replay fixture row overclaims {forbidden}")
+
+    if len(batch_a_replay_method_output_v018_rows) != len(expected_v018_fixture_ids):
+        errors.append(
+            "batch_a_replay_method_output_manifest_v0.18.csv should contain "
+            f"{len(expected_v018_fixture_ids)} rows, found {len(batch_a_replay_method_output_v018_rows)}"
+        )
+    if len(batch_a_replay_candidate_v018_rows) != len(expected_v018_fixture_ids):
+        errors.append(
+            "batch_a_replay_candidate_outputs_v0.18.csv should contain "
+            f"{len(expected_v018_fixture_ids)} rows, found {len(batch_a_replay_candidate_v018_rows)}"
+        )
+    if len(batch_a_replay_run_v018_rows) != len(expected_v018_fixture_ids):
+        errors.append(
+            "batch_a_replay_run_v0.18.csv should contain "
+            f"{len(expected_v018_fixture_ids)} rows, found {len(batch_a_replay_run_v018_rows)}"
+        )
+    allowed_v018_parse_status = {"parsed", "partial", "failed", "not_applicable"}
+    for row in batch_a_replay_method_output_v018_rows:
+        run_record_id = row.get("run_record_id", "")
+        if row.get("execution_stage") != "v0.15_minimal_smoke_replay_fixture":
+            errors.append(f"{run_record_id}: v0.18 method output execution_stage must remain replay fixture")
+        if row.get("parser_status") not in allowed_v018_parse_status:
+            errors.append(f"{run_record_id}: invalid v0.18 parser_status {row.get('parser_status')}")
+        if not row.get("raw_output_root", "").startswith(
+            "/data/protein-design/data/outputs/benchmark_v0.15/batch_a/"
+        ):
+            errors.append(f"{run_record_id}: v0.18 raw_output_root must remain external")
+        try:
+            int(row.get("runtime_seconds", ""))
+            int(row.get("exit_code", ""))
+        except ValueError:
+            errors.append(f"{run_record_id}: v0.18 runtime_seconds and exit_code must be integer-like")
+    candidate_by_design = {row.get("design_id", ""): row for row in batch_a_replay_candidate_v018_rows}
+    run_by_design = {row.get("design_id", ""): row for row in batch_a_replay_run_v018_rows}
+    if set(candidate_by_design) != set(run_by_design):
+        errors.append("v0.18 candidate_outputs and run fixture design_id sets must match")
+    for row in batch_a_replay_candidate_v018_rows:
+        design_id = row.get("design_id", "")
+        if row.get("parse_status") not in allowed_v018_parse_status:
+            errors.append(f"{design_id}: invalid v0.18 candidate parse_status {row.get('parse_status')}")
+        if row.get("method") == "PepMLM" and row.get("parse_status") != "partial":
+            errors.append("PepMLM v0.18 replay fixture must retain partial parser caveat")
+        if row.get("method") == "RFpeptide/RFdiffusion" and not row.get("structure_path", "").startswith(
+            "/data/protein-design/data/outputs/benchmark_v0.15/batch_a/"
+        ):
+            errors.append("RFpeptide/RFdiffusion v0.18 structure_path must remain external")
+    for row in batch_a_replay_run_v018_rows:
+        design_id = row.get("design_id", "")
+        if row.get("status") != "not_real_benchmark":
+            errors.append(f"{design_id}: v0.18 replay run rows must remain not_real_benchmark")
+        if row.get("task_id") not in REQUIRED_PROTOCOL_TASKS:
+            errors.append(f"{design_id}: invalid v0.18 replay run task_id {row.get('task_id')}")
+
+    pilot_plan_text = (ROOT / "ops/plans/batch_b_pilot_execution_plan_v0.17.md").read_text(
+        encoding="utf-8"
+    )
+    for token in [
+        "Batch B Pilot Execution Plan v0.17",
+        "target_set_v0.csv",
+        "batch_b_pilot_target_gate_v0.17.csv",
+        "batch_b_pilot_job_manifest_v0.17.csv",
+        "不新增 GPU run",
+    ]:
+        if token not in pilot_plan_text:
+            errors.append(f"batch_b_pilot_execution_plan_v0.17.md missing token {token}")
+    pilot_audit_text = (ROOT / "ops/audits/batch_b_pilot_readiness_audit_v0.17.md").read_text(
+        encoding="utf-8"
+    )
+    for token in [
+        "Batch B Pilot Readiness Audit v0.17",
+        "3EQS",
+        "1SJH",
+        "7ZKR",
+        "pdl1_workbench_fixture",
+        "No-Overclaim Boundary",
+    ]:
+        if token not in pilot_audit_text:
+            errors.append(f"batch_b_pilot_readiness_audit_v0.17.md missing token {token}")
+    replay_audit_text = (ROOT / "ops/audits/adapter_replay_fixture_audit_v0.18.md").read_text(
+        encoding="utf-8"
+    )
+    for token in [
+        "Adapter Replay Fixture Audit v0.18",
+        "adapter_replay_fixture_manifest_v0.18.csv",
+        "batch_a_replay_candidate_outputs_v0.18.csv",
+        "parse_batch_a_replay_fixtures.py",
+        "not Benchmark result",
+    ]:
+        if token not in replay_audit_text:
+            errors.append(f"adapter_replay_fixture_audit_v0.18.md missing token {token}")
+    for text_name, text_value in [
+        ("batch_b_pilot_execution_plan_v0.17.md", pilot_plan_text.lower()),
+        ("batch_b_pilot_readiness_audit_v0.17.md", pilot_audit_text.lower()),
+        ("adapter_replay_fixture_audit_v0.18.md", replay_audit_text.lower()),
+    ]:
+        for forbidden_phrase in [
+            "benchmark completed",
+            "best-performing",
+            "experimentally validated",
+            "problem-free",
+            "benchmark_ready | reached",
+            "smoke_test_ready | reached",
+        ]:
+            if has_unqualified_forbidden_wording(text_value, forbidden_phrase):
+                errors.append(f"{text_name} contains overclaim phrase {forbidden_phrase}")
+
     adapter_methods = {row.get("method", ""): row for row in adapter_preflight_rows}
     for method in ["PepMLM", "RFdiffusion + ProteinMPNN", "PepMirror"]:
         if method not in adapter_methods:
@@ -2918,6 +3285,8 @@ def main() -> int:
         "v0.15 外部预检和 Batch A 只支持 minimal smoke-test observed readiness evidence",
         "v0.16 adapter/parser hardening 是接口计划层不是新增运行证据",
         "v0.16 Batch B target review queue 不是 frozen target set",
+        "v0.17 Batch B pilot gate 不是 frozen target set 或正式运行结果",
+        "v0.18 adapter replay fixtures 是 parser evidence 不是 Benchmark results",
     ]:
         if claim not in claim_texts:
             errors.append(f"benchmark_manuscript_claim_evidence_map.csv missing claim boundary: {claim}")
@@ -2988,6 +3357,13 @@ def main() -> int:
             "batch_a_smoke_test_v015_rows": len(batch_a_smoke_test_v015_rows),
             "adapter_parser_hardening_v016_rows": len(adapter_parser_hardening_v016_rows),
             "batch_b_target_review_v016_rows": len(batch_b_target_review_v016_rows),
+            "batch_b_pilot_target_gate_v017_rows": len(batch_b_pilot_target_gate_v017_rows),
+            "batch_b_pilot_method_scope_v017_rows": len(batch_b_pilot_method_scope_v017_rows),
+            "batch_b_pilot_job_manifest_v017_rows": len(batch_b_pilot_job_manifest_v017_rows),
+            "adapter_replay_fixture_v018_rows": len(adapter_replay_fixture_v018_rows),
+            "batch_a_replay_method_output_v018_rows": len(batch_a_replay_method_output_v018_rows),
+            "batch_a_replay_candidate_v018_rows": len(batch_a_replay_candidate_v018_rows),
+            "batch_a_replay_run_v018_rows": len(batch_a_replay_run_v018_rows),
             "method_readiness_v08_rows": len(method_readiness_v08_rows),
             "method_preflight_v010_rows": len(method_preflight_rows),
             "adapter_preflight_v011_rows": len(adapter_preflight_rows),

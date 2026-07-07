@@ -6,9 +6,9 @@ This project is an independent protocol-first Benchmark knowledge base for recen
 
 Current authoritative plan: `ops/plans/updated_plan_v0.9.md`.
 
-Current version: `1.2.5`.
+Current version: `1.2.6`.
 
-Next planned phase: v0.17 controlled Batch B dry-run preparation after adapter/parser and target/control review. Do not start additional clone, download, install, or GPU execution unless the user explicitly requests that later phase.
+Next planned phase: v0.19 controlled external multi-seed fixture pilot after v0.17 pilot gates and v0.18 adapter replay fixtures. Do not start additional clone, download, install, or GPU execution unless the user explicitly requests that later phase.
 
 ## Source Boundaries
 
@@ -52,6 +52,11 @@ For broad research-to-paper or multi-stage review tasks, route through `academic
 | `benchmark/deployment/adapter_parser_hardening_matrix_v0.16.csv` | adapter/parser hardening matrix | interface planning only; not new execution evidence |
 | `benchmark/input_sets/batch_b_target_review_queue_v0.16.csv` | Batch B target/control review queue | review queue only; not frozen target set |
 | `benchmark/protocols/adapter_replay_contract_v0.16.md` | adapter replay metadata contract | future replay contract only; not a run log |
+| `benchmark/input_sets/batch_b_pilot_target_gate_v0.17.csv` | Batch B pilot target gate | fixture/review gate only; not frozen target set |
+| `benchmark/input_sets/batch_b_pilot_job_manifest_v0.17.csv` | Batch B pilot planned job manifest | planned fixture jobs only; not execution evidence |
+| `benchmark/deployment/batch_b_pilot_method_scope_v0.17.csv` | Batch B pilot method scope | method gating only; not performance evidence |
+| `benchmark/deployment/adapter_replay_fixture_manifest_v0.18.csv` | adapter replay fixture manifest | parser replay fixture only; not new method execution |
+| `benchmark/results/batch_a_replay_*_v0.18.csv` | small adapter replay fixture outputs | parsed v0.15 minimal smoke fixtures only; not Benchmark results |
 | `ops/plans/protein_design_image_consolidation_plan_v0.13.md` | image consolidation plan | planning artifact only |
 | `ops/plans/adapter_parser_hardening_plan_v0.16.md` | adapter/parser hardening plan | planning artifact only |
 | `ops/audits/docker_environment_assignment_audit_v0.13.md` | Docker/environment assignment audit | readiness finding only; not local reproducibility evidence |
@@ -80,7 +85,7 @@ Method and dataset readiness must move through explicit gates:
 6. `dry_run_ready`
 7. `smoke_test_ready`
 
-Current v0.15/v0.16 KB artifacts support only `minimal_smoke_observed` and interface-planning evidence for selected external examples. They do not support promotion to `smoke_test_ready` without standardized inputs, adapter commands, parser outputs, validation artifacts, and target/control governance. PepMirror remains dependency-blocked until PyRosetta/license and checkpoint/dependency routes are resolved.
+Current v0.15-v0.18 KB artifacts support only `minimal_smoke_observed`, interface-planning, pilot-gate, and parser-replay fixture evidence for selected external examples. They do not support promotion to `smoke_test_ready` without controlled target governance, standardized inputs, adapter commands, multi-seed outputs, scoring artifacts, validation artifacts, and target/control governance. PepMirror remains dependency-blocked until PyRosetta/license and checkpoint/dependency routes are resolved.
 
 ## Language And Claim Rules
 
@@ -91,6 +96,8 @@ Current v0.15/v0.16 KB artifacts support only `minimal_smoke_observed` and inter
 - Do not treat source pinning, source checkouts, method contracts, availability checks, download manifests, or schema reviews as installation, smoke-test, Benchmark-result, or local-reproducibility evidence.
 - Do not treat v0.15 minimal smoke tests as complete benchmark runs, target-set evidence, scoring evidence, performance ranking, or proof that broader method environments are problem-free.
 - Do not treat v0.16 adapter/parser hardening or Batch B target review queue rows as new run evidence, frozen targets, scoring evidence, or performance findings.
+- Do not treat v0.17 pilot gates as frozen targets, completed runs, or head-to-head evidence.
+- Do not treat v0.18 replay fixtures as new execution, scoring results, method ranking, or Benchmark results.
 - Do not treat watchlist datasets, target candidates, review-only methods, or literature examples as frozen Benchmark targets.
 - Generation ability, ranking/rescoring ability, developability proxies, structural confidence, and biological validation are separate evidence layers.
 

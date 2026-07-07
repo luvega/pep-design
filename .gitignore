@@ -36,6 +36,9 @@ weights/
 !benchmark/results/README.md
 !benchmark/results/example_method_output_manifest_v0.11.csv
 !benchmark/results/example_candidate_outputs_v0.11.csv
+!benchmark/results/batch_a_replay_method_output_manifest_v0.18.csv
+!benchmark/results/batch_a_replay_candidate_outputs_v0.18.csv
+!benchmark/results/batch_a_replay_run_v0.18.csv
 *.pt
 *.pth
 *.ckpt

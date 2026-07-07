@@ -1,5 +1,50 @@
 # Release Notes
 
+## v1.2.6 Batch B Pilot Gates And Adapter Replay Fixtures - 2026-07-07
+
+This checkpoint adds the v0.17 pilot-gate layer and v0.18 adapter replay
+fixture layer. It moves the project from planning-only adapter requirements
+toward repeatable parser evidence while keeping formal Benchmark results out of
+scope.
+
+### Added
+
+- Added `benchmark/input_sets/batch_b_pilot_target_gate_v0.17.csv`.
+- Added `benchmark/input_sets/batch_b_pilot_job_manifest_v0.17.csv`.
+- Added `benchmark/deployment/batch_b_pilot_method_scope_v0.17.csv`.
+- Added `benchmark/deployment/adapter_replay_fixture_manifest_v0.18.csv`.
+- Added `benchmark/results/batch_a_replay_method_output_manifest_v0.18.csv`.
+- Added `benchmark/results/batch_a_replay_candidate_outputs_v0.18.csv`.
+- Added `benchmark/results/batch_a_replay_run_v0.18.csv`.
+- Added `scripts/parse_batch_a_replay_fixtures.py`.
+- Added v0.17/v0.18 readiness and replay audits.
+
+### Changed
+
+- Bumped project version to `1.2.6`.
+- Updated validator coverage for v0.17 pilot gates, v0.18 replay fixtures,
+  replay result rows, parser caveats and no-overclaim boundaries.
+- Updated index, README, Benchmark README, AGENTS and project log for v0.17 and
+  v0.18.
+- Added v0.17/v0.18 claim boundaries to the manuscript claim-evidence map.
+
+### Notification
+
+- RCSB metadata checks were used to populate fixture-level chain and sequence
+  gates for 3EQS, 1SJH and 7ZKR.
+- PepMLM replay parsing retains a `partial` status because the v0.15 smoke
+  output contains `X`.
+- ProteinMPNN and RFpeptide/RFdiffusion v0.15 outputs can now be parsed into
+  small `candidate_outputs` and `run` fixture rows.
+
+### Boundaries
+
+- No new method execution.
+- No new model, data or checkpoint download.
+- No `target_set_v0.csv` promotion.
+- No scoring, performance ranking or complete Benchmark result.
+- No method promotion to `smoke_test_ready` or `benchmark_ready`.
+
 ## v1.2.5 Adapter Parser Hardening And Batch B Review Planning - 2026-07-07
 
 This checkpoint adds the v0.16 planning layer that turns v0.15 minimal
