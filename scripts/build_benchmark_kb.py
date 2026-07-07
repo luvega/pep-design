@@ -541,17 +541,20 @@ PD_WIKI_IMPORTS = [
 
 def ensure_dirs() -> None:
     dirs = [
-        "raw_sources/zotero",
-        "raw_sources/pd_wiki",
-        "raw_sources/endnote",
-        "raw_sources/external_search",
-        "references",
-        "wiki/literature",
-        "wiki/methods",
-        "wiki/concepts",
-        "wiki/benchmark_candidates",
-        "tables",
-        "reports",
+        "sources/raw_snapshots/zotero",
+        "sources/raw_snapshots/pd_wiki",
+        "sources/raw_snapshots/endnote",
+        "sources/raw_snapshots/external_search",
+        "kb/references",
+        "kb/wiki/literature",
+        "kb/wiki/methods",
+        "kb/wiki/concepts",
+        "kb/wiki/benchmark_candidates",
+        "kb/tables",
+        "manuscript/support",
+        "ops/audits",
+        "ops/plans",
+        "ops/validation",
         "scripts",
     ]
     for rel in dirs:
@@ -730,10 +733,10 @@ def classify_item(title: str, year: str) -> tuple[str, str, str, str, str, str, 
 
 def collect_zotero() -> tuple[list[dict[str, Any]], dict[str, str]]:
     collections, _ = zotero_get("/collections")
-    write_json("raw_sources/zotero/collections.json", collections)
+    write_json("sources/raw_snapshots/zotero/collections.json", collections)
 
     status: dict[str, Any] = {"source": "Zotero local API", "base": ZOTERO_BASE, "build_date": BUILD_DATE}
-    write_json("raw_sources/zotero/zotero_status_snapshot.json", status)
+    write_json("sources/raw_snapshots/zotero/zotero_status_snapshot.json", status)
 
     collection_payload: dict[str, Any] = {}
     query_payload: dict[str, Any] = {}
@@ -761,8 +764,8 @@ def collect_zotero() -> tuple[list[dict[str, Any]], dict[str, str]]:
             item_by_key[item_key] = row
             item_sources.setdefault(item_key, []).append(f"zotero_query:{query}")
 
-    write_json("raw_sources/zotero/seed_items_by_collection.json", collection_payload)
-    write_json("raw_sources/zotero/search_results_by_query.json", query_payload)
+    write_json("sources/raw_snapshots/zotero/seed_items_by_collection.json", collection_payload)
+    write_json("sources/raw_snapshots/zotero/search_results_by_query.json", query_payload)
 
     rows: list[dict[str, Any]] = []
     bibtex_chunks: list[str] = []
@@ -848,9 +851,9 @@ def collect_zotero() -> tuple[list[dict[str, Any]], dict[str, str]]:
             }
         )
 
-    write_csv("references/dedupe_report.csv", ["zotero_key", "identity", "title"], duplicate_rows)
+    write_csv("kb/references/dedupe_report.csv", ["zotero_key", "identity", "title"], duplicate_rows)
     write_csv(
-        "references/zotero-map.tsv",
+        "kb/references/zotero-map.tsv",
         ["zotero_key", "bibtex_key", "title"],
         [
             {
@@ -863,7 +866,7 @@ def collect_zotero() -> tuple[list[dict[str, Any]], dict[str, str]]:
         ],
     )
     # Re-write the TSV with tabs after DictWriter created a comma file.
-    map_path = PROJECT_ROOT / "references/zotero-map.tsv"
+    map_path = PROJECT_ROOT / "kb/references/zotero-map.tsv"
     with map_path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=["zotero_key", "bibtex_key", "title"], delimiter="\t")
         writer.writeheader()
@@ -877,7 +880,7 @@ def collect_zotero() -> tuple[list[dict[str, Any]], dict[str, str]]:
                     }
                 )
 
-    write_text("references/references.bib", "\n\n".join(bibtex_chunks))
+    write_text("kb/references/references.bib", "\n\n".join(bibtex_chunks))
     return rows, bibtex_key_by_zotero
 
 
@@ -887,14 +890,14 @@ def import_pd_wiki_sources() -> list[dict[str, str]]:
         for rel in PD_WIKI_IMPORTS:
             src = PD_WIKI_ROOT / rel
             if src.exists():
-                dst = PROJECT_ROOT / "raw_sources/pd_wiki" / rel
+                dst = PROJECT_ROOT / "sources/raw_snapshots/pd_wiki" / rel
                 dst.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(src, dst)
                 imported.append({"source": str(src), "project_copy": str(dst), "type": "selected_pd_wiki_file"})
         card_dir = PD_WIKI_ROOT / "wiki/review/peptide-methods/reference_evidence_cards_v8"
         if card_dir.exists():
             for src in sorted(card_dir.glob("*.md")):
-                dst = PROJECT_ROOT / "raw_sources/pd_wiki/reference_evidence_cards_v8" / src.name
+                dst = PROJECT_ROOT / "sources/raw_snapshots/pd_wiki/reference_evidence_cards_v8" / src.name
                 dst.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(src, dst)
                 imported.append({"source": str(src), "project_copy": str(dst), "type": "reference_evidence_card"})
@@ -903,12 +906,12 @@ def import_pd_wiki_sources() -> list[dict[str, str]]:
     if legacy_project.exists():
         for src in sorted(legacy_project.rglob("*")):
             if src.is_file() and src.suffix.lower() in {".md", ".csv", ".json"}:
-                dst = PROJECT_ROOT / "raw_sources/pd_wiki/_kb_review_project" / src.relative_to(legacy_project)
+                dst = PROJECT_ROOT / "sources/raw_snapshots/pd_wiki/_kb_review_project" / src.relative_to(legacy_project)
                 dst.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(src, dst)
                 imported.append({"source": str(src), "project_copy": str(dst), "type": "kb_review_project"})
 
-    write_csv("raw_sources/pd_wiki/import_manifest.csv", ["source", "project_copy", "type"], imported)
+    write_csv("sources/raw_snapshots/pd_wiki/import_manifest.csv", ["source", "project_copy", "type"], imported)
     return imported
 
 
@@ -968,8 +971,8 @@ def write_method_outputs(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any
         if method["decision"] == "include":
             write_candidate_card(method, paper_key)
 
-    write_csv("tables/method_evidence_matrix.csv", EVIDENCE_HEADERS, evidence_rows)
-    write_csv("tables/candidate_method_scorecard.csv", SCORE_HEADERS, score_rows)
+    write_csv("kb/tables/method_evidence_matrix.csv", EVIDENCE_HEADERS, evidence_rows)
+    write_csv("kb/tables/candidate_method_scorecard.csv", SCORE_HEADERS, score_rows)
     return evidence_rows, score_rows
 
 
@@ -1026,7 +1029,7 @@ relations: ["derived_from:{paper_key}", "applies_to:benchmark-readiness"]
 ## Benchmark 前置记录
 {method['reproducibility_notes']}
 """
-    write_text(f"wiki/methods/{method['slug']}.md", text)
+    write_text(f"kb/wiki/methods/{method['slug']}.md", text)
 
 
 def write_candidate_card(method: dict[str, Any], paper_key: str) -> None:
@@ -1062,7 +1065,7 @@ relations: ["derived_from:../methods/{method['slug']}.md"]
 - 主要论文：{method['primary_title']}
 - 追踪 key：{paper_key}
 """
-    write_text(f"wiki/benchmark_candidates/{method['slug']}.md", text)
+    write_text(f"kb/wiki/benchmark_candidates/{method['slug']}.md", text)
 
 
 def write_literature_cards(rows: list[dict[str, Any]]) -> list[dict[str, str]]:
@@ -1112,7 +1115,7 @@ relations: ["derived_from:zotero:{row['zotero_key']}"]
 ## Evidence Note
 {abstract[:900]}
 """
-        rel = f"wiki/literature/{slug}.md"
+        rel = f"kb/wiki/literature/{slug}.md"
         write_text(rel, text)
         cards.append({"file": rel, "title": row["title"], "zotero_key": row["zotero_key"], "year": row["year"]})
     return cards
@@ -1147,7 +1150,7 @@ relations: []
 ## 相关方法
 {chr(10).join(method_links) if method_links else "- 当前作为背景主题，不纳入第一轮可运行方法清单。"}
 """
-        rel = f"wiki/concepts/{concept['slug']}.md"
+        rel = f"kb/wiki/concepts/{concept['slug']}.md"
         write_text(rel, text)
         cards.append({"file": rel, "title": concept["title"], "type": "concept"})
     return cards
@@ -1194,12 +1197,12 @@ def write_indexes(literature_cards: list[dict[str, str]]) -> None:
         for card in literature_cards
     ]
 
-    write_text("wiki/methods/_index.md", "# Method Cards\n\n" + table(method_rows))
-    write_text("wiki/benchmark_candidates/_index.md", "# Benchmark Candidates\n\n" + table(candidate_rows))
-    write_text("wiki/concepts/_index.md", "# Concepts\n\n" + table(concept_rows))
-    write_text("wiki/literature/_index.md", "# Literature Cards\n\n" + table(literature_rows))
+    write_text("kb/wiki/methods/_index.md", "# Method Cards\n\n" + table(method_rows))
+    write_text("kb/wiki/benchmark_candidates/_index.md", "# Benchmark Candidates\n\n" + table(candidate_rows))
+    write_text("kb/wiki/concepts/_index.md", "# Concepts\n\n" + table(concept_rows))
+    write_text("kb/wiki/literature/_index.md", "# Literature Cards\n\n" + table(literature_rows))
     write_text(
-        "raw_sources/_index.md",
+        "sources/raw_snapshots/_index.md",
         """# Raw Sources
 
 | folder | source | rule |
@@ -1225,7 +1228,7 @@ def write_external_search_log() -> None:
             }
         )
     write_csv(
-        "raw_sources/external_search/method_repository_routes.csv",
+        "sources/raw_snapshots/external_search/method_repository_routes.csv",
         ["method", "primary_paper", "code_url", "weights_url", "status"],
         source_rows,
     )
@@ -1249,8 +1252,8 @@ def write_external_search_log() -> None:
             "- GitHub/Hugging Face/Zenodo 用于 runnable route 查证。",
         ]
     )
-    write_text("references/search_log.md", "\n".join(query_lines))
-    write_text("raw_sources/external_search/search_log.md", "\n".join(query_lines))
+    write_text("kb/references/search_log.md", "\n".join(query_lines))
+    write_text("sources/raw_snapshots/external_search/search_log.md", "\n".join(query_lines))
 
 
 def check_url_status(url: str) -> tuple[str, str]:
@@ -1295,7 +1298,7 @@ def write_url_status() -> None:
                 }
             )
     write_csv(
-        "raw_sources/external_search/url_status.csv",
+        "sources/raw_snapshots/external_search/url_status.csv",
         ["method", "field", "url", "http_status", "check_status"],
         rows,
     )
@@ -1311,7 +1314,7 @@ def write_reports(rows: list[dict[str, Any]], evidence_rows: list[dict[str, Any]
     include_count = sum(1 for row in score_rows if row["decision"] == "include")
 
     write_text(
-        "reports/skill_selection.md",
+        "ops/audits/skill_selection.md",
         f"""# Skill Selection
 
 ## 已采用
@@ -1332,7 +1335,7 @@ def write_reports(rows: list[dict[str, Any]], evidence_rows: list[dict[str, Any]
     family_lines = "\n".join(f"- {family}: {count}" for family, count in sorted(family_counts.items()))
     status_lines = "\n".join(f"- {status}: {count}" for status, count in sorted(status_counts.items()))
     write_text(
-        "reports/literature_scope_report.md",
+        "manuscript/support/literature_scope_report.md",
         f"""# Literature Scope Report
 
 ## Scope
@@ -1364,7 +1367,7 @@ def write_reports(rows: list[dict[str, Any]], evidence_rows: list[dict[str, Any]
         method = next(item for item in CANDIDATE_METHODS if item["method"] == row["method"])
         table_lines.append(f"| {row['method']} | {row['total_score']} | {row['decision']} | {method['code_url']} |")
     write_text(
-        "reports/candidate_methods_shortlist.md",
+        "manuscript/support/candidate_methods_shortlist.md",
         f"""# Candidate Methods Shortlist
 
 第一轮选择遵循“先可运行，再代表性”的规则。`include` 表示进入 Benchmark 方案设计阶段；`watchlist` 表示保留但需要进一步确认执行路线。
@@ -1389,24 +1392,38 @@ def write_root_docs(rows: list[dict[str, Any]], score_rows: list[dict[str, Any]]
 ## Purpose
 This project is an independent Benchmark background knowledge base for recent peptide-design methods.
 
+Current authoritative plan: `ops/plans/updated_plan_v0.9.md`.
+
+## Skill Routing
+
+- building-llm-wiki
+- academic-research-suite
+- benchmark-paper-template
+
 ## Source Boundaries
 - Do not edit `E:\\Endnote参考文献`, EndNote `.enl` files, Zotero items, or the upstream `PD-wiki`.
-- Treat `raw_sources/` as a local read-only mirror/snapshot layer.
-- Treat `wiki/`, `tables/`, `references/`, and `reports/` as generated project artifacts.
-- Treat `benchmarks/` as the Benchmark protocol, smoke-test planning, and future run-result interface layer.
+- Treat `sources/raw_snapshots/` as a local read-only mirror/snapshot layer.
+- Treat `kb/wiki/`, `kb/tables/`, `kb/references/`, `manuscript/`, and `ops/` as generated project artifacts.
+- Treat `benchmark/` as the Benchmark protocol, smoke-test planning, and future run-result interface layer.
 
 ## Language And Claims
 - Reader-facing prose is Chinese by default.
 - Preserve English method names, paper titles, Zotero item keys, BibTeX keys, URLs, model names, and command names.
 - Do not claim local reproducibility until a method has been installed and run in a later Benchmark phase.
 - Use `提示/支持/表明/仍需验证` rather than overclaiming when evidence is only metadata-level.
+- Keep `download_performed=no` until approved server execution.
+- Keep artificial example rows as `not_real_benchmark`.
+
+## Execution Gates
+
+metadata_ready -> source_pinned -> license_checked -> weights_manifested -> input_contract_ready -> dry_run_ready -> smoke_test_ready
 
 ## Update Order
 1. Refresh Zotero/API snapshots.
-2. Update `references/` and `tables/`.
-3. Regenerate `wiki/` cards and `_index.md` files.
-4. Update `reports/` and append `log.md`.
-5. Run `python scripts/validate_benchmark_kb.py`.
+2. Update `kb/references/` and `kb/tables/`.
+3. Regenerate `kb/wiki/` cards and `_index.md` files.
+4. Update `manuscript/`, `ops/`, and append `ops/log.md`.
+5. Run with `PYTHONUTF8=1`: `python scripts/validate_benchmark_kb.py`.
 """,
     )
     write_text(
@@ -1422,39 +1439,39 @@ This project is an independent Benchmark background knowledge base for recent pe
 - Project boundary: this folder is the working KB; Zotero/EndNote/PD-wiki remain source systems.
 
 ## Navigation
-- [Raw source snapshots](raw_sources/_index.md)
-- [References and search log](references/search_log.md)
-- [Literature cards](wiki/literature/_index.md)
-- [Method cards](wiki/methods/_index.md)
-- [Concept map](wiki/concepts/_index.md)
-- [Benchmark candidates](wiki/benchmark_candidates/_index.md)
-- [Candidate shortlist](reports/candidate_methods_shortlist.md)
-- [Literature scope report](reports/literature_scope_report.md)
-- [Benchmark literature lessons](reports/benchmark_literature_lessons.md)
-- [Benchmark protocol v0](benchmarks/protocols/benchmark_protocol_v0.md)
-- [run.csv schema](benchmarks/protocols/run_csv_schema.md)
-- [Target set schema](benchmarks/input_sets/target_set_v0_schema.md)
-- [Candidate benchmark datasets](benchmarks/input_sets/candidate_benchmark_datasets.csv)
-- [Dataset readiness scorecard](benchmarks/input_sets/dataset_readiness_scorecard.csv)
-- [Target candidate matrix v0.4](benchmarks/input_sets/target_candidate_matrix_v0.4.csv)
-- [Negative design panel schema](benchmarks/input_sets/negative_design_panel_schema.md)
-- [Scoring protocol v0](benchmarks/scoring/scoring_protocol_v0.md)
-- [Scoring output schema](benchmarks/protocols/scoring_outputs_schema.md)
-- [Method runnability audit](reports/method_runnability_audit.md)
-- [Dataset candidate audit](reports/dataset_candidate_audit.md)
-- [Method source audit](reports/method_source_audit.md)
-- [Source pin audit v0.4](benchmarks/method_sources/source_pin_audit_v0.4.csv)
-- [Environment feasibility audit](reports/environment_feasibility_audit.md)
-- [Expert panel review v0.4](reports/expert_panel_review_v0.4.md)
-- [Benchmark manuscript outline](reports/benchmark_manuscript_outline.md)
-- [Benchmark manuscript figure/table plan](reports/benchmark_manuscript_figure_table_plan.md)
+- [Raw source snapshots](sources/raw_snapshots/_index.md)
+- [References and search log](kb/references/search_log.md)
+- [Literature cards](kb/wiki/literature/_index.md)
+- [Method cards](kb/wiki/methods/_index.md)
+- [Concept map](kb/wiki/concepts/_index.md)
+- [Benchmark candidates](kb/wiki/benchmark_candidates/_index.md)
+- [Candidate shortlist](manuscript/support/candidate_methods_shortlist.md)
+- [Literature scope report](manuscript/support/literature_scope_report.md)
+- [Benchmark literature lessons](manuscript/support/benchmark_literature_lessons.md)
+- [Benchmark protocol v0](benchmark/protocols/benchmark_protocol_v0.md)
+- [run.csv schema](benchmark/protocols/run_csv_schema.md)
+- [Target set schema](benchmark/input_sets/target_set_v0_schema.md)
+- [Candidate benchmark datasets](benchmark/input_sets/candidate_benchmark_datasets.csv)
+- [Dataset readiness scorecard](benchmark/input_sets/dataset_readiness_scorecard.csv)
+- [Target candidate matrix v0.4](benchmark/input_sets/target_candidate_matrix_v0.4.csv)
+- [Negative design panel schema](benchmark/input_sets/negative_design_panel_schema.md)
+- [Scoring protocol v0](benchmark/scoring/scoring_protocol_v0.md)
+- [Scoring output schema](benchmark/protocols/scoring_outputs_schema.md)
+- [Method runnability audit](ops/audits/method_runnability_audit.md)
+- [Dataset candidate audit](ops/audits/dataset_candidate_audit.md)
+- [Method source audit](ops/audits/method_source_audit.md)
+- [Source pin audit v0.4](benchmark/method_sources/source_pin_audit_v0.4.csv)
+- [Environment feasibility audit](ops/audits/environment_feasibility_audit.md)
+- [Expert panel review v0.4](ops/audits/expert_panel_review_v0.4.md)
+- [Benchmark manuscript outline](manuscript/outlines/benchmark_manuscript_outline.md)
+- [Benchmark manuscript figure/table plan](manuscript/support/benchmark_manuscript_figure_table_plan.md)
 
 ## Next Phase
 The current next phase is v0.4 expert-panel and small-file readiness: use expert action items, dataset readiness, target candidates, and source pins to prepare v0.5 clean data sampling and no-weight smoke-test contracts without downloading large weights or running GPU benchmark tasks.
 """,
     )
     write_text(
-        "log.md",
+        "ops/log.md",
         f"""# Project Log
 
 ## [{BUILD_DATE}] release | v{PROJECT_VERSION}
@@ -1464,7 +1481,7 @@ The current next phase is v0.4 expert-panel and small-file readiness: use expert
 - Exclusions remain unchanged: no third-party source trees in git, no large data in git, no method installation, no model weights, no GPU runs, and no local reproducibility claims.
 
 ## [{BUILD_DATE}] protocol | Zotero benchmark literature revision
-- Added local Zotero benchmark/scoring/developability lessons in `reports/benchmark_literature_lessons.md` and `tables/benchmark_literature_lessons.csv`.
+- Added local Zotero benchmark/scoring/developability lessons in `manuscript/support/benchmark_literature_lessons.md` and `kb/tables/benchmark_literature_lessons.csv`.
 - Added target/control schema, negative-design panel schema, developability metrics, leakage/homology placeholders, and generation versus ranking/rescoring split.
 - Split candidate interpretation into `scientific_priority` and `engineering_readiness` while keeping `tier` only as a smoke-test scheduling shorthand.
 - Did not write Zotero items, modify EndNote/PD-wiki source layers, install methods, download weights, or run GPU tasks.
@@ -1480,9 +1497,9 @@ The current next phase is v0.4 expert-panel and small-file readiness: use expert
 - Preserved claim boundaries: no method is described as locally reproduced or superior before smoke tests.
 
 ## [{BUILD_DATE}] bootstrap | peptide design benchmark KB
-- Built independent raw/wiki/schema project structure under `E:\\Codex_Projects\\Pep_design`.
+- Built independent raw/kb/wiki/schema project structure under `E:\\Codex_Projects\\Pep_design`.
 - Read Zotero through local API only; no Zotero writes were performed.
-- Mirrored selected `PD-wiki` and `_kb` evidence files into `raw_sources/pd_wiki`.
+- Mirrored selected `PD-wiki` and `_kb` evidence files into `sources/raw_snapshots/pd_wiki`.
 - Generated literature manifest, method evidence matrix, candidate scorecard, method cards, concept pages, and reports.
 """,
     )
@@ -1503,7 +1520,7 @@ def write_source_paths() -> None:
 ## Rule
 This project stores snapshots and derived notes only. Do not move, delete, or rewrite raw EndNote/Zotero/PD-wiki files from this project workflow.
 """
-    write_text("raw_sources/endnote/source_paths.md", text)
+    write_text("sources/raw_snapshots/endnote/source_paths.md", text)
 
 
 def main() -> None:
@@ -1513,7 +1530,7 @@ def main() -> None:
     write_source_paths()
     write_external_search_log()
     write_url_status()
-    write_csv("tables/master_literature_manifest.csv", MASTER_HEADERS, rows)
+    write_csv("kb/tables/master_literature_manifest.csv", MASTER_HEADERS, rows)
     literature_cards = write_literature_cards(rows)
     write_concepts()
     evidence_rows, score_rows = write_method_outputs(rows)
@@ -1529,7 +1546,7 @@ def main() -> None:
         "included_candidates": sum(1 for row in score_rows if row["decision"] == "include"),
         "pd_wiki_imported_files": len(imported),
     }
-    write_json("reports/build_summary.json", summary)
+    write_json("ops/build_summary.json", summary)
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 
 

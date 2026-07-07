@@ -484,104 +484,286 @@ METHOD_LANDSCAPE_PATCH_HEADERS = [
     "next_action",
 ]
 
+GRANT_REVIEW_ACTION_HEADERS = [
+    "review_panel",
+    "criterion",
+    "score",
+    "severity",
+    "artifact",
+    "issue",
+    "recommendation",
+    "decision",
+    "status",
+    "evidence",
+    "next_action",
+    "gate",
+]
+
+PREFLIGHT_DOWNLOAD_APPROVAL_HEADERS = [
+    "artifact_id",
+    "artifact_type",
+    "method_or_dataset",
+    "source_url",
+    "version_or_commit",
+    "license_status",
+    "expected_size",
+    "checksum_policy",
+    "external_destination",
+    "approval_required",
+    "approved_by",
+    "download_performed",
+    "next_gate",
+    "next_action",
+]
+
+METHOD_PREFLIGHT_STATUS_HEADERS = [
+    "method",
+    "batch",
+    "current_gate",
+    "max_allowed_gate",
+    "preflight_status",
+    "license_status",
+    "source_status",
+    "weights_or_checkpoint_status",
+    "input_contract_status",
+    "environment_status",
+    "external_roots",
+    "blocking_items",
+    "next_action",
+]
+
+MIGRATION_FILE_ROLE_HEADERS = [
+    "old_path",
+    "new_path",
+    "role",
+    "migration_reason",
+    "validator_required",
+]
+
+JOB_MANIFEST_HEADERS = [
+    "job_id",
+    "method",
+    "task_id",
+    "target_id",
+    "input_mode",
+    "target_sequence",
+    "target_pdb",
+    "target_chains",
+    "binder_chain",
+    "pocket_definition",
+    "peptide_type",
+    "chirality",
+    "cyclic",
+    "n_designs_requested",
+    "random_seed",
+    "adapter_config",
+    "status",
+    "notes",
+]
+
+METHOD_OUTPUT_MANIFEST_HEADERS = [
+    "run_record_id",
+    "job_id",
+    "method",
+    "task_id",
+    "execution_stage",
+    "source_commit",
+    "model_revision",
+    "environment_id",
+    "command",
+    "raw_output_root",
+    "stdout_log",
+    "stderr_log",
+    "runtime_seconds",
+    "exit_code",
+    "parser_status",
+    "status_reason",
+    "created_at",
+]
+
+CANDIDATE_OUTPUT_HEADERS = [
+    "design_id",
+    "job_id",
+    "method",
+    "target_id",
+    "binder_id",
+    "source_output_id",
+    "generation_rank",
+    "sequence",
+    "structure_path",
+    "peptide_type",
+    "chirality",
+    "cyclic",
+    "parse_status",
+    "status_reason",
+    "notes",
+]
+
+SOURCE_FRESHNESS_HEADERS = [
+    "record_id",
+    "method_or_artifact",
+    "artifact_type",
+    "primary_paper",
+    "doi_or_identifier",
+    "official_metadata_sources",
+    "code_route",
+    "model_or_data_route",
+    "license_route",
+    "freshness_check_status",
+    "download_allowed",
+    "next_action",
+]
+
+SOURCE_CLONE_HEADERS = [
+    "method",
+    "repo_name",
+    "repo_url",
+    "default_branch",
+    "pinned_commit",
+    "external_clone_path",
+    "clone_performed",
+    "checkout_status",
+    "observed_head",
+    "license_files",
+    "environment_files",
+    "submodule_status",
+    "lfs_pointer_status",
+    "next_gate",
+    "notes",
+]
+
+ADAPTER_PREFLIGHT_HEADERS = [
+    "method",
+    "batch",
+    "adapter_gate",
+    "job_manifest_status",
+    "input_adapter_status",
+    "output_parser_status",
+    "expected_raw_outputs",
+    "allowed_test_depth",
+    "blocking_items",
+    "next_action",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
-    "log.md",
-    "benchmarks/README.md",
-    "benchmarks/availability/README.md",
-    "benchmarks/availability/link_availability_matrix_v0.5.csv",
-    "benchmarks/availability/data_access_manifest_v0.5.csv",
-    "benchmarks/protocols/benchmark_protocol_v0.md",
-    "benchmarks/protocols/run_csv_schema.md",
-    "benchmarks/protocols/scoring_outputs_schema.md",
-    "benchmarks/scoring/scoring_protocol_v0.md",
-    "benchmarks/smoke_tests/README.md",
-    "benchmarks/input_sets/README.md",
-    "benchmarks/input_sets/candidate_benchmark_datasets.csv",
-    "benchmarks/input_sets/dataset_readiness_scorecard.csv",
-    "benchmarks/input_sets/target_candidate_matrix_v0.4.csv",
-    "benchmarks/input_sets/target_candidate_matrix_v0.5.csv",
-    "benchmarks/input_sets/dataset_supplement_watchlist_v0.6.csv",
-    "benchmarks/input_sets/dataset_supplement_schema_review_v0.7.csv",
-    "benchmarks/input_sets/dataset_supplement_schema_review_v0.8.csv",
-    "benchmarks/input_sets/example_run.csv",
-    "benchmarks/input_sets/target_set_v0.csv",
-    "benchmarks/input_sets/target_set_v0_schema.md",
-    "benchmarks/input_sets/negative_design_panel_schema.md",
-    "benchmarks/method_sources/README.md",
-    "benchmarks/method_sources/method_source_manifest.csv",
-    "benchmarks/method_sources/source_pin_audit_v0.4.csv",
-    "benchmarks/method_sources/source_pin_audit_v0.5.csv",
-    "benchmarks/deployment/server_readiness_checklist_v0.5.md",
-    "benchmarks/deployment/server_smoke_test_contract_v0.6.md",
-    "benchmarks/deployment/download_manifest_template_v0.7.csv",
-    "benchmarks/deployment/download_manifest_v0.8.csv",
-    "benchmarks/deployment/method_readiness_review_v0.8.csv",
-    "benchmarks/deployment/method_contracts/pepmlm_server_contract_v0.7.md",
-    "benchmarks/deployment/method_contracts/rfdiffusion_proteinmpnn_server_contract_v0.7.md",
-    "benchmarks/deployment/method_contracts/pepmirror_dependency_contract_v0.7.md",
-    "benchmarks/environments/README.md",
-    "benchmarks/environments/environment_feasibility_matrix.csv",
-    "benchmarks/results/README.md",
-    "raw_sources/_index.md",
-    "references/references.bib",
-    "references/zotero-map.tsv",
-    "references/search_log.md",
-    "references/dedupe_report.csv",
-    "tables/master_literature_manifest.csv",
-    "tables/method_evidence_matrix.csv",
-    "tables/candidate_method_scorecard.csv",
-    "tables/method_runnability_matrix.csv",
-    "tables/benchmark_literature_lessons.csv",
-    "tables/expert_review_action_items.csv",
-    "tables/ars_review_action_items_v0.6.csv",
-    "reports/skill_selection.md",
-    "reports/literature_scope_report.md",
-    "reports/candidate_methods_shortlist.md",
-    "reports/method_runnability_audit.md",
-    "reports/dataset_candidate_audit.md",
-    "reports/method_source_audit.md",
-    "reports/environment_feasibility_audit.md",
-    "reports/expert_panel_review_v0.4.md",
-    "reports/link_and_data_availability_audit_v0.5.md",
-    "reports/academic_research_suite_review_v0.6.md",
-    "reports/updated_plan_v0.6.md",
-    "reports/updated_plan_v0.9.md",
-    "reports/license_schema_input_contract_review_v0.8.md",
-    "reports/supervisor_skills_idea_evaluation.md",
-    "reports/benchmark_template_audit.md",
-    "reports/benchmark_intro_logic_chain.md",
-    "reports/review_draft_benchmark_reference_value.md",
-    "reports/review_synthesis_benchmark_framework_supplement.md",
-    "reports/benchmark_literature_lessons.md",
-    "reports/benchmark_manuscript_outline.md",
-    "reports/benchmark_manuscript_outline_zh_v1.md",
-    "reports/benchmark_manuscript_outline_en_v1.md",
-    "reports/assets/figures/benchmark_figure1_overview_v1.png",
-    "reports/assets/figures/benchmark_figure2_task_method_matrix_v1.png",
-    "reports/assets/figures/benchmark_figure3_dual_track_v1.png",
-    "reports/assets/figures/benchmark_figure4_scoring_architecture_v1.png",
-    "reports/assets/figures/imagegen_prompt_record_v1.md",
-    "reports/benchmark_manuscript_sync_map_v1.csv",
-    "reports/benchmark_test_design_v1.md",
-    "reports/benchmark_reference_bibliography_v1.md",
-    "reports/benchmark_manuscript_todo_v1.csv",
-    "reports/benchmark_manuscript_claim_evidence_map.csv",
-    "reports/benchmark_manuscript_figure_table_plan.md",
-    "reports/supplementary_materials_reference_value_v1.1.md",
-    "reports/short_peptide_scoring_rationale_v1.1.md",
-    "reports/cyclic_peptide_benchmark_supplement_v1.1.md",
-    "tables/candidate_method_classification_v1.csv",
-    "tables/supplementary_materials_action_matrix_v1.1.csv",
-    "tables/scoring_metric_rationale_matrix_v1.1.csv",
-    "tables/method_landscape_patch_candidates_v1.1.csv",
-    "benchmarks/input_sets/reference_dataset_sources_v1.csv",
-    "benchmarks/method_sources/method_landscape_watchlist_v0.9.csv",
-    "wiki/literature/_index.md",
-    "wiki/methods/_index.md",
-    "wiki/concepts/_index.md",
-    "wiki/benchmark_candidates/_index.md",
+    "ops/log.md",
+    "benchmark/README.md",
+    "benchmark/availability/README.md",
+    "benchmark/availability/link_availability_matrix_v0.5.csv",
+    "benchmark/availability/data_access_manifest_v0.5.csv",
+    "benchmark/protocols/benchmark_protocol_v0.md",
+    "benchmark/protocols/run_csv_schema.md",
+    "benchmark/protocols/scoring_outputs_schema.md",
+    "benchmark/protocols/job_manifest_schema_v0.11.md",
+    "benchmark/protocols/adapter_output_schema_v0.11.md",
+    "benchmark/scoring/scoring_protocol_v0.md",
+    "benchmark/smoke_tests/README.md",
+    "benchmark/input_sets/README.md",
+    "benchmark/input_sets/candidate_benchmark_datasets.csv",
+    "benchmark/input_sets/dataset_readiness_scorecard.csv",
+    "benchmark/input_sets/target_candidate_matrix_v0.4.csv",
+    "benchmark/input_sets/target_candidate_matrix_v0.5.csv",
+    "benchmark/input_sets/dataset_supplement_watchlist_v0.6.csv",
+    "benchmark/input_sets/dataset_supplement_schema_review_v0.7.csv",
+    "benchmark/input_sets/dataset_supplement_schema_review_v0.8.csv",
+    "benchmark/input_sets/example_run.csv",
+    "benchmark/input_sets/example_job_manifest_v0.11.csv",
+    "benchmark/input_sets/target_set_v0.csv",
+    "benchmark/input_sets/target_set_v0_schema.md",
+    "benchmark/input_sets/target_control_freeze_checklist_v0.10.md",
+    "benchmark/input_sets/negative_design_panel_schema.md",
+    "benchmark/method_sources/README.md",
+    "benchmark/method_sources/method_source_manifest.csv",
+    "benchmark/method_sources/source_pin_audit_v0.4.csv",
+    "benchmark/method_sources/source_pin_audit_v0.5.csv",
+    "benchmark/deployment/server_readiness_checklist_v0.5.md",
+    "benchmark/deployment/server_smoke_test_contract_v0.6.md",
+    "benchmark/deployment/download_manifest_template_v0.7.csv",
+    "benchmark/deployment/download_manifest_v0.8.csv",
+    "benchmark/deployment/preflight_download_approval_v0.10.csv",
+    "benchmark/deployment/source_freshness_manifest_v0.11.csv",
+    "benchmark/deployment/source_clone_manifest_v0.12.csv",
+    "benchmark/deployment/method_readiness_review_v0.8.csv",
+    "benchmark/deployment/method_preflight_status_v0.10.csv",
+    "benchmark/deployment/adapter_preflight_status_v0.11.csv",
+    "benchmark/deployment/method_contracts/pepmlm_server_contract_v0.7.md",
+    "benchmark/deployment/method_contracts/rfdiffusion_proteinmpnn_server_contract_v0.7.md",
+    "benchmark/deployment/method_contracts/pepmirror_dependency_contract_v0.7.md",
+    "benchmark/deployment/method_contracts/batch_a_adapter_contract_v0.11.md",
+    "benchmark/environments/README.md",
+    "benchmark/environments/environment_feasibility_matrix.csv",
+    "benchmark/results/README.md",
+    "benchmark/results/example_method_output_manifest_v0.11.csv",
+    "benchmark/results/example_candidate_outputs_v0.11.csv",
+    "sources/raw_snapshots/_index.md",
+    "kb/references/references.bib",
+    "kb/references/zotero-map.tsv",
+    "kb/references/search_log.md",
+    "kb/references/dedupe_report.csv",
+    "kb/tables/master_literature_manifest.csv",
+    "kb/tables/method_evidence_matrix.csv",
+    "kb/tables/candidate_method_scorecard.csv",
+    "kb/tables/method_runnability_matrix.csv",
+    "kb/tables/benchmark_literature_lessons.csv",
+    "kb/tables/expert_review_action_items.csv",
+    "kb/tables/ars_review_action_items_v0.6.csv",
+    "ops/audits/skill_selection.md",
+    "manuscript/support/literature_scope_report.md",
+    "manuscript/support/candidate_methods_shortlist.md",
+    "ops/audits/method_runnability_audit.md",
+    "ops/audits/dataset_candidate_audit.md",
+    "ops/audits/method_source_audit.md",
+    "ops/audits/environment_feasibility_audit.md",
+    "ops/audits/expert_panel_review_v0.4.md",
+    "ops/audits/link_and_data_availability_audit_v0.5.md",
+    "ops/audits/academic_research_suite_review_v0.6.md",
+    "ops/audits/source_code_clone_audit_v0.12.md",
+    "ops/plans/updated_plan_v0.6.md",
+    "ops/plans/updated_plan_v0.9.md",
+    "ops/plans/updated_plan_v1.3.md",
+    "ops/plans/server_preflight_plan_v0.10.md",
+    "ops/plans/server_from_scratch_run_plan_v0.10.md",
+    "ops/plans/source_io_smoke_test_plan_v0.11.md",
+    "ops/migration/file_role_map_v0.10.csv",
+    "ops/audits/license_schema_input_contract_review_v0.8.md",
+    "ops/audits/supervisor_skills_idea_evaluation.md",
+    "manuscript/support/benchmark_template_audit.md",
+    "manuscript/support/benchmark_intro_logic_chain.md",
+    "manuscript/support/review_draft_benchmark_reference_value.md",
+    "manuscript/support/review_synthesis_benchmark_framework_supplement.md",
+    "ops/audits/grant_style_mock_review_v1.3.md",
+    "manuscript/support/benchmark_literature_lessons.md",
+    "manuscript/outlines/benchmark_manuscript_outline.md",
+    "manuscript/outlines/benchmark_manuscript_outline_zh_v1.md",
+    "manuscript/outlines/benchmark_manuscript_outline_en_v1.md",
+    "manuscript/assets/figures/benchmark_figure1_overview_v1.png",
+    "manuscript/assets/figures/benchmark_figure2_task_method_matrix_v1.png",
+    "manuscript/assets/figures/benchmark_figure3_dual_track_v1.png",
+    "manuscript/assets/figures/benchmark_figure4_scoring_architecture_v1.png",
+    "manuscript/assets/figures/imagegen_prompt_record_v1.md",
+    "manuscript/assets/figures/manuscript_figure_imagegen_qc_v2.md",
+    "manuscript/support/benchmark_manuscript_sync_map_v1.csv",
+    "manuscript/support/benchmark_test_design_v1.md",
+    "manuscript/support/benchmark_reference_bibliography_v1.md",
+    "manuscript/support/benchmark_manuscript_todo_v1.csv",
+    "manuscript/support/benchmark_manuscript_claim_evidence_map.csv",
+    "manuscript/support/benchmark_manuscript_figure_table_plan.md",
+    "manuscript/support/supplementary_materials_reference_value_v1.1.md",
+    "manuscript/support/short_peptide_scoring_rationale_v1.1.md",
+    "manuscript/support/cyclic_peptide_benchmark_supplement_v1.1.md",
+    "kb/tables/candidate_method_classification_v1.csv",
+    "kb/tables/supplementary_materials_action_matrix_v1.1.csv",
+    "kb/tables/scoring_metric_rationale_matrix_v1.1.csv",
+    "kb/tables/method_landscape_patch_candidates_v1.1.csv",
+    "kb/tables/grant_review_action_items_v1.3.csv",
+    "benchmark/input_sets/reference_dataset_sources_v1.csv",
+    "benchmark/method_sources/method_landscape_watchlist_v0.9.csv",
+    "kb/wiki/literature/_index.md",
+    "kb/wiki/methods/_index.md",
+    "kb/wiki/concepts/_index.md",
+    "kb/wiki/benchmark_candidates/_index.md",
 ]
 
 METHOD_REQUIRED_TOKENS = [
@@ -605,6 +787,9 @@ REQUIRED_PROTOCOL_TASKS = [
 ]
 
 REQUIRED_SCORING_OUTPUTS = [
+    "job_manifest.csv",
+    "method_output_manifest.csv",
+    "candidate_outputs.csv",
     "run.csv",
     "confidence_metrics.csv",
     "interface_metrics.csv",
@@ -653,7 +838,7 @@ FORBIDDEN_TRACKED_SUFFIXES = {
 }
 
 ALLOWED_LARGE_TRACKED_FILES = {
-    "raw_sources/zotero/seed_items_by_collection.json",
+    "sources/raw_snapshots/zotero/seed_items_by_collection.json",
 }
 
 
@@ -676,7 +861,7 @@ def check_markdown_links(errors: list[str]) -> int:
     link_pattern = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
     for path in ROOT.rglob("*.md"):
         rel_path = path.relative_to(ROOT)
-        if rel_path.parts and rel_path.parts[0] == "raw_sources":
+        if len(rel_path.parts) >= 2 and rel_path.parts[:2] == ("sources", "raw_snapshots"):
             continue
         text = path.read_text(encoding="utf-8")
         for link in link_pattern.findall(text):
@@ -761,7 +946,7 @@ def main() -> int:
 
     if errors:
         result = {"status": "fail", "errors": errors, "warnings": warnings}
-        (ROOT / "reports/wiki_validation_report.md").write_text(
+        (ROOT / "ops/validation/wiki_validation_report.md").write_text(
             "# Wiki Validation Report\n\n```json\n"
             + json.dumps(result, ensure_ascii=False, indent=2)
             + "\n```\n",
@@ -772,7 +957,7 @@ def main() -> int:
 
     agents_text = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
     for token in [
-        "reports/updated_plan_v0.9.md",
+        "ops/plans/updated_plan_v0.9.md",
         "Skill Routing",
         "building-llm-wiki",
         "academic-research-suite",
@@ -786,153 +971,203 @@ def main() -> int:
         if token not in agents_text:
             errors.append(f"AGENTS.md missing required local operating token {token}")
 
-    master_rows = check_headers(errors, "tables/master_literature_manifest.csv", MASTER_HEADERS)
-    evidence_rows = check_headers(errors, "tables/method_evidence_matrix.csv", EVIDENCE_HEADERS)
-    score_rows = check_headers(errors, "tables/candidate_method_scorecard.csv", SCORE_HEADERS)
-    runnability_rows = check_headers(errors, "tables/method_runnability_matrix.csv", RUNNABILITY_HEADERS)
+    master_rows = check_headers(errors, "kb/tables/master_literature_manifest.csv", MASTER_HEADERS)
+    evidence_rows = check_headers(errors, "kb/tables/method_evidence_matrix.csv", EVIDENCE_HEADERS)
+    score_rows = check_headers(errors, "kb/tables/candidate_method_scorecard.csv", SCORE_HEADERS)
+    runnability_rows = check_headers(errors, "kb/tables/method_runnability_matrix.csv", RUNNABILITY_HEADERS)
     benchmark_lesson_rows = check_headers(
         errors,
-        "tables/benchmark_literature_lessons.csv",
+        "kb/tables/benchmark_literature_lessons.csv",
         BENCHMARK_LITERATURE_HEADERS,
     )
-    target_set_rows = check_headers(errors, "benchmarks/input_sets/target_set_v0.csv", TARGET_SET_HEADERS)
+    target_set_rows = check_headers(errors, "benchmark/input_sets/target_set_v0.csv", TARGET_SET_HEADERS)
     dataset_candidate_rows = check_headers(
         errors,
-        "benchmarks/input_sets/candidate_benchmark_datasets.csv",
+        "benchmark/input_sets/candidate_benchmark_datasets.csv",
         DATASET_CANDIDATE_HEADERS,
     )
     method_source_rows = check_headers(
         errors,
-        "benchmarks/method_sources/method_source_manifest.csv",
+        "benchmark/method_sources/method_source_manifest.csv",
         METHOD_SOURCE_HEADERS,
     )
     environment_rows = check_headers(
         errors,
-        "benchmarks/environments/environment_feasibility_matrix.csv",
+        "benchmark/environments/environment_feasibility_matrix.csv",
         ENVIRONMENT_HEADERS,
     )
-    expert_review_rows = check_headers(errors, "tables/expert_review_action_items.csv", EXPERT_REVIEW_HEADERS)
+    expert_review_rows = check_headers(errors, "kb/tables/expert_review_action_items.csv", EXPERT_REVIEW_HEADERS)
     dataset_readiness_rows = check_headers(
         errors,
-        "benchmarks/input_sets/dataset_readiness_scorecard.csv",
+        "benchmark/input_sets/dataset_readiness_scorecard.csv",
         DATASET_READINESS_HEADERS,
     )
     target_candidate_rows = check_headers(
         errors,
-        "benchmarks/input_sets/target_candidate_matrix_v0.4.csv",
+        "benchmark/input_sets/target_candidate_matrix_v0.4.csv",
         TARGET_CANDIDATE_HEADERS,
     )
     target_candidate_v05_rows = check_headers(
         errors,
-        "benchmarks/input_sets/target_candidate_matrix_v0.5.csv",
+        "benchmark/input_sets/target_candidate_matrix_v0.5.csv",
         TARGET_CANDIDATE_HEADERS,
     )
     source_pin_rows = check_headers(
         errors,
-        "benchmarks/method_sources/source_pin_audit_v0.4.csv",
+        "benchmark/method_sources/source_pin_audit_v0.4.csv",
         SOURCE_PIN_HEADERS,
     )
     source_pin_v05_rows = check_headers(
         errors,
-        "benchmarks/method_sources/source_pin_audit_v0.5.csv",
+        "benchmark/method_sources/source_pin_audit_v0.5.csv",
         SOURCE_PIN_HEADERS,
     )
     link_availability_rows = check_headers(
         errors,
-        "benchmarks/availability/link_availability_matrix_v0.5.csv",
+        "benchmark/availability/link_availability_matrix_v0.5.csv",
         LINK_AVAILABILITY_HEADERS,
     )
     data_access_rows = check_headers(
         errors,
-        "benchmarks/availability/data_access_manifest_v0.5.csv",
+        "benchmark/availability/data_access_manifest_v0.5.csv",
         DATA_ACCESS_HEADERS,
     )
     ars_action_rows = check_headers(
         errors,
-        "tables/ars_review_action_items_v0.6.csv",
+        "kb/tables/ars_review_action_items_v0.6.csv",
         ARS_REVIEW_ACTION_HEADERS,
     )
     dataset_watchlist_rows = check_headers(
         errors,
-        "benchmarks/input_sets/dataset_supplement_watchlist_v0.6.csv",
+        "benchmark/input_sets/dataset_supplement_watchlist_v0.6.csv",
         DATASET_SUPPLEMENT_WATCHLIST_HEADERS,
     )
     example_run_rows = check_headers(
         errors,
-        "benchmarks/input_sets/example_run.csv",
+        "benchmark/input_sets/example_run.csv",
         RUN_CSV_HEADERS,
+    )
+    example_job_manifest_rows = check_headers(
+        errors,
+        "benchmark/input_sets/example_job_manifest_v0.11.csv",
+        JOB_MANIFEST_HEADERS,
     )
     download_manifest_rows = check_headers(
         errors,
-        "benchmarks/deployment/download_manifest_template_v0.7.csv",
+        "benchmark/deployment/download_manifest_template_v0.7.csv",
         DOWNLOAD_MANIFEST_HEADERS,
     )
     dataset_schema_review_rows = check_headers(
         errors,
-        "benchmarks/input_sets/dataset_supplement_schema_review_v0.7.csv",
+        "benchmark/input_sets/dataset_supplement_schema_review_v0.7.csv",
         DATASET_SCHEMA_REVIEW_HEADERS,
     )
     dataset_schema_review_v08_rows = check_headers(
         errors,
-        "benchmarks/input_sets/dataset_supplement_schema_review_v0.8.csv",
+        "benchmark/input_sets/dataset_supplement_schema_review_v0.8.csv",
         DATASET_SCHEMA_REVIEW_V08_HEADERS,
     )
     download_manifest_v08_rows = check_headers(
         errors,
-        "benchmarks/deployment/download_manifest_v0.8.csv",
+        "benchmark/deployment/download_manifest_v0.8.csv",
         DOWNLOAD_MANIFEST_HEADERS,
+    )
+    preflight_download_rows = check_headers(
+        errors,
+        "benchmark/deployment/preflight_download_approval_v0.10.csv",
+        PREFLIGHT_DOWNLOAD_APPROVAL_HEADERS,
+    )
+    source_freshness_rows = check_headers(
+        errors,
+        "benchmark/deployment/source_freshness_manifest_v0.11.csv",
+        SOURCE_FRESHNESS_HEADERS,
+    )
+    source_clone_rows = check_headers(
+        errors,
+        "benchmark/deployment/source_clone_manifest_v0.12.csv",
+        SOURCE_CLONE_HEADERS,
     )
     method_readiness_v08_rows = check_headers(
         errors,
-        "benchmarks/deployment/method_readiness_review_v0.8.csv",
+        "benchmark/deployment/method_readiness_review_v0.8.csv",
         METHOD_READINESS_REVIEW_HEADERS,
+    )
+    method_preflight_rows = check_headers(
+        errors,
+        "benchmark/deployment/method_preflight_status_v0.10.csv",
+        METHOD_PREFLIGHT_STATUS_HEADERS,
+    )
+    adapter_preflight_rows = check_headers(
+        errors,
+        "benchmark/deployment/adapter_preflight_status_v0.11.csv",
+        ADAPTER_PREFLIGHT_HEADERS,
     )
     method_landscape_rows = check_headers(
         errors,
-        "benchmarks/method_sources/method_landscape_watchlist_v0.9.csv",
+        "benchmark/method_sources/method_landscape_watchlist_v0.9.csv",
         METHOD_LANDSCAPE_HEADERS,
     )
     manuscript_sync_rows = check_headers(
         errors,
-        "reports/benchmark_manuscript_sync_map_v1.csv",
+        "manuscript/support/benchmark_manuscript_sync_map_v1.csv",
         BILINGUAL_SYNC_HEADERS,
     )
     method_classification_rows = check_headers(
         errors,
-        "tables/candidate_method_classification_v1.csv",
+        "kb/tables/candidate_method_classification_v1.csv",
         METHOD_CLASSIFICATION_HEADERS,
     )
     reference_dataset_source_rows = check_headers(
         errors,
-        "benchmarks/input_sets/reference_dataset_sources_v1.csv",
+        "benchmark/input_sets/reference_dataset_sources_v1.csv",
         REFERENCE_DATASET_SOURCE_HEADERS,
     )
     manuscript_todo_rows = check_headers(
         errors,
-        "reports/benchmark_manuscript_todo_v1.csv",
+        "manuscript/support/benchmark_manuscript_todo_v1.csv",
         MANUSCRIPT_TODO_HEADERS,
     )
     manuscript_claim_rows = check_headers(
         errors,
-        "reports/benchmark_manuscript_claim_evidence_map.csv",
+        "manuscript/support/benchmark_manuscript_claim_evidence_map.csv",
         MANUSCRIPT_CLAIM_HEADERS,
     )
     supplementary_material_rows = check_headers(
         errors,
-        "tables/supplementary_materials_action_matrix_v1.1.csv",
+        "kb/tables/supplementary_materials_action_matrix_v1.1.csv",
         SUPPLEMENTARY_MATERIAL_HEADERS,
     )
     scoring_rationale_rows = check_headers(
         errors,
-        "tables/scoring_metric_rationale_matrix_v1.1.csv",
+        "kb/tables/scoring_metric_rationale_matrix_v1.1.csv",
         SCORING_RATIONALE_HEADERS,
     )
     method_landscape_patch_rows = check_headers(
         errors,
-        "tables/method_landscape_patch_candidates_v1.1.csv",
+        "kb/tables/method_landscape_patch_candidates_v1.1.csv",
         METHOD_LANDSCAPE_PATCH_HEADERS,
     )
-    _map_rows = check_headers(errors, "references/zotero-map.tsv", ["zotero_key", "bibtex_key", "title"], delimiter="\t")
+    grant_review_action_rows = check_headers(
+        errors,
+        "kb/tables/grant_review_action_items_v1.3.csv",
+        GRANT_REVIEW_ACTION_HEADERS,
+    )
+    migration_rows = check_headers(
+        errors,
+        "ops/migration/file_role_map_v0.10.csv",
+        MIGRATION_FILE_ROLE_HEADERS,
+    )
+    method_output_manifest_rows = check_headers(
+        errors,
+        "benchmark/results/example_method_output_manifest_v0.11.csv",
+        METHOD_OUTPUT_MANIFEST_HEADERS,
+    )
+    candidate_output_rows = check_headers(
+        errors,
+        "benchmark/results/example_candidate_outputs_v0.11.csv",
+        CANDIDATE_OUTPUT_HEADERS,
+    )
+    _map_rows = check_headers(errors, "kb/references/zotero-map.tsv", ["zotero_key", "bibtex_key", "title"], delimiter="\t")
 
     included_master = [row for row in master_rows if row.get("screening_status") == "included"]
     for row in included_master:
@@ -969,7 +1204,7 @@ def main() -> int:
             if not runnability.get(required_field):
                 errors.append(f"{method}: runnability row missing {required_field}")
 
-        smoke_path = ROOT / "benchmarks/smoke_tests" / method_slug(method) / "README.md"
+        smoke_path = ROOT / "benchmark/smoke_tests" / method_slug(method) / "README.md"
         if not smoke_path.exists():
             errors.append(f"{method}: missing smoke-test README at {smoke_path.relative_to(ROOT)}")
 
@@ -1195,7 +1430,7 @@ def main() -> int:
         if not row.get("decision"):
             errors.append(f"{row.get('candidate_id')}: missing v0.5 target candidate decision")
 
-    deployment_text = (ROOT / "benchmarks/deployment/server_readiness_checklist_v0.5.md").read_text(
+    deployment_text = (ROOT / "benchmark/deployment/server_readiness_checklist_v0.5.md").read_text(
         encoding="utf-8"
     )
     for token in ["Linux CUDA Conda", "External source root", "External data root", "PyRosetta", "不下载数据", "不得纳入本仓库 git"]:
@@ -1254,7 +1489,7 @@ def main() -> int:
         if "frozen" in decision or "ready_for_benchmark" in decision:
             errors.append(f"{row.get('candidate_id')}: watchlist decision must not imply frozen benchmark readiness")
 
-    server_contract = (ROOT / "benchmarks/deployment/server_smoke_test_contract_v0.6.md").read_text(
+    server_contract = (ROOT / "benchmark/deployment/server_smoke_test_contract_v0.6.md").read_text(
         encoding="utf-8"
     )
     for token in required_gates:
@@ -1264,13 +1499,13 @@ def main() -> int:
         if forbidden not in server_contract:
             errors.append(f"server_smoke_test_contract_v0.6.md missing forbidden wording guard {forbidden}")
 
-    ars_review_text = (ROOT / "reports/academic_research_suite_review_v0.6.md").read_text(
+    ars_review_text = (ROOT / "ops/audits/academic_research_suite_review_v0.6.md").read_text(
         encoding="utf-8"
     )
     for token in ["Material Passport", "Major Revision Before Execution", "Devil's Advocate Review", "Web Refresh Notes"]:
         if token not in ars_review_text:
             errors.append(f"academic_research_suite_review_v0.6.md missing required section {token}")
-    updated_plan_text = (ROOT / "reports/updated_plan_v0.6.md").read_text(encoding="utf-8")
+    updated_plan_text = (ROOT / "ops/plans/updated_plan_v0.6.md").read_text(encoding="utf-8")
     for token in ["Revised Execution Gates", "Updated Dataset Policy", "Updated Method Policy", "Out Of Scope"]:
         if token not in updated_plan_text:
             errors.append(f"updated_plan_v0.6.md missing required section {token}")
@@ -1286,6 +1521,20 @@ def main() -> int:
             errors.append(f"{row.get('design_id')}: example_run target_id must remain placeholder")
         if "not a benchmark" not in row.get("notes", "").lower() and "not_real" not in row.get("notes", "").lower():
             errors.append(f"{row.get('design_id')}: example_run notes must state it is not benchmark evidence")
+
+    if len(example_job_manifest_rows) < 2:
+        errors.append("example_job_manifest_v0.11.csv should contain placeholder jobs for Batch A")
+    for row in example_job_manifest_rows:
+        if row.get("status") != "not_real_benchmark":
+            errors.append(f"{row.get('job_id')}: example job manifest status must be not_real_benchmark")
+        if row.get("method") not in {"PepMLM", "RFdiffusion + ProteinMPNN"}:
+            errors.append(f"{row.get('job_id')}: example job manifest should only cover Batch A methods")
+        if row.get("task_id") not in {"T1_sequence_binder", "T3_miniprotein_binder_baseline"}:
+            errors.append(f"{row.get('job_id')}: invalid Batch A task_id {row.get('task_id')}")
+        if "placeholder" not in row.get("target_id", "").lower():
+            errors.append(f"{row.get('job_id')}: example job target_id must remain placeholder")
+        if "not a benchmark" not in row.get("notes", "").lower() and "placeholder" not in row.get("notes", "").lower():
+            errors.append(f"{row.get('job_id')}: example job notes must state placeholder/non-benchmark status")
 
     if not download_manifest_rows:
         errors.append("download_manifest_template_v0.7.csv should contain a placeholder row")
@@ -1385,7 +1634,7 @@ def main() -> int:
             if not row.get(required_field):
                 errors.append(f"{row.get('method')}: v0.9 method landscape row missing {required_field}")
 
-    current_plan_text = (ROOT / "reports/updated_plan_v0.9.md").read_text(encoding="utf-8")
+    current_plan_text = (ROOT / "ops/plans/updated_plan_v0.9.md").read_text(encoding="utf-8")
     for token in ["Current Authoritative Plan Files", "Benchmark Paper Template", "v0.9 Method Landscape Policy", "Next Work Package", "Claim Gate"]:
         if token not in current_plan_text:
             errors.append(f"updated_plan_v0.9.md missing required section {token}")
@@ -1393,31 +1642,31 @@ def main() -> int:
         if forbidden in current_plan_text:
             errors.append(f"updated_plan_v0.9.md contains overclaim boundary violation: {forbidden}")
 
-    benchmark_template_text = (ROOT / "reports/benchmark_template_audit.md").read_text(encoding="utf-8")
+    benchmark_template_text = (ROOT / "manuscript/support/benchmark_template_audit.md").read_text(encoding="utf-8")
     for token in ["Five-Pillar Completeness Table", "Introduction Six-Part Logic Chain", "Pre-Submission Self-Check", "NOT READY"]:
         if token not in benchmark_template_text:
             errors.append(f"benchmark_template_audit.md missing Benchmark template token {token}")
-    intro_logic_text = (ROOT / "reports/benchmark_intro_logic_chain.md").read_text(encoding="utf-8")
+    intro_logic_text = (ROOT / "manuscript/support/benchmark_intro_logic_chain.md").read_text(encoding="utf-8")
     for token in ["Background + Running Example", "Existing-Benchmark Limitations", "Research Questions", "Design Considerations", "Our Proposal", "Contributions"]:
         if token not in intro_logic_text:
             errors.append(f"benchmark_intro_logic_chain.md missing six-part Introduction token {token}")
-    review_synthesis_text = (ROOT / "reports/review_synthesis_benchmark_framework_supplement.md").read_text(
+    review_synthesis_text = (ROOT / "manuscript/support/review_synthesis_benchmark_framework_supplement.md").read_text(
         encoding="utf-8"
     )
     for token in ["生成范式分类轴", "方法覆盖图与缺口", "PepMimic ≠ PepMirror", "PPFlow ≠ PepFlow", "Claim Boundary"]:
         if token not in review_synthesis_text:
             errors.append(f"review_synthesis_benchmark_framework_supplement.md missing v0.9 synthesis token {token}")
-    supplementary_text = (ROOT / "reports/supplementary_materials_reference_value_v1.1.md").read_text(
+    supplementary_text = (ROOT / "manuscript/support/supplementary_materials_reference_value_v1.1.md").read_text(
         encoding="utf-8"
     )
     for token in ["source discovery", "docking score", "topology-aware", "Flow matching", "patch candidate"]:
         if token not in supplementary_text:
             errors.append(f"supplementary_materials_reference_value_v1.1.md missing v1.1 token {token}")
-    short_scoring_text = (ROOT / "reports/short_peptide_scoring_rationale_v1.1.md").read_text(encoding="utf-8")
+    short_scoring_text = (ROOT / "manuscript/support/short_peptide_scoring_rationale_v1.1.md").read_text(encoding="utf-8")
     for token in ["binding region", "N/C orientation", "key residue", "comparability", "不得写"]:
         if token not in short_scoring_text:
             errors.append(f"short_peptide_scoring_rationale_v1.1.md missing v1.1 scoring token {token}")
-    cyclic_supplement_text = (ROOT / "reports/cyclic_peptide_benchmark_supplement_v1.1.md").read_text(
+    cyclic_supplement_text = (ROOT / "manuscript/support/cyclic_peptide_benchmark_supplement_v1.1.md").read_text(
         encoding="utf-8"
     )
     for token in ["Topology-Aware Fields", "cyclization_mode", "chirality_detail", "HELM", "CHUCKLES", "patch_candidate"]:
@@ -1425,8 +1674,8 @@ def main() -> int:
             errors.append(f"cyclic_peptide_benchmark_supplement_v1.1.md missing v1.1 cyclic token {token}")
 
     server_contract_paths = [
-        ROOT / "benchmarks/deployment/method_contracts/pepmlm_server_contract_v0.7.md",
-        ROOT / "benchmarks/deployment/method_contracts/rfdiffusion_proteinmpnn_server_contract_v0.7.md",
+        ROOT / "benchmark/deployment/method_contracts/pepmlm_server_contract_v0.7.md",
+        ROOT / "benchmark/deployment/method_contracts/rfdiffusion_proteinmpnn_server_contract_v0.7.md",
     ]
     for path in server_contract_paths:
         text = path.read_text(encoding="utf-8")
@@ -1435,7 +1684,7 @@ def main() -> int:
                 errors.append(f"{path.relative_to(ROOT)} missing method contract token {token}")
         if "smoke_test_ready" in text and "max_allowed_gate_in_kb | `dry_run_ready`" not in text:
             errors.append(f"{path.relative_to(ROOT)} must not promote a method to smoke_test_ready")
-    pepmirror_contract = (ROOT / "benchmarks/deployment/method_contracts/pepmirror_dependency_contract_v0.7.md").read_text(
+    pepmirror_contract = (ROOT / "benchmark/deployment/method_contracts/pepmirror_dependency_contract_v0.7.md").read_text(
         encoding="utf-8"
     )
     if "current_gate | `source_pinned`" not in pepmirror_contract:
@@ -1444,7 +1693,7 @@ def main() -> int:
         if token not in pepmirror_contract:
             errors.append(f"pepmirror_dependency_contract_v0.7.md missing dependency token {token}")
 
-    protocol_text = (ROOT / "benchmarks/protocols/benchmark_protocol_v0.md").read_text(encoding="utf-8")
+    protocol_text = (ROOT / "benchmark/protocols/benchmark_protocol_v0.md").read_text(encoding="utf-8")
     for task in REQUIRED_PROTOCOL_TASKS:
         if task not in protocol_text:
             errors.append(f"benchmark_protocol_v0.md missing task {task}")
@@ -1452,16 +1701,16 @@ def main() -> int:
         if token not in protocol_text:
             errors.append(f"benchmark_protocol_v0.md missing required section {token}")
 
-    scoring_schema = (ROOT / "benchmarks/protocols/scoring_outputs_schema.md").read_text(encoding="utf-8")
+    scoring_schema = (ROOT / "benchmark/protocols/scoring_outputs_schema.md").read_text(encoding="utf-8")
     for filename in REQUIRED_SCORING_OUTPUTS:
         if filename not in scoring_schema:
             errors.append(f"scoring_outputs_schema.md missing output table {filename}")
-    scoring_protocol = (ROOT / "benchmarks/scoring/scoring_protocol_v0.md").read_text(encoding="utf-8")
+    scoring_protocol = (ROOT / "benchmark/scoring/scoring_protocol_v0.md").read_text(encoding="utf-8")
     for family in ["developability", "negative_design", "leakage_homology"]:
         if family not in scoring_protocol:
             errors.append(f"scoring_protocol_v0.md missing metric family {family}")
 
-    manuscript_outline = (ROOT / "reports/benchmark_manuscript_outline.md").read_text(encoding="utf-8")
+    manuscript_outline = (ROOT / "manuscript/outlines/benchmark_manuscript_outline.md").read_text(encoding="utf-8")
     for token in MANUSCRIPT_REQUIRED_TOKENS:
         if token not in manuscript_outline:
             errors.append(f"benchmark_manuscript_outline.md missing required token {token}")
@@ -1473,8 +1722,8 @@ def main() -> int:
     if len(manuscript_claim_rows) < 12:
         errors.append("benchmark_manuscript_claim_evidence_map.csv should cover revised benchmark claims")
 
-    zh_outline = (ROOT / "reports/benchmark_manuscript_outline_zh_v1.md").read_text(encoding="utf-8")
-    en_outline = (ROOT / "reports/benchmark_manuscript_outline_en_v1.md").read_text(encoding="utf-8")
+    zh_outline = (ROOT / "manuscript/outlines/benchmark_manuscript_outline_zh_v1.md").read_text(encoding="utf-8")
+    en_outline = (ROOT / "manuscript/outlines/benchmark_manuscript_outline_en_v1.md").read_text(encoding="utf-8")
     zh_required = ["题名", "摘要", "候选方法分类与代码位置", "参考数据集来源与靶点集计划", "待办清单", "参考文献与引用边界"]
     en_required = ["Title", "Abstract", "Candidate Method Taxonomy and Code Routes", "Reference Dataset Sources and Target-Set Planning", "TODO List", "References and Citation Boundary"]
     for token in zh_required:
@@ -1492,10 +1741,10 @@ def main() -> int:
         "assets/figures/benchmark_figure2_task_method_matrix_v1.png",
         "assets/figures/benchmark_figure3_dual_track_v1.png",
         "assets/figures/benchmark_figure4_scoring_architecture_v1.png",
-        "tables/candidate_method_classification_v1.csv",
-        "benchmarks/input_sets/reference_dataset_sources_v1.csv",
-        "tables/scoring_metric_rationale_matrix_v1.1.csv",
-        "benchmarks/deployment/method_readiness_review_v0.8.csv",
+        "kb/tables/candidate_method_classification_v1.csv",
+        "benchmark/input_sets/reference_dataset_sources_v1.csv",
+        "kb/tables/scoring_metric_rationale_matrix_v1.1.csv",
+        "benchmark/deployment/method_readiness_review_v0.8.csv",
         "不代表真实 benchmark 结果",
     ]:
         if token not in zh_outline:
@@ -1632,6 +1881,242 @@ def main() -> int:
         if row.get("related_task_id") not in {"T1_sequence_binder", "T2_structure_peptide_binder", "T3_miniprotein_binder_baseline", "method_landscape_only"}:
             errors.append(f"{row.get('method')}: invalid v1.1 related_task_id {row.get('related_task_id')}")
 
+    grant_review_text = (ROOT / "ops/audits/grant_style_mock_review_v1.3.md").read_text(encoding="utf-8")
+    for token in [
+        "NIH-style mock review",
+        "NSF-style mock review",
+        "Overall Impact",
+        "Significance",
+        "Approach",
+        "Broader impacts",
+        "No benchmark execution",
+        "Major Revision Before Execution",
+    ]:
+        if token not in grant_review_text:
+            errors.append(f"grant_style_mock_review_v1.3.md missing token {token}")
+    updated_plan_v13 = (ROOT / "ops/plans/updated_plan_v1.3.md").read_text(encoding="utf-8")
+    for token in [
+        "v0.10 Preflight Package",
+        "Specific Aim 1",
+        "Specific Aim 2",
+        "Specific Aim 3",
+        "No clone",
+        "No download",
+        "No GPU",
+        "updated_plan_v0.9.md",
+    ]:
+        if token not in updated_plan_v13:
+            errors.append(f"updated_plan_v1.3.md missing token {token}")
+    if len(grant_review_action_rows) < 10:
+        errors.append("grant_review_action_items_v1.3.csv should contain at least 10 action rows")
+    observed_review_panels = {row.get("review_panel", "") for row in grant_review_action_rows}
+    for panel in ["NIH", "NSF", "Data_Sharing", "Risk", "Budget"]:
+        if panel not in observed_review_panels:
+            errors.append(f"grant_review_action_items_v1.3.csv missing review panel {panel}")
+    observed_gates = {row.get("gate", "") for row in grant_review_action_rows}
+    for gate in ["target_gate", "execution_gate", "scoring_gate", "dissemination_gate"]:
+        if gate not in observed_gates:
+            errors.append(f"grant_review_action_items_v1.3.csv missing gate {gate}")
+    if not any(row.get("severity") == "critical" for row in grant_review_action_rows):
+        errors.append("grant_review_action_items_v1.3.csv should include at least one critical item")
+    for row in grant_review_action_rows:
+        if row.get("severity") not in {"critical", "major", "minor"}:
+            errors.append(f"{row.get('criterion')}: invalid grant review severity {row.get('severity')}")
+        if row.get("status") not in {"open", "done", "deferred"}:
+            errors.append(f"{row.get('criterion')}: invalid grant review status {row.get('status')}")
+        for required_field in ["artifact", "issue", "recommendation", "decision", "evidence", "next_action", "gate"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('criterion')}: grant review row missing {required_field}")
+        if row.get("status") == "done":
+            errors.append(f"{row.get('criterion')}: v1.3 grant review action rows should not imply completed execution")
+
+    server_preflight_text = (ROOT / "ops/plans/server_preflight_plan_v0.10.md").read_text(encoding="utf-8")
+    for token in [
+        "不 clone",
+        "不下载",
+        "Batch A",
+        "dry_run_ready",
+        "download_performed=no",
+        "/srv/pep_design",
+    ]:
+        if token not in server_preflight_text:
+            errors.append(f"server_preflight_plan_v0.10.md missing token {token}")
+
+    target_freeze_text = (ROOT / "benchmark/input_sets/target_control_freeze_checklist_v0.10.md").read_text(
+        encoding="utf-8"
+    )
+    for token in ["schema-only", "license", "assay", "positive control", "negative control", "leakage", "No row"]:
+        if token not in target_freeze_text:
+            errors.append(f"target_control_freeze_checklist_v0.10.md missing token {token}")
+
+    preflight_artifact_ids = {row.get("artifact_id", "") for row in preflight_download_rows}
+    for artifact_id in [
+        "pepmlm_hf_model_snapshot",
+        "rfdiffusion_base_ckpt",
+        "proteinmpnn_repo_weights",
+        "pepmirror_cross_both_v1_ckpt",
+        "overath_final_dataset_csv",
+    ]:
+        if artifact_id not in preflight_artifact_ids:
+            errors.append(f"preflight_download_approval_v0.10.csv missing {artifact_id}")
+    for row in preflight_download_rows:
+        if row.get("download_performed") != "no":
+            errors.append(f"{row.get('artifact_id')}: v0.10 preflight rows must keep download_performed=no")
+        if row.get("approved_by") != "pending":
+            errors.append(f"{row.get('artifact_id')}: v0.10 preflight approval must remain pending")
+        for required_field in ["source_url", "license_status", "external_destination", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('artifact_id')}: preflight download row missing {required_field}")
+
+    preflight_methods = {row.get("method", ""): row for row in method_preflight_rows}
+    for method in ["PepMLM", "RFdiffusion + ProteinMPNN", "PepMirror"]:
+        if method not in preflight_methods:
+            errors.append(f"method_preflight_status_v0.10.csv missing {method}")
+    for row in method_preflight_rows:
+        if row.get("max_allowed_gate") not in {"dry_run_ready", "input_contract_ready", "source_pinned"}:
+            errors.append(f"{row.get('method')}: invalid v0.10 max_allowed_gate {row.get('max_allowed_gate')}")
+        text = " ".join(row.values()).lower()
+        for forbidden in ["installed", "reproduced", "smoke_test_ready", "benchmark_ready"]:
+            if forbidden in text:
+                errors.append(f"{row.get('method')}: v0.10 method preflight must not imply {forbidden}")
+        if "/srv/pep_design" not in row.get("external_roots", ""):
+            errors.append(f"{row.get('method')}: v0.10 method preflight must keep external roots outside KB")
+
+    source_freshness_methods = {row.get("method_or_artifact", ""): row for row in source_freshness_rows}
+    for method in ["PepMLM", "RFdiffusion", "ProteinMPNN", "PepMirror"]:
+        if method not in source_freshness_methods:
+            errors.append(f"source_freshness_manifest_v0.11.csv missing {method}")
+    for row in source_freshness_rows:
+        if row.get("freshness_check_status") not in {"needs_external_refresh", "blocked_dependency", "planned_not_refreshed"}:
+            errors.append(f"{row.get('record_id')}: invalid v0.11 freshness status {row.get('freshness_check_status')}")
+        if row.get("download_allowed") != "no_until_approved":
+            errors.append(f"{row.get('record_id')}: v0.11 source freshness must keep download_allowed=no_until_approved")
+        for required_field in ["primary_paper", "official_metadata_sources", "code_route", "license_route", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('record_id')}: source freshness row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in ["download_performed=yes", "installed", "reproduced", "smoke_test_ready"]:
+            if forbidden in text:
+                errors.append(f"{row.get('record_id')}: source freshness row overclaims {forbidden}")
+
+    expected_source_clones = {
+        "pepmlm": "3169c4920f8c383948e0a5d3a7c8f87e5e7d2436",
+        "saltnpeppr": "fba9d029f34638fe87277f69b5d6a5797273c5a5",
+        "DiffPepBuilder": "c19eb4f0cd2419d3bcc116184c0868243b6c4169",
+        "PepGLAD": "bad015ca50c312a89482adb5220c3d907f13df5c",
+        "PeptideDesign": "3e3e9f501ee16db318e9bf52643513636a07699a",
+        "PepMirror": "41cb31f3974d91e1a2ca88f0db060405833e4a9c",
+        "ColabDesign": "e31a56fe1d9b4de25c8697f3a28b75892941cc72",
+        "OSPREY3": "3d53244851f0388db9e01b288bbd330145935aa7",
+        "RFdiffusion": "2d0c003df46b9db41d119321f15403dec3716cd9",
+        "ProteinMPNN": "8907e6671bfbfc92303b5f79c4b5e6ce47cdef57",
+        "BindCraft": "b971db42ba6e091afab63ccb30ae02215150a990",
+    }
+    source_clone_by_repo = {row.get("repo_name", ""): row for row in source_clone_rows}
+    for repo_name, commit in expected_source_clones.items():
+        row = source_clone_by_repo.get(repo_name)
+        if not row:
+            errors.append(f"source_clone_manifest_v0.12.csv missing {repo_name}")
+            continue
+        if row.get("pinned_commit") != commit:
+            errors.append(f"{repo_name}: v0.12 source clone pinned commit mismatch")
+        if row.get("observed_head") != commit:
+            errors.append(f"{repo_name}: v0.12 source clone observed head mismatch")
+    if len(source_clone_rows) != len(expected_source_clones):
+        errors.append(
+            f"source_clone_manifest_v0.12.csv should contain {len(expected_source_clones)} rows, found {len(source_clone_rows)}"
+        )
+    allowed_clone_status = {"checkout_verified", "checkout_verified_network_warning"}
+    for row in source_clone_rows:
+        repo_name = row.get("repo_name", "")
+        if row.get("clone_performed") != "yes":
+            errors.append(f"{repo_name}: v0.12 source clone row must record clone_performed=yes")
+        if row.get("checkout_status") not in allowed_clone_status:
+            errors.append(f"{repo_name}: invalid v0.12 checkout_status {row.get('checkout_status')}")
+        if not row.get("external_clone_path", "").startswith(
+            "/mnt/ssd4t/protein-design/data/src/pep_design_benchmark/"
+        ):
+            errors.append(f"{repo_name}: source clone path must remain outside the KB repository")
+        for required_field in ["method", "repo_url", "default_branch", "license_files", "environment_files", "next_gate"]:
+            if not row.get(required_field):
+                errors.append(f"{repo_name}: source clone row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in ["installed", "reproduced", "smoke_test_ready", "benchmark_ready", "gpu_run", "weights_downloaded"]:
+            if forbidden in text:
+                errors.append(f"{repo_name}: source clone row overclaims {forbidden}")
+
+    adapter_methods = {row.get("method", ""): row for row in adapter_preflight_rows}
+    for method in ["PepMLM", "RFdiffusion + ProteinMPNN", "PepMirror"]:
+        if method not in adapter_methods:
+            errors.append(f"adapter_preflight_status_v0.11.csv missing {method}")
+    for method in ["PepMLM", "RFdiffusion + ProteinMPNN"]:
+        row = adapter_methods.get(method, {})
+        if row.get("batch") != "Batch_A":
+            errors.append(f"{method}: v0.11 adapter row must remain Batch_A")
+        if "artificial_dry_run" not in row.get("allowed_test_depth", ""):
+            errors.append(f"{method}: v0.11 adapter must start with artificial dry-run planning")
+    pepmirror_adapter = adapter_methods.get("PepMirror", {})
+    if pepmirror_adapter and pepmirror_adapter.get("allowed_test_depth") != "none_dependency_blocked":
+        errors.append("PepMirror v0.11 adapter row must remain dependency-blocked")
+    for row in adapter_preflight_rows:
+        for required_field in ["adapter_gate", "job_manifest_status", "input_adapter_status", "output_parser_status", "blocking_items", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{row.get('method')}: adapter preflight row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in ["installed", "reproduced", "benchmark_ready"]:
+            if forbidden in text:
+                errors.append(f"{row.get('method')}: adapter preflight row overclaims {forbidden}")
+
+    for row in method_output_manifest_rows:
+        if row.get("parser_status") != "not_real_benchmark":
+            errors.append(f"{row.get('run_record_id')}: example method output parser_status must be not_real_benchmark")
+        if row.get("source_commit") != "not_cloned":
+            errors.append(f"{row.get('run_record_id')}: example method output source_commit must be not_cloned")
+        if row.get("command") != "placeholder_only_do_not_run":
+            errors.append(f"{row.get('run_record_id')}: example method output command must remain placeholder_only_do_not_run")
+        if not row.get("raw_output_root", "").startswith("/srv/pep_design/"):
+            errors.append(f"{row.get('run_record_id')}: raw output root must be an external /srv/pep_design path")
+
+    for row in candidate_output_rows:
+        if row.get("parse_status") != "not_real_benchmark":
+            errors.append(f"{row.get('design_id')}: example candidate output parse_status must be not_real_benchmark")
+        if row.get("source_output_id") != "not_generated":
+            errors.append(f"{row.get('design_id')}: example candidate output must not imply generated output")
+        if row.get("method") not in {"PepMLM", "RFdiffusion + ProteinMPNN"}:
+            errors.append(f"{row.get('design_id')}: example candidate output should only cover Batch A")
+
+    source_io_plan_text = (ROOT / "ops/plans/source_io_smoke_test_plan_v0.11.md").read_text(encoding="utf-8")
+    for token in [
+        "不 clone",
+        "不下载",
+        "不安装",
+        "不运行 GPU",
+        "job_manifest.csv",
+        "method_output_manifest.csv",
+        "candidate_outputs.csv",
+        "Batch A",
+        "PepMirror",
+        "download_performed=no",
+    ]:
+        if token not in source_io_plan_text:
+            errors.append(f"source_io_smoke_test_plan_v0.11.md missing token {token}")
+
+    adapter_contract_text = (
+        ROOT / "benchmark/deployment/method_contracts/batch_a_adapter_contract_v0.11.md"
+    ).read_text(encoding="utf-8")
+    for token in ["planning_only_no_run", "PepMLM Adapter", "RFdiffusion + ProteinMPNN Adapter", "PepMirror Boundary"]:
+        if token not in adapter_contract_text:
+            errors.append(f"batch_a_adapter_contract_v0.11.md missing token {token}")
+
+    if len(migration_rows) < 10:
+        errors.append("file_role_map_v0.10.csv should record the major path migrations")
+    for row in migration_rows:
+        for required_field in MIGRATION_FILE_ROLE_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"migration row missing {required_field}: {row}")
+        if row.get("validator_required") not in {"yes", "no"}:
+            errors.append(f"{row.get('old_path')}: migration validator_required must be yes or no")
+
     dataset_source_ids = {row.get("dataset_id", "") for row in reference_dataset_source_rows}
     for dataset_id in ["overath_binder_success_2025", "pepbi_dryad_2025", "pepbenchmark_2026", "gpcr_peptide_benchmark_2026", "tcrtransbench_2026", "chang_af2_ranking_cases_2023"]:
         if dataset_id not in dataset_source_ids:
@@ -1648,7 +2133,7 @@ def main() -> int:
         if "frozen" in row.get("planned_use", "").lower():
             errors.append(f"{row.get('dataset_id')}: reference dataset planned_use must not imply frozen target promotion")
 
-    test_design_text = (ROOT / "reports/benchmark_test_design_v1.md").read_text(encoding="utf-8")
+    test_design_text = (ROOT / "manuscript/support/benchmark_test_design_v1.md").read_text(encoding="utf-8")
     for token in [
         "Generation Benchmark",
         "Ranking / Rescoring Benchmark",
@@ -1675,7 +2160,7 @@ def main() -> int:
             if not row.get(required_field):
                 errors.append(f"{row.get('todo_id')}: TODO row missing {required_field}")
 
-    bibliography_text = (ROOT / "reports/benchmark_reference_bibliography_v1.md").read_text(encoding="utf-8")
+    bibliography_text = (ROOT / "manuscript/support/benchmark_reference_bibliography_v1.md").read_text(encoding="utf-8")
     for token in ["Core Method References", "Benchmark, Ranking and Scoring References", "Dataset and Benchmark Source References", "needs_bibtex_verification", "Citation Safety Rules"]:
         if token not in bibliography_text:
             errors.append(f"benchmark_reference_bibliography_v1.md missing token {token}")
@@ -1692,11 +2177,13 @@ def main() -> int:
         "环肽和非天然肽补充资料支持 topology-aware evaluation 但不支持 target-set 晋升",
         "flow matching 补充资料是方法范式背景不是源码可运行性证据",
         "v1.1 method landscape patch candidates 不是 include scorecard",
+        "v1.3 grant-style mock review 是模拟评审和更新计划不是资助决定或执行证据",
+        "v1.3 行动项表支持 v0.10 preflight planning 但不支持本地安装复现或代码无问题",
     ]:
         if claim not in claim_texts:
             errors.append(f"benchmark_manuscript_claim_evidence_map.csv missing claim boundary: {claim}")
 
-    method_files = sorted((ROOT / "wiki/methods").glob("*.md"))
+    method_files = sorted((ROOT / "kb/wiki/methods").glob("*.md"))
     method_files = [path for path in method_files if path.name != "_index.md"]
     if len(method_files) < len(score_rows):
         errors.append(f"method card count {len(method_files)} is less than score rows {len(score_rows)}")
@@ -1709,7 +2196,7 @@ def main() -> int:
     if len(evidence_rows) != len(score_rows):
         errors.append("method_evidence_matrix and candidate_method_scorecard row counts differ")
 
-    bibtex = (ROOT / "references/references.bib").read_text(encoding="utf-8")
+    bibtex = (ROOT / "kb/references/references.bib").read_text(encoding="utf-8")
     bib_entries = len(re.findall(r"@\w+\{", bibtex))
     if bib_entries == 0:
         errors.append("references.bib has no BibTeX entries")
@@ -1717,7 +2204,7 @@ def main() -> int:
     link_count = check_markdown_links(errors)
     tracked_file_count = check_tracked_large_or_forbidden_files(errors)
 
-    literature_cards = [path for path in (ROOT / "wiki/literature").glob("*.md") if path.name != "_index.md"]
+    literature_cards = [path for path in (ROOT / "kb/wiki/literature").glob("*.md") if path.name != "_index.md"]
     if len(literature_cards) < 10:
         warnings.append(f"only {len(literature_cards)} literature cards generated")
 
@@ -1746,11 +2233,19 @@ def main() -> int:
             "ars_review_action_rows": len(ars_action_rows),
             "dataset_watchlist_v06_rows": len(dataset_watchlist_rows),
             "example_run_rows": len(example_run_rows),
+            "example_job_manifest_v011_rows": len(example_job_manifest_rows),
             "download_manifest_rows": len(download_manifest_rows),
             "dataset_schema_review_v07_rows": len(dataset_schema_review_rows),
             "dataset_schema_review_v08_rows": len(dataset_schema_review_v08_rows),
             "download_manifest_v08_rows": len(download_manifest_v08_rows),
+            "preflight_download_v010_rows": len(preflight_download_rows),
+            "source_freshness_v011_rows": len(source_freshness_rows),
+            "source_clone_v012_rows": len(source_clone_rows),
             "method_readiness_v08_rows": len(method_readiness_v08_rows),
+            "method_preflight_v010_rows": len(method_preflight_rows),
+            "adapter_preflight_v011_rows": len(adapter_preflight_rows),
+            "method_output_manifest_v011_rows": len(method_output_manifest_rows),
+            "candidate_output_v011_rows": len(candidate_output_rows),
             "method_landscape_v09_rows": len(method_landscape_rows),
             "bilingual_sync_rows": len(manuscript_sync_rows),
             "method_classification_v1_rows": len(method_classification_rows),
@@ -1760,8 +2255,10 @@ def main() -> int:
             "supplementary_material_rows": len(supplementary_material_rows),
             "scoring_rationale_rows": len(scoring_rationale_rows),
             "method_landscape_patch_v11_rows": len(method_landscape_patch_rows),
+            "grant_review_action_v13_rows": len(grant_review_action_rows),
+            "migration_v010_rows": len(migration_rows),
             "smoke_test_readmes": len(
-                [path for path in (ROOT / "benchmarks/smoke_tests").glob("*/README.md")]
+                [path for path in (ROOT / "benchmark/smoke_tests").glob("*/README.md")]
             ),
             "method_cards": len(method_files),
             "literature_cards": len(literature_cards),
@@ -1785,7 +2282,7 @@ def main() -> int:
     report += "\n\n## Raw JSON\n\n```json\n"
     report += json.dumps(result, ensure_ascii=False, indent=2)
     report += "\n```\n"
-    (ROOT / "reports/wiki_validation_report.md").write_text(report, encoding="utf-8")
+    (ROOT / "ops/validation/wiki_validation_report.md").write_text(report, encoding="utf-8")
 
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0 if not errors else 1

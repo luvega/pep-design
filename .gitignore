@@ -22,8 +22,18 @@ desktop.ini
 # Benchmark execution outputs for later phases
 benchmark_runs/
 checkpoints/
+data/
+logs/
+method_sources/
 models/
+results/
+runs/
+tmp/
 weights/
+!benchmark/results/
+!benchmark/results/README.md
+!benchmark/results/example_method_output_manifest_v0.11.csv
+!benchmark/results/example_candidate_outputs_v0.11.csv
 *.pt
 *.pth
 *.ckpt

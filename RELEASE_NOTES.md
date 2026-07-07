@@ -1,19 +1,136 @@
 # Release Notes
 
+## v1.2.1 Repository Checkpoint, Preflight Interfaces, And Source Clone Audit - 2026-07-07
+
+This checkpoint collects the v0.10 structure/preflight layer, v0.11 source-I/O adapter planning layer, v0.12 external source-code clone audit, and v1.3 grant-style planning supplement into one repository commit. It remains a protocol/readiness release, not a benchmark-result release.
+
+### Added
+
+- Added v0.10 structure and server preflight planning artifacts.
+- Added v0.11 job/adapter interface schemas and artificial example manifests.
+- Added v0.12 source clone manifest and source-code clone audit.
+- Added v1.3 grant-style mock review planning artifacts.
+
+### Changed
+
+- Bumped project version to `1.2.1`.
+- Reorganized repository paths into `sources/`, `kb/`, `benchmark/`, `manuscript/`, and `ops/`.
+- Updated validator coverage for v0.10/v0.11/v0.12/v1.3 control-plane artifacts.
+- Updated index, README, Benchmark README, AGENTS and project log for the checkpoint.
+
+### Notification
+
+- The first-wave include-method source code is now externally checked out under `/mnt/ssd4t/protein-design/data/src/pep_design_benchmark`.
+- The KB records source checkout provenance only; third-party source trees remain outside the tracked repository.
+- RFdiffusion and ProteinMPNN Docker assets under `/data/protein-design` remain separate from source provenance.
+
+### Boundaries
+
+- No model weights.
+- No dataset download.
+- No environment install.
+- No Docker or GPU run.
+- No target-set freeze.
+- No smoke-test execution.
+- No local reproducibility or method-performance claim.
+
+## v0.12 Source Code Clone Audit - 2026-07-07
+
+### Added
+
+- Added `benchmark/deployment/source_clone_manifest_v0.12.csv`.
+- Added `ops/audits/source_code_clone_audit_v0.12.md`.
+- Cloned and checked out 11 first-wave method source repositories under `/mnt/ssd4t/protein-design/data/src/pep_design_benchmark`.
+
+### Changed
+
+- Updated validator coverage for v0.12 source clone rows and no-overclaim boundaries.
+- Updated index, README, Benchmark README and project log for the source-only external checkout layer.
+
+### Boundaries
+
+- Source clone only.
+- No model weights.
+- No dataset download.
+- No environment install.
+- No Docker or GPU run.
+- No target-set freeze.
+- No smoke-test execution.
+- No local reproducibility or method-performance claim.
+
+## v0.11 Source/I-O And Initial Smoke-Test Planning - 2026-07-07
+
+### Added
+
+- Added `ops/plans/source_io_smoke_test_plan_v0.11.md`.
+- Added `benchmark/protocols/job_manifest_schema_v0.11.md`.
+- Added `benchmark/protocols/adapter_output_schema_v0.11.md`.
+- Added `benchmark/input_sets/example_job_manifest_v0.11.csv`.
+- Added `benchmark/results/example_method_output_manifest_v0.11.csv`.
+- Added `benchmark/results/example_candidate_outputs_v0.11.csv`.
+- Added `benchmark/deployment/source_freshness_manifest_v0.11.csv`.
+- Added `benchmark/deployment/adapter_preflight_status_v0.11.csv`.
+- Added `benchmark/deployment/method_contracts/batch_a_adapter_contract_v0.11.md`.
+
+### Changed
+
+- Extended `run.csv` and scoring-output protocol docs with a non-breaking v0.11 adapter layer.
+- Updated validator coverage for v0.11 schemas, manifests, placeholder rows and no-execution boundaries.
+- Updated index and README navigation for the new source/I-O/smoke-test planning artifacts.
+
+### Boundaries
+
+- No clone.
+- No download.
+- No install.
+- No model weights.
+- No GPU run.
+- No target-set freeze.
+- No smoke-test execution.
+- No local reproducibility or method-performance claim.
+
+## v0.10 Structure And Preflight Planning - 2026-07-07
+
+### Added
+
+- Added `ops/plans/server_preflight_plan_v0.10.md`.
+- Added `benchmark/deployment/preflight_download_approval_v0.10.csv`.
+- Added `benchmark/deployment/method_preflight_status_v0.10.csv`.
+- Added `benchmark/input_sets/target_control_freeze_checklist_v0.10.md`.
+- Added `ops/migration/file_role_map_v0.10.csv`.
+
+### Changed
+
+- Reorganized top-level artifacts into `sources/`, `kb/`, `benchmark/`, `manuscript/`, and `ops/`.
+- Moved current and historical plans, audits, validation output, build summary, and project log under `ops/`.
+- Moved manuscript outlines, figures, claim gates, reference planning, and paper support reports under `manuscript/`.
+- Updated scripts, index, README, AGENTS, and validator expectations for the new paths.
+
+### Boundaries
+
+- No clone.
+- No download.
+- No install.
+- No model weights.
+- No GPU run.
+- No target-set freeze.
+- No smoke-test execution.
+- No local reproducibility or method-performance claim.
+
 ## v1.2.0 Chinese Manuscript Figure/Table Embedding Layer - 2026-06-18
 
 This release adds a manuscript presentation layer on top of the v0.9.0 current plan, v1.0 bilingual outlines and v1.1 supplementary-source synthesis.
 
 ### Added
 
-- Added four project-local manuscript figure assets under `reports/assets/figures/`.
-- Added `reports/assets/figures/imagegen_prompt_record_v1.md` to record figure-generation intent and claim boundaries.
-- Embedded four conceptual figures into `reports/benchmark_manuscript_outline_zh_v1.md`.
+- Added four project-local manuscript figure assets under `manuscript/assets/figures/`.
+- Added `manuscript/assets/figures/imagegen_prompt_record_v1.md` to record figure-generation intent and claim boundaries.
+- Embedded four conceptual figures into `manuscript/outlines/benchmark_manuscript_outline_zh_v1.md`.
 - Embedded four CSV-derived Markdown tables into the Chinese manuscript outline:
-  - `tables/candidate_method_classification_v1.csv`
-  - `benchmarks/input_sets/reference_dataset_sources_v1.csv`
-  - `tables/scoring_metric_rationale_matrix_v1.1.csv`
-  - `benchmarks/deployment/method_readiness_review_v0.8.csv`
+  - `kb/tables/candidate_method_classification_v1.csv`
+  - `benchmark/input_sets/reference_dataset_sources_v1.csv`
+  - `kb/tables/scoring_metric_rationale_matrix_v1.1.csv`
+  - `benchmark/deployment/method_readiness_review_v0.8.csv`
 
 ### Changed
 
@@ -35,12 +152,12 @@ Supplementary-source synthesis update on top of the v0.9.0 plan and v1.0 bilingu
 
 ### Added
 
-- Added `reports/supplementary_materials_reference_value_v1.1.md`.
-- Added `reports/short_peptide_scoring_rationale_v1.1.md`.
-- Added `reports/cyclic_peptide_benchmark_supplement_v1.1.md`.
-- Added `tables/supplementary_materials_action_matrix_v1.1.csv`.
-- Added `tables/scoring_metric_rationale_matrix_v1.1.csv`.
-- Added `tables/method_landscape_patch_candidates_v1.1.csv`.
+- Added `manuscript/support/supplementary_materials_reference_value_v1.1.md`.
+- Added `manuscript/support/short_peptide_scoring_rationale_v1.1.md`.
+- Added `manuscript/support/cyclic_peptide_benchmark_supplement_v1.1.md`.
+- Added `kb/tables/supplementary_materials_action_matrix_v1.1.csv`.
+- Added `kb/tables/scoring_metric_rationale_matrix_v1.1.csv`.
+- Added `kb/tables/method_landscape_patch_candidates_v1.1.csv`.
 
 ### Changed
 
@@ -59,15 +176,15 @@ Plan and Benchmark manuscript synchronization release.
 
 ### Added
 
-- Added `reports/updated_plan_v0.9.md` as the current authoritative plan.
+- Added `ops/plans/updated_plan_v0.9.md` as the current authoritative plan.
 - Added validator coverage for v0.9 plan, Benchmark template artifacts, review synthesis artifacts, and method landscape watchlist.
 - Added claim boundaries for review-driven method landscape mapping and manuscript planning.
 
 ### Changed
 
-- Synchronized `VERSION`, `README.md`, `index.md`, `log.md`, manuscript outline, claim-evidence map, and validation report with v0.9.
-- Promoted `reports/updated_plan_v0.9.md` as the current plan entry point while preserving `reports/updated_plan_v0.6.md` as historical context.
-- Kept `benchmarks/method_sources/method_landscape_watchlist_v0.9.csv` as a landscape/watchlist artifact, not an include-method scorecard.
+- Synchronized `VERSION`, `README.md`, `index.md`, `ops/log.md`, manuscript outline, claim-evidence map, and validation report with v0.9.
+- Promoted `ops/plans/updated_plan_v0.9.md` as the current plan entry point while preserving `ops/plans/updated_plan_v0.6.md` as historical context.
+- Kept `benchmark/method_sources/method_landscape_watchlist_v0.9.csv` as a landscape/watchlist artifact, not an include-method scorecard.
 
 ### Validation
 
@@ -97,10 +214,10 @@ License, schema, and input-contract readiness release.
 
 ### Added
 
-- Added `benchmarks/input_sets/dataset_supplement_schema_review_v0.8.csv`.
-- Added `benchmarks/deployment/method_readiness_review_v0.8.csv`.
-- Added `benchmarks/deployment/download_manifest_v0.8.csv`.
-- Added `reports/license_schema_input_contract_review_v0.8.md`.
+- Added `benchmark/input_sets/dataset_supplement_schema_review_v0.8.csv`.
+- Added `benchmark/deployment/method_readiness_review_v0.8.csv`.
+- Added `benchmark/deployment/download_manifest_v0.8.csv`.
+- Added `ops/audits/license_schema_input_contract_review_v0.8.md`.
 
 ### Changed
 
@@ -136,9 +253,9 @@ Server dry-run contract and placeholder input release.
 
 - Added method-level contracts for PepMLM and RFdiffusion + ProteinMPNN.
 - Added a dependency-only PepMirror contract.
-- Added artificial `benchmarks/input_sets/example_run.csv` rows with `status=not_real_benchmark`.
-- Added `benchmarks/deployment/download_manifest_template_v0.7.csv`.
-- Added `benchmarks/input_sets/dataset_supplement_schema_review_v0.7.csv`.
+- Added artificial `benchmark/input_sets/example_run.csv` rows with `status=not_real_benchmark`.
+- Added `benchmark/deployment/download_manifest_template_v0.7.csv`.
+- Added `benchmark/input_sets/dataset_supplement_schema_review_v0.7.csv`.
 
 ### Changed
 
@@ -174,11 +291,11 @@ Academic Research Suite review and server dry-run planning release.
 
 ### Added
 
-- Added `reports/academic_research_suite_review_v0.6.md`.
-- Added `reports/updated_plan_v0.6.md`.
-- Added `tables/ars_review_action_items_v0.6.csv`.
-- Added `benchmarks/input_sets/dataset_supplement_watchlist_v0.6.csv`.
-- Added `benchmarks/deployment/server_smoke_test_contract_v0.6.md`.
+- Added `ops/audits/academic_research_suite_review_v0.6.md`.
+- Added `ops/plans/updated_plan_v0.6.md`.
+- Added `kb/tables/ars_review_action_items_v0.6.csv`.
+- Added `benchmark/input_sets/dataset_supplement_watchlist_v0.6.csv`.
+- Added `benchmark/deployment/server_smoke_test_contract_v0.6.md`.
 
 ### Changed
 
@@ -211,11 +328,11 @@ Availability and server-readiness audit release for the peptide-design Benchmark
 
 ### Added
 
-- Added `benchmarks/availability/link_availability_matrix_v0.5.csv` and `data_access_manifest_v0.5.csv`.
-- Added `reports/link_and_data_availability_audit_v0.5.md`.
-- Added `benchmarks/method_sources/source_pin_audit_v0.5.csv` covering all 10 include methods.
-- Added `benchmarks/input_sets/target_candidate_matrix_v0.5.csv`.
-- Added `benchmarks/deployment/server_readiness_checklist_v0.5.md` for Linux CUDA Conda/mamba deployment planning.
+- Added `benchmark/availability/link_availability_matrix_v0.5.csv` and `data_access_manifest_v0.5.csv`.
+- Added `ops/audits/link_and_data_availability_audit_v0.5.md`.
+- Added `benchmark/method_sources/source_pin_audit_v0.5.csv` covering all 10 include methods.
+- Added `benchmark/input_sets/target_candidate_matrix_v0.5.csv`.
+- Added `benchmark/deployment/server_readiness_checklist_v0.5.md` for Linux CUDA Conda/mamba deployment planning.
 
 ### Changed
 
@@ -249,9 +366,9 @@ Expert-panel and small-file audit release for the peptide-design Benchmark KB.
 
 ### Added
 
-- Added `reports/expert_panel_review_v0.4.md` and `tables/expert_review_action_items.csv`.
-- Added `benchmarks/input_sets/dataset_readiness_scorecard.csv` and `target_candidate_matrix_v0.4.csv`.
-- Added `benchmarks/method_sources/source_pin_audit_v0.4.csv`.
+- Added `ops/audits/expert_panel_review_v0.4.md` and `kb/tables/expert_review_action_items.csv`.
+- Added `benchmark/input_sets/dataset_readiness_scorecard.csv` and `target_candidate_matrix_v0.4.csv`.
+- Added `benchmark/method_sources/source_pin_audit_v0.4.csv`.
 - Performed external-only audit of Overath `final_dataset.csv` and priority source pins for PepMLM, RFdiffusion, ProteinMPNN, and PepMirror.
 
 ### Changed
@@ -286,10 +403,10 @@ Dataset/source/environment audit release for the peptide-design Benchmark KB.
 
 ### Added
 
-- Added `benchmarks/input_sets/candidate_benchmark_datasets.csv` and `reports/dataset_candidate_audit.md`.
+- Added `benchmark/input_sets/candidate_benchmark_datasets.csv` and `ops/audits/dataset_candidate_audit.md`.
 - Added the bioRxiv/Zenodo candidate dataset `overath_binder_success_2025` for ranking/rescoring and scoring calibration planning.
-- Added `benchmarks/method_sources/README.md`, `benchmarks/method_sources/method_source_manifest.csv`, and `reports/method_source_audit.md`.
-- Added `benchmarks/environments/README.md`, `benchmarks/environments/environment_feasibility_matrix.csv`, and `reports/environment_feasibility_audit.md`.
+- Added `benchmark/method_sources/README.md`, `benchmark/method_sources/method_source_manifest.csv`, and `ops/audits/method_source_audit.md`.
+- Added `benchmark/environments/README.md`, `benchmark/environments/environment_feasibility_matrix.csv`, and `ops/audits/environment_feasibility_audit.md`.
 
 ### Changed
 
@@ -323,11 +440,11 @@ Protocol-readiness release for the peptide-design Benchmark KB.
 
 ### Added
 
-- Added Benchmark protocol layer with `benchmarks/protocols/benchmark_protocol_v0.md`, `run_csv_schema.md`, and `scoring_outputs_schema.md`.
-- Added `benchmarks/smoke_tests/` planning READMEs for all 10 included methods.
+- Added Benchmark protocol layer with `benchmark/protocols/benchmark_protocol_v0.md`, `run_csv_schema.md`, and `scoring_outputs_schema.md`.
+- Added `benchmark/smoke_tests/` planning READMEs for all 10 included methods.
 - Added PepMirror as a first-wave include method and created the corresponding method/candidate evidence layer.
-- Added `tables/method_runnability_matrix.csv` and `reports/method_runnability_audit.md`.
-- Added local Zotero Benchmark/scoring/developability lesson layer with `tables/benchmark_literature_lessons.csv` and `reports/benchmark_literature_lessons.md`.
+- Added `kb/tables/method_runnability_matrix.csv` and `ops/audits/method_runnability_audit.md`.
+- Added local Zotero Benchmark/scoring/developability lesson layer with `kb/tables/benchmark_literature_lessons.csv` and `manuscript/support/benchmark_literature_lessons.md`.
 - Added target/control planning schemas: `target_set_v0.csv`, `target_set_v0_schema.md`, and `negative_design_panel_schema.md`.
 - Added Benchmark manuscript outline, claim-evidence map, and figure/table plan for a protocol-first manuscript.
 
@@ -370,8 +487,8 @@ Initial repository version for the peptide-design method benchmark background kn
 
 ### Added
 
-- Bootstrapped AI-native knowledge-base structure with `raw_sources/`, `references/`, `tables/`, `wiki/`, `reports/`, and `scripts/`.
-- Exported and deduplicated Zotero-derived metadata into `tables/master_literature_manifest.csv`.
+- Bootstrapped AI-native knowledge-base structure with `sources/raw_snapshots/`, `kb/references/`, `kb/tables/`, `kb/wiki/`, `reports/`, and `scripts/`.
+- Exported and deduplicated Zotero-derived metadata into `kb/tables/master_literature_manifest.csv`.
 - Generated 120 literature cards, 11 method cards, 9 benchmark candidate cards, and concept pages.
 - Generated first-wave candidate shortlist with 9 included methods and 2 watchlist methods.
 - Added URL status evidence for method repositories, Hugging Face pages, and Zenodo routes.

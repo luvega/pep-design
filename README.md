@@ -2,14 +2,18 @@
 
 This repository hosts a peptide-design method knowledge base and a protocol-first benchmark design layer.
 
-Release `1.2.0` packages the protocol and manuscript layer rather than benchmark results. It includes Academic Research Suite review, Benchmark paper template alignment, claim gates, method landscape coverage, server dry-run input contracts, license/schema/input-contract readiness, artificial `run.csv` examples, future download manifests, dataset schema review, link availability, metadata-only data access audits, source pinning, target/control schema design, scoring protocol design, bilingual manuscript outlines, supplementary-source synthesis, and Chinese manuscript figure/table embedding. The release draws from Zotero metadata, selected PD-wiki evidence cards, benchmark/scoring literature lessons, external dataset metadata, method route checks, read-only supplementary Markdown notes, and project-local figure assets.
+Release `1.2.1` packages a repository checkpoint for the protocol, manuscript and preflight control layers rather than benchmark results. It includes Academic Research Suite review, Benchmark paper template alignment, claim gates, method landscape coverage, server dry-run input contracts, license/schema/input-contract readiness, artificial `run.csv` examples, future download manifests, dataset schema review, link availability, metadata-only data access audits, source pinning, target/control schema design, scoring protocol design, bilingual manuscript outlines, supplementary-source synthesis, Chinese manuscript figure/table embedding, v1.3 grant-style mock review planning, v0.10 preflight preparation, v0.11 source/I/O/smoke-test interface planning, and v0.12 external source-code clone auditing. The release draws from Zotero metadata, selected PD-wiki evidence cards, benchmark/scoring literature lessons, external dataset metadata, method route checks, read-only supplementary Markdown notes, project-local `$imagegen` figure assets, planning-level grant review criteria, and external source checkouts kept outside the KB.
 
 ## Current Version
 
-- Version: `1.2.0`
+- Version: `1.2.1`
 - Manuscript outline layer: `v1.0`
 - Supplementary-source synthesis layer: `v1.1`
 - Chinese manuscript figure/table embedding layer: `v1.2`
+- Grant-style mock review layer: `v1.3` planning supplement
+- Source/I/O/smoke-test interface layer: `v0.11` planning supplement
+- Source-code clone audit layer: `v0.12` external checkout supplement
+- Repository checkpoint: `v1.2.1`
 - Build date: 2026-06-18
 - Literature window: 2021-06-03 to 2026-06-03
 - Included first-wave candidate methods: 10
@@ -17,13 +21,26 @@ Release `1.2.0` packages the protocol and manuscript layer rather than benchmark
 
 ## What Is Included
 
-- `references/`: BibTeX export, Zotero-to-BibTeX key map, search log, dedupe report.
-- `tables/`: master literature manifest, method evidence matrix, candidate method scorecard, expert review action items, v1.0 candidate method classification, v1.1 supplementary-material action matrix, scoring rationale matrix, and method-landscape patch candidates.
-- `wiki/`: literature cards, method cards, concept pages, benchmark candidate pages.
-- `benchmarks/`: protocol, run.csv schema, target/control schema, scoring schema, dataset readiness scorecard, target candidate matrix, v1.0 reference dataset sources, method source routes, source pin audits, availability audits, server readiness checklist, server smoke-test contract, method contracts, artificial example run table, download manifest template, environment feasibility matrix, and smoke-test planning layer.
-- `raw_sources/`: read-only local snapshots copied into the project for provenance.
-- `reports/`: current plan, skill selection, literature scope, shortlist, runnability audit, expert-panel review, ARS review, dataset candidate audit, method source audit, environment feasibility audit, license/schema/input-contract review, manuscript outline, Chinese and English v1.0 manuscript outlines, bilingual sync map, Benchmark test design, reference bibliography plan, TODO list, Benchmark template audit, Introduction logic chain, review-driven framework supplement, benchmark literature lessons, v1.1 supplementary-material assessment, short-peptide scoring rationale, cyclic peptide benchmark supplement, v1.2 manuscript figure assets, build summary, validation report.
+- `kb/references/`: BibTeX export, Zotero-to-BibTeX key map, search log, dedupe report.
+- `kb/tables/`: master literature manifest, method evidence matrix, candidate method scorecard, expert review action items, v1.0 candidate method classification, v1.1 supplementary-material action matrix, scoring rationale matrix, method-landscape patch candidates, and v1.3 grant review action items.
+- `kb/wiki/`: literature cards, method cards, concept pages, benchmark candidate pages.
+- `benchmark/`: protocol, run.csv schema, target/control schema, scoring schema, dataset readiness scorecard, target candidate matrix, v1.0 reference dataset sources, method source routes, source pin audits, availability audits, server readiness checklist, server smoke-test contract, method contracts, artificial example run table, download manifest template, environment feasibility matrix, and smoke-test planning layer.
+- v0.11 adds `job_manifest.csv` and adapter-output schemas plus artificial Batch A example manifests for PepMLM and RFdiffusion + ProteinMPNN.
+- v0.12 adds `benchmark/deployment/source_clone_manifest_v0.12.csv` and `ops/audits/source_code_clone_audit_v0.12.md` to record external source checkouts for 11 first-wave method repositories.
+- `sources/raw_snapshots/`: read-only local snapshots copied into the project for provenance.
+- `manuscript/`: Benchmark outlines, claim map, figure/table plan, bibliography planning, manuscript figures, and manuscript-facing support reports.
+- `ops/`: current and historical plans, audits, validation report, build summary, migration records, and project log.
 - `scripts/`: reproducible build and validation scripts.
+
+## Current Directory Architecture
+
+- `sources/raw_snapshots/`: read-only source snapshots only.
+- `kb/`: generated references, structured tables, and wiki cards.
+- `benchmark/`: protocol, schemas, input-set governance, method-source readiness, deployment manifests, and smoke-test planning interfaces.
+- `manuscript/`: paper outlines, figures, claim gates, citation planning, and manuscript-facing support.
+- `ops/`: plans, audits, migration records, validation outputs, build summaries, and the project log.
+
+v0.10/v0.11 preflight planning adds approval/status/source-freshness/adapter files for future server execution, while v0.12 records source-only external checkouts. Model weights, datasets, installations, GPU outputs and benchmark run evidence remain outside the KB.
 
 ## First-Wave Candidate Methods
 
@@ -52,7 +69,7 @@ python scripts/build_benchmark_kb.py
 python scripts/validate_benchmark_kb.py
 ```
 
-Expected validation for v1.2.0 covers the v0.9 current plan, v1.0 manuscript-outline layer, v1.1 supplementary-source synthesis layer, and v1.2 Chinese manuscript figure/table embedding layer:
+Expected validation for the current working layer covers the v0.9 current plan, v1.0 manuscript-outline layer, v1.1 supplementary-source synthesis layer, v1.2 Chinese manuscript figure/table embedding layer, v1.3 grant-style mock review planning layer, and v0.11 source/I-O/smoke-test interface planning layer:
 
 - `status`: `pass`
 - `master_rows`: 432
@@ -77,16 +94,25 @@ Expected validation for v1.2.0 covers the v0.9 current plan, v1.0 manuscript-out
 - `dataset_schema_review_v07_rows`: 6
 - `dataset_schema_review_v08_rows`: 6
 - `download_manifest_v08_rows`: 8
+- `preflight_download_v010_rows`: 8
+- `source_freshness_v011_rows`: 4
 - `method_readiness_v08_rows`: 4
+- `method_preflight_v010_rows`: 3
+- `adapter_preflight_v011_rows`: 3
+- `source_clone_v012_rows`: 11
+- `example_job_manifest_v011_rows`: 2
+- `method_output_manifest_v011_rows`: 2
+- `candidate_output_v011_rows`: 2
 - `method_landscape_v09_rows`: 27
 - `bilingual_sync_rows`: 19
 - `method_classification_v1_rows`: 27
 - `reference_dataset_sources_v1_rows`: 8
-- `manuscript_todo_v1_rows`: 16
-- `manuscript_claim_rows`: 56
+- `manuscript_todo_v1_rows`: 18
+- `manuscript_claim_rows`: 63
 - `supplementary_material_rows`: 6
 - `scoring_rationale_rows`: 10
 - `method_landscape_patch_v11_rows`: 8
+- `grant_review_action_v13_rows`: 12
 - `smoke_test_readmes`: 10
 - `method_cards`: 12
 - `literature_cards`: 120
@@ -94,6 +120,6 @@ Expected validation for v1.2.0 covers the v0.9 current plan, v1.0 manuscript-out
 
 ## Source Boundary
 
-This repository is the working project layer. Zotero, EndNote, and the prior PD-wiki remain upstream source systems. The files under `raw_sources/` are local project snapshots used for provenance and should be treated as read-only.
+This repository is the working project layer. Zotero, EndNote, and the prior PD-wiki remain upstream source systems. The files under `sources/raw_snapshots/` are local project snapshots used for provenance and should be treated as read-only.
 
-This release excludes model weights, downloaded PDFs, EndNote libraries, third-party source trees, large datasets and benchmark execution outputs. v0.5 source pinning and data availability checks are metadata-only snapshots. v1.1 supplementary-source synthesis provides source discovery and framing, not primary-source verified evidence or runnability evidence. v1.2 manuscript figures and embedded Markdown tables are planning/reporting artifacts, not benchmark results. Future server-side downloads and clones must live outside this repository or in gitignored paths.
+This release excludes model weights, downloaded PDFs, EndNote libraries, third-party source trees, large datasets and benchmark execution outputs. v0.5 source pinning and data availability checks are metadata-only snapshots. v1.1 supplementary-source synthesis provides source discovery and framing, not primary-source verified evidence or runnability evidence. v1.2 manuscript figures and embedded Markdown tables are planning/reporting artifacts, not benchmark results. v1.3 grant-style mock review is a simulated review and preflight-planning layer, not a funding decision, execution record, code-quality confirmation, or local reproducibility claim. v0.12 source-code clone evidence records external Git checkouts only; it is not installation, environment validation, smoke-test execution, model-weight download, or local reproducibility evidence. Future server-side downloads and large artifacts must live outside this repository or in gitignored paths.

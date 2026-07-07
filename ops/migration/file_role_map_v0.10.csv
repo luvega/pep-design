@@ -1,0 +1,24 @@
+old_path,new_path,role,migration_reason,validator_required
+raw_sources/,sources/raw_snapshots/,read_only_source_snapshots,Move source snapshots into explicit sources layer,yes
+references/,kb/references/,bibliography_and_search_metadata,Move reference metadata into KB layer,yes
+tables/,kb/tables/,structured_kb_tables,Move generated tables into KB layer,yes
+wiki/,kb/wiki/,generated_literature_method_concept_cards,Move generated wiki into KB layer,yes
+benchmarks/,benchmark/,benchmark_protocol_and_execution_interface,Singular top-level benchmark layer for protocols and future run interfaces,yes
+reports/benchmark_manuscript_outline.md,manuscript/outlines/benchmark_manuscript_outline.md,manuscript_outline,Separate manuscript artifacts from ops audits,yes
+reports/benchmark_manuscript_outline_zh_v1.md,manuscript/outlines/benchmark_manuscript_outline_zh_v1.md,zh_manuscript_outline,Separate manuscript artifacts from ops audits,yes
+reports/benchmark_manuscript_outline_en_v1.md,manuscript/outlines/benchmark_manuscript_outline_en_v1.md,en_manuscript_outline,Separate manuscript artifacts from ops audits,yes
+reports/assets/figures/,manuscript/assets/figures/,manuscript_figures,Move figure assets under manuscript layer,yes
+reports/benchmark_manuscript_claim_evidence_map.csv,manuscript/support/benchmark_manuscript_claim_evidence_map.csv,claim_gate,Keep claim evidence with manuscript support,yes
+reports/benchmark_manuscript_figure_table_plan.md,manuscript/support/benchmark_manuscript_figure_table_plan.md,figure_table_plan,Keep figure/table plan with manuscript support,yes
+reports/benchmark_reference_bibliography_v1.md,manuscript/support/benchmark_reference_bibliography_v1.md,citation_planning,Keep bibliography planning with manuscript support,yes
+reports/benchmark_template_audit.md,manuscript/support/benchmark_template_audit.md,benchmark_paper_template_audit,Keep paper-structure gate with manuscript support,yes
+reports/benchmark_intro_logic_chain.md,manuscript/support/benchmark_intro_logic_chain.md,introduction_logic,Keep intro planning with manuscript support,yes
+reports/benchmark_test_design_v1.md,manuscript/support/benchmark_test_design_v1.md,manuscript_test_design,Keep test-design narrative with manuscript support,yes
+reports/updated_plan_v0.9.md,ops/plans/updated_plan_v0.9.md,current_authoritative_plan,Move plans to ops layer,yes
+reports/updated_plan_v0.6.md,ops/plans/updated_plan_v0.6.md,historical_plan,Move plans to ops layer,yes
+reports/updated_plan_v1.3.md,ops/plans/updated_plan_v1.3.md,grant_review_closure_plan,Move plans to ops layer,yes
+benchmarks/deployment/server_from_scratch_run_plan_v0.10.md,ops/plans/server_from_scratch_run_plan_v0.10.md,future_server_runbook,Move runbook to ops layer,yes
+reports/wiki_validation_report.md,ops/validation/wiki_validation_report.md,validator_output,Move machine validation output to ops layer,yes
+log.md,ops/log.md,project_log,Move operational log to ops layer,yes
+reports/build_summary.json,ops/build_summary.json,build_summary,Move machine build summary to ops layer,yes
+reports/*_audit.md,ops/audits/,audit_reports,Move operational readiness audits to ops layer,yes
