@@ -6,9 +6,9 @@ This project is an independent protocol-first Benchmark knowledge base for recen
 
 Current authoritative plan: `ops/plans/updated_plan_v0.9.md`.
 
-Current version: `1.2.1`.
+Current version: `1.2.3`.
 
-Next planned phase: v0.10 server-side preflight package planning. Do not start clone, download, install, or GPU execution unless the user explicitly requests that later phase.
+Next planned phase: v0.14 target/control metadata review followed by v0.10 server-side preflight package planning. Do not start clone, download, install, or GPU execution unless the user explicitly requests that later phase.
 
 ## Source Boundaries
 
@@ -45,6 +45,14 @@ For broad research-to-paper or multi-stage review tasks, route through `academic
 | `benchmark/deployment/preflight_download_approval_v0.10.csv` | future download approval table | all rows must keep `download_performed=no` and `approved_by=pending` until approved server execution |
 | `benchmark/deployment/method_preflight_status_v0.10.csv` | priority method preflight state | planning-only; no clone/install/run evidence |
 | `benchmark/deployment/source_clone_manifest_v0.12.csv` | external source checkout evidence | source-only clone evidence; not install/run/weight evidence |
+| `benchmark/deployment/docker_image_inventory_v0.13.csv` | local Docker image reuse inventory | image assignment evidence only; not build/run evidence |
+| `benchmark/deployment/method_environment_assignment_v0.13.csv` | method-to-image/environment assignment | scaffold/readiness evidence only; not installation or smoke-test evidence |
+| `ops/plans/protein_design_image_consolidation_plan_v0.13.md` | image consolidation plan | planning artifact only |
+| `ops/audits/docker_environment_assignment_audit_v0.13.md` | Docker/environment assignment audit | readiness finding only; not local reproducibility evidence |
+| `benchmark/method_sources/method_paper_case_matrix_v0.14.csv` | method-paper case matrix | literature case evidence only; not target freeze or run evidence |
+| `benchmark/input_sets/target_candidate_academic_search_v0.14.csv` | academic-search target candidate matrix | candidate/panel planning only; not frozen target set |
+| `ops/plans/target_candidate_academic_search_plan_v0.14.md` | target academic-search plan | planning artifact only |
+| `ops/audits/target_candidate_academic_search_audit_v0.14.md` | target academic-search audit | metadata-level evidence only; no data download |
 | `benchmark/deployment/method_readiness_review_v0.8.csv` | method license/env/checkpoint/input-contract audit | not local reproducibility evidence |
 | `benchmark/method_sources/method_landscape_watchlist_v0.9.csv` | method landscape and Related Work coverage | not an include scorecard or source pin audit |
 | `benchmark/input_sets/target_set_v0.csv` | frozen target interface | remains schema-only until controls, assay, license, leakage, and provenance are complete |

@@ -1,5 +1,89 @@
 # Release Notes
 
+## v1.2.3 Academic-Search Target Candidate And Method Case Planning - 2026-07-07
+
+This checkpoint adds the v0.14 academic-search layer for candidate peptide
+targets, method-paper cases and dataset/panel references. It records literature
+examples and candidate panels for later schema review; it is not a target-set
+freeze or execution layer.
+
+### Added
+
+- Added `benchmark/method_sources/method_paper_case_matrix_v0.14.csv`.
+- Added `benchmark/input_sets/target_candidate_academic_search_v0.14.csv`.
+- Added `ops/plans/target_candidate_academic_search_plan_v0.14.md`.
+- Added `ops/audits/target_candidate_academic_search_audit_v0.14.md`.
+
+### Changed
+
+- Bumped project version to `1.2.3`.
+- Updated validator coverage for v0.14 method-paper cases and academic-search
+  target candidates.
+- Updated index, README, Benchmark README, input-set README, method-source
+  README, AGENTS and project log for the academic-search target/case layer.
+
+### Notification
+
+- Candidate targets now include method-paper cases and panels such as NCAM1,
+  AMHR2, MDM2/3EQS, MHCII/1SJH, 3CLpro/7Z4S, ALK1/6SF1, TNF/7KP7,
+  PepBench/LNR, PepMerge, PEPBI, GPCR 124 complexes, pMHC targets and Chang
+  ranking cases.
+- The next review queue should focus on exact chain/sequence extraction,
+  controls, assay evidence, license, data route and leakage checks before any
+  target-set promotion.
+
+### Boundaries
+
+- No target-set freeze.
+- No data download.
+- No model weights.
+- No method installation.
+- No Docker/GPU benchmark run.
+- No smoke-test evidence.
+- No local reproducibility or method-performance claim.
+
+## v1.2.2 Docker Image Assignment And Benchmark Environment Scaffold - 2026-07-07
+
+This checkpoint adds the v0.13 Docker image/environment assignment layer. It
+records which `/mnt/ssd4t/protein-design` images should be reused and defines a
+shared multi-conda benchmark image scaffold for first-wave methods that do not
+already have dedicated local images.
+
+### Added
+
+- Added `benchmark/deployment/docker_image_inventory_v0.13.csv`.
+- Added `benchmark/deployment/method_environment_assignment_v0.13.csv`.
+- Added `ops/plans/protein_design_image_consolidation_plan_v0.13.md`.
+- Added `ops/audits/docker_environment_assignment_audit_v0.13.md`.
+
+### Changed
+
+- Bumped project version to `1.2.2`.
+- Updated validator coverage for v0.13 image inventory and method-environment
+  assignment rows.
+- Updated index, README, Benchmark README, AGENTS and project log for the
+  image/environment scaffold layer.
+
+### Notification
+
+- Existing RFdiffusion/RFpeptide, ProteinMPNN/Foundry, BindCraft, AF2/AF3,
+  Rosetta, PepMimic and RFpeptide images under `/mnt/ssd4t/protein-design` are
+  assigned for reuse.
+- The external workbench now contains a `pd-benchmark-methods-gpu:0.13`
+  Dockerfile scaffold with separate conda environments for PepMLM,
+  DiffPepBuilder, PepGLAD, D-Flow/PeptideDesign and ColabDesign.
+
+### Boundaries
+
+- No new image build was recorded in the KB.
+- No model weights.
+- No dataset download.
+- No third-party source stored in the KB.
+- No method installation evidence.
+- No Docker/GPU benchmark run.
+- No target-set freeze.
+- No local reproducibility or method-performance claim.
+
 ## v1.2.1 Repository Checkpoint, Preflight Interfaces, And Source Clone Audit - 2026-07-07
 
 This checkpoint collects the v0.10 structure/preflight layer, v0.11 source-I/O adapter planning layer, v0.12 external source-code clone audit, and v1.3 grant-style planning supplement into one repository commit. It remains a protocol/readiness release, not a benchmark-result release.

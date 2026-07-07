@@ -32,6 +32,10 @@
 - preflight_download_v010_rows: 8
 - source_freshness_v011_rows: 4
 - source_clone_v012_rows: 11
+- docker_image_inventory_v013_rows: 8
+- method_environment_assignment_v013_rows: 10
+- method_paper_case_v014_rows: 13
+- target_academic_search_v014_rows: 16
 - method_readiness_v08_rows: 4
 - method_preflight_v010_rows: 3
 - adapter_preflight_v011_rows: 3
@@ -52,8 +56,8 @@
 - method_cards: 12
 - literature_cards: 120
 - bibtex_entries: 432
-- markdown_links_checked: 124
-- tracked_files_checked: 343
+- markdown_links_checked: 137
+- tracked_files_checked: 351
 
 ## Errors
 - None
@@ -97,6 +101,10 @@
     "preflight_download_v010_rows": 8,
     "source_freshness_v011_rows": 4,
     "source_clone_v012_rows": 11,
+    "docker_image_inventory_v013_rows": 8,
+    "method_environment_assignment_v013_rows": 10,
+    "method_paper_case_v014_rows": 13,
+    "target_academic_search_v014_rows": 16,
     "method_readiness_v08_rows": 4,
     "method_preflight_v010_rows": 3,
     "adapter_preflight_v011_rows": 3,
@@ -117,8 +125,8 @@
     "method_cards": 12,
     "literature_cards": 120,
     "bibtex_entries": 432,
-    "markdown_links_checked": 124,
-    "tracked_files_checked": 343
+    "markdown_links_checked": 137,
+    "tracked_files_checked": 351
   },
   "errors": [],
   "warnings": []

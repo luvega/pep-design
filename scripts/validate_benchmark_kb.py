@@ -632,6 +632,76 @@ SOURCE_CLONE_HEADERS = [
     "notes",
 ]
 
+DOCKER_IMAGE_INVENTORY_HEADERS = [
+    "image_tag",
+    "service_name",
+    "covered_methods_or_role",
+    "local_status",
+    "image_id_or_build_state",
+    "size_or_scope",
+    "source_mount",
+    "model_or_weight_mount",
+    "license_boundary",
+    "smoke_test_target",
+    "next_action",
+]
+
+METHOD_ENVIRONMENT_ASSIGNMENT_HEADERS = [
+    "method",
+    "benchmark_role",
+    "assigned_image",
+    "assigned_conda_env",
+    "assignment_status",
+    "source_root",
+    "model_or_weight_mount",
+    "input_contract_scope",
+    "license_boundary",
+    "smoke_test_target",
+    "next_gate",
+    "next_action",
+]
+
+METHOD_PAPER_CASE_V014_HEADERS = [
+    "method",
+    "case_id",
+    "case_scope",
+    "source_paper",
+    "source_identifier",
+    "source_url",
+    "publication_status",
+    "reported_case_or_dataset",
+    "target_or_dataset",
+    "pdb_id_or_panel",
+    "task_id",
+    "peptide_scope",
+    "input_requirement",
+    "case_role_for_benchmark",
+    "benchmark_use_decision",
+    "evidence_boundary",
+    "next_action",
+]
+
+TARGET_ACADEMIC_SEARCH_V014_HEADERS = [
+    "candidate_id",
+    "target_or_panel",
+    "source_type",
+    "primary_source",
+    "source_identifier",
+    "source_url",
+    "pdb_id_or_panel_size",
+    "target_class",
+    "task_id",
+    "peptide_design_feature",
+    "method_paper_anchor",
+    "benchmark_track",
+    "priority",
+    "readiness_decision",
+    "evidence_summary",
+    "required_controls_or_checks",
+    "download_policy",
+    "next_action",
+]
+
 ADAPTER_PREFLIGHT_HEADERS = [
     "method",
     "batch",
@@ -665,6 +735,7 @@ REQUIRED_FILES = [
     "benchmark/input_sets/dataset_readiness_scorecard.csv",
     "benchmark/input_sets/target_candidate_matrix_v0.4.csv",
     "benchmark/input_sets/target_candidate_matrix_v0.5.csv",
+    "benchmark/input_sets/target_candidate_academic_search_v0.14.csv",
     "benchmark/input_sets/dataset_supplement_watchlist_v0.6.csv",
     "benchmark/input_sets/dataset_supplement_schema_review_v0.7.csv",
     "benchmark/input_sets/dataset_supplement_schema_review_v0.8.csv",
@@ -678,6 +749,7 @@ REQUIRED_FILES = [
     "benchmark/method_sources/method_source_manifest.csv",
     "benchmark/method_sources/source_pin_audit_v0.4.csv",
     "benchmark/method_sources/source_pin_audit_v0.5.csv",
+    "benchmark/method_sources/method_paper_case_matrix_v0.14.csv",
     "benchmark/deployment/server_readiness_checklist_v0.5.md",
     "benchmark/deployment/server_smoke_test_contract_v0.6.md",
     "benchmark/deployment/download_manifest_template_v0.7.csv",
@@ -685,6 +757,8 @@ REQUIRED_FILES = [
     "benchmark/deployment/preflight_download_approval_v0.10.csv",
     "benchmark/deployment/source_freshness_manifest_v0.11.csv",
     "benchmark/deployment/source_clone_manifest_v0.12.csv",
+    "benchmark/deployment/docker_image_inventory_v0.13.csv",
+    "benchmark/deployment/method_environment_assignment_v0.13.csv",
     "benchmark/deployment/method_readiness_review_v0.8.csv",
     "benchmark/deployment/method_preflight_status_v0.10.csv",
     "benchmark/deployment/adapter_preflight_status_v0.11.csv",
@@ -720,12 +794,16 @@ REQUIRED_FILES = [
     "ops/audits/link_and_data_availability_audit_v0.5.md",
     "ops/audits/academic_research_suite_review_v0.6.md",
     "ops/audits/source_code_clone_audit_v0.12.md",
+    "ops/audits/docker_environment_assignment_audit_v0.13.md",
+    "ops/audits/target_candidate_academic_search_audit_v0.14.md",
     "ops/plans/updated_plan_v0.6.md",
     "ops/plans/updated_plan_v0.9.md",
     "ops/plans/updated_plan_v1.3.md",
     "ops/plans/server_preflight_plan_v0.10.md",
     "ops/plans/server_from_scratch_run_plan_v0.10.md",
     "ops/plans/source_io_smoke_test_plan_v0.11.md",
+    "ops/plans/protein_design_image_consolidation_plan_v0.13.md",
+    "ops/plans/target_candidate_academic_search_plan_v0.14.md",
     "ops/migration/file_role_map_v0.10.csv",
     "ops/audits/license_schema_input_contract_review_v0.8.md",
     "ops/audits/supervisor_skills_idea_evaluation.md",
@@ -1086,6 +1164,26 @@ def main() -> int:
         errors,
         "benchmark/deployment/source_clone_manifest_v0.12.csv",
         SOURCE_CLONE_HEADERS,
+    )
+    docker_image_inventory_rows = check_headers(
+        errors,
+        "benchmark/deployment/docker_image_inventory_v0.13.csv",
+        DOCKER_IMAGE_INVENTORY_HEADERS,
+    )
+    method_environment_assignment_rows = check_headers(
+        errors,
+        "benchmark/deployment/method_environment_assignment_v0.13.csv",
+        METHOD_ENVIRONMENT_ASSIGNMENT_HEADERS,
+    )
+    method_paper_case_v014_rows = check_headers(
+        errors,
+        "benchmark/method_sources/method_paper_case_matrix_v0.14.csv",
+        METHOD_PAPER_CASE_V014_HEADERS,
+    )
+    target_academic_search_v014_rows = check_headers(
+        errors,
+        "benchmark/input_sets/target_candidate_academic_search_v0.14.csv",
+        TARGET_ACADEMIC_SEARCH_V014_HEADERS,
     )
     method_readiness_v08_rows = check_headers(
         errors,
@@ -2045,6 +2143,263 @@ def main() -> int:
             if forbidden in text:
                 errors.append(f"{repo_name}: source clone row overclaims {forbidden}")
 
+    expected_image_tags = {
+        "pd-foundry-gpu:latest",
+        "pd-rfpeptide-gpu:fixed",
+        "pd-bindcraft-gpu:installed",
+        "pd-af2multimer-gpu:fixed",
+        "pd-af3-gpu:v3.0.2",
+        "pd-rosetta-cpu-parallel:latest",
+        "pd-pepmimic-gpu:latest",
+        "pd-benchmark-methods-gpu:0.13",
+    }
+    image_by_tag = {row.get("image_tag", ""): row for row in docker_image_inventory_rows}
+    for image_tag in expected_image_tags:
+        if image_tag not in image_by_tag:
+            errors.append(f"docker_image_inventory_v0.13.csv missing {image_tag}")
+    if len(docker_image_inventory_rows) != len(expected_image_tags):
+        errors.append(
+            f"docker_image_inventory_v0.13.csv should contain {len(expected_image_tags)} rows, "
+            f"found {len(docker_image_inventory_rows)}"
+        )
+    allowed_image_status = {"existing_docker_image_observed", "workbench_dockerfile_defined_not_built"}
+    for row in docker_image_inventory_rows:
+        image_tag = row.get("image_tag", "")
+        if row.get("local_status") not in allowed_image_status:
+            errors.append(f"{image_tag}: invalid v0.13 local_status {row.get('local_status')}")
+        for required_field in ["service_name", "covered_methods_or_role", "license_boundary", "smoke_test_target", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{image_tag}: docker image inventory row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in ["benchmark_completed", "best_performing", "experimentally_validated", "weights_baked"]:
+            if forbidden in text:
+                errors.append(f"{image_tag}: docker image inventory row overclaims {forbidden}")
+
+    expected_environment_methods = {
+        "PepMLM",
+        "SaLT&PepPr",
+        "DiffPepBuilder",
+        "PepGLAD",
+        "D-Flow / PeptideDesign",
+        "PepMirror",
+        "AfCycDesign / ColabDesign cyclic peptide",
+        "DexDesign / OSPREY3",
+        "RFdiffusion + ProteinMPNN",
+        "BindCraft",
+    }
+    environment_by_method = {row.get("method", ""): row for row in method_environment_assignment_rows}
+    for method in expected_environment_methods:
+        if method not in environment_by_method:
+            errors.append(f"method_environment_assignment_v0.13.csv missing {method}")
+    if len(method_environment_assignment_rows) != len(expected_environment_methods):
+        errors.append(
+            f"method_environment_assignment_v0.13.csv should contain {len(expected_environment_methods)} rows, "
+            f"found {len(method_environment_assignment_rows)}"
+        )
+    allowed_assignment_status = {
+        "dockerfile_defined_not_built",
+        "existing_images_reuse",
+        "existing_image_reuse",
+        "license_gated_placeholder",
+        "dependency_blocked",
+        "cpu_java_route_planned",
+    }
+    for row in method_environment_assignment_rows:
+        method = row.get("method", "")
+        if row.get("assignment_status") not in allowed_assignment_status:
+            errors.append(f"{method}: invalid v0.13 assignment_status {row.get('assignment_status')}")
+        if row.get("assigned_image") != "not_assigned_license_gated" and not row.get("source_root", "").startswith(
+            "/mnt/ssd4t/protein-design/data/src/pep_design_benchmark"
+        ):
+            errors.append(f"{method}: v0.13 source root must remain outside the KB repository")
+        for required_field in ["benchmark_role", "assigned_image", "license_boundary", "next_gate", "next_action"]:
+            if not row.get(required_field):
+                errors.append(f"{method}: method environment assignment row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in ["benchmark_completed", "best_performing", "experimentally_validated", "smoke_test_ready"]:
+            if forbidden in text:
+                errors.append(f"{method}: method environment assignment row overclaims {forbidden}")
+
+    expected_v014_case_ids = {
+        "pepmlm_ncam1_binding",
+        "pepmlm_amhr2_binding",
+        "pepmlm_intracellular_degradation_targets",
+        "pepmlm_viral_phosphoproteins",
+        "diffpepbuilder_mhcii_1sjh",
+        "diffpepbuilder_ogt_6ma3",
+        "diffpepbuilder_mdm2_3eqs",
+        "diffpepbuilder_3clpro_7z4s",
+        "diffpepbuilder_alk1_6sf1",
+        "diffpepbuilder_tnf_7kp7",
+        "pepglad_pepbench_lnr_panel",
+        "dflow_pepmerge_panel",
+        "rfdiffusion_pmhci_specificity_panel",
+    }
+    observed_v014_case_ids = {row.get("case_id", "") for row in method_paper_case_v014_rows}
+    missing_v014_cases = sorted(expected_v014_case_ids - observed_v014_case_ids)
+    if missing_v014_cases:
+        errors.append("method_paper_case_matrix_v0.14.csv missing cases: " + ", ".join(missing_v014_cases))
+    if len(method_paper_case_v014_rows) < len(expected_v014_case_ids):
+        errors.append(
+            f"method_paper_case_matrix_v0.14.csv should contain at least {len(expected_v014_case_ids)} rows, "
+            f"found {len(method_paper_case_v014_rows)}"
+        )
+    allowed_v014_case_decisions = {
+        "candidate_reference_not_frozen",
+        "related_work_reference_not_frozen",
+        "panel_reference_not_downloaded",
+    }
+    allowed_v014_case_scopes = {"wet_case", "regeneration_case", "de_novo_case", "benchmark_dataset_case", "method_extension_case"}
+    for row in method_paper_case_v014_rows:
+        case_id = row.get("case_id", "")
+        if row.get("case_scope") not in allowed_v014_case_scopes:
+            errors.append(f"{case_id}: invalid v0.14 case_scope {row.get('case_scope')}")
+        if row.get("task_id") not in REQUIRED_PROTOCOL_TASKS:
+            errors.append(f"{case_id}: invalid v0.14 task_id {row.get('task_id')}")
+        if row.get("benchmark_use_decision") not in allowed_v014_case_decisions:
+            errors.append(f"{case_id}: invalid v0.14 benchmark_use_decision {row.get('benchmark_use_decision')}")
+        if not row.get("source_url", "").startswith("http"):
+            errors.append(f"{case_id}: v0.14 method paper case must cite an HTTP source URL")
+        for required_field in [
+            "method",
+            "source_paper",
+            "source_identifier",
+            "publication_status",
+            "reported_case_or_dataset",
+            "target_or_dataset",
+            "peptide_scope",
+            "input_requirement",
+            "evidence_boundary",
+            "next_action",
+        ]:
+            if not row.get(required_field):
+                errors.append(f"{case_id}: v0.14 method paper case row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "download_performed=yes",
+            "ready_for_target_set",
+            "smoke_test_ready",
+            "benchmark_completed",
+            "best_performing",
+            "installed",
+            "reproduced",
+            "ran_locally",
+        ]:
+            if forbidden in text:
+                errors.append(f"{case_id}: v0.14 method paper case row overclaims {forbidden}")
+
+    expected_v014_target_ids = {
+        "diff_mdm2_p53_3eqs_v014",
+        "diff_mhcii_hiv_1sjh_v014",
+        "diff_ogt_hcf1_6ma3_v014",
+        "diff_3clpro_7z4s_v014",
+        "diff_alk1_bmp10_6sf1_v014",
+        "diff_tnf_tnfr1_7kp7_v014",
+        "pepmlm_ncam1_v014",
+        "pepmlm_amhr2_v014",
+        "pepmlm_degradation_targets_v014",
+        "pepmlm_viral_phosphoproteins_v014",
+        "rfdiffusion_pmhci_11_targets_v014",
+        "pepglad_pepbench_lnr_v014",
+        "dflow_pepmerge_v014",
+        "pepbi_329_panel_v014",
+        "gpcr_124_panel_v014",
+        "chang_af2_six_receptors_v014",
+    }
+    observed_v014_target_ids = {row.get("candidate_id", "") for row in target_academic_search_v014_rows}
+    missing_v014_targets = sorted(expected_v014_target_ids - observed_v014_target_ids)
+    if missing_v014_targets:
+        errors.append(
+            "target_candidate_academic_search_v0.14.csv missing candidates: " + ", ".join(missing_v014_targets)
+        )
+    if len(target_academic_search_v014_rows) < 12:
+        errors.append(
+            "target_candidate_academic_search_v0.14.csv should contain at least 12 academic-search candidates"
+        )
+    allowed_v014_priorities = {"high", "medium", "low"}
+    allowed_v014_target_decisions = {"candidate_not_frozen", "panel_candidate_not_frozen", "related_work_not_frozen"}
+    for row in target_academic_search_v014_rows:
+        candidate_id = row.get("candidate_id", "")
+        if row.get("task_id") not in REQUIRED_PROTOCOL_TASKS:
+            errors.append(f"{candidate_id}: invalid v0.14 target task_id {row.get('task_id')}")
+        if row.get("priority") not in allowed_v014_priorities:
+            errors.append(f"{candidate_id}: invalid v0.14 priority {row.get('priority')}")
+        if row.get("readiness_decision") not in allowed_v014_target_decisions:
+            errors.append(f"{candidate_id}: invalid v0.14 readiness_decision {row.get('readiness_decision')}")
+        if "metadata_only" not in row.get("download_policy", ""):
+            errors.append(f"{candidate_id}: v0.14 download_policy must remain metadata_only/no-download")
+        if not row.get("source_url", "").startswith("http"):
+            errors.append(f"{candidate_id}: v0.14 target candidate must cite an HTTP source URL")
+        for required_field in [
+            "target_or_panel",
+            "source_type",
+            "primary_source",
+            "source_identifier",
+            "pdb_id_or_panel_size",
+            "target_class",
+            "peptide_design_feature",
+            "method_paper_anchor",
+            "benchmark_track",
+            "evidence_summary",
+            "required_controls_or_checks",
+            "next_action",
+        ]:
+            if not row.get(required_field):
+                errors.append(f"{candidate_id}: v0.14 target candidate row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "download_performed=yes",
+            "ready_for_target_set",
+            "smoke_test_ready",
+            "benchmark_completed",
+            "best_performing",
+            "installed",
+            "reproduced",
+            "ran_locally",
+        ]:
+            if forbidden in text:
+                errors.append(f"{candidate_id}: v0.14 target candidate row overclaims {forbidden}")
+
+    target_search_plan_text = (ROOT / "ops/plans/target_candidate_academic_search_plan_v0.14.md").read_text(
+        encoding="utf-8"
+    )
+    for token in [
+        "academic-search driven",
+        "method_paper_case_matrix_v0.14.csv",
+        "target_candidate_academic_search_v0.14.csv",
+        "NCAM1",
+        "MDM2",
+        "PepMerge",
+        "PEPBI",
+        "GPCR 124",
+        "metadata_only_no_download",
+        "does not freeze",
+    ]:
+        if token not in target_search_plan_text:
+            errors.append(f"target_candidate_academic_search_plan_v0.14.md missing token {token}")
+    for forbidden in ["download_performed=yes", "smoke_test_ready | reached", "target_set_v0.csv 已冻结"]:
+        if forbidden in target_search_plan_text:
+            errors.append(f"target_candidate_academic_search_plan_v0.14.md contains overclaim token {forbidden}")
+
+    target_search_audit_text = (ROOT / "ops/audits/target_candidate_academic_search_audit_v0.14.md").read_text(
+        encoding="utf-8"
+    )
+    for token in [
+        "Search Evidence",
+        "PepMLM",
+        "DiffPepBuilder",
+        "RCSB PDB API",
+        "PepBench",
+        "D-Flow",
+        "RFdiffusion",
+        "PEPBI",
+        "GPCR",
+        "Chang AlphaFold",
+        "No-Overclaim Boundary",
+    ]:
+        if token not in target_search_audit_text:
+            errors.append(f"target_candidate_academic_search_audit_v0.14.md missing token {token}")
+
     adapter_methods = {row.get("method", ""): row for row in adapter_preflight_rows}
     for method in ["PepMLM", "RFdiffusion + ProteinMPNN", "PepMirror"]:
         if method not in adapter_methods:
@@ -2241,6 +2596,10 @@ def main() -> int:
             "preflight_download_v010_rows": len(preflight_download_rows),
             "source_freshness_v011_rows": len(source_freshness_rows),
             "source_clone_v012_rows": len(source_clone_rows),
+            "docker_image_inventory_v013_rows": len(docker_image_inventory_rows),
+            "method_environment_assignment_v013_rows": len(method_environment_assignment_rows),
+            "method_paper_case_v014_rows": len(method_paper_case_v014_rows),
+            "target_academic_search_v014_rows": len(target_academic_search_v014_rows),
             "method_readiness_v08_rows": len(method_readiness_v08_rows),
             "method_preflight_v010_rows": len(method_preflight_rows),
             "adapter_preflight_v011_rows": len(adapter_preflight_rows),

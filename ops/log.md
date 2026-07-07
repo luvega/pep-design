@@ -1,5 +1,21 @@
 # Project Log
 
+## [2026-07-07] release | v1.2.3 academic-search target candidate planning
+- Bumped project version to `1.2.3`.
+- Added `benchmark/method_sources/method_paper_case_matrix_v0.14.csv` to map PepMLM, DiffPepBuilder, PepGLAD, D-Flow and RFdiffusion + ProteinMPNN pMHC literature cases to Benchmark task roles.
+- Added `benchmark/input_sets/target_candidate_academic_search_v0.14.csv` with 16 candidate targets or panels, including NCAM1, AMHR2, MDM2/3EQS, MHCII/1SJH, 3CLpro/7Z4S, ALK1/6SF1, TNF/7KP7, PepBench/LNR, PepMerge, PEPBI, GPCR 124 complexes, pMHC and Chang ranking sources.
+- Added `ops/plans/target_candidate_academic_search_plan_v0.14.md` and `ops/audits/target_candidate_academic_search_audit_v0.14.md`.
+- Updated validator, README, index, Benchmark README, input-set README, method-source README, release notes and AGENTS for v0.14.
+- Maintained boundaries: no Zotero/EndNote/PD-wiki writes, no PDF/data/weight download, no source clone, no install, no Docker/GPU run, no smoke-test evidence, no `target_set_v0.csv` promotion, and no local reproducibility or method-performance claim.
+
+## [2026-07-07] release | v1.2.2 Docker image assignment scaffold
+- Bumped project version to `1.2.2`.
+- Added v0.13 Docker image inventory and method-environment assignment manifests for the `/mnt/ssd4t/protein-design` workbench.
+- Recorded that existing RFdiffusion/RFpeptide, ProteinMPNN/Foundry, BindCraft, AF2/AF3, Rosetta, PepMimic and RFpeptide images should be reused rather than rebuilt inside the Benchmark KB.
+- Added an image-consolidation plan and Docker/environment assignment audit for the shared `pd-benchmark-methods-gpu:0.13` multi-conda scaffold covering PepMLM, DiffPepBuilder, PepGLAD, D-Flow/PeptideDesign and ColabDesign.
+- Updated validator, index, README, Benchmark README, AGENTS and validation report coverage for v0.13.
+- Maintained boundaries: no Zotero/EndNote/PD-wiki writes, no model-weight download, no dataset download, no third-party source stored in the KB, no method installation evidence, no Docker/GPU benchmark run, no smoke-test-ready claim, no target-set promotion, and no local reproducibility or method-performance claim.
+
 ## [2026-07-07] release | v1.2.1 repository checkpoint and source checkout notice
 - Bumped project version to `1.2.1`.
 - Consolidated v0.10 structure/preflight planning, v0.11 source-I/O adapter planning, v0.12 external source-code clone auditing, and v1.3 grant-style planning into one repository checkpoint.

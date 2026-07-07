@@ -25,6 +25,8 @@ checkpoints/
 data/
 logs/
 method_sources/
+!benchmark/method_sources/
+!benchmark/method_sources/**
 models/
 results/
 runs/

@@ -17,3 +17,7 @@ Source pinning means commit/license/README/environment route inspection only. It
 ## v0.9 Method Landscape Watchlist
 
 `method_landscape_watchlist_v0.9.csv` records review-derived method coverage across generation paradigms, peptide topology, target conditioning and coverage gaps. It is not a source pin audit and does not change `candidate_method_scorecard.csv`; `review_only` rows must go through source/license/runnability/input-contract review before they can be considered for a future candidate-pool change.
+
+## v0.14 Method Paper Case Matrix
+
+`method_paper_case_matrix_v0.14.csv` records academic-search evidence for method-paper cases and benchmark panels used by PepMLM, DiffPepBuilder, PepGLAD, D-Flow and RFdiffusion + ProteinMPNN pMHC work. It is a literature/case mapping layer only. It does not mean any method has been installed, run, reproduced or compared in this repository, and it does not promote any case into `target_set_v0.csv`.
