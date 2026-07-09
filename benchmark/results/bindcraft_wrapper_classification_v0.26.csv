@@ -1,0 +1,2 @@
+method,output_root,classification,accepted_pdb_count,low_confidence_pdb_count,rejected_pdb_count,trajectory_pdb_count,runtime_exit_code,hard_stop_status,reason,evidence_boundary
+BindCraft,/data/protein-design/data/outputs/benchmark_v0.21/adapter_smokes/bindcraft,low_confidence_only,0,1,0,1,0,timeout_controlled,low_confidence_trajectory_present_without_accepted_final,Wrapper classifier evidence only; not Benchmark result; not scoring evidence; not accepted final unless classification is accepted_final

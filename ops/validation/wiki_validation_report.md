@@ -58,6 +58,12 @@
 - adapter_method_output_v021_rows: 10
 - adapter_candidate_output_v021_rows: 6
 - adapter_run_rows_v021_rows: 6
+- dflow_bounded_candidate_v026_rows: 1
+- bindcraft_classification_v026_rows: 1
+- bindcraft_accepted_final_v028_rows: 1
+- colabdesign_bounded_method_v029_rows: 1
+- colabdesign_bounded_candidate_v029_rows: 1
+- bindcraft_accepted_candidate_v029_rows: 4
 - method_example_fixture_v022_rows: 10
 - multi_case_fixture_target_v022_rows: 5
 - multi_case_fixture_control_v022_rows: 7
@@ -67,6 +73,12 @@
 - dflow_project_install_v023_rows: 1
 - external_dry_run_package_v023_rows: 5
 - priority_gate_review_v023_rows: 5
+- dflow_input_contract_fixture_v024_rows: 1
+- dflow_full_pepmerge_download_v025_rows: 1
+- dflow_colab_bindcraft_v026_rows: 3
+- colabdesign_dexdesign_gate_v027_rows: 2
+- external_asset_rescue_v028_rows: 3
+- bounded_generation_parser_v029_rows: 3
 - method_readiness_v08_rows: 4
 - method_preflight_v010_rows: 3
 - adapter_preflight_v011_rows: 3
@@ -87,8 +99,8 @@
 - method_cards: 12
 - literature_cards: 120
 - bibtex_entries: 432
-- markdown_links_checked: 181
-- tracked_files_checked: 404
+- markdown_links_checked: 199
+- tracked_files_checked: 435
 
 ## Errors
 - None
@@ -158,6 +170,12 @@
     "adapter_method_output_v021_rows": 10,
     "adapter_candidate_output_v021_rows": 6,
     "adapter_run_rows_v021_rows": 6,
+    "dflow_bounded_candidate_v026_rows": 1,
+    "bindcraft_classification_v026_rows": 1,
+    "bindcraft_accepted_final_v028_rows": 1,
+    "colabdesign_bounded_method_v029_rows": 1,
+    "colabdesign_bounded_candidate_v029_rows": 1,
+    "bindcraft_accepted_candidate_v029_rows": 4,
     "method_example_fixture_v022_rows": 10,
     "multi_case_fixture_target_v022_rows": 5,
     "multi_case_fixture_control_v022_rows": 7,
@@ -167,6 +185,12 @@
     "dflow_project_install_v023_rows": 1,
     "external_dry_run_package_v023_rows": 5,
     "priority_gate_review_v023_rows": 5,
+    "dflow_input_contract_fixture_v024_rows": 1,
+    "dflow_full_pepmerge_download_v025_rows": 1,
+    "dflow_colab_bindcraft_v026_rows": 3,
+    "colabdesign_dexdesign_gate_v027_rows": 2,
+    "external_asset_rescue_v028_rows": 3,
+    "bounded_generation_parser_v029_rows": 3,
     "method_readiness_v08_rows": 4,
     "method_preflight_v010_rows": 3,
     "adapter_preflight_v011_rows": 3,
@@ -187,8 +211,8 @@
     "method_cards": 12,
     "literature_cards": 120,
     "bibtex_entries": 432,
-    "markdown_links_checked": 181,
-    "tracked_files_checked": 404
+    "markdown_links_checked": 199,
+    "tracked_files_checked": 435
   },
   "errors": [],
   "warnings": []

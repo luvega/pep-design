@@ -1,0 +1,2 @@
+method,output_root,classification,accepted_pdb_count,low_confidence_pdb_count,rejected_pdb_count,trajectory_pdb_count,runtime_exit_code,hard_stop_status,reason,evidence_boundary
+BindCraft,/data/protein-design/data/outputs/bindcraft/CD47,accepted_final,4,876,1,1037,not_recorded,not_recorded,accepted_pdb_present,Wrapper classifier evidence only; not Benchmark result; not scoring evidence; not accepted final unless classification is accepted_final

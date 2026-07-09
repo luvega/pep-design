@@ -1,5 +1,260 @@
 # Release Notes
 
+## v1.2.17 Bounded Generation and Parser Evidence - 2026-07-09
+
+This checkpoint records the v0.29 bounded/parser follow-up for ColabDesign,
+DexDesign and BindCraft.
+
+### Added
+
+- Added `scripts/run_colabdesign_bounded_generation.py`.
+- Added `scripts/prepare_dexdesign_minimal_fixture.py`.
+- Added `scripts/parse_bindcraft_accepted_outputs.py`.
+- Added `benchmark/deployment/bounded_generation_parser_v0.29.csv`.
+- Added `benchmark/results/colabdesign_bounded_method_output_manifest_v0.29.csv`.
+- Added `benchmark/results/colabdesign_bounded_candidate_outputs_v0.29.csv`.
+- Added `benchmark/results/bindcraft_accepted_candidate_outputs_v0.29.csv`.
+- Added `ops/audits/bounded_generation_parser_audit_v0.29.md`.
+- Added `tests/test_v029_bounded_generation_parser.py`.
+
+### Changed
+
+- Bumped project version to `1.2.17`.
+- Updated validator coverage for v0.29 bounded/parser artifacts.
+- Updated README, index, Benchmark README, AGENTS and project log for v0.29.
+
+### Notification
+
+- ColabDesign completed one bounded 7ZKR GPU generation/parser attempt in
+  `benchmark_runs/v0.29/colabdesign_bounded_generation`; exit code was `0`,
+  parser status was `parsed`, and the compact candidate row records sequence
+  `IQTNYYVRSRTQCQ`.
+- DexDesign now has a synthetic prepared D-L complex fixture with target=`z`
+  and peptide=`y`; no DexDesign design job was run.
+- BindCraft external CD47 accepted-final outputs were converted into four
+  standard candidate rows.
+
+### Boundaries
+
+- No controlled multi-case Benchmark run.
+- No `target_set_v0.csv` promotion.
+- No multi-seed generation evidence.
+- No scoring or method-ranking evidence.
+- No complete Benchmark result.
+
+## v1.2.16 External Asset Rescue - 2026-07-09
+
+This checkpoint records external asset rescue for three previously incomplete
+method gates: ColabDesign AF parameters, DexDesign input contract, and
+BindCraft accepted-final output classification.
+
+### Added
+
+- Added `benchmark/deployment/external_asset_rescue_v0.28.csv`.
+- Added `benchmark/results/bindcraft_accepted_final_classification_v0.28.csv`.
+- Added `ops/audits/external_asset_rescue_audit_v0.28.md`.
+- Added `tests/test_v028_external_asset_rescue.py`.
+
+### Changed
+
+- Bumped project version to `1.2.16`.
+- Updated ColabDesign adapter defaults to use
+  `/data/protein-design/data/alphafold_db/params`.
+- Extended BindCraft classifier support for native `Accepted/` output layout.
+- Extended DexDesign route audit with explicit D-peptide/L-protein input
+  contract fields.
+- Updated validator coverage for v0.28 external asset rescue rows.
+
+### Notification
+
+- ColabDesign asset gate now reaches `ready_for_bounded_gpu_generation` using
+  `/data/protein-design/data/alphafold_db/params` and
+  `7zkr_GABARAP.pdb`; no ColabDesign generation was run.
+- DexDesign input contract is now explicit: first chain is L-target, second
+  chain is D-peptide, recommended target=`z`, peptide=`y`; no prepared D-L
+  complex fixture was found.
+- BindCraft external CD47 output is classified as `accepted_final` with four
+  accepted PDB files.
+
+### Boundaries
+
+- No controlled multi-case Benchmark run.
+- No ColabDesign generated design claim.
+- No DexDesign design run.
+- No scoring or method-ranking evidence.
+- No complete Benchmark result.
+
+## v1.2.15 ColabDesign/DexDesign Gate Update - 2026-07-09
+
+This checkpoint records two gate updates: a bounded ColabDesign execute asset
+gate and a DexDesign-specific OSPREY3 route audit.
+
+### Added
+
+- Added `scripts/audit_dexdesign_route.py`.
+- Added `benchmark/deployment/colabdesign_dexdesign_gate_v0.27.csv`.
+- Added `ops/audits/colabdesign_dexdesign_gate_v0.27.md`.
+- Added `tests/test_v027_colabdesign_dexdesign_gates.py`.
+
+### Changed
+
+- Bumped project version to `1.2.15`.
+- Extended `scripts/prepare_colabdesign_cli_adapter.py` so `--execute` now
+  writes standard failed-closed manifests when AF parameters are missing.
+- Updated validator coverage for v0.27 ColabDesign and DexDesign gate rows.
+- Updated README, index, Benchmark README, AGENTS and project log for v0.27.
+
+### Notification
+
+- ColabDesign remains blocked before generation as `blocked_af_params_missing`
+  until a verified AF parameter route is supplied.
+- DexDesign is restricted to the OSPREY3 `examples/ccs.D-peptide-L-protein/`
+  route. Generic OSPREY examples are recorded only as
+  `env_probe_only_not_dexdesign`.
+- DexDesign remains `blocked_dexdesign_input_contract` until a minimal
+  D-peptide/L-protein complex fixture and bounded CPU smoke route are recorded.
+
+### Boundaries
+
+- No ColabDesign generation result.
+- No DexDesign design result.
+- No `target_set_v0.csv` promotion.
+- No scoring or method-ranking evidence.
+- No complete Benchmark result.
+
+## v1.2.14 D-Flow/ColabDesign/BindCraft Gate Update - 2026-07-09
+
+This checkpoint records three readiness-gate updates: a bounded single-entry
+D-Flow dry-run, a standard ColabDesign job-row CLI adapter package, and a
+BindCraft accepted-final output classifier.
+
+### Added
+
+- Added `scripts/prepare_colabdesign_cli_adapter.py`.
+- Added `scripts/classify_bindcraft_outputs.py`.
+- Added `benchmark/deployment/dflow_colabdesign_bindcraft_v0.26.csv`.
+- Added `benchmark/results/dflow_bounded_candidate_outputs_v0.26.csv`.
+- Added `benchmark/results/bindcraft_wrapper_classification_v0.26.csv`.
+- Added `ops/audits/dflow_colabdesign_bindcraft_v0.26.md`.
+- Added `tests/test_v026_colabdesign_bindcraft_adapters.py`.
+
+### Changed
+
+- Bumped project version to `1.2.14`.
+- Updated validator coverage for v0.26 gate rows, D-Flow bounded candidate
+  parsing, and BindCraft wrapper classification.
+- Updated README, index, Benchmark README, AGENTS and project log for v0.26.
+
+### Notification
+
+- D-Flow completed a bounded one-entry run on PepMerge entry `1aze_B` with
+  `num_steps=1` and `num_samples=1`; exit code was `0`, runtime was 147.67 s,
+  and `sample_0.pdb`, `gt.pdb`, `outputs.csv`, and `aar.csv` were produced in
+  gitignored runtime storage.
+- The D-Flow sample PDB parser extracted chain B sequence `MRRRRRRRRY`.
+- ColabDesign now has a standard job-row CLI adapter package for
+  `v022_pilot_colabdesign_7zkr_seed42`; v0.26 packages config and manifests but
+  does not run ColabDesign generation.
+- BindCraft v0.21 output is classified as `low_confidence_only` with zero
+  accepted PDBs and one LowConfidence trajectory PDB.
+
+### Boundaries
+
+- No `target_set_v0.csv` promotion.
+- No scoring or method-ranking evidence.
+- No ColabDesign generation run.
+- No BindCraft accepted-final design claim.
+- No complete Benchmark result.
+- No biological or experimental validation claim.
+- No source tree, model weight, downloaded dataset archive, generated PDB,
+  LMDB, or raw runtime log is tracked in git.
+
+## v1.2.13 D-Flow Full PepMerge Download Readiness - 2026-07-09
+
+This checkpoint resolves the D-Flow full PepMerge Google Drive blocker. It
+records verified downloads for `PepMerge_release.zip` and `PepMerge_lmdb.zip`,
+archive integrity checks, extracted structure coverage, official split-name
+bridging, and passing `PepDataset(reset=False)` loads for the official train
+and test LMDB caches.
+
+### Added
+
+- Added `benchmark/deployment/dflow_full_pepmerge_download_v0.25.csv`.
+- Added `ops/audits/dflow_full_pepmerge_download_audit_v0.25.md`.
+- Added `tests/test_v025_dflow_full_pepmerge_download.py`.
+
+### Changed
+
+- Bumped project version to `1.2.13`.
+- Updated validator coverage for the v0.25 full PepMerge download/load row.
+- Updated README, index, Benchmark README, AGENTS and project log for v0.25.
+
+### Notification
+
+- The local DNS issue for `drive.google.com` was isolated; folder metadata was
+  reached with a Google-IP override and downloads completed through
+  `drive.usercontent.google.com`.
+- `PepMerge_release.zip` is stored in gitignored
+  `data/dflow/downloads/PepMerge_release.zip` with SHA256
+  `eb0c9f6f81b85c399a32fe38e7f79274584805d7cafaac774a8d091792d0410c`.
+- `PepMerge_lmdb.zip` is stored in gitignored
+  `data/dflow/downloads/PepMerge_lmdb.zip` with SHA256
+  `452240f8d60227c0959f7f3a8cf43a2f8a63e53806f4f47bdf8ccb1cb1f5ef08`.
+- The extracted structure directory contains 10,348 case directories with no
+  missing required `pocket.pdb`/`peptide.pdb`/`receptor.pdb`/FASTA files.
+- D-Flow `PepDataset(reset=False)` loads 154 `pep_pocket_test` entries and
+  9,849 `pep_pocket_train` entries from the official LMDB package.
+
+### Boundaries
+
+- No `target_set_v0.csv` promotion.
+- No D-Flow generation run, scoring, or method-ranking evidence.
+- No complete Benchmark result.
+- No biological or experimental validation claim.
+- No source tree, model weight, downloaded dataset archive, generated PDB,
+  LMDB, or raw runtime log is tracked in git.
+
+## v1.2.12 D-Flow Input Contract Fixture Readiness - 2026-07-09
+
+This checkpoint resolves the D-Flow PepMerge/LMDB blocker at fixture level. It
+adds a reusable builder that prepares a PepMerge-style 3EQS input directory,
+generates `pep_pocket_test_structure_cache.lmdb`, and verifies
+`PepDataset(reset=False)` loading in the project-local D-Flow environment.
+
+### Added
+
+- Added `scripts/prepare_dflow_input_contract.py`.
+- Added `benchmark/deployment/dflow_input_contract_fixture_v0.24.csv`.
+- Added `ops/audits/dflow_input_contract_fixture_audit_v0.24.md`.
+- Added `tests/test_v024_dflow_input_contract.py`.
+
+### Changed
+
+- Bumped project version to `1.2.12`.
+- Updated validator coverage for the v0.24 D-Flow input-contract fixture row.
+- Updated README, index, Benchmark README, AGENTS and project log for v0.24.
+
+### Notification
+
+- The D-Flow fixture path `data/dflow/pepmerge/mdm2_p53_3eqs_fixture` and
+  LMDB cache `data/dflow/pep_cache/pep_pocket_test_structure_cache.lmdb` were
+  created in gitignored runtime storage.
+- `PepDataset(reset=True)` and `PepDataset(reset=False)` both passed for one
+  3EQS fixture entry.
+- The full PepMerge release Google Drive route remains unresolved; v0.24 does
+  not claim full PepMerge dataset access.
+- 3EQS chain B loads as 11 generated residues through the D-Flow parser, so
+  target chain/sequence review remains required before scoring.
+
+### Boundaries
+
+- No `target_set_v0.csv` promotion.
+- No D-Flow generation run, scoring, or method-ranking evidence.
+- No complete Benchmark result.
+- No biological or experimental validation claim.
+- No source tree, model weight, downloaded dataset archive, generated PDB,
+  LMDB, or raw runtime log is tracked in git.
+
 ## v1.2.11 External Dry-run Package Readiness - 2026-07-09
 
 This checkpoint adds the v0.23 execution-heavy readiness package. It records a

@@ -1090,6 +1090,154 @@ PRIORITY_GATE_REVIEW_V023_HEADERS = [
     "next_action",
 ]
 
+DFLOW_INPUT_CONTRACT_FIXTURE_V024_HEADERS = [
+    "method",
+    "fixture_case_id",
+    "pdb_id",
+    "receptor_chains",
+    "peptide_chains",
+    "structure_dir",
+    "case_dir",
+    "dataset_dir",
+    "names_file",
+    "lmdb_path",
+    "lmdb_size_bytes",
+    "lmdb_entries",
+    "entry_id_sha256",
+    "pep_dataset_reset_true_status",
+    "pep_dataset_reset_false_status",
+    "first_total_residues",
+    "first_generated_residues",
+    "log_path",
+    "script",
+    "status",
+    "evidence_boundary",
+    "next_action",
+]
+
+DFLOW_FULL_PEPMERGE_DOWNLOAD_V025_HEADERS = [
+    "method",
+    "asset_set",
+    "source_url",
+    "source_file_ids",
+    "download_route",
+    "download_status",
+    "release_zip_path",
+    "release_zip_size_bytes",
+    "release_zip_sha256",
+    "release_zip_integrity_status",
+    "release_structure_dir",
+    "case_dirs",
+    "structure_files",
+    "required_file_missing_case_dirs",
+    "lmdb_zip_path",
+    "lmdb_zip_size_bytes",
+    "lmdb_zip_sha256",
+    "lmdb_zip_integrity_status",
+    "lmdb_dir",
+    "test_names",
+    "train_names",
+    "test_names_missing_in_release",
+    "pep_dataset_test_entries",
+    "pep_dataset_train_entries",
+    "pep_dataset_load_status",
+    "names_bridge",
+    "status",
+    "evidence_boundary",
+    "next_action",
+]
+
+DFLOW_COLAB_BINDCRAFT_V026_HEADERS = [
+    "item_id",
+    "method",
+    "component",
+    "status",
+    "execution_status",
+    "exit_code",
+    "runtime_sec",
+    "gpu_evidence",
+    "command_path",
+    "raw_output_root",
+    "primary_output",
+    "parser_or_classifier_status",
+    "observed_items",
+    "blocker",
+    "next_gate",
+    "evidence_boundary",
+    "next_action",
+]
+
+BINDCRAFT_CLASSIFICATION_V026_HEADERS = [
+    "method",
+    "output_root",
+    "classification",
+    "accepted_pdb_count",
+    "low_confidence_pdb_count",
+    "rejected_pdb_count",
+    "trajectory_pdb_count",
+    "runtime_exit_code",
+    "hard_stop_status",
+    "reason",
+    "evidence_boundary",
+]
+
+COLABDESIGN_DEXDESIGN_GATE_V027_HEADERS = [
+    "item_id",
+    "method",
+    "component",
+    "status",
+    "execution_status",
+    "exit_code",
+    "runtime_sec",
+    "gpu_evidence",
+    "command_path",
+    "raw_output_root",
+    "primary_output",
+    "parser_or_audit_status",
+    "generic_osprey_example_status",
+    "observed_items",
+    "blocker",
+    "next_gate",
+    "evidence_boundary",
+    "next_action",
+]
+
+EXTERNAL_ASSET_RESCUE_V028_HEADERS = [
+    "item_id",
+    "method",
+    "blocker",
+    "search_scope",
+    "status",
+    "execution_status",
+    "asset_or_output_status",
+    "external_asset_path",
+    "raw_output_root",
+    "primary_output",
+    "secondary_evidence",
+    "observed_items",
+    "blocker_remaining",
+    "next_gate",
+    "evidence_boundary",
+    "next_action",
+]
+
+BOUNDED_GENERATION_PARSER_V029_HEADERS = [
+    "item_id",
+    "method",
+    "artifact_type",
+    "status",
+    "execution_status",
+    "job_or_fixture_id",
+    "external_source_or_output",
+    "tracked_artifact",
+    "runtime_artifact",
+    "exit_code",
+    "parser_status",
+    "candidate_count",
+    "evidence_boundary",
+    "next_action",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
@@ -1099,6 +1247,13 @@ REQUIRED_FILES = [
     "scripts/collect_v020_method_unblock_smokes.py",
     "scripts/collect_v021_adapter_smokes.py",
     "scripts/parse_v021_adapter_outputs.py",
+    "scripts/prepare_dflow_input_contract.py",
+    "scripts/prepare_colabdesign_cli_adapter.py",
+    "scripts/audit_dexdesign_route.py",
+    "scripts/classify_bindcraft_outputs.py",
+    "scripts/run_colabdesign_bounded_generation.py",
+    "scripts/prepare_dexdesign_minimal_fixture.py",
+    "scripts/parse_bindcraft_accepted_outputs.py",
     "benchmark/README.md",
     "benchmark/availability/README.md",
     "benchmark/availability/link_availability_matrix_v0.5.csv",
@@ -1165,6 +1320,12 @@ REQUIRED_FILES = [
     "benchmark/deployment/dflow_project_install_contract_v0.23.csv",
     "benchmark/deployment/external_dry_run_package_manifest_v0.23.csv",
     "benchmark/deployment/priority_gate_review_v0.23.csv",
+    "benchmark/deployment/dflow_input_contract_fixture_v0.24.csv",
+    "benchmark/deployment/dflow_full_pepmerge_download_v0.25.csv",
+    "benchmark/deployment/dflow_colabdesign_bindcraft_v0.26.csv",
+    "benchmark/deployment/colabdesign_dexdesign_gate_v0.27.csv",
+    "benchmark/deployment/external_asset_rescue_v0.28.csv",
+    "benchmark/deployment/bounded_generation_parser_v0.29.csv",
     "benchmark/deployment/method_readiness_review_v0.8.csv",
     "benchmark/deployment/method_preflight_status_v0.10.csv",
     "benchmark/deployment/adapter_preflight_status_v0.11.csv",
@@ -1183,6 +1344,12 @@ REQUIRED_FILES = [
     "benchmark/results/adapter_method_output_manifest_v0.21.csv",
     "benchmark/results/adapter_candidate_outputs_v0.21.csv",
     "benchmark/results/adapter_run_rows_v0.21.csv",
+    "benchmark/results/dflow_bounded_candidate_outputs_v0.26.csv",
+    "benchmark/results/bindcraft_wrapper_classification_v0.26.csv",
+    "benchmark/results/bindcraft_accepted_final_classification_v0.28.csv",
+    "benchmark/results/colabdesign_bounded_method_output_manifest_v0.29.csv",
+    "benchmark/results/colabdesign_bounded_candidate_outputs_v0.29.csv",
+    "benchmark/results/bindcraft_accepted_candidate_outputs_v0.29.csv",
     "sources/raw_snapshots/_index.md",
     "kb/references/references.bib",
     "kb/references/zotero-map.tsv",
@@ -1216,6 +1383,12 @@ REQUIRED_FILES = [
     "ops/audits/adapter_smoke_audit_v0.21.md",
     "ops/audits/multi_case_fixture_pilot_audit_v0.22.md",
     "ops/audits/external_dry_run_package_audit_v0.23.md",
+    "ops/audits/dflow_input_contract_fixture_audit_v0.24.md",
+    "ops/audits/dflow_full_pepmerge_download_audit_v0.25.md",
+    "ops/audits/dflow_colabdesign_bindcraft_v0.26.md",
+    "ops/audits/colabdesign_dexdesign_gate_v0.27.md",
+    "ops/audits/external_asset_rescue_audit_v0.28.md",
+    "ops/audits/bounded_generation_parser_audit_v0.29.md",
     "ops/plans/updated_plan_v0.6.md",
     "ops/plans/updated_plan_v0.9.md",
     "ops/plans/updated_plan_v1.3.md",
@@ -1760,6 +1933,36 @@ def main() -> int:
         "benchmark/deployment/priority_gate_review_v0.23.csv",
         PRIORITY_GATE_REVIEW_V023_HEADERS,
     )
+    dflow_input_contract_fixture_v024_rows = check_headers(
+        errors,
+        "benchmark/deployment/dflow_input_contract_fixture_v0.24.csv",
+        DFLOW_INPUT_CONTRACT_FIXTURE_V024_HEADERS,
+    )
+    dflow_full_pepmerge_download_v025_rows = check_headers(
+        errors,
+        "benchmark/deployment/dflow_full_pepmerge_download_v0.25.csv",
+        DFLOW_FULL_PEPMERGE_DOWNLOAD_V025_HEADERS,
+    )
+    dflow_colab_bindcraft_v026_rows = check_headers(
+        errors,
+        "benchmark/deployment/dflow_colabdesign_bindcraft_v0.26.csv",
+        DFLOW_COLAB_BINDCRAFT_V026_HEADERS,
+    )
+    colabdesign_dexdesign_gate_v027_rows = check_headers(
+        errors,
+        "benchmark/deployment/colabdesign_dexdesign_gate_v0.27.csv",
+        COLABDESIGN_DEXDESIGN_GATE_V027_HEADERS,
+    )
+    external_asset_rescue_v028_rows = check_headers(
+        errors,
+        "benchmark/deployment/external_asset_rescue_v0.28.csv",
+        EXTERNAL_ASSET_RESCUE_V028_HEADERS,
+    )
+    bounded_generation_parser_v029_rows = check_headers(
+        errors,
+        "benchmark/deployment/bounded_generation_parser_v0.29.csv",
+        BOUNDED_GENERATION_PARSER_V029_HEADERS,
+    )
     method_readiness_v08_rows = check_headers(
         errors,
         "benchmark/deployment/method_readiness_review_v0.8.csv",
@@ -1854,6 +2057,36 @@ def main() -> int:
         errors,
         "benchmark/results/adapter_run_rows_v0.21.csv",
         RUN_CSV_HEADERS,
+    )
+    dflow_bounded_candidate_v026_rows = check_headers(
+        errors,
+        "benchmark/results/dflow_bounded_candidate_outputs_v0.26.csv",
+        CANDIDATE_OUTPUT_HEADERS,
+    )
+    bindcraft_classification_v026_rows = check_headers(
+        errors,
+        "benchmark/results/bindcraft_wrapper_classification_v0.26.csv",
+        BINDCRAFT_CLASSIFICATION_V026_HEADERS,
+    )
+    bindcraft_accepted_final_v028_rows = check_headers(
+        errors,
+        "benchmark/results/bindcraft_accepted_final_classification_v0.28.csv",
+        BINDCRAFT_CLASSIFICATION_V026_HEADERS,
+    )
+    colabdesign_bounded_method_v029_rows = check_headers(
+        errors,
+        "benchmark/results/colabdesign_bounded_method_output_manifest_v0.29.csv",
+        METHOD_OUTPUT_MANIFEST_HEADERS,
+    )
+    colabdesign_bounded_candidate_v029_rows = check_headers(
+        errors,
+        "benchmark/results/colabdesign_bounded_candidate_outputs_v0.29.csv",
+        CANDIDATE_OUTPUT_HEADERS,
+    )
+    bindcraft_accepted_candidate_v029_rows = check_headers(
+        errors,
+        "benchmark/results/bindcraft_accepted_candidate_outputs_v0.29.csv",
+        CANDIDATE_OUTPUT_HEADERS,
     )
     _map_rows = check_headers(errors, "kb/references/zotero-map.tsv", ["zotero_key", "bibtex_key", "title"], delimiter="\t")
 
@@ -4198,6 +4431,386 @@ def main() -> int:
             if forbidden in text:
                 errors.append(f"{gate_id}: v0.23 priority gate row overclaims {forbidden}")
 
+    if len(dflow_input_contract_fixture_v024_rows) != 1:
+        errors.append(
+            "dflow_input_contract_fixture_v0.24.csv should contain 1 row, "
+            f"found {len(dflow_input_contract_fixture_v024_rows)}"
+        )
+    for row in dflow_input_contract_fixture_v024_rows:
+        method = row.get("method", "")
+        text = " ".join(row.values())
+        lower_text = text.lower()
+        for required_field in DFLOW_INPUT_CONTRACT_FIXTURE_V024_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{method}: v0.24 D-Flow input-contract row missing {required_field}")
+        if method != "D-Flow / PeptideDesign":
+            errors.append("D-Flow v0.24 input-contract row must be for D-Flow / PeptideDesign")
+        if row.get("status") != "input_contract_ready_fixture":
+            errors.append("D-Flow v0.24 fixture status must be input_contract_ready_fixture")
+        if row.get("pep_dataset_reset_true_status") != "passed":
+            errors.append("D-Flow v0.24 PepDataset reset=True status must be passed")
+        if row.get("pep_dataset_reset_false_status") != "passed":
+            errors.append("D-Flow v0.24 PepDataset reset=False status must be passed")
+        if row.get("lmdb_entries") != "1":
+            errors.append("D-Flow v0.24 fixture must record exactly 1 LMDB entry")
+        for token in ["pep_pocket_test_structure_cache.lmdb", "scripts/prepare_dflow_input_contract.py"]:
+            if token not in text:
+                errors.append(f"D-Flow v0.24 input-contract row missing token {token}")
+        if "not Benchmark result" not in row.get("evidence_boundary", ""):
+            errors.append("D-Flow v0.24 evidence boundary must say not Benchmark result")
+        for forbidden in ["benchmark_completed", "best_performing", "performance_ranking", "smoke_test_ready", "benchmark_ready"]:
+            if forbidden in lower_text:
+                errors.append(f"D-Flow v0.24 input-contract row overclaims {forbidden}")
+
+    if len(dflow_full_pepmerge_download_v025_rows) != 1:
+        errors.append(
+            "dflow_full_pepmerge_download_v0.25.csv should contain 1 row, "
+            f"found {len(dflow_full_pepmerge_download_v025_rows)}"
+        )
+    for row in dflow_full_pepmerge_download_v025_rows:
+        method = row.get("method", "")
+        text = " ".join(row.values())
+        lower_text = text.lower()
+        for required_field in DFLOW_FULL_PEPMERGE_DOWNLOAD_V025_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{method}: v0.25 D-Flow full PepMerge row missing {required_field}")
+        if method != "D-Flow / PeptideDesign":
+            errors.append("D-Flow v0.25 full PepMerge row must be for D-Flow / PeptideDesign")
+        if row.get("download_status") != "downloaded_verified":
+            errors.append("D-Flow v0.25 full PepMerge download status must be downloaded_verified")
+        if row.get("release_zip_integrity_status") != "unzip_test_passed":
+            errors.append("D-Flow v0.25 release zip integrity status must be unzip_test_passed")
+        if row.get("lmdb_zip_integrity_status") != "unzip_test_passed":
+            errors.append("D-Flow v0.25 LMDB zip integrity status must be unzip_test_passed")
+        expected_values = {
+            "case_dirs": "10348",
+            "required_file_missing_case_dirs": "0",
+            "test_names": "154",
+            "train_names": "9849",
+            "test_names_missing_in_release": "0",
+            "pep_dataset_test_entries": "154",
+            "pep_dataset_train_entries": "9849",
+        }
+        for key, expected in expected_values.items():
+            if row.get(key) != expected:
+                errors.append(f"D-Flow v0.25 {key} must be {expected}")
+        if row.get("pep_dataset_load_status") != "passed":
+            errors.append("D-Flow v0.25 PepDataset load status must be passed")
+        if row.get("status") != "input_contract_ready_full_pepmerge":
+            errors.append("D-Flow v0.25 status must be input_contract_ready_full_pepmerge")
+        for token in ["PepMerge_release.zip", "PepMerge_lmdb.zip", "drive.usercontent.google.com"]:
+            if token not in text:
+                errors.append(f"D-Flow v0.25 full PepMerge row missing token {token}")
+        if "not Benchmark result" not in row.get("evidence_boundary", ""):
+            errors.append("D-Flow v0.25 evidence boundary must say not Benchmark result")
+        for forbidden in ["benchmark_completed", "best_performing", "performance_ranking", "smoke_test_ready", "benchmark_ready"]:
+            if forbidden in lower_text and f"not {forbidden}" not in lower_text:
+                errors.append(f"D-Flow v0.25 full PepMerge row overclaims {forbidden}")
+
+    expected_v026_ids = {
+        "v026_dflow_bounded_dry_run",
+        "v026_colabdesign_cli_adapter",
+        "v026_bindcraft_wrapper_classifier",
+    }
+    observed_v026_ids = {row.get("item_id", "") for row in dflow_colab_bindcraft_v026_rows}
+    missing_v026_ids = sorted(expected_v026_ids - observed_v026_ids)
+    if missing_v026_ids:
+        errors.append("dflow_colabdesign_bindcraft_v0.26.csv missing items: " + ", ".join(missing_v026_ids))
+    if len(dflow_colab_bindcraft_v026_rows) != len(expected_v026_ids):
+        errors.append(
+            f"dflow_colabdesign_bindcraft_v0.26.csv should contain {len(expected_v026_ids)} rows, "
+            f"found {len(dflow_colab_bindcraft_v026_rows)}"
+        )
+    for row in dflow_colab_bindcraft_v026_rows:
+        item_id = row.get("item_id", "")
+        text = " ".join(row.values()).lower()
+        for required_field in DFLOW_COLAB_BINDCRAFT_V026_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{item_id}: v0.26 gate row missing {required_field}")
+        if "not Benchmark result" not in row.get("evidence_boundary", ""):
+            errors.append(f"{item_id}: v0.26 gate evidence boundary must say not Benchmark result")
+        if item_id == "v026_dflow_bounded_dry_run":
+            if row.get("status") != "bounded_dry_run_passed":
+                errors.append("D-Flow v0.26 bounded dry-run status must be bounded_dry_run_passed")
+            if row.get("exit_code") != "0":
+                errors.append("D-Flow v0.26 bounded dry-run exit_code must be 0")
+            for token in ["sample_0.pdb", "outputs_csv", "parsed"]:
+                if token not in text:
+                    errors.append(f"D-Flow v0.26 bounded dry-run row missing token {token}")
+        if item_id == "v026_colabdesign_cli_adapter":
+            if row.get("status") != "cli_adapter_defined":
+                errors.append("ColabDesign v0.26 status must be cli_adapter_defined")
+            if row.get("execution_status") != "dry_run_package_only":
+                errors.append("ColabDesign v0.26 execution_status must be dry_run_package_only")
+            if "no gpu design run" not in text:
+                errors.append("ColabDesign v0.26 row must preserve no GPU design run boundary")
+        if item_id == "v026_bindcraft_wrapper_classifier":
+            if row.get("parser_or_classifier_status") != "low_confidence_only":
+                errors.append("BindCraft v0.26 classifier status must be low_confidence_only")
+            if "accepted_final" not in text:
+                errors.append("BindCraft v0.26 classifier row must mention accepted_final")
+        for forbidden in ["benchmark_completed", "best_performing", "performance_ranking", "benchmark_ready"]:
+            if forbidden in text:
+                errors.append(f"{item_id}: v0.26 gate row overclaims {forbidden}")
+
+    expected_v027_ids = {
+        "v027_colabdesign_bounded_execute_gate",
+        "v027_dexdesign_route_audit",
+    }
+    observed_v027_ids = {row.get("item_id", "") for row in colabdesign_dexdesign_gate_v027_rows}
+    missing_v027_ids = sorted(expected_v027_ids - observed_v027_ids)
+    if missing_v027_ids:
+        errors.append("colabdesign_dexdesign_gate_v0.27.csv missing items: " + ", ".join(missing_v027_ids))
+    if len(colabdesign_dexdesign_gate_v027_rows) != len(expected_v027_ids):
+        errors.append(
+            f"colabdesign_dexdesign_gate_v0.27.csv should contain {len(expected_v027_ids)} rows, "
+            f"found {len(colabdesign_dexdesign_gate_v027_rows)}"
+        )
+    for row in colabdesign_dexdesign_gate_v027_rows:
+        item_id = row.get("item_id", "")
+        text = " ".join(row.values()).lower()
+        for required_field in COLABDESIGN_DEXDESIGN_GATE_V027_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{item_id}: v0.27 gate row missing {required_field}")
+        if "not Benchmark result" not in row.get("evidence_boundary", ""):
+            errors.append(f"{item_id}: v0.27 gate evidence boundary must say not Benchmark result")
+        if item_id == "v027_colabdesign_bounded_execute_gate":
+            if row.get("method") != "AfCycDesign / ColabDesign cyclic peptide":
+                errors.append("ColabDesign v0.27 row has wrong method")
+            if row.get("status") not in {"blocked_af_params_missing", "bounded_gpu_generation_passed"}:
+                errors.append("ColabDesign v0.27 status must be blocked_af_params_missing or bounded_gpu_generation_passed")
+            if row.get("status") == "blocked_af_params_missing" and "af" not in row.get("blocker", "").lower():
+                errors.append("ColabDesign v0.27 blocked row must mention AF parameter blocker")
+            if row.get("status") == "blocked_af_params_missing" and row.get("exit_code") != "not_run":
+                errors.append("ColabDesign v0.27 blocked row exit_code must be not_run")
+            if row.get("status") == "blocked_af_params_missing" and "no_gpu_generation" not in row.get("gpu_evidence", ""):
+                errors.append("ColabDesign v0.27 blocked row must preserve no GPU generation evidence")
+        if item_id == "v027_dexdesign_route_audit":
+            if row.get("method") != "DexDesign / OSPREY3":
+                errors.append("DexDesign v0.27 row has wrong method")
+            if row.get("generic_osprey_example_status") != "env_probe_only_not_dexdesign":
+                errors.append("DexDesign v0.27 generic OSPREY example status must be env_probe_only_not_dexdesign")
+            if row.get("status") != "blocked_dexdesign_input_contract":
+                errors.append("DexDesign v0.27 status must remain blocked_dexdesign_input_contract")
+            if "ccs.d-peptide-l-protein" not in text:
+                errors.append("DexDesign v0.27 row must mention ccs.D-peptide-L-protein route")
+        for forbidden in ["benchmark_completed", "best_performing", "performance_ranking", "benchmark_ready", "smoke_test_ready"]:
+            if forbidden in text:
+                errors.append(f"{item_id}: v0.27 gate row overclaims {forbidden}")
+
+    expected_v028_ids = {
+        "v028_colabdesign_af_params_target_gate",
+        "v028_dexdesign_input_contract",
+        "v028_bindcraft_accepted_final",
+    }
+    observed_v028_ids = {row.get("item_id", "") for row in external_asset_rescue_v028_rows}
+    missing_v028_ids = sorted(expected_v028_ids - observed_v028_ids)
+    if missing_v028_ids:
+        errors.append("external_asset_rescue_v0.28.csv missing items: " + ", ".join(missing_v028_ids))
+    if len(external_asset_rescue_v028_rows) != len(expected_v028_ids):
+        errors.append(
+            f"external_asset_rescue_v0.28.csv should contain {len(expected_v028_ids)} rows, "
+            f"found {len(external_asset_rescue_v028_rows)}"
+        )
+    for row in external_asset_rescue_v028_rows:
+        item_id = row.get("item_id", "")
+        text = " ".join(row.values()).lower()
+        for required_field in EXTERNAL_ASSET_RESCUE_V028_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{item_id}: v0.28 rescue row missing {required_field}")
+        if "not Benchmark result" not in row.get("evidence_boundary", ""):
+            errors.append(f"{item_id}: v0.28 evidence boundary must say not Benchmark result")
+        if item_id == "v028_colabdesign_af_params_target_gate":
+            if row.get("status") != "asset_gate_ready_no_generation":
+                errors.append("ColabDesign v0.28 rescue status must be asset_gate_ready_no_generation")
+            for token in ["alphafold_db/params", "7zkr_GABARAP.pdb", "no generated design"]:
+                if token.lower() not in text:
+                    errors.append(f"ColabDesign v0.28 row missing token {token}")
+        if item_id == "v028_dexdesign_input_contract":
+            if row.get("status") != "input_contract_defined_fixture_missing":
+                errors.append("DexDesign v0.28 status must be input_contract_defined_fixture_missing")
+            for token in ["l-target first chain", "d-peptide second chain", "target=z", "peptide=y"]:
+                if token not in text:
+                    errors.append(f"DexDesign v0.28 row missing token {token}")
+        if item_id == "v028_bindcraft_accepted_final":
+            if row.get("status") != "accepted_final_found":
+                errors.append("BindCraft v0.28 status must be accepted_final_found")
+            for token in ["accepted_final_count_4", "4 accepted pdb"]:
+                if token not in text:
+                    errors.append(f"BindCraft v0.28 row missing token {token}")
+        for forbidden in ["benchmark_completed", "best_performing", "performance_ranking", "benchmark_ready", "smoke_test_ready"]:
+            if forbidden in text:
+                errors.append(f"{item_id}: v0.28 rescue row overclaims {forbidden}")
+
+    expected_v029_ids = {
+        "v029_colabdesign_bounded_generation",
+        "v029_dexdesign_minimal_fixture",
+        "v029_bindcraft_candidate_parser",
+    }
+    observed_v029_ids = {row.get("item_id", "") for row in bounded_generation_parser_v029_rows}
+    missing_v029_ids = sorted(expected_v029_ids - observed_v029_ids)
+    if missing_v029_ids:
+        errors.append("bounded_generation_parser_v0.29.csv missing items: " + ", ".join(missing_v029_ids))
+    if len(bounded_generation_parser_v029_rows) != len(expected_v029_ids):
+        errors.append(
+            f"bounded_generation_parser_v0.29.csv should contain {len(expected_v029_ids)} rows, "
+            f"found {len(bounded_generation_parser_v029_rows)}"
+        )
+    for row in bounded_generation_parser_v029_rows:
+        item_id = row.get("item_id", "")
+        text = " ".join(row.values()).lower()
+        for required_field in BOUNDED_GENERATION_PARSER_V029_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{item_id}: v0.29 row missing {required_field}")
+        if "not Benchmark result" not in row.get("evidence_boundary", ""):
+            errors.append(f"{item_id}: v0.29 evidence boundary must say not Benchmark result")
+        if item_id == "v029_colabdesign_bounded_generation":
+            if row.get("method") != "AfCycDesign / ColabDesign cyclic peptide":
+                errors.append("ColabDesign v0.29 row has wrong method")
+            if row.get("status") != "bounded_gpu_generation_passed":
+                errors.append("ColabDesign v0.29 status must be bounded_gpu_generation_passed")
+            if row.get("exit_code") != "0":
+                errors.append("ColabDesign v0.29 exit_code must be 0")
+            if row.get("parser_status") != "parsed":
+                errors.append("ColabDesign v0.29 parser_status must be parsed")
+            if row.get("candidate_count") != "1":
+                errors.append("ColabDesign v0.29 candidate_count must be 1")
+            for token in ["7zkr_gabarap.pdb", "alphafold_db/params", "single_seed_single_model_ultra_smoke"]:
+                if token not in text:
+                    errors.append(f"ColabDesign v0.29 row missing token {token}")
+        if item_id == "v029_dexdesign_minimal_fixture":
+            if row.get("method") != "DexDesign / OSPREY3":
+                errors.append("DexDesign v0.29 row has wrong method")
+            if row.get("status") != "dexdesign_input_contract_ready_fixture_created":
+                errors.append("DexDesign v0.29 status must be dexdesign_input_contract_ready_fixture_created")
+            if row.get("parser_status") != "not_applicable":
+                errors.append("DexDesign v0.29 parser_status must be not_applicable")
+            if row.get("candidate_count") != "0":
+                errors.append("DexDesign v0.29 candidate_count must be 0")
+            for token in ["prepared d-l complex", "target=z", "peptide=y"]:
+                if token not in text:
+                    errors.append(f"DexDesign v0.29 row missing token {token}")
+        if item_id == "v029_bindcraft_candidate_parser":
+            if row.get("method") != "BindCraft":
+                errors.append("BindCraft v0.29 row has wrong method")
+            if row.get("status") != "accepted_candidate_parser_passed":
+                errors.append("BindCraft v0.29 status must be accepted_candidate_parser_passed")
+            if row.get("parser_status") != "parsed":
+                errors.append("BindCraft v0.29 parser_status must be parsed")
+            if row.get("candidate_count") != "4":
+                errors.append("BindCraft v0.29 candidate_count must be 4")
+            for token in ["accepted", "final_design_stats.csv", "external accepted-final parser fixture"]:
+                if token not in text:
+                    errors.append(f"BindCraft v0.29 row missing token {token}")
+        for forbidden in ["benchmark_completed", "best_performing", "performance_ranking", "benchmark_ready", "smoke_test_ready"]:
+            if forbidden in text:
+                errors.append(f"{item_id}: v0.29 row overclaims {forbidden}")
+
+    if len(dflow_bounded_candidate_v026_rows) != 1:
+        errors.append(
+            "dflow_bounded_candidate_outputs_v0.26.csv should contain 1 row, "
+            f"found {len(dflow_bounded_candidate_v026_rows)}"
+        )
+    for row in dflow_bounded_candidate_v026_rows:
+        if row.get("method") != "D-Flow / PeptideDesign":
+            errors.append("D-Flow v0.26 candidate row must be for D-Flow / PeptideDesign")
+        if row.get("parse_status") != "parsed":
+            errors.append("D-Flow v0.26 candidate row parse_status must be parsed")
+        if row.get("sequence") != "MRRRRRRRRY":
+            errors.append("D-Flow v0.26 candidate row sequence must be MRRRRRRRRY")
+        if "not target-set evidence" not in row.get("notes", ""):
+            errors.append("D-Flow v0.26 candidate row must preserve target-set boundary")
+
+    if len(bindcraft_classification_v026_rows) != 1:
+        errors.append(
+            "bindcraft_wrapper_classification_v0.26.csv should contain 1 row, "
+            f"found {len(bindcraft_classification_v026_rows)}"
+        )
+    for row in bindcraft_classification_v026_rows:
+        if row.get("method") != "BindCraft":
+            errors.append("BindCraft v0.26 classification row must be for BindCraft")
+        if row.get("classification") != "low_confidence_only":
+            errors.append("BindCraft v0.26 classification must be low_confidence_only")
+        if row.get("accepted_pdb_count") != "0":
+            errors.append("BindCraft v0.26 accepted_pdb_count must be 0")
+        if row.get("low_confidence_pdb_count") != "1":
+            errors.append("BindCraft v0.26 low_confidence_pdb_count must be 1")
+        if "not Benchmark result" not in row.get("evidence_boundary", ""):
+            errors.append("BindCraft v0.26 evidence boundary must say not Benchmark result")
+
+    if len(bindcraft_accepted_final_v028_rows) != 1:
+        errors.append(
+            "bindcraft_accepted_final_classification_v0.28.csv should contain 1 row, "
+            f"found {len(bindcraft_accepted_final_v028_rows)}"
+        )
+    for row in bindcraft_accepted_final_v028_rows:
+        if row.get("method") != "BindCraft":
+            errors.append("BindCraft v0.28 classification row must be for BindCraft")
+        if row.get("classification") != "accepted_final":
+            errors.append("BindCraft v0.28 classification must be accepted_final")
+        if row.get("accepted_pdb_count") != "4":
+            errors.append("BindCraft v0.28 accepted_pdb_count must be 4")
+        if "not Benchmark result" not in row.get("evidence_boundary", ""):
+            errors.append("BindCraft v0.28 evidence boundary must say not Benchmark result")
+
+    if len(colabdesign_bounded_method_v029_rows) != 1:
+        errors.append(
+            "colabdesign_bounded_method_output_manifest_v0.29.csv should contain 1 row, "
+            f"found {len(colabdesign_bounded_method_v029_rows)}"
+        )
+    for row in colabdesign_bounded_method_v029_rows:
+        if row.get("method") != "AfCycDesign / ColabDesign cyclic peptide":
+            errors.append("ColabDesign v0.29 method manifest row has wrong method")
+        if row.get("execution_stage") != "bounded_gpu_generation":
+            errors.append("ColabDesign v0.29 method manifest execution_stage must be bounded_gpu_generation")
+        if row.get("exit_code") != "0":
+            errors.append("ColabDesign v0.29 method manifest exit_code must be 0")
+        if row.get("parser_status") != "parsed":
+            errors.append("ColabDesign v0.29 method manifest parser_status must be parsed")
+        if "not Benchmark result" not in row.get("status_reason", ""):
+            errors.append("ColabDesign v0.29 method manifest must preserve not Benchmark result boundary")
+
+    if len(colabdesign_bounded_candidate_v029_rows) != 1:
+        errors.append(
+            "colabdesign_bounded_candidate_outputs_v0.29.csv should contain 1 row, "
+            f"found {len(colabdesign_bounded_candidate_v029_rows)}"
+        )
+    for row in colabdesign_bounded_candidate_v029_rows:
+        if row.get("method") != "AfCycDesign / ColabDesign cyclic peptide":
+            errors.append("ColabDesign v0.29 candidate row has wrong method")
+        if row.get("parse_status") != "parsed":
+            errors.append("ColabDesign v0.29 candidate parse_status must be parsed")
+        if len(row.get("sequence", "")) != 14:
+            errors.append("ColabDesign v0.29 candidate sequence length must be 14 for the bounded fixture")
+        if "benchmark_runs/v0.29/colabdesign_bounded_generation" not in row.get("structure_path", ""):
+            errors.append("ColabDesign v0.29 candidate structure_path must point to gitignored runtime root")
+        if "not Benchmark result" not in row.get("notes", ""):
+            errors.append("ColabDesign v0.29 candidate notes must preserve not Benchmark result boundary")
+
+    if len(bindcraft_accepted_candidate_v029_rows) != 4:
+        errors.append(
+            "bindcraft_accepted_candidate_outputs_v0.29.csv should contain 4 rows, "
+            f"found {len(bindcraft_accepted_candidate_v029_rows)}"
+        )
+    expected_bindcraft_sequences_v029 = {
+        "SPKEEWRKRLAE",
+        "APTGKELWRKRLAE",
+        "PPTGKELWRKRLAE",
+        "SPKEEWKARLRARR",
+    }
+    observed_bindcraft_sequences_v029 = {row.get("sequence", "") for row in bindcraft_accepted_candidate_v029_rows}
+    if observed_bindcraft_sequences_v029 != expected_bindcraft_sequences_v029:
+        errors.append("BindCraft v0.29 candidate sequences do not match accepted-final parser fixture")
+    for row in bindcraft_accepted_candidate_v029_rows:
+        if row.get("method") != "BindCraft":
+            errors.append("BindCraft v0.29 candidate row has wrong method")
+        if row.get("parse_status") != "parsed":
+            errors.append("BindCraft v0.29 candidate parse_status must be parsed")
+        if "Accepted" not in row.get("structure_path", ""):
+            errors.append("BindCraft v0.29 candidate structure_path must point to Accepted output")
+        if "not Benchmark result" not in row.get("notes", ""):
+            errors.append("BindCraft v0.29 candidate notes must preserve not Benchmark result boundary")
+
     pilot_plan_text = (ROOT / "ops/plans/batch_b_pilot_execution_plan_v0.17.md").read_text(
         encoding="utf-8"
     )
@@ -4580,6 +5193,12 @@ def main() -> int:
             "adapter_method_output_v021_rows": len(adapter_method_output_v021_rows),
             "adapter_candidate_output_v021_rows": len(adapter_candidate_output_v021_rows),
             "adapter_run_rows_v021_rows": len(adapter_run_rows_v021_rows),
+            "dflow_bounded_candidate_v026_rows": len(dflow_bounded_candidate_v026_rows),
+            "bindcraft_classification_v026_rows": len(bindcraft_classification_v026_rows),
+            "bindcraft_accepted_final_v028_rows": len(bindcraft_accepted_final_v028_rows),
+            "colabdesign_bounded_method_v029_rows": len(colabdesign_bounded_method_v029_rows),
+            "colabdesign_bounded_candidate_v029_rows": len(colabdesign_bounded_candidate_v029_rows),
+            "bindcraft_accepted_candidate_v029_rows": len(bindcraft_accepted_candidate_v029_rows),
             "method_example_fixture_v022_rows": len(method_example_fixture_v022_rows),
             "multi_case_fixture_target_v022_rows": len(multi_case_fixture_target_v022_rows),
             "multi_case_fixture_control_v022_rows": len(multi_case_fixture_control_v022_rows),
@@ -4589,6 +5208,12 @@ def main() -> int:
             "dflow_project_install_v023_rows": len(dflow_project_install_v023_rows),
             "external_dry_run_package_v023_rows": len(external_dry_run_package_v023_rows),
             "priority_gate_review_v023_rows": len(priority_gate_review_v023_rows),
+            "dflow_input_contract_fixture_v024_rows": len(dflow_input_contract_fixture_v024_rows),
+            "dflow_full_pepmerge_download_v025_rows": len(dflow_full_pepmerge_download_v025_rows),
+            "dflow_colab_bindcraft_v026_rows": len(dflow_colab_bindcraft_v026_rows),
+            "colabdesign_dexdesign_gate_v027_rows": len(colabdesign_dexdesign_gate_v027_rows),
+            "external_asset_rescue_v028_rows": len(external_asset_rescue_v028_rows),
+            "bounded_generation_parser_v029_rows": len(bounded_generation_parser_v029_rows),
             "method_readiness_v08_rows": len(method_readiness_v08_rows),
             "method_preflight_v010_rows": len(method_preflight_rows),
             "adapter_preflight_v011_rows": len(adapter_preflight_rows),

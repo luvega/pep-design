@@ -6,9 +6,9 @@ This project is an independent protocol-first Benchmark knowledge base for recen
 
 Current authoritative plan: `ops/plans/updated_plan_v0.9.md`.
 
-Current version: `1.2.11`.
+Current version: `1.2.17`.
 
-Next planned phase: resolve the v0.23 dry-run blockers before controlled multi-case execution. Do not start additional clone, download, install, or GPU execution unless the user explicitly requests that later phase.
+Next planned phase: promote the v0.29 ColabDesign/DexDesign/BindCraft contracts into a controlled multi-case target/control/job manifest, then run a bounded DexDesign CPU route smoke and add multi-seed parser/scoring checks only after target governance is explicit. Do not start additional clone, install, large download, or broader GPU execution unless the user explicitly requests that later phase. Additional large downloads and generated outputs must remain in gitignored external/runtime roots.
 
 ## Source Boundaries
 
@@ -80,6 +80,23 @@ For broad research-to-paper or multi-stage review tasks, route through `academic
 | `benchmark/deployment/priority_gate_review_v0.23.csv` | v0.23 D-Flow/ColabDesign/BindCraft gate review | readiness gate only; not scoring or target-set evidence |
 | `ops/plans/external_dry_run_package_plan_v0.23.md` | v0.23 dry-run package plan | planning/readiness artifact only |
 | `ops/audits/external_dry_run_package_audit_v0.23.md` | v0.23 dry-run package audit | readiness findings and blocker record only |
+| `benchmark/deployment/dflow_input_contract_fixture_v0.24.csv` | D-Flow PepDataset fixture-level LMDB load evidence | one fixture input-contract readiness only; not full PepMerge access, scoring, or smoke-test-ready evidence |
+| `ops/audits/dflow_input_contract_fixture_audit_v0.24.md` | v0.24 D-Flow input-contract audit | root-cause and fixture-load evidence only; not Benchmark result |
+| `benchmark/deployment/dflow_full_pepmerge_download_v0.25.csv` | D-Flow full PepMerge download/load evidence | full PepMerge input-contract readiness only; large assets stay gitignored; not scoring or smoke-test-ready evidence |
+| `ops/audits/dflow_full_pepmerge_download_audit_v0.25.md` | v0.25 D-Flow full PepMerge audit | download integrity and PepDataset load evidence only; not Benchmark result |
+| `benchmark/deployment/dflow_colabdesign_bindcraft_v0.26.csv` | v0.26 D-Flow/ColabDesign/BindCraft gate evidence | bounded readiness/interface evidence only; not scoring or Benchmark result |
+| `benchmark/results/dflow_bounded_candidate_outputs_v0.26.csv` | D-Flow single-entry parsed candidate row | bounded dry-run parser evidence only; not target-set or scoring evidence |
+| `benchmark/results/bindcraft_wrapper_classification_v0.26.csv` | BindCraft wrapper output class row | classifier evidence only; `low_confidence_only` is not accepted final |
+| `ops/audits/dflow_colabdesign_bindcraft_v0.26.md` | v0.26 gate audit | readiness findings and no-overclaim boundary only |
+| `benchmark/deployment/colabdesign_dexdesign_gate_v0.27.csv` | v0.27 ColabDesign/DexDesign gate evidence | bounded gate/route-audit evidence only; not scoring or Benchmark result |
+| `ops/audits/colabdesign_dexdesign_gate_v0.27.md` | v0.27 ColabDesign/DexDesign gate audit | blocker findings only; not run or ranking evidence |
+| `benchmark/deployment/external_asset_rescue_v0.28.csv` | v0.28 ColabDesign/DexDesign/BindCraft asset rescue | external asset and contract evidence only; not scoring or Benchmark result |
+| `benchmark/results/bindcraft_accepted_final_classification_v0.28.csv` | BindCraft accepted-final classification | wrapper classifier evidence only; not controlled multi-case output |
+| `ops/audits/external_asset_rescue_audit_v0.28.md` | v0.28 external asset rescue audit | readiness findings only; not run or ranking evidence |
+| `benchmark/deployment/bounded_generation_parser_v0.29.csv` | v0.29 ColabDesign/DexDesign/BindCraft bounded/parser evidence | single-case or parser-fixture evidence only; not controlled multi-case output |
+| `benchmark/results/colabdesign_bounded_*_v0.29.csv` | ColabDesign one-case bounded GPU generation parser rows | ultra-smoke evidence only; raw PDB stays gitignored; not scoring or method ranking |
+| `benchmark/results/bindcraft_accepted_candidate_outputs_v0.29.csv` | BindCraft accepted-final standard candidate parser fixture | external CD47 parser fixture only; not controlled benchmark output |
+| `ops/audits/bounded_generation_parser_audit_v0.29.md` | v0.29 bounded generation/parser audit | readiness findings only; not Benchmark result |
 | `ops/plans/protein_design_image_consolidation_plan_v0.13.md` | image consolidation plan | planning artifact only |
 | `ops/plans/adapter_parser_hardening_plan_v0.16.md` | adapter/parser hardening plan | planning artifact only |
 | `ops/audits/docker_environment_assignment_audit_v0.13.md` | Docker/environment assignment audit | readiness finding only; not local reproducibility evidence |
@@ -108,7 +125,7 @@ Method and dataset readiness must move through explicit gates:
 6. `dry_run_ready`
 7. `smoke_test_ready`
 
-Current v0.15-v0.23 KB artifacts support only `minimal_smoke_observed`, interface-planning, pilot-gate, parser-replay fixture, method-provided example/preflight readiness evidence, method-unblock findings, bounded adapter-smoke evidence, parser fixture rows for selected external examples, multi-case fixture pilot planning, and v0.23 dry-run package readiness findings. They do not support promotion to `smoke_test_ready` or `benchmark_ready` without controlled target governance, standardized inputs, adapter commands, multi-seed outputs, scoring artifacts, validation artifacts, and target/control governance. PepMirror and PepGLAD have v0.21 checkpoint/weight unblock evidence; D-Flow has project-local source/env/checkpoint/import readiness evidence but remains input-contract blocked by missing PepMerge and `pep_pocket_test_structure_cache.lmdb`.
+Current v0.15-v0.29 KB artifacts support only `minimal_smoke_observed`, interface-planning, pilot-gate, parser-replay fixture, method-provided example/preflight readiness evidence, method-unblock findings, bounded adapter-smoke evidence, parser fixture rows for selected external examples, multi-case fixture pilot planning, v0.23 dry-run package readiness findings, one D-Flow fixture-level PepDataset LMDB load test, D-Flow full PepMerge download/load readiness, one bounded D-Flow dry-run, one ColabDesign CLI adapter package, one BindCraft wrapper classification, a ColabDesign bounded execute asset gate, a DexDesign route audit, v0.28 external asset rescue findings, one ColabDesign single-case bounded GPU generation parser row, one DexDesign synthetic D-L input-contract fixture, and one BindCraft external accepted-final standard candidate parser fixture. They do not support promotion to `smoke_test_ready` or `benchmark_ready` without controlled target governance, standardized multi-case inputs, adapter commands, multi-seed outputs, scoring artifacts, validation artifacts, and target/control governance.
 
 ## Language And Claim Rules
 
@@ -125,6 +142,12 @@ Current v0.15-v0.23 KB artifacts support only `minimal_smoke_observed`, interfac
 - Do not treat v0.21 adapter-smoke or parser rows as target-set evidence, scoring evidence, method ranking, full reproducibility evidence, or Benchmark results.
 - Do not treat v0.22 multi-case fixture target/control/job manifests or priority gates as frozen target-set evidence, execution evidence, scoring evidence, method ranking, full reproducibility evidence, or Benchmark results.
 - Do not treat v0.23 notebook CLI tooling or D-Flow project-local install/import evidence as target-set evidence, scoring evidence, method ranking, full reproducibility evidence, or Benchmark results.
+- Do not treat v0.24 D-Flow fixture-level LMDB load evidence as full PepMerge dataset access, scoring evidence, method ranking, `smoke_test_ready`, or complete Benchmark evidence.
+- Do not treat v0.25 D-Flow full PepMerge download/load evidence as a generation run, target-set evidence, scoring evidence, method ranking, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence.
+- Do not treat v0.26 D-Flow bounded dry-run, ColabDesign CLI adapter package, or BindCraft wrapper classification as frozen target-set evidence, scoring evidence, method ranking, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence.
+- Do not treat v0.27 ColabDesign asset-gate or DexDesign route-audit rows as generation evidence, scoring evidence, method ranking, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence.
+- Do not treat v0.28 external asset rescue, ColabDesign asset gate readiness, DexDesign input-contract extraction, or BindCraft accepted-final external output classification as controlled multi-case Benchmark evidence, scoring evidence, method ranking, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence.
+- Do not treat v0.29 ColabDesign single-case bounded GPU output, DexDesign synthetic prepared D-L fixture, or BindCraft external accepted candidate parser rows as controlled multi-case Benchmark evidence, scoring evidence, method ranking, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence.
 - Do not treat watchlist datasets, target candidates, review-only methods, or literature examples as frozen Benchmark targets.
 - Generation ability, ranking/rescoring ability, developability proxies, structural confidence, and biological validation are separate evidence layers.
 

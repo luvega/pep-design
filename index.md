@@ -1,7 +1,7 @@
 # 多肽设计方法 Benchmark 知识库
 
 ## Current Status
-- Project version: 1.2.11
+- Project version: 1.2.17
 - Manuscript outline layer: v1.0
 - Supplementary-source synthesis layer: v1.1
 - Chinese manuscript figure/table embedding layer: v1.2
@@ -18,7 +18,13 @@
 - Adapter smoke/parser fixture layer: v0.21 external readiness supplement
 - Multi-case fixture pilot planning layer: v0.22 planning supplement
 - External dry-run package readiness layer: v0.23 project-local readiness supplement
-- Repository checkpoint: v1.2.11
+- D-Flow input-contract fixture layer: v0.24 project-local readiness supplement
+- D-Flow full PepMerge download/load layer: v0.25 project-local readiness supplement
+- D-Flow/ColabDesign/BindCraft gate update layer: v0.26 project-local readiness supplement
+- ColabDesign/DexDesign gate layer: v0.27 project-local readiness supplement
+- External asset rescue layer: v0.28 project-local readiness supplement
+- Bounded generation/parser layer: v0.29 project-local readiness supplement
+- Repository checkpoint: v1.2.17
 - Build date: 2026-07-09
 - Time window: 2021-06-03 to 2026-06-03
 - Unique Zotero-derived records after dedupe: 432
@@ -102,12 +108,24 @@
 - [D-Flow project install contract v0.23](benchmark/deployment/dflow_project_install_contract_v0.23.csv)
 - [External dry-run package manifest v0.23](benchmark/deployment/external_dry_run_package_manifest_v0.23.csv)
 - [Priority gate review v0.23](benchmark/deployment/priority_gate_review_v0.23.csv)
+- [D-Flow input contract fixture v0.24](benchmark/deployment/dflow_input_contract_fixture_v0.24.csv)
+- [D-Flow full PepMerge download v0.25](benchmark/deployment/dflow_full_pepmerge_download_v0.25.csv)
+- [D-Flow/ColabDesign/BindCraft gate update v0.26](benchmark/deployment/dflow_colabdesign_bindcraft_v0.26.csv)
+- [ColabDesign/DexDesign gate v0.27](benchmark/deployment/colabdesign_dexdesign_gate_v0.27.csv)
+- [External asset rescue v0.28](benchmark/deployment/external_asset_rescue_v0.28.csv)
+- [Bounded generation/parser evidence v0.29](benchmark/deployment/bounded_generation_parser_v0.29.csv)
 - [Batch A replay method output manifest v0.18](benchmark/results/batch_a_replay_method_output_manifest_v0.18.csv)
 - [Batch A replay candidate outputs v0.18](benchmark/results/batch_a_replay_candidate_outputs_v0.18.csv)
 - [Batch A replay run rows v0.18](benchmark/results/batch_a_replay_run_v0.18.csv)
 - [Adapter method output manifest v0.21](benchmark/results/adapter_method_output_manifest_v0.21.csv)
 - [Adapter candidate outputs v0.21](benchmark/results/adapter_candidate_outputs_v0.21.csv)
 - [Adapter run rows v0.21](benchmark/results/adapter_run_rows_v0.21.csv)
+- [D-Flow bounded candidate outputs v0.26](benchmark/results/dflow_bounded_candidate_outputs_v0.26.csv)
+- [BindCraft wrapper classification v0.26](benchmark/results/bindcraft_wrapper_classification_v0.26.csv)
+- [BindCraft accepted-final classification v0.28](benchmark/results/bindcraft_accepted_final_classification_v0.28.csv)
+- [ColabDesign bounded method output manifest v0.29](benchmark/results/colabdesign_bounded_method_output_manifest_v0.29.csv)
+- [ColabDesign bounded candidate outputs v0.29](benchmark/results/colabdesign_bounded_candidate_outputs_v0.29.csv)
+- [BindCraft accepted candidate outputs v0.29](benchmark/results/bindcraft_accepted_candidate_outputs_v0.29.csv)
 - [Multi-case fixture target manifest v0.22](benchmark/input_sets/multi_case_fixture_target_manifest_v0.22.csv)
 - [Multi-case fixture control manifest v0.22](benchmark/input_sets/multi_case_fixture_control_manifest_v0.22.csv)
 - [Multi-case fixture job manifest v0.22](benchmark/input_sets/multi_case_fixture_job_manifest_v0.22.csv)
@@ -140,6 +158,12 @@
 - [Multi-case fixture pilot audit v0.22](ops/audits/multi_case_fixture_pilot_audit_v0.22.md)
 - [External dry-run package plan v0.23](ops/plans/external_dry_run_package_plan_v0.23.md)
 - [External dry-run package audit v0.23](ops/audits/external_dry_run_package_audit_v0.23.md)
+- [D-Flow input contract fixture audit v0.24](ops/audits/dflow_input_contract_fixture_audit_v0.24.md)
+- [D-Flow full PepMerge download audit v0.25](ops/audits/dflow_full_pepmerge_download_audit_v0.25.md)
+- [D-Flow/ColabDesign/BindCraft gate audit v0.26](ops/audits/dflow_colabdesign_bindcraft_v0.26.md)
+- [ColabDesign/DexDesign gate audit v0.27](ops/audits/colabdesign_dexdesign_gate_v0.27.md)
+- [External asset rescue audit v0.28](ops/audits/external_asset_rescue_audit_v0.28.md)
+- [Bounded generation/parser audit v0.29](ops/audits/bounded_generation_parser_audit_v0.29.md)
 - [Target candidate academic-search audit v0.14](ops/audits/target_candidate_academic_search_audit_v0.14.md)
 - [Target candidate academic-search plan v0.14](ops/plans/target_candidate_academic_search_plan_v0.14.md)
 - [Dataset supplement schema review v0.8](benchmark/input_sets/dataset_supplement_schema_review_v0.8.csv)
@@ -170,6 +194,6 @@
 - [Method landscape patch candidates v1.1](kb/tables/method_landscape_patch_candidates_v1.1.csv)
 
 ## Next Phase
-`ops/plans/updated_plan_v0.9.md` remains the current plan. The manuscript layer now contains separate Chinese and English v1.0 outlines, v1.1 supplementary-source synthesis, v1.2 Chinese figure/table embedding, and v1.3 grant-style mock review planning. v0.12 records external source-only checkouts, v0.13 records Docker image reuse/environment assignment, v0.14 records academic-search-derived method-paper cases and target candidates, v0.15 records external import-level preflight and three minimal Batch A smoke-test summaries, v0.16 records adapter/parser hardening and Batch B target review planning, v0.17 records controlled Batch B pilot gates, v0.18 parses v0.15 outputs into replay fixtures, v0.19 records external method install/example-smoke readiness, v0.20 records method-unblock readiness, v0.21 records bounded adapter smoke plus parser fixture rows for the 10 first-wave methods, v0.22 converts those examples into controlled multi-case fixture target/control/job manifests and priority gates, and v0.23 records project-local notebook CLI plus D-Flow readiness findings. These layers keep the 10-method include set unchanged, leave `target_set_v0.csv` unfrozen, perform no scoring or performance comparison, and make no full local reproducibility claim.
+`ops/plans/updated_plan_v0.9.md` remains the current plan. The manuscript layer now contains separate Chinese and English v1.0 outlines, v1.1 supplementary-source synthesis, v1.2 Chinese figure/table embedding, and v1.3 grant-style mock review planning. v0.12 records external source-only checkouts, v0.13 records Docker image reuse/environment assignment, v0.14 records academic-search-derived method-paper cases and target candidates, v0.15 records external import-level preflight and three minimal Batch A smoke-test summaries, v0.16 records adapter/parser hardening and Batch B target review planning, v0.17 records controlled Batch B pilot gates, v0.18 parses v0.15 outputs into replay fixtures, v0.19 records external method install/example-smoke readiness, v0.20 records method-unblock readiness, v0.21 records bounded adapter smoke plus parser fixture rows for the 10 first-wave methods, v0.22 converts those examples into controlled multi-case fixture target/control/job manifests and priority gates, v0.23 records project-local notebook CLI plus D-Flow readiness findings, v0.24 records one D-Flow fixture-level PepDataset LMDB load test, v0.25 records full PepMerge download plus official LMDB load readiness, v0.26 records D-Flow bounded dry-run plus ColabDesign/BindCraft gate updates, v0.27 records ColabDesign bounded execute asset gate plus DexDesign route audit, v0.28 records ColabDesign AF parameter/target route rescue, DexDesign input-contract extraction and BindCraft accepted-final classification, and v0.29 records one ColabDesign single-case bounded generation/parser row, one DexDesign synthetic prepared D-L fixture, and one BindCraft accepted-final standard candidate parser fixture. These layers keep the 10-method include set unchanged, leave `target_set_v0.csv` unfrozen, perform no scoring or performance comparison, and make no complete Benchmark claim.
 
-The next execution phase should resolve the PepMerge access route or accept a user-provided archive, rerun D-Flow `PepDataset(reset=False)` against `pep_pocket_test_structure_cache.lmdb`, implement the ColabDesign standard job-row CLI adapter, and implement the BindCraft output classifier before any controlled multi-case run.
+The next execution phase should promote the v0.29 contracts into controlled multi-case target/control/job manifests, run a bounded DexDesign CPU route smoke, and add multi-seed parser/scoring checks before any controlled multi-case scoring.

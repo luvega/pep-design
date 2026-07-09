@@ -1,5 +1,113 @@
 # Project Log
 
+## [2026-07-09] release | v1.2.17 bounded generation and parser evidence
+- Bumped project version to `1.2.17`.
+- Added `scripts/run_colabdesign_bounded_generation.py` and ran one bounded
+  ColabDesign 7ZKR GPU generation/parser attempt in gitignored
+  `benchmark_runs/v0.29/colabdesign_bounded_generation`; exit code was `0`,
+  parser status was `parsed`, and the compact candidate row records sequence
+  `IQTNYYVRSRTQCQ`.
+- Added `scripts/prepare_dexdesign_minimal_fixture.py` and created a synthetic
+  prepared D-L complex fixture with target=`z` and peptide=`y`; the DexDesign
+  route audit now reports `dexdesign_input_contract_ready` for that fixture.
+- Added `scripts/parse_bindcraft_accepted_outputs.py` and converted four
+  external CD47 BindCraft accepted-final PDBs into standard candidate rows.
+- Recorded v0.29 evidence in
+  `benchmark/deployment/bounded_generation_parser_v0.29.csv`,
+  `benchmark/results/colabdesign_bounded_method_output_manifest_v0.29.csv`,
+  `benchmark/results/colabdesign_bounded_candidate_outputs_v0.29.csv`,
+  `benchmark/results/bindcraft_accepted_candidate_outputs_v0.29.csv`, and
+  `ops/audits/bounded_generation_parser_audit_v0.29.md`.
+- Maintained boundaries: no controlled multi-case run, no target-set
+  promotion, no multi-seed evidence, no scoring, no method ranking, and no
+  complete Benchmark result.
+
+## [2026-07-09] release | v1.2.16 external asset rescue
+- Bumped project version to `1.2.16`.
+- Found ColabDesign/AlphaFold parameters under
+  `/data/protein-design/data/alphafold_db/params` and a reusable fixture target
+  PDB at
+  `/mnt/ssd4t/protein-design/data/src/pep_design_benchmark/RFdiffusion/examples/input_pdbs/7zkr_GABARAP.pdb`.
+- Reran the ColabDesign bounded asset gate in gitignored
+  `benchmark_runs/v0.28/colabdesign_asset_gate`; status is
+  `ready_for_bounded_gpu_generation`, with no generation run.
+- Extracted the DexDesign D-peptide/L-protein input contract from the OSPREY3
+  `examples/ccs.D-peptide-L-protein/` route and recorded the remaining missing
+  prepared D-L complex fixture.
+- Extended the BindCraft classifier to support native `Accepted/` layouts and
+  classified `/data/protein-design/data/outputs/bindcraft/CD47` as
+  `accepted_final` with four accepted PDB files.
+- Recorded v0.28 evidence in
+  `benchmark/deployment/external_asset_rescue_v0.28.csv`,
+  `benchmark/results/bindcraft_accepted_final_classification_v0.28.csv`, and
+  `ops/audits/external_asset_rescue_audit_v0.28.md`.
+- Maintained boundaries: no controlled multi-case run, no ColabDesign
+  generation claim, no DexDesign design claim, no scoring, no method ranking,
+  and no complete Benchmark result.
+
+## [2026-07-09] release | v1.2.15 ColabDesign/DexDesign gate update
+- Bumped project version to `1.2.15`.
+- Extended `scripts/prepare_colabdesign_cli_adapter.py` with a bounded
+  execute asset gate that writes standard manifests and fails closed when
+  AlphaFold/ColabDesign parameters are missing.
+- Added `scripts/audit_dexdesign_route.py` to audit the DexDesign-specific
+  OSPREY3 `examples/ccs.D-peptide-L-protein/` route.
+- Recorded the compact gate summary in
+  `benchmark/deployment/colabdesign_dexdesign_gate_v0.27.csv` and audit notes
+  in `ops/audits/colabdesign_dexdesign_gate_v0.27.md`.
+- Maintained boundaries: generic OSPREY examples are environment probes only,
+  ColabDesign is blocked before generation without AF parameters, DexDesign is
+  blocked until a D-peptide/L-protein input contract and bounded CPU smoke are
+  recorded, and there is no scoring or complete Benchmark result.
+
+## [2026-07-09] release | v1.2.14 D-Flow/ColabDesign/BindCraft gate update
+- Bumped project version to `1.2.14`.
+- Ran a bounded D-Flow / PeptideDesign dry-run on one official PepMerge entry
+  (`1aze_B`) with `num_steps=1` and `num_samples=1`; exit code was `0` and the
+  output includes `sample_0.pdb`, `gt.pdb`, `outputs.csv`, and `aar.csv` under
+  gitignored `benchmark_runs/v0.26`.
+- Parsed the D-Flow sample PDB into a compact candidate row with chain B
+  sequence `MRRRRRRRRY` in
+  `benchmark/results/dflow_bounded_candidate_outputs_v0.26.csv`.
+- Added `scripts/prepare_colabdesign_cli_adapter.py` and generated a standard
+  ColabDesign job-row adapter package for `v022_pilot_colabdesign_7zkr_seed42`
+  without running notebook or GPU generation code.
+- Added `scripts/classify_bindcraft_outputs.py`; classified the v0.21 BindCraft
+  output as `low_confidence_only` with zero accepted PDBs.
+- Recorded the compact gate summary in
+  `benchmark/deployment/dflow_colabdesign_bindcraft_v0.26.csv` and audit notes
+  in `ops/audits/dflow_colabdesign_bindcraft_v0.26.md`.
+- Maintained boundaries: no `target_set_v0.csv` promotion, no scoring, no
+  method-ranking evidence, no ColabDesign generation claim, no BindCraft
+  accepted-final claim, no complete Benchmark result, and no biological-
+  validation claim.
+
+## [2026-07-09] release | v1.2.13 D-Flow full PepMerge download readiness
+- Bumped project version to `1.2.13`.
+- Resolved the D-Flow full PepMerge Google Drive blocker by using a working
+  Google IP for folder metadata and `drive.usercontent.google.com` confirmed
+  download URLs.
+- Downloaded and verified gitignored `PepMerge_release.zip` and
+  `PepMerge_lmdb.zip`; both archives passed `unzip -t` and SHA256 recording.
+- Extracted 10,348 PepMerge structure case directories and confirmed no case is
+  missing required `pocket.pdb`, `peptide.pdb`, `receptor.pdb`,
+  `receptor.fasta`, or `peptide.fasta`.
+- Verified `PepDataset(reset=False)` loads 154 official `pep_pocket_test`
+  entries and 9,849 official `pep_pocket_train` entries from the extracted LMDB
+  package; recorded the summary in
+  `benchmark/deployment/dflow_full_pepmerge_download_v0.25.csv`.
+- Maintained boundaries: no `target_set_v0.csv` promotion, no D-Flow generation
+  run, no scoring, no method-ranking evidence, no complete Benchmark result,
+  and no biological-validation claim.
+
+## [2026-07-09] release | v1.2.12 D-Flow input-contract fixture readiness
+- Bumped project version to `1.2.12`.
+- Added `scripts/prepare_dflow_input_contract.py` to build a D-Flow PepMerge-style fixture from a benchmark PDB case and verify `PepDataset` LMDB loading.
+- Created a gitignored 3EQS D-Flow fixture under `data/dflow/pepmerge/mdm2_p53_3eqs_fixture` and generated `data/dflow/pep_cache/pep_pocket_test_structure_cache.lmdb`.
+- Verified `PepDataset(reset=True)` and `PepDataset(reset=False)` load one fixture entry in the project-local D-Flow environment; recorded the compact summary in `benchmark/deployment/dflow_input_contract_fixture_v0.24.csv`.
+- Added `ops/audits/dflow_input_contract_fixture_audit_v0.24.md` and pytest/validator coverage.
+- Maintained boundaries: no full PepMerge release download, no `target_set_v0.csv` promotion, no D-Flow generation run, no scoring, no method-ranking evidence, no complete Benchmark result, and no biological-validation claim.
+
 ## [2026-07-09] release | v1.2.11 external dry-run package readiness
 - Bumped project version to `1.2.11`.
 - Added v0.23 notebook CLI smoke, D-Flow project install contract, external dry-run package manifest, priority gate review, plan, audit and pytest coverage.
