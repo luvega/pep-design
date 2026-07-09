@@ -1,5 +1,29 @@
 # Project Log
 
+## [2026-07-09] release | v1.2.19 bounded Wave A pilot execution/parser layer
+- Bumped project version to `1.2.19`.
+- Added `scripts/run_v031_wave_a_pilot.py` and
+  `scripts/parse_v031_pilot_outputs.py` to package, execute and merge the
+  v0.31 bounded Wave A pilot rows from the v0.30 manifests.
+- Ran the v0.31 Wave A pilot over 14 jobs and merged compact execution,
+  method, candidate and run rows into
+  `benchmark/deployment/pilot_execution_results_v0.31.csv`,
+  `benchmark/results/pilot_method_output_manifest_v0.31.csv`,
+  `benchmark/results/pilot_candidate_outputs_v0.31.csv`,
+  `benchmark/results/pilot_run_v0.31.csv`, and
+  `benchmark/results/pilot_v031_merge_summary.json`.
+- Fixed the ColabDesign bounded runner so the v0.31 outer `command.sh` is not
+  overwritten by the inner Docker command record; the inner command is stored
+  as `colabdesign_inner_command.sh`.
+- Recorded v0.31 status as 4 parsed/generated rows and 10 failed placeholder
+  rows. Parsed methods are PepMLM and AfCycDesign / ColabDesign cyclic peptide.
+- Added `ops/audits/pilot_wave_a_execution_audit_v0.31.md` and
+  `tests/test_v031_wave_a_pilot.py`; extended validator checks for v0.31
+  headers, row counts, Wave A job alignment, parser counts and no-overclaim
+  boundaries.
+- Maintained boundaries: no scoring, no method ranking, no target-set
+  promotion, no wet-lab validation, and no complete Benchmark result.
+
 ## [2026-07-09] release | v1.2.18 pilot benchmark design layer
 - Bumped project version to `1.2.18`.
 - Added v0.30 pilot target, control and job manifests for the next bounded

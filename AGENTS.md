@@ -6,9 +6,9 @@ This project is an independent protocol-first Benchmark knowledge base for recen
 
 Current authoritative plan: `ops/plans/updated_plan_v0.9.md`.
 
-Current version: `1.2.18`.
+Current version: `1.2.19`.
 
-Next planned phase: execute the v0.31 bounded Wave A pilot jobs defined by the v0.30 target/control/job manifests, then merge parser outputs into a compact candidate table and keep scoring limited to parser/QC until target controls are reviewed. Do not start additional clone, install, large download, or broader GPU execution unless the user explicitly requests that later phase. Additional large downloads and generated outputs must remain in gitignored external/runtime roots.
+Next planned phase: implement real Wave A adapters/parsers for the v0.31 placeholder-failed methods before any scoring layer is attempted. Do not start additional clone, install, large download, broad GPU execution, or scoring/ranking unless the user explicitly requests that later phase. Additional large downloads and generated outputs must remain in gitignored external/runtime roots.
 
 ## Source Boundaries
 
@@ -103,6 +103,9 @@ For broad research-to-paper or multi-stage review tasks, route through `academic
 | `benchmark/deployment/pilot_execution_matrix_v0.30.csv` | v0.30 runner/environment matrix | planned execution routing only; output roots stay gitignored |
 | `benchmark/input_sets/wet_lab_candidate_panel_v0.30.csv` | v0.30 prospective wet-lab candidate panel | planning-only; not synthesis, assay, or wet-lab validation evidence |
 | `ops/audits/pilot_benchmark_design_audit_v0.30.md` | v0.30 pilot design audit | target/control/job planning boundary only; not Benchmark result |
+| `benchmark/deployment/pilot_execution_results_v0.31.csv` | v0.31 bounded Wave A execution summary | bounded pilot/parser evidence only; not scoring or Benchmark result |
+| `benchmark/results/pilot_*_v0.31.*` | v0.31 merged method/candidate/run parser rows | compact parser rows only; raw outputs stay gitignored; not method ranking |
+| `ops/audits/pilot_wave_a_execution_audit_v0.31.md` | v0.31 Wave A execution audit | bounded execution/parser boundary only; not Benchmark result |
 | `ops/plans/protein_design_image_consolidation_plan_v0.13.md` | image consolidation plan | planning artifact only |
 | `ops/plans/adapter_parser_hardening_plan_v0.16.md` | adapter/parser hardening plan | planning artifact only |
 | `ops/audits/docker_environment_assignment_audit_v0.13.md` | Docker/environment assignment audit | readiness finding only; not local reproducibility evidence |

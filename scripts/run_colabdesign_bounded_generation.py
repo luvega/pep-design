@@ -107,7 +107,7 @@ def _shell_quote(value: str) -> str:
     return "'" + value.replace("'", "'\"'\"'") + "'"
 
 
-def runtime_script_text(target_pdb_name: str) -> str:
+def runtime_script_text(target_pdb_name: str, random_seed: int = 42, binder_len: int = 14) -> str:
     return f'''#!/usr/bin/env python3
 import json
 import os
@@ -118,7 +118,7 @@ from pathlib import Path
 
 os.environ.setdefault("XLA_PYTHON_CLIENT_PREALLOCATE", "false")
 os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
-random.seed(42)
+random.seed({random_seed})
 sys.path.insert(0, "/opt/ColabDesign")
 
 result = {{
@@ -144,7 +144,7 @@ try:
     model.prep_inputs(
         pdb_filename="/data/inputs/{target_pdb_name}",
         chain="A",
-        binder_len=14,
+        binder_len={binder_len},
         binder_chain=None,
         hotspot=None,
         ignore_missing=False,
@@ -240,22 +240,25 @@ def write_result_tables(
     *,
     output_dir: Path,
     command: list[str],
+    command_path: Path,
     runtime_seconds: float,
     exit_code: str,
     parser_status: str,
     status_reason: str,
     candidate_row: dict[str, Any],
+    job_id: str = JOB_ID,
+    task_id: str = TASK_ID,
 ) -> None:
     method_row = {
-        "run_record_id": f"{JOB_ID}_colabdesign_bounded_generation",
-        "job_id": JOB_ID,
+        "run_record_id": f"{job_id}_colabdesign_bounded_generation",
+        "job_id": job_id,
         "method": METHOD,
-        "task_id": TASK_ID,
+        "task_id": task_id,
         "execution_stage": "bounded_gpu_generation",
         "source_commit": SOURCE_COMMIT,
         "model_revision": "af_params_asset_gate_present",
         "environment_id": ENVIRONMENT_ID,
-        "command": str(output_dir / "command.sh"),
+        "command": str(command_path),
         "raw_output_root": str(output_dir),
         "stdout_log": str(output_dir / "stdout.log"),
         "stderr_log": str(output_dir / "stderr.log"),
@@ -270,7 +273,7 @@ def write_result_tables(
     (output_dir / "run_result.json").write_text(
         json.dumps(
             {
-                "job_id": JOB_ID,
+                "job_id": job_id,
                 "status": parser_status,
                 "exit_code": exit_code,
                 "command": command,
@@ -294,6 +297,15 @@ def run_bounded_generation(
     target_pdb: Path = DEFAULT_TARGET_PDB,
     image: str = DEFAULT_IMAGE,
     timeout_sec: int = 900,
+    job_id: str = JOB_ID,
+    target_id: str = TARGET_ID,
+    task_id: str = TASK_ID,
+    random_seed: int = 42,
+    peptide_type: str = "linear",
+    chirality: str = "L",
+    cyclic: str = "no",
+    binder_len: int = 14,
+    inner_command_filename: str = "command.sh",
 ) -> dict[str, Any]:
     output_dir = output_dir.resolve()
     source_dir = source_dir.resolve()
@@ -301,7 +313,7 @@ def run_bounded_generation(
     target_pdb = target_pdb.resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
     (output_dir / "colabdesign_ultra_smoke.py").write_text(
-        runtime_script_text(target_pdb.name),
+        runtime_script_text(target_pdb.name, random_seed=random_seed, binder_len=binder_len),
         encoding="utf-8",
     )
     command = build_docker_command(
@@ -312,8 +324,9 @@ def run_bounded_generation(
         image=image,
         timeout_sec=timeout_sec,
     )
-    (output_dir / "command.sh").write_text(shell_join(command) + "\n", encoding="utf-8")
-    (output_dir / "command.sh").chmod(0o755)
+    inner_command_path = output_dir / inner_command_filename
+    inner_command_path.write_text(shell_join(command) + "\n", encoding="utf-8")
+    inner_command_path.chmod(0o755)
 
     start = time.monotonic()
     stdout = ""
@@ -350,18 +363,18 @@ def run_bounded_generation(
         status = "bounded_gpu_generation_passed"
         status_reason = "bounded_colabdesign_gpu_generation_parsed; not Benchmark result; not scoring evidence"
         candidate_row = {
-            "design_id": f"{JOB_ID}_candidate_1",
-            "job_id": JOB_ID,
+            "design_id": f"{job_id}_candidate_1",
+            "job_id": job_id,
             "method": METHOD,
-            "target_id": TARGET_ID,
+            "target_id": target_id,
             "binder_id": parsed["chain_id"],
             "source_output_id": output_pdb.name,
             "generation_rank": "1",
             "sequence": parsed["sequence"],
             "structure_path": str(output_pdb),
-            "peptide_type": "linear",
-            "chirality": "L",
-            "cyclic": "no",
+            "peptide_type": peptide_type,
+            "chirality": chirality,
+            "cyclic": cyclic,
             "parse_status": "parsed",
             "status_reason": "bounded_colabdesign_output_parsed",
             "notes": "Single bounded GPU generation attempt; not Benchmark result; not controlled multi-case; not scoring evidence",
@@ -374,18 +387,18 @@ def run_bounded_generation(
             "not Benchmark result; not scoring evidence"
         )
         candidate_row = {
-            "design_id": f"{JOB_ID}_not_generated",
-            "job_id": JOB_ID,
+            "design_id": f"{job_id}_not_generated",
+            "job_id": job_id,
             "method": METHOD,
-            "target_id": TARGET_ID,
+            "target_id": target_id,
             "binder_id": "not_generated",
             "source_output_id": "not_generated",
             "generation_rank": "",
             "sequence": "",
             "structure_path": "",
-            "peptide_type": "linear",
-            "chirality": "L",
-            "cyclic": "no",
+            "peptide_type": peptide_type,
+            "chirality": chirality,
+            "cyclic": cyclic,
             "parse_status": "failed",
             "status_reason": f"exit_{exit_code}_or_no_parseable_pdb",
             "notes": "Bounded GPU generation attempt failed or produced no parseable PDB; not Benchmark result; not scoring evidence",
@@ -394,11 +407,14 @@ def run_bounded_generation(
     write_result_tables(
         output_dir=output_dir,
         command=command,
+        command_path=inner_command_path,
         runtime_seconds=runtime_seconds,
         exit_code=exit_code,
         parser_status=parser_status,
         status_reason=status_reason,
         candidate_row=candidate_row,
+        job_id=job_id,
+        task_id=task_id,
     )
     return {
         "status": status,
@@ -418,6 +434,15 @@ def main() -> int:
     parser.add_argument("--target-pdb", type=Path, default=DEFAULT_TARGET_PDB)
     parser.add_argument("--image", default=DEFAULT_IMAGE)
     parser.add_argument("--timeout-sec", type=int, default=900)
+    parser.add_argument("--job-id", default=JOB_ID)
+    parser.add_argument("--target-id", default=TARGET_ID)
+    parser.add_argument("--task-id", default=TASK_ID)
+    parser.add_argument("--random-seed", type=int, default=42)
+    parser.add_argument("--peptide-type", default="linear")
+    parser.add_argument("--chirality", default="L")
+    parser.add_argument("--cyclic", default="no")
+    parser.add_argument("--binder-len", type=int, default=14)
+    parser.add_argument("--inner-command-filename", default="command.sh")
     args = parser.parse_args()
 
     result = run_bounded_generation(
@@ -427,6 +452,15 @@ def main() -> int:
         target_pdb=args.target_pdb,
         image=args.image,
         timeout_sec=args.timeout_sec,
+        job_id=args.job_id,
+        target_id=args.target_id,
+        task_id=args.task_id,
+        random_seed=args.random_seed,
+        peptide_type=args.peptide_type,
+        chirality=args.chirality,
+        cyclic=args.cyclic,
+        binder_len=args.binder_len,
+        inner_command_filename=args.inner_command_filename,
     )
     print(json.dumps(result, sort_keys=True))
     return 0

@@ -9,3 +9,7 @@ v0.11 新增的 `example_method_output_manifest_v0.11.csv` 和 `example_candidat
 v0.18 新增的 `batch_a_replay_method_output_manifest_v0.18.csv`、`batch_a_replay_candidate_outputs_v0.18.csv` 和 `batch_a_replay_run_v0.18.csv` 是从外部 v0.15 Batch A minimal smoke outputs 解析得到的小型 replay fixtures。它们用于检查 adapter/parser 字段和 `design_id` join，不是新的方法执行、scoring evidence、head-to-head result 或 Benchmark performance finding。
 
 v0.21 新增的 `adapter_method_output_manifest_v0.21.csv`、`adapter_candidate_outputs_v0.21.csv` 和 `adapter_run_rows_v0.21.csv` 是 bounded adapter smoke 的 parser fixture rows，不是 scoring evidence 或 Benchmark results。v0.22 不新增结果表，只在 `benchmark/input_sets/` 和 `benchmark/deployment/` 中记录 multi-case fixture pilot planning manifests。
+
+v0.26-v0.29 新增的小型结果表记录 D-Flow bounded dry-run、BindCraft wrapper/accepted-final parser fixture、ColabDesign 单例 bounded generation/parser 和 DexDesign/BindCraft parser-contract 证据。它们是 readiness/parser evidence，不是 scoring evidence、method ranking 或完整 Benchmark result。
+
+v0.31 新增的 `pilot_method_output_manifest_v0.31.csv`、`pilot_candidate_outputs_v0.31.csv`、`pilot_run_v0.31.csv` 和 `pilot_v031_merge_summary.json` 汇总 14 个 Wave A bounded pilot job。当前 4 行 parsed/generated，10 行为 adapter placeholder failed。原始 PDB、日志和生成输出保留在 gitignored `benchmark_runs/v0.31/`；这些表不是 scoring evidence、method ranking、target-set promotion 或完整 Benchmark result。

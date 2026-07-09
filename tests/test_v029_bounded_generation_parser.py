@@ -80,6 +80,46 @@ def test_colabdesign_runner_resolves_relative_output_mount() -> None:
     assert "benchmark_runs/v0.29/relative_colab:/data/outputs" not in command
 
 
+def test_colabdesign_runner_can_write_inner_command_without_overwriting_outer_wrapper(tmp_path: Path, monkeypatch) -> None:
+    module = load_module(COLAB_RUNNER_SCRIPT, "run_colabdesign_bounded_generation")
+    output_dir = tmp_path / "colab"
+    target_pdb = tmp_path / "target.pdb"
+    target_pdb.write_text("HEADER TEST\n", encoding="utf-8")
+
+    def fake_run(command, **kwargs):
+        _ = command, kwargs
+        (output_dir / "colabdesign_binder.pdb").write_text(
+            "\n".join(
+                [
+                    "ATOM      1  CA  ALA B   1       1.000   0.000   0.000  1.00 10.00           C",
+                    "ATOM      2  CA  LEU B   2       2.000   0.000   0.000  1.00 10.00           C",
+                    "END",
+                ]
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        return module.subprocess.CompletedProcess(command, 0, stdout="ok\n", stderr="")
+
+    monkeypatch.setattr(module.subprocess, "run", fake_run)
+
+    result = module.run_bounded_generation(
+        output_dir=output_dir,
+        source_dir=tmp_path / "source",
+        params_dir=tmp_path / "params",
+        target_pdb=target_pdb,
+        image="pd-benchmark-methods-gpu:0.21",
+        timeout_sec=30,
+        inner_command_filename="colabdesign_inner_command.sh",
+    )
+
+    method_rows = read_csv(output_dir / "method_output_manifest.csv")
+    assert result["parser_status"] == "parsed"
+    assert (output_dir / "colabdesign_inner_command.sh").is_file()
+    assert not (output_dir / "command.sh").exists()
+    assert method_rows[0]["command"].endswith("colabdesign_inner_command.sh")
+
+
 def test_dexdesign_minimal_fixture_contains_contract_chains(tmp_path: Path) -> None:
     module = load_module(DEX_FIXTURE_SCRIPT, "prepare_dexdesign_minimal_fixture")
 

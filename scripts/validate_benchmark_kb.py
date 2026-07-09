@@ -1317,6 +1317,50 @@ WET_LAB_CANDIDATE_PANEL_V030_HEADERS = [
     "next_action",
 ]
 
+PILOT_EXECUTION_RESULTS_V031_HEADERS = [
+    "execution_id",
+    "job_id",
+    "method",
+    "target_id",
+    "execution_wave",
+    "runner",
+    "container_or_env",
+    "output_root",
+    "status",
+    "exit_code",
+    "runtime_seconds",
+    "parser_status",
+    "candidate_count",
+    "blocked_reason",
+    "evidence_boundary",
+    "next_action",
+]
+
+PILOT_RUN_V031_HEADERS = [
+    "design_id",
+    "method",
+    "task_id",
+    "target_id",
+    "binder_id",
+    "input_mode",
+    "target_sequence",
+    "target_pdb",
+    "target_chains",
+    "binder_chain",
+    "pocket_definition",
+    "peptide_type",
+    "chirality",
+    "cyclic",
+    "status",
+    "notes",
+    "parent_job_id",
+    "source_output_id",
+    "generation_rank",
+    "random_seed",
+    "adapter_status",
+    "status_reason",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
@@ -1333,6 +1377,8 @@ REQUIRED_FILES = [
     "scripts/run_colabdesign_bounded_generation.py",
     "scripts/prepare_dexdesign_minimal_fixture.py",
     "scripts/parse_bindcraft_accepted_outputs.py",
+    "scripts/run_v031_wave_a_pilot.py",
+    "scripts/parse_v031_pilot_outputs.py",
     "benchmark/README.md",
     "benchmark/availability/README.md",
     "benchmark/availability/link_availability_matrix_v0.5.csv",
@@ -1410,6 +1456,7 @@ REQUIRED_FILES = [
     "benchmark/deployment/external_asset_rescue_v0.28.csv",
     "benchmark/deployment/bounded_generation_parser_v0.29.csv",
     "benchmark/deployment/pilot_execution_matrix_v0.30.csv",
+    "benchmark/deployment/pilot_execution_results_v0.31.csv",
     "benchmark/deployment/method_readiness_review_v0.8.csv",
     "benchmark/deployment/method_preflight_status_v0.10.csv",
     "benchmark/deployment/adapter_preflight_status_v0.11.csv",
@@ -1434,6 +1481,10 @@ REQUIRED_FILES = [
     "benchmark/results/colabdesign_bounded_method_output_manifest_v0.29.csv",
     "benchmark/results/colabdesign_bounded_candidate_outputs_v0.29.csv",
     "benchmark/results/bindcraft_accepted_candidate_outputs_v0.29.csv",
+    "benchmark/results/pilot_method_output_manifest_v0.31.csv",
+    "benchmark/results/pilot_candidate_outputs_v0.31.csv",
+    "benchmark/results/pilot_run_v0.31.csv",
+    "benchmark/results/pilot_v031_merge_summary.json",
     "sources/raw_snapshots/_index.md",
     "kb/references/references.bib",
     "kb/references/zotero-map.tsv",
@@ -1474,6 +1525,7 @@ REQUIRED_FILES = [
     "ops/audits/external_asset_rescue_audit_v0.28.md",
     "ops/audits/bounded_generation_parser_audit_v0.29.md",
     "ops/audits/pilot_benchmark_design_audit_v0.30.md",
+    "ops/audits/pilot_wave_a_execution_audit_v0.31.md",
     "ops/plans/updated_plan_v0.6.md",
     "ops/plans/updated_plan_v0.9.md",
     "ops/plans/updated_plan_v1.3.md",
@@ -1525,6 +1577,7 @@ REQUIRED_FILES = [
     "kb/wiki/concepts/_index.md",
     "kb/wiki/benchmark_candidates/_index.md",
     "tests/test_v030_pilot_benchmark_design.py",
+    "tests/test_v031_wave_a_pilot.py",
 ]
 
 METHOD_REQUIRED_TOKENS = [
@@ -2074,6 +2127,11 @@ def main() -> int:
         "benchmark/input_sets/wet_lab_candidate_panel_v0.30.csv",
         WET_LAB_CANDIDATE_PANEL_V030_HEADERS,
     )
+    pilot_execution_results_v031_rows = check_headers(
+        errors,
+        "benchmark/deployment/pilot_execution_results_v0.31.csv",
+        PILOT_EXECUTION_RESULTS_V031_HEADERS,
+    )
     method_readiness_v08_rows = check_headers(
         errors,
         "benchmark/deployment/method_readiness_review_v0.8.csv",
@@ -2198,6 +2256,21 @@ def main() -> int:
         errors,
         "benchmark/results/bindcraft_accepted_candidate_outputs_v0.29.csv",
         CANDIDATE_OUTPUT_HEADERS,
+    )
+    pilot_method_output_v031_rows = check_headers(
+        errors,
+        "benchmark/results/pilot_method_output_manifest_v0.31.csv",
+        METHOD_OUTPUT_MANIFEST_HEADERS,
+    )
+    pilot_candidate_output_v031_rows = check_headers(
+        errors,
+        "benchmark/results/pilot_candidate_outputs_v0.31.csv",
+        CANDIDATE_OUTPUT_HEADERS,
+    )
+    pilot_run_v031_rows = check_headers(
+        errors,
+        "benchmark/results/pilot_run_v0.31.csv",
+        PILOT_RUN_V031_HEADERS,
     )
     _map_rows = check_headers(errors, "kb/references/zotero-map.tsv", ["zotero_key", "bibtex_key", "title"], delimiter="\t")
 
@@ -5017,6 +5090,110 @@ def main() -> int:
         if token not in pilot_benchmark_design_audit_v030_text:
             errors.append(f"pilot_benchmark_design_audit_v0.30.md missing token {token}")
 
+    wave_a_job_ids_v030 = {row.get("job_id", "") for row in wave_a_v030_jobs}
+    v031_table_sets = {
+        "pilot_execution_results_v0.31.csv": {row.get("job_id", "") for row in pilot_execution_results_v031_rows},
+        "pilot_method_output_manifest_v0.31.csv": {row.get("job_id", "") for row in pilot_method_output_v031_rows},
+        "pilot_candidate_outputs_v0.31.csv": {row.get("job_id", "") for row in pilot_candidate_output_v031_rows},
+        "pilot_run_v0.31.csv": {row.get("parent_job_id", "") for row in pilot_run_v031_rows},
+    }
+    for artifact_name, observed_job_ids in v031_table_sets.items():
+        if observed_job_ids != wave_a_job_ids_v030:
+            errors.append(f"{artifact_name} job set must exactly match v0.30 Wave A jobs")
+    for artifact_name, rows in [
+        ("pilot_execution_results_v0.31.csv", pilot_execution_results_v031_rows),
+        ("pilot_method_output_manifest_v0.31.csv", pilot_method_output_v031_rows),
+        ("pilot_candidate_outputs_v0.31.csv", pilot_candidate_output_v031_rows),
+        ("pilot_run_v0.31.csv", pilot_run_v031_rows),
+    ]:
+        if len(rows) != 14:
+            errors.append(f"{artifact_name} should contain 14 Wave A rows, found {len(rows)}")
+        for row in rows:
+            text = " ".join(row.values()).lower()
+            if "not benchmark result" not in text:
+                errors.append(f"{artifact_name}: {row.get('job_id') or row.get('parent_job_id') or row.get('design_id')} missing not Benchmark result boundary")
+            for forbidden in ["benchmark_completed", "best_performing", "performance_ranking", "benchmark_ready", "smoke_test_ready", "wet_lab_validated"]:
+                if forbidden in text:
+                    errors.append(
+                        f"{artifact_name}: {row.get('job_id') or row.get('parent_job_id') or row.get('design_id')} overclaims {forbidden}"
+                    )
+    if sum(1 for row in pilot_execution_results_v031_rows if row.get("status") == "parsed") != 4:
+        errors.append("pilot_execution_results_v0.31.csv should contain 4 parsed rows")
+    if sum(1 for row in pilot_execution_results_v031_rows if row.get("status") == "failed") != 10:
+        errors.append("pilot_execution_results_v0.31.csv should contain 10 failed rows")
+    if sum(1 for row in pilot_method_output_v031_rows if row.get("parser_status") == "parsed") != 4:
+        errors.append("pilot_method_output_manifest_v0.31.csv should contain 4 parsed rows")
+    if sum(1 for row in pilot_method_output_v031_rows if row.get("parser_status") == "failed") != 10:
+        errors.append("pilot_method_output_manifest_v0.31.csv should contain 10 failed rows")
+    if sum(1 for row in pilot_candidate_output_v031_rows if row.get("parse_status") == "parsed") != 4:
+        errors.append("pilot_candidate_outputs_v0.31.csv should contain 4 parsed rows")
+    if sum(1 for row in pilot_candidate_output_v031_rows if row.get("parse_status") == "failed") != 10:
+        errors.append("pilot_candidate_outputs_v0.31.csv should contain 10 failed rows")
+    if sum(1 for row in pilot_run_v031_rows if row.get("status") == "generated") != 4:
+        errors.append("pilot_run_v0.31.csv should contain 4 generated rows")
+    if sum(1 for row in pilot_run_v031_rows if row.get("status") == "failed") != 10:
+        errors.append("pilot_run_v0.31.csv should contain 10 failed rows")
+    parsed_methods_v031 = {
+        row.get("method", "")
+        for row in pilot_candidate_output_v031_rows
+        if row.get("parse_status") == "parsed"
+    }
+    if parsed_methods_v031 != {"PepMLM", "AfCycDesign / ColabDesign cyclic peptide"}:
+        errors.append("pilot_candidate_outputs_v0.31.csv parsed methods must be PepMLM and ColabDesign only")
+    failed_reasons_v031 = {
+        row.get("status_reason", "")
+        for row in pilot_candidate_output_v031_rows
+        if row.get("parse_status") == "failed"
+    }
+    if failed_reasons_v031 != {"adapter_execution_failed_or_not_implemented_exit_86"}:
+        errors.append("pilot_candidate_outputs_v0.31.csv failed rows must use the exit_86 adapter placeholder reason")
+    for row in pilot_candidate_output_v031_rows:
+        if row.get("parse_status") == "parsed" and row.get("method") == "PepMLM":
+            if not row.get("sequence") or row.get("structure_path"):
+                errors.append(f"{row.get('design_id')}: PepMLM v0.31 row must have sequence and no structure_path")
+        if row.get("parse_status") == "parsed" and row.get("method") == "AfCycDesign / ColabDesign cyclic peptide":
+            if len(row.get("sequence", "")) != 14:
+                errors.append(f"{row.get('design_id')}: ColabDesign v0.31 sequence length must be 14")
+            if "benchmark_runs/v0.31/colabdesign" not in row.get("structure_path", ""):
+                errors.append(f"{row.get('design_id')}: ColabDesign v0.31 structure_path must point to gitignored v0.31 runtime root")
+    for row in pilot_method_output_v031_rows:
+        if row.get("method") == "AfCycDesign / ColabDesign cyclic peptide" and row.get("parser_status") == "parsed":
+            if not row.get("command", "").endswith("colabdesign_inner_command.sh"):
+                errors.append(f"{row.get('job_id')}: ColabDesign v0.31 method row must record inner command path")
+    summary_v031_path = ROOT / "benchmark/results/pilot_v031_merge_summary.json"
+    try:
+        summary_v031 = json.loads(summary_v031_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        errors.append(f"pilot_v031_merge_summary.json is not valid JSON: {exc}")
+        summary_v031 = {}
+    for key, expected in {
+        "wave_a_jobs": 14,
+        "method_rows": 14,
+        "candidate_rows": 14,
+        "run_rows": 14,
+        "execution_rows": 14,
+    }.items():
+        if summary_v031.get(key) != expected:
+            errors.append(f"pilot_v031_merge_summary.json {key} should be {expected}")
+    if "not Benchmark result" not in summary_v031.get("evidence_boundary", ""):
+        errors.append("pilot_v031_merge_summary.json must preserve not Benchmark result boundary")
+
+    pilot_wave_a_execution_audit_v031_text = (
+        ROOT / "ops/audits/pilot_wave_a_execution_audit_v0.31.md"
+    ).read_text(encoding="utf-8")
+    for token in [
+        "Pilot Wave A Execution Audit v0.31",
+        "14 Wave A jobs",
+        "4 parsed",
+        "10 failed",
+        "PepMLM",
+        "ColabDesign",
+        "target_set_v0.csv remains empty",
+        "not Benchmark result",
+    ]:
+        if token not in pilot_wave_a_execution_audit_v031_text:
+            errors.append(f"pilot_wave_a_execution_audit_v0.31.md missing token {token}")
+
     if len(dflow_bounded_candidate_v026_rows) != 1:
         errors.append(
             "dflow_bounded_candidate_outputs_v0.26.csv should contain 1 row, "
@@ -5530,6 +5707,10 @@ def main() -> int:
             "pilot_benchmark_job_v030_rows": len(pilot_benchmark_job_v030_rows),
             "pilot_execution_matrix_v030_rows": len(pilot_execution_matrix_v030_rows),
             "wet_lab_candidate_panel_v030_rows": len(wet_lab_candidate_panel_v030_rows),
+            "pilot_execution_results_v031_rows": len(pilot_execution_results_v031_rows),
+            "pilot_method_output_v031_rows": len(pilot_method_output_v031_rows),
+            "pilot_candidate_output_v031_rows": len(pilot_candidate_output_v031_rows),
+            "pilot_run_v031_rows": len(pilot_run_v031_rows),
             "method_readiness_v08_rows": len(method_readiness_v08_rows),
             "method_preflight_v010_rows": len(method_preflight_rows),
             "adapter_preflight_v011_rows": len(adapter_preflight_rows),

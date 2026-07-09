@@ -1,5 +1,49 @@
 # Release Notes
 
+## v1.2.19 Bounded Wave A Pilot Execution Parser Layer - 2026-07-09
+
+This checkpoint executes and merges the v0.31 bounded Wave A pilot package from
+the v0.30 manifests.
+
+### Added
+
+- Added `scripts/run_v031_wave_a_pilot.py`.
+- Added `scripts/parse_v031_pilot_outputs.py`.
+- Added `benchmark/deployment/pilot_execution_results_v0.31.csv`.
+- Added `benchmark/results/pilot_method_output_manifest_v0.31.csv`.
+- Added `benchmark/results/pilot_candidate_outputs_v0.31.csv`.
+- Added `benchmark/results/pilot_run_v0.31.csv`.
+- Added `benchmark/results/pilot_v031_merge_summary.json`.
+- Added `ops/audits/pilot_wave_a_execution_audit_v0.31.md`.
+- Added `tests/test_v031_wave_a_pilot.py`.
+
+### Changed
+
+- Bumped project version to `1.2.19`.
+- Extended the ColabDesign bounded runner so v0.31 can keep the outer
+  `command.sh` separate from the inner `colabdesign_inner_command.sh`.
+- Updated validator coverage for v0.31 execution, method, candidate and run
+  tables.
+- Updated README, index, Benchmark README, AGENTS and project log for v0.31.
+
+### Notification
+
+- v0.31 represents 14 Wave A jobs from the v0.30 job manifest.
+- Parsed/generated rows: 4.
+- Failed placeholder rows: 10.
+- Parsed methods: PepMLM and AfCycDesign / ColabDesign cyclic peptide.
+- ColabDesign seed 42 and seed 43 both produced parsed 14-aa binder-chain rows
+  after the wrapper fix.
+
+### Boundaries
+
+- No scoring or method ranking.
+- No `target_set_v0.csv` promotion.
+- No wet-lab synthesis, assay, or validation claim.
+- The 10 failed rows are adapter placeholder failures, not algorithm-failure
+  conclusions.
+- No complete Benchmark result.
+
 ## v1.2.18 Pilot Benchmark Design Layer - 2026-07-09
 
 This checkpoint converts the v0.29 bounded/parser evidence into a controlled
