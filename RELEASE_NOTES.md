@@ -1,5 +1,57 @@
 # Release Notes
 
+## v1.2.11 External Dry-run Package Readiness - 2026-07-09
+
+This checkpoint adds the v0.23 execution-heavy readiness package. It records a
+project-local notebook CLI tool layer and a project-local D-Flow installation
+attempt while keeping datasets, weights, source trees, logs and runtime outputs
+in gitignored roots.
+
+### Added
+
+- Added `benchmark/deployment/notebook_cli_smoke_manifest_v0.23.csv`.
+- Added `benchmark/deployment/dflow_project_install_contract_v0.23.csv`.
+- Added `benchmark/deployment/external_dry_run_package_manifest_v0.23.csv`.
+- Added `benchmark/deployment/priority_gate_review_v0.23.csv`.
+- Added `ops/plans/external_dry_run_package_plan_v0.23.md`.
+- Added `ops/audits/external_dry_run_package_audit_v0.23.md`.
+- Added `tests/test_v023_external_dry_run_package.py`.
+
+### Changed
+
+- Bumped project version to `1.2.11`.
+- Updated validator coverage for v0.23 notebook CLI tooling, D-Flow
+  project-local install evidence, dry-run package rows and priority gates.
+- Excluded gitignored runtime environment directories from markdown link
+  validation.
+
+### Notification
+
+- Notebook CLI tooling is installed in `.venv/benchmark-v023-conda` and a
+  `papermill` smoke executed under `benchmark_runs/v0.23`.
+- D-Flow / PeptideDesign is cloned into `method_sources/dflow/PeptideDesign`
+  as a real project-local checkout, not a symlink.
+- D-Flow has a project-local GPU Python environment at `.venv/dflow-v023`;
+  `dflow.pt` is extracted under `weights/dflow/`; `PepDataset`, `PepModel`,
+  DeepSpeed and `inference_pep` imports pass after the documented DeepSpeed
+  `torch._six` patch.
+- D-Flow remains `blocked_input_contract` because PepMerge and
+  `pep_pocket_test_structure_cache.lmdb` are absent. Google Drive access to
+  the README PepMerge folder timed out through both `gdown` and `curl`.
+- ColabDesign has notebook CLI tooling available, but the standard job-row CLI
+  adapter remains pending.
+- BindCraft still requires the accepted-final output classifier before any
+  accepted design claim.
+
+### Boundaries
+
+- No `target_set_v0.csv` promotion.
+- No scoring or method-ranking evidence.
+- No complete Benchmark result.
+- No biological or experimental validation claim.
+- No source tree, conda environment, model weight, downloaded dataset, LMDB,
+  notebook output or raw runtime log is tracked in git.
+
 ## v1.2.10 Multi-case Fixture Pilot Planning - 2026-07-08
 
 This checkpoint adds the v0.22 controlled multi-case fixture pilot planning

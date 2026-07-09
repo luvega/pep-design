@@ -6,9 +6,9 @@ This project is an independent protocol-first Benchmark knowledge base for recen
 
 Current authoritative plan: `ops/plans/updated_plan_v0.9.md`.
 
-Current version: `1.2.10`.
+Current version: `1.2.11`.
 
-Next planned phase: v0.23 approved external dry-run package preparation after v0.22 multi-case fixture pilot planning. Do not start additional clone, download, install, or GPU execution unless the user explicitly requests that later phase.
+Next planned phase: resolve the v0.23 dry-run blockers before controlled multi-case execution. Do not start additional clone, download, install, or GPU execution unless the user explicitly requests that later phase.
 
 ## Source Boundaries
 
@@ -74,6 +74,12 @@ For broad research-to-paper or multi-stage review tasks, route through `academic
 | `benchmark/deployment/priority_gate_review_v0.22.csv` | v0.22 D-Flow/ColabDesign/BindCraft gate review | blocked/planning gate only; not execution evidence |
 | `ops/plans/multi_case_fixture_pilot_plan_v0.22.md` | v0.22 pilot plan | planning artifact only |
 | `ops/audits/multi_case_fixture_pilot_audit_v0.22.md` | v0.22 pilot audit | readiness findings and no-overclaim boundary only |
+| `benchmark/deployment/notebook_cli_smoke_manifest_v0.23.csv` | project-local notebook CLI smoke summary | tooling readiness only; not method output or Benchmark evidence |
+| `benchmark/deployment/dflow_project_install_contract_v0.23.csv` | D-Flow project-local install/input-contract evidence | readiness findings only; D-Flow remains input-contract blocked |
+| `benchmark/deployment/external_dry_run_package_manifest_v0.23.csv` | v0.23 dry-run package index | package readiness only; large assets stay in gitignored roots |
+| `benchmark/deployment/priority_gate_review_v0.23.csv` | v0.23 D-Flow/ColabDesign/BindCraft gate review | readiness gate only; not scoring or target-set evidence |
+| `ops/plans/external_dry_run_package_plan_v0.23.md` | v0.23 dry-run package plan | planning/readiness artifact only |
+| `ops/audits/external_dry_run_package_audit_v0.23.md` | v0.23 dry-run package audit | readiness findings and blocker record only |
 | `ops/plans/protein_design_image_consolidation_plan_v0.13.md` | image consolidation plan | planning artifact only |
 | `ops/plans/adapter_parser_hardening_plan_v0.16.md` | adapter/parser hardening plan | planning artifact only |
 | `ops/audits/docker_environment_assignment_audit_v0.13.md` | Docker/environment assignment audit | readiness finding only; not local reproducibility evidence |
@@ -102,7 +108,7 @@ Method and dataset readiness must move through explicit gates:
 6. `dry_run_ready`
 7. `smoke_test_ready`
 
-Current v0.15-v0.22 KB artifacts support only `minimal_smoke_observed`, interface-planning, pilot-gate, parser-replay fixture, method-provided example/preflight readiness evidence, method-unblock findings, bounded adapter-smoke evidence, parser fixture rows for selected external examples, and multi-case fixture pilot planning. They do not support promotion to `smoke_test_ready` or `benchmark_ready` without controlled target governance, standardized inputs, adapter commands, multi-seed outputs, scoring artifacts, validation artifacts, and target/control governance. PepMirror and PepGLAD have v0.21 checkpoint/weight unblock evidence; D-Flow remains input-contract blocked by the missing PepMerge cache.
+Current v0.15-v0.23 KB artifacts support only `minimal_smoke_observed`, interface-planning, pilot-gate, parser-replay fixture, method-provided example/preflight readiness evidence, method-unblock findings, bounded adapter-smoke evidence, parser fixture rows for selected external examples, multi-case fixture pilot planning, and v0.23 dry-run package readiness findings. They do not support promotion to `smoke_test_ready` or `benchmark_ready` without controlled target governance, standardized inputs, adapter commands, multi-seed outputs, scoring artifacts, validation artifacts, and target/control governance. PepMirror and PepGLAD have v0.21 checkpoint/weight unblock evidence; D-Flow has project-local source/env/checkpoint/import readiness evidence but remains input-contract blocked by missing PepMerge and `pep_pocket_test_structure_cache.lmdb`.
 
 ## Language And Claim Rules
 
@@ -118,6 +124,7 @@ Current v0.15-v0.22 KB artifacts support only `minimal_smoke_observed`, interfac
 - Do not treat v0.20 method-unblock rows as target-set evidence, scoring evidence, method ranking, or Benchmark results.
 - Do not treat v0.21 adapter-smoke or parser rows as target-set evidence, scoring evidence, method ranking, full reproducibility evidence, or Benchmark results.
 - Do not treat v0.22 multi-case fixture target/control/job manifests or priority gates as frozen target-set evidence, execution evidence, scoring evidence, method ranking, full reproducibility evidence, or Benchmark results.
+- Do not treat v0.23 notebook CLI tooling or D-Flow project-local install/import evidence as target-set evidence, scoring evidence, method ranking, full reproducibility evidence, or Benchmark results.
 - Do not treat watchlist datasets, target candidates, review-only methods, or literature examples as frozen Benchmark targets.
 - Generation ability, ranking/rescoring ability, developability proxies, structural confidence, and biological validation are separate evidence layers.
 

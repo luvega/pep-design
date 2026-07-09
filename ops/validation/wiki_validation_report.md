@@ -63,6 +63,10 @@
 - multi_case_fixture_control_v022_rows: 7
 - multi_case_fixture_job_v022_rows: 8
 - priority_gate_review_v022_rows: 4
+- notebook_cli_smoke_v023_rows: 1
+- dflow_project_install_v023_rows: 1
+- external_dry_run_package_v023_rows: 5
+- priority_gate_review_v023_rows: 5
 - method_readiness_v08_rows: 4
 - method_preflight_v010_rows: 3
 - adapter_preflight_v011_rows: 3
@@ -83,8 +87,8 @@
 - method_cards: 12
 - literature_cards: 120
 - bibtex_entries: 432
-- markdown_links_checked: 175
-- tracked_files_checked: 397
+- markdown_links_checked: 181
+- tracked_files_checked: 404
 
 ## Errors
 - None
@@ -159,6 +163,10 @@
     "multi_case_fixture_control_v022_rows": 7,
     "multi_case_fixture_job_v022_rows": 8,
     "priority_gate_review_v022_rows": 4,
+    "notebook_cli_smoke_v023_rows": 1,
+    "dflow_project_install_v023_rows": 1,
+    "external_dry_run_package_v023_rows": 5,
+    "priority_gate_review_v023_rows": 5,
     "method_readiness_v08_rows": 4,
     "method_preflight_v010_rows": 3,
     "adapter_preflight_v011_rows": 3,
@@ -179,8 +187,8 @@
     "method_cards": 12,
     "literature_cards": 120,
     "bibtex_entries": 432,
-    "markdown_links_checked": 175,
-    "tracked_files_checked": 397
+    "markdown_links_checked": 181,
+    "tracked_files_checked": 404
   },
   "errors": [],
   "warnings": []

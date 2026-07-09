@@ -1,5 +1,14 @@
 # Project Log
 
+## [2026-07-09] release | v1.2.11 external dry-run package readiness
+- Bumped project version to `1.2.11`.
+- Added v0.23 notebook CLI smoke, D-Flow project install contract, external dry-run package manifest, priority gate review, plan, audit and pytest coverage.
+- Installed notebook CLI tooling in the project-local `.venv/benchmark-v023-conda` environment and verified a `papermill` notebook execution smoke under `benchmark_runs/v0.23`.
+- Cloned D-Flow / PeptideDesign into `method_sources/dflow/PeptideDesign` as a real project-local checkout at commit `3e3e9f501ee16db318e9bf52643513636a07699a`, not a symlink.
+- Built a project-local D-Flow GPU environment under `.venv/dflow-v023`, extracted `dflow.pt` under `weights/dflow/`, patched the documented DeepSpeed `torch._six` issue, and verified `PepDataset`, `PepModel` and `inference_pep` imports.
+- Recorded D-Flow blocker: PepMerge and `pep_pocket_test_structure_cache.lmdb` are absent; Google Drive access to the README PepMerge folder timed out through `gdown` and `curl`.
+- Maintained boundaries: no `target_set_v0.csv` promotion, no scoring, no method-ranking evidence, no complete Benchmark result, and no biological-validation claim.
+
 ## [2026-07-08] release | v1.2.10 multi-case fixture pilot planning
 - Bumped project version to `1.2.10`.
 - Added v0.22 method-example fixture evidence, multi-case fixture target/control/job manifests, priority gate review, pilot plan and pilot audit.

@@ -1027,6 +1027,69 @@ PRIORITY_GATE_REVIEW_V022_HEADERS = [
     "next_action",
 ]
 
+NOTEBOOK_CLI_SMOKE_V023_HEADERS = [
+    "component_id",
+    "component",
+    "environment_path",
+    "python_version",
+    "installed_packages",
+    "smoke_command",
+    "smoke_output",
+    "status",
+    "blocker",
+    "evidence_boundary",
+    "next_action",
+]
+
+DFLOW_PROJECT_INSTALL_V023_HEADERS = [
+    "method",
+    "source_dir",
+    "source_commit",
+    "source_mode",
+    "is_symlink",
+    "environment_path",
+    "python_version",
+    "gpu_evidence",
+    "weight_path",
+    "weight_sha256",
+    "package_import_status",
+    "model_import_status",
+    "inference_import_status",
+    "deepspeed_patch",
+    "official_env_status",
+    "input_contract_status",
+    "load_test_log",
+    "blocker",
+    "next_gate",
+    "evidence_boundary",
+    "next_action",
+]
+
+EXTERNAL_DRY_RUN_PACKAGE_V023_HEADERS = [
+    "package_item_id",
+    "method_or_component",
+    "role",
+    "project_local_path",
+    "runtime_evidence",
+    "status",
+    "blocker",
+    "allowed_use",
+    "next_action",
+]
+
+PRIORITY_GATE_REVIEW_V023_HEADERS = [
+    "gate_id",
+    "method",
+    "priority_area",
+    "v022_status",
+    "v023_status",
+    "observed_evidence",
+    "remaining_blocker",
+    "allowed_v023_use",
+    "promotion_condition",
+    "next_action",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
@@ -1098,6 +1161,10 @@ REQUIRED_FILES = [
     "benchmark/deployment/blocker_asset_manifest_v0.21.csv",
     "benchmark/deployment/method_example_fixture_evidence_v0.22.csv",
     "benchmark/deployment/priority_gate_review_v0.22.csv",
+    "benchmark/deployment/notebook_cli_smoke_manifest_v0.23.csv",
+    "benchmark/deployment/dflow_project_install_contract_v0.23.csv",
+    "benchmark/deployment/external_dry_run_package_manifest_v0.23.csv",
+    "benchmark/deployment/priority_gate_review_v0.23.csv",
     "benchmark/deployment/method_readiness_review_v0.8.csv",
     "benchmark/deployment/method_preflight_status_v0.10.csv",
     "benchmark/deployment/adapter_preflight_status_v0.11.csv",
@@ -1148,6 +1215,7 @@ REQUIRED_FILES = [
     "ops/audits/method_unblock_audit_v0.20.md",
     "ops/audits/adapter_smoke_audit_v0.21.md",
     "ops/audits/multi_case_fixture_pilot_audit_v0.22.md",
+    "ops/audits/external_dry_run_package_audit_v0.23.md",
     "ops/plans/updated_plan_v0.6.md",
     "ops/plans/updated_plan_v0.9.md",
     "ops/plans/updated_plan_v1.3.md",
@@ -1159,6 +1227,7 @@ REQUIRED_FILES = [
     "ops/plans/adapter_parser_hardening_plan_v0.16.md",
     "ops/plans/batch_b_pilot_execution_plan_v0.17.md",
     "ops/plans/multi_case_fixture_pilot_plan_v0.22.md",
+    "ops/plans/external_dry_run_package_plan_v0.23.md",
     "ops/migration/file_role_map_v0.10.csv",
     "ops/audits/license_schema_input_contract_review_v0.8.md",
     "ops/audits/supervisor_skills_idea_evaluation.md",
@@ -1274,6 +1343,15 @@ ALLOWED_LARGE_TRACKED_FILES = {
     "sources/raw_snapshots/zotero/seed_items_by_collection.json",
 }
 
+RUNTIME_MARKDOWN_SKIP_DIRS = {
+    ".venv",
+    "benchmark_runs",
+    "data",
+    "logs",
+    "method_sources",
+    "weights",
+}
+
 
 def read_csv(path: Path, delimiter: str = ",") -> tuple[list[str], list[dict[str, str]]]:
     with path.open("r", encoding="utf-8", newline="") as handle:
@@ -1294,6 +1372,8 @@ def check_markdown_links(errors: list[str]) -> int:
     link_pattern = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
     for path in ROOT.rglob("*.md"):
         rel_path = path.relative_to(ROOT)
+        if rel_path.parts and rel_path.parts[0] in RUNTIME_MARKDOWN_SKIP_DIRS:
+            continue
         if len(rel_path.parts) >= 2 and rel_path.parts[:2] == ("sources", "raw_snapshots"):
             continue
         text = path.read_text(encoding="utf-8")
@@ -1659,6 +1739,26 @@ def main() -> int:
         errors,
         "benchmark/deployment/priority_gate_review_v0.22.csv",
         PRIORITY_GATE_REVIEW_V022_HEADERS,
+    )
+    notebook_cli_smoke_v023_rows = check_headers(
+        errors,
+        "benchmark/deployment/notebook_cli_smoke_manifest_v0.23.csv",
+        NOTEBOOK_CLI_SMOKE_V023_HEADERS,
+    )
+    dflow_project_install_v023_rows = check_headers(
+        errors,
+        "benchmark/deployment/dflow_project_install_contract_v0.23.csv",
+        DFLOW_PROJECT_INSTALL_V023_HEADERS,
+    )
+    external_dry_run_package_v023_rows = check_headers(
+        errors,
+        "benchmark/deployment/external_dry_run_package_manifest_v0.23.csv",
+        EXTERNAL_DRY_RUN_PACKAGE_V023_HEADERS,
+    )
+    priority_gate_review_v023_rows = check_headers(
+        errors,
+        "benchmark/deployment/priority_gate_review_v0.23.csv",
+        PRIORITY_GATE_REVIEW_V023_HEADERS,
     )
     method_readiness_v08_rows = check_headers(
         errors,
@@ -3995,6 +4095,109 @@ def main() -> int:
             if forbidden in text:
                 errors.append(f"{gate_id}: v0.22 priority gate row overclaims {forbidden}")
 
+    if len(notebook_cli_smoke_v023_rows) != 1:
+        errors.append(
+            f"notebook_cli_smoke_manifest_v0.23.csv should contain 1 row, found {len(notebook_cli_smoke_v023_rows)}"
+        )
+    for row in notebook_cli_smoke_v023_rows:
+        component_id = row.get("component_id", "")
+        for required_field in NOTEBOOK_CLI_SMOKE_V023_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{component_id}: v0.23 notebook CLI row missing {required_field}")
+        if row.get("status") != "smoke_passed":
+            errors.append("v0.23 notebook CLI smoke must record smoke_passed")
+        if "papermill" not in row.get("installed_packages", ""):
+            errors.append("v0.23 notebook CLI smoke must include papermill")
+        if "not method output" not in row.get("evidence_boundary", ""):
+            errors.append("v0.23 notebook CLI evidence boundary must say not method output")
+
+    if len(dflow_project_install_v023_rows) != 1:
+        errors.append(
+            f"dflow_project_install_contract_v0.23.csv should contain 1 row, found {len(dflow_project_install_v023_rows)}"
+        )
+    for row in dflow_project_install_v023_rows:
+        method = row.get("method", "")
+        for required_field in DFLOW_PROJECT_INSTALL_V023_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{method}: v0.23 D-Flow install row missing {required_field}")
+        if row.get("source_mode") != "project_internal_git_clone_not_symlink":
+            errors.append("D-Flow v0.23 source_mode must be project_internal_git_clone_not_symlink")
+        if row.get("is_symlink") != "no":
+            errors.append("D-Flow v0.23 source must not be recorded as a symlink")
+        if row.get("input_contract_status") != "blocked_input_contract":
+            errors.append("D-Flow v0.23 must remain blocked_input_contract until PepMerge LMDB loads")
+        for token in ["PepDataset", "PepModel_import_ok", "inference_pep_import_ok", "Google Drive"]:
+            if token not in " ".join(row.values()):
+                errors.append(f"D-Flow v0.23 install row missing token {token}")
+        for forbidden in ["smoke_test_ready", "benchmark_ready", "benchmark_completed", "best_performing"]:
+            if forbidden in " ".join(row.values()).lower():
+                errors.append(f"D-Flow v0.23 install row overclaims {forbidden}")
+
+    expected_v023_package_ids = {
+        "v023_notebook_cli",
+        "v023_dflow_project_install",
+        "v023_colabdesign_adapter",
+        "v023_bindcraft_classifier",
+        "v023_alphafold_target_qc",
+    }
+    observed_v023_package_ids = {row.get("package_item_id", "") for row in external_dry_run_package_v023_rows}
+    missing_v023_package_ids = sorted(expected_v023_package_ids - observed_v023_package_ids)
+    if missing_v023_package_ids:
+        errors.append(
+            "external_dry_run_package_manifest_v0.23.csv missing package ids: "
+            + ", ".join(missing_v023_package_ids)
+        )
+    if len(external_dry_run_package_v023_rows) != len(expected_v023_package_ids):
+        errors.append(
+            f"external_dry_run_package_manifest_v0.23.csv should contain {len(expected_v023_package_ids)} rows, "
+            f"found {len(external_dry_run_package_v023_rows)}"
+        )
+    for row in external_dry_run_package_v023_rows:
+        package_item_id = row.get("package_item_id", "")
+        for required_field in EXTERNAL_DRY_RUN_PACKAGE_V023_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{package_item_id}: v0.23 package row missing {required_field}")
+        if package_item_id == "v023_alphafold_target_qc" and row.get("allowed_use") != "target_qc_only_not_scoring":
+            errors.append("AlphaFold v0.23 package row must remain target_qc_only_not_scoring")
+
+    expected_v023_gate_ids = {
+        "v023_dflow_project_install",
+        "v023_dflow_input_contract",
+        "v023_colabdesign_notebook_cli",
+        "v023_bindcraft_wrapper_classifier",
+        "v023_formal_manifest_gate",
+    }
+    observed_v023_gate_ids = {row.get("gate_id", "") for row in priority_gate_review_v023_rows}
+    missing_v023_gate_ids = sorted(expected_v023_gate_ids - observed_v023_gate_ids)
+    if missing_v023_gate_ids:
+        errors.append("priority_gate_review_v0.23.csv missing gates: " + ", ".join(missing_v023_gate_ids))
+    if len(priority_gate_review_v023_rows) != len(expected_v023_gate_ids):
+        errors.append(
+            f"priority_gate_review_v0.23.csv should contain {len(expected_v023_gate_ids)} rows, "
+            f"found {len(priority_gate_review_v023_rows)}"
+        )
+    for row in priority_gate_review_v023_rows:
+        gate_id = row.get("gate_id", "")
+        text = " ".join(row.values()).lower()
+        for required_field in PRIORITY_GATE_REVIEW_V023_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{gate_id}: v0.23 priority gate row missing {required_field}")
+        if gate_id == "v023_dflow_input_contract":
+            if row.get("allowed_v023_use") != "blocked_contract_row_only":
+                errors.append("D-Flow v0.23 input gate must remain blocked_contract_row_only")
+            for token in ["google drive", "pep_pocket_test_structure_cache.lmdb"]:
+                if token not in text:
+                    errors.append(f"D-Flow v0.23 input gate missing token {token}")
+        if gate_id == "v023_colabdesign_notebook_cli" and row.get("allowed_v023_use") != "cli_tooling_only":
+            errors.append("ColabDesign v0.23 gate must remain cli_tooling_only")
+        if gate_id == "v023_bindcraft_wrapper_classifier":
+            for token in ["accepted_final", "low_confidence_only", "timeout_only", "no_output", "failed"]:
+                if token not in text:
+                    errors.append(f"BindCraft v0.23 gate missing output class token {token}")
+        for forbidden in ["benchmark_completed", "best_performing", "performance_ranking", "smoke_test_ready", "benchmark_ready"]:
+            if forbidden in text:
+                errors.append(f"{gate_id}: v0.23 priority gate row overclaims {forbidden}")
+
     pilot_plan_text = (ROOT / "ops/plans/batch_b_pilot_execution_plan_v0.17.md").read_text(
         encoding="utf-8"
     )
@@ -4036,6 +4239,12 @@ def main() -> int:
         encoding="utf-8"
     )
     multi_case_fixture_audit_text = (ROOT / "ops/audits/multi_case_fixture_pilot_audit_v0.22.md").read_text(
+        encoding="utf-8"
+    )
+    external_dry_run_plan_text = (ROOT / "ops/plans/external_dry_run_package_plan_v0.23.md").read_text(
+        encoding="utf-8"
+    )
+    external_dry_run_audit_text = (ROOT / "ops/audits/external_dry_run_package_audit_v0.23.md").read_text(
         encoding="utf-8"
     )
     for token in [
@@ -4094,6 +4303,29 @@ def main() -> int:
     ]:
         if token not in multi_case_fixture_audit_text:
             errors.append(f"multi_case_fixture_pilot_audit_v0.22.md missing token {token}")
+    for token in [
+        "External Dry-run Package Plan v0.23",
+        "notebook_cli_smoke_manifest_v0.23.csv",
+        "dflow_project_install_contract_v0.23.csv",
+        "D-Flow",
+        "ColabDesign",
+        "BindCraft",
+        "AlphaFold DB",
+        "No-Overclaim Boundary",
+    ]:
+        if token not in external_dry_run_plan_text:
+            errors.append(f"external_dry_run_package_plan_v0.23.md missing token {token}")
+    for token in [
+        "External Dry-run Package Audit v0.23",
+        "external_dry_run_package_manifest_v0.23.csv",
+        "priority_gate_review_v0.23.csv",
+        "FileNotFoundError",
+        "Google Drive",
+        "not Benchmark result",
+        "No-Overclaim Boundary",
+    ]:
+        if token not in external_dry_run_audit_text:
+            errors.append(f"external_dry_run_package_audit_v0.23.md missing token {token}")
     for text_name, text_value in [
         ("batch_b_pilot_execution_plan_v0.17.md", pilot_plan_text.lower()),
         ("batch_b_pilot_readiness_audit_v0.17.md", pilot_audit_text.lower()),
@@ -4103,6 +4335,8 @@ def main() -> int:
         ("adapter_smoke_audit_v0.21.md", adapter_smoke_audit_text.lower()),
         ("multi_case_fixture_pilot_plan_v0.22.md", multi_case_fixture_plan_text.lower()),
         ("multi_case_fixture_pilot_audit_v0.22.md", multi_case_fixture_audit_text.lower()),
+        ("external_dry_run_package_plan_v0.23.md", external_dry_run_plan_text.lower()),
+        ("external_dry_run_package_audit_v0.23.md", external_dry_run_audit_text.lower()),
     ]:
         for forbidden_phrase in [
             "benchmark completed",
@@ -4351,6 +4585,10 @@ def main() -> int:
             "multi_case_fixture_control_v022_rows": len(multi_case_fixture_control_v022_rows),
             "multi_case_fixture_job_v022_rows": len(multi_case_fixture_job_v022_rows),
             "priority_gate_review_v022_rows": len(priority_gate_review_v022_rows),
+            "notebook_cli_smoke_v023_rows": len(notebook_cli_smoke_v023_rows),
+            "dflow_project_install_v023_rows": len(dflow_project_install_v023_rows),
+            "external_dry_run_package_v023_rows": len(external_dry_run_package_v023_rows),
+            "priority_gate_review_v023_rows": len(priority_gate_review_v023_rows),
             "method_readiness_v08_rows": len(method_readiness_v08_rows),
             "method_preflight_v010_rows": len(method_preflight_rows),
             "adapter_preflight_v011_rows": len(adapter_preflight_rows),
