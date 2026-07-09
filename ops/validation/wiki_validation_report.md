@@ -79,6 +79,11 @@
 - colabdesign_dexdesign_gate_v027_rows: 2
 - external_asset_rescue_v028_rows: 3
 - bounded_generation_parser_v029_rows: 3
+- pilot_benchmark_target_v030_rows: 7
+- pilot_benchmark_control_v030_rows: 8
+- pilot_benchmark_job_v030_rows: 17
+- pilot_execution_matrix_v030_rows: 17
+- wet_lab_candidate_panel_v030_rows: 4
 - method_readiness_v08_rows: 4
 - method_preflight_v010_rows: 3
 - adapter_preflight_v011_rows: 3
@@ -99,8 +104,8 @@
 - method_cards: 12
 - literature_cards: 120
 - bibtex_entries: 432
-- markdown_links_checked: 199
-- tracked_files_checked: 435
+- markdown_links_checked: 205
+- tracked_files_checked: 442
 
 ## Errors
 - None
@@ -191,6 +196,11 @@
     "colabdesign_dexdesign_gate_v027_rows": 2,
     "external_asset_rescue_v028_rows": 3,
     "bounded_generation_parser_v029_rows": 3,
+    "pilot_benchmark_target_v030_rows": 7,
+    "pilot_benchmark_control_v030_rows": 8,
+    "pilot_benchmark_job_v030_rows": 17,
+    "pilot_execution_matrix_v030_rows": 17,
+    "wet_lab_candidate_panel_v030_rows": 4,
     "method_readiness_v08_rows": 4,
     "method_preflight_v010_rows": 3,
     "adapter_preflight_v011_rows": 3,
@@ -211,8 +221,8 @@
     "method_cards": 12,
     "literature_cards": 120,
     "bibtex_entries": 432,
-    "markdown_links_checked": 199,
-    "tracked_files_checked": 435
+    "markdown_links_checked": 205,
+    "tracked_files_checked": 442
   },
   "errors": [],
   "warnings": []

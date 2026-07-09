@@ -1,5 +1,25 @@
 # Project Log
 
+## [2026-07-09] release | v1.2.18 pilot benchmark design layer
+- Bumped project version to `1.2.18`.
+- Added v0.30 pilot target, control and job manifests for the next bounded
+  Wave A/Wave B execution phase:
+  `benchmark/input_sets/pilot_benchmark_target_manifest_v0.30.csv`,
+  `benchmark/input_sets/pilot_benchmark_control_manifest_v0.30.csv`, and
+  `benchmark/input_sets/pilot_benchmark_job_manifest_v0.30.csv`.
+- Added `benchmark/deployment/pilot_execution_matrix_v0.30.csv` with 17 planned
+  execution records: 14 Wave A jobs, 2 Wave B control/smoke jobs and 1 blocked
+  SaLT&PepPr access record.
+- Added `benchmark/input_sets/wet_lab_candidate_panel_v0.30.csv` with four
+  prospective follow-up target classes: MDM2, GABARAP, NCAM1 and AMHR2.
+- Added `ops/audits/pilot_benchmark_design_audit_v0.30.md` and
+  `tests/test_v030_pilot_benchmark_design.py`; extended the validator to check
+  v0.30 headers, row counts, job/matrix alignment, blocked-license handling,
+  empty `target_set_v0.csv`, and wet-lab prospective-only boundaries.
+- Maintained boundaries: no v0.30 job execution, no target-set promotion, no
+  scoring, no method ranking, no wet-lab validation, and no complete Benchmark
+  result.
+
 ## [2026-07-09] release | v1.2.17 bounded generation and parser evidence
 - Bumped project version to `1.2.17`.
 - Added `scripts/run_colabdesign_bounded_generation.py` and ran one bounded

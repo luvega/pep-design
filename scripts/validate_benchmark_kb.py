@@ -1238,6 +1238,85 @@ BOUNDED_GENERATION_PARSER_V029_HEADERS = [
     "next_action",
 ]
 
+PILOT_BENCHMARK_TARGET_V030_HEADERS = [
+    "pilot_target_id",
+    "target_id",
+    "task_id",
+    "target_label",
+    "input_ref",
+    "target_sequence",
+    "target_pdb",
+    "target_chains",
+    "binder_chain",
+    "benchmark_lane",
+    "allowed_methods",
+    "target_status",
+    "control_status",
+    "leakage_status",
+    "license_status",
+    "wet_lab_priority",
+    "allowed_use",
+    "evidence_source",
+    "evidence_boundary",
+    "next_action",
+]
+
+PILOT_BENCHMARK_CONTROL_V030_HEADERS = [
+    "control_id",
+    "pilot_target_id",
+    "control_type",
+    "control_label",
+    "control_input_ref",
+    "status",
+    "allowed_use",
+    "blocker",
+    "evidence_boundary",
+    "next_action",
+]
+
+PILOT_BENCHMARK_JOB_V030_HEADERS = JOB_MANIFEST_HEADERS + [
+    "pilot_target_id",
+    "pilot_lane",
+    "execution_wave",
+    "expected_output_contract",
+    "failure_policy",
+    "evidence_boundary",
+]
+
+PILOT_EXECUTION_MATRIX_V030_HEADERS = [
+    "execution_id",
+    "job_id",
+    "method",
+    "target_id",
+    "execution_wave",
+    "runner",
+    "container_or_env",
+    "gpu_required",
+    "max_runtime_sec",
+    "output_root",
+    "expected_parser",
+    "status",
+    "blocked_reason",
+    "evidence_boundary",
+    "next_action",
+]
+
+WET_LAB_CANDIDATE_PANEL_V030_HEADERS = [
+    "wet_lab_candidate_id",
+    "target_id",
+    "target_label",
+    "validation_tier",
+    "recommended_assay",
+    "positive_control",
+    "negative_control_or_decoy",
+    "expected_materials",
+    "selection_trigger",
+    "status",
+    "evidence_source",
+    "evidence_boundary",
+    "next_action",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
@@ -1278,6 +1357,10 @@ REQUIRED_FILES = [
     "benchmark/input_sets/multi_case_fixture_target_manifest_v0.22.csv",
     "benchmark/input_sets/multi_case_fixture_control_manifest_v0.22.csv",
     "benchmark/input_sets/multi_case_fixture_job_manifest_v0.22.csv",
+    "benchmark/input_sets/pilot_benchmark_target_manifest_v0.30.csv",
+    "benchmark/input_sets/pilot_benchmark_control_manifest_v0.30.csv",
+    "benchmark/input_sets/pilot_benchmark_job_manifest_v0.30.csv",
+    "benchmark/input_sets/wet_lab_candidate_panel_v0.30.csv",
     "benchmark/input_sets/dataset_supplement_watchlist_v0.6.csv",
     "benchmark/input_sets/dataset_supplement_schema_review_v0.7.csv",
     "benchmark/input_sets/dataset_supplement_schema_review_v0.8.csv",
@@ -1326,6 +1409,7 @@ REQUIRED_FILES = [
     "benchmark/deployment/colabdesign_dexdesign_gate_v0.27.csv",
     "benchmark/deployment/external_asset_rescue_v0.28.csv",
     "benchmark/deployment/bounded_generation_parser_v0.29.csv",
+    "benchmark/deployment/pilot_execution_matrix_v0.30.csv",
     "benchmark/deployment/method_readiness_review_v0.8.csv",
     "benchmark/deployment/method_preflight_status_v0.10.csv",
     "benchmark/deployment/adapter_preflight_status_v0.11.csv",
@@ -1389,6 +1473,7 @@ REQUIRED_FILES = [
     "ops/audits/colabdesign_dexdesign_gate_v0.27.md",
     "ops/audits/external_asset_rescue_audit_v0.28.md",
     "ops/audits/bounded_generation_parser_audit_v0.29.md",
+    "ops/audits/pilot_benchmark_design_audit_v0.30.md",
     "ops/plans/updated_plan_v0.6.md",
     "ops/plans/updated_plan_v0.9.md",
     "ops/plans/updated_plan_v1.3.md",
@@ -1439,6 +1524,7 @@ REQUIRED_FILES = [
     "kb/wiki/methods/_index.md",
     "kb/wiki/concepts/_index.md",
     "kb/wiki/benchmark_candidates/_index.md",
+    "tests/test_v030_pilot_benchmark_design.py",
 ]
 
 METHOD_REQUIRED_TOKENS = [
@@ -1962,6 +2048,31 @@ def main() -> int:
         errors,
         "benchmark/deployment/bounded_generation_parser_v0.29.csv",
         BOUNDED_GENERATION_PARSER_V029_HEADERS,
+    )
+    pilot_benchmark_target_v030_rows = check_headers(
+        errors,
+        "benchmark/input_sets/pilot_benchmark_target_manifest_v0.30.csv",
+        PILOT_BENCHMARK_TARGET_V030_HEADERS,
+    )
+    pilot_benchmark_control_v030_rows = check_headers(
+        errors,
+        "benchmark/input_sets/pilot_benchmark_control_manifest_v0.30.csv",
+        PILOT_BENCHMARK_CONTROL_V030_HEADERS,
+    )
+    pilot_benchmark_job_v030_rows = check_headers(
+        errors,
+        "benchmark/input_sets/pilot_benchmark_job_manifest_v0.30.csv",
+        PILOT_BENCHMARK_JOB_V030_HEADERS,
+    )
+    pilot_execution_matrix_v030_rows = check_headers(
+        errors,
+        "benchmark/deployment/pilot_execution_matrix_v0.30.csv",
+        PILOT_EXECUTION_MATRIX_V030_HEADERS,
+    )
+    wet_lab_candidate_panel_v030_rows = check_headers(
+        errors,
+        "benchmark/input_sets/wet_lab_candidate_panel_v0.30.csv",
+        WET_LAB_CANDIDATE_PANEL_V030_HEADERS,
     )
     method_readiness_v08_rows = check_headers(
         errors,
@@ -4706,6 +4817,206 @@ def main() -> int:
             if forbidden in text:
                 errors.append(f"{item_id}: v0.29 row overclaims {forbidden}")
 
+    expected_v030_target_ids = {
+        "pepmlm_sequence_contract_fixture",
+        "mdm2_p53_3eqs_fixture",
+        "gabarap_7zkr_fixture",
+        "mhcii_hiv_1sjh_fixture",
+        "pdl1_workbench_fixture",
+        "dexdesign_synthetic_d_l_fixture",
+        "bindcraft_cd47_method_example_control",
+    }
+    observed_v030_target_ids = {row.get("pilot_target_id", "") for row in pilot_benchmark_target_v030_rows}
+    missing_v030_target_ids = sorted(expected_v030_target_ids - observed_v030_target_ids)
+    if missing_v030_target_ids:
+        errors.append(
+            "pilot_benchmark_target_manifest_v0.30.csv missing targets: "
+            + ", ".join(missing_v030_target_ids)
+        )
+    if len(pilot_benchmark_target_v030_rows) != len(expected_v030_target_ids):
+        errors.append(
+            "pilot_benchmark_target_manifest_v0.30.csv should contain "
+            f"{len(expected_v030_target_ids)} rows, found {len(pilot_benchmark_target_v030_rows)}"
+        )
+    if target_set_rows:
+        errors.append("target_set_v0.csv must remain empty before v0.30 target/control freeze review")
+    expected_v030_lanes = {
+        "pepmlm_sequence_contract_fixture": "wave_a_sequence_generation",
+        "mdm2_p53_3eqs_fixture": "wave_a_structure_generation",
+        "gabarap_7zkr_fixture": "wave_a_topology_parser",
+        "mhcii_hiv_1sjh_fixture": "review_only",
+        "pdl1_workbench_fixture": "reserve_only",
+        "dexdesign_synthetic_d_l_fixture": "wave_b_input_contract_smoke",
+        "bindcraft_cd47_method_example_control": "wave_b_wrapper_control",
+    }
+    for row in pilot_benchmark_target_v030_rows:
+        pilot_target_id = row.get("pilot_target_id", "")
+        text = " ".join(row.values()).lower()
+        for required_field in PILOT_BENCHMARK_TARGET_V030_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{pilot_target_id}: v0.30 target row missing {required_field}")
+        if row.get("benchmark_lane") != expected_v030_lanes.get(pilot_target_id):
+            errors.append(f"{pilot_target_id}: unexpected v0.30 benchmark_lane {row.get('benchmark_lane')}")
+        if row.get("target_status") == "frozen_target_set":
+            errors.append(f"{pilot_target_id}: v0.30 target row must not be frozen_target_set")
+        if "not Benchmark result" not in row.get("evidence_boundary", ""):
+            errors.append(f"{pilot_target_id}: v0.30 target evidence boundary must say not Benchmark result")
+        for forbidden in ["benchmark_completed", "best_performing", "performance_ranking", "benchmark_ready", "smoke_test_ready", "wet_lab_validated"]:
+            if forbidden in text:
+                errors.append(f"{pilot_target_id}: v0.30 target row overclaims {forbidden}")
+
+    expected_v030_control_ids = {
+        "pepmlm_sequence_noncanonical_parser_control",
+        "mdm2_positive_complex_chain_control",
+        "mdm2_negative_control_placeholder",
+        "gabarap_noncanonical_parser_control",
+        "mhcii_chain_d_confounder_control",
+        "pdl1_local_provenance_control",
+        "dexdesign_synthetic_chain_contract_control",
+        "bindcraft_accepted_final_parser_control",
+    }
+    observed_v030_control_ids = {row.get("control_id", "") for row in pilot_benchmark_control_v030_rows}
+    missing_v030_control_ids = sorted(expected_v030_control_ids - observed_v030_control_ids)
+    if missing_v030_control_ids:
+        errors.append(
+            "pilot_benchmark_control_manifest_v0.30.csv missing controls: "
+            + ", ".join(missing_v030_control_ids)
+        )
+    if len(pilot_benchmark_control_v030_rows) != len(expected_v030_control_ids):
+        errors.append(
+            "pilot_benchmark_control_manifest_v0.30.csv should contain "
+            f"{len(expected_v030_control_ids)} rows, found {len(pilot_benchmark_control_v030_rows)}"
+        )
+    for row in pilot_benchmark_control_v030_rows:
+        control_id = row.get("control_id", "")
+        text = " ".join(row.values()).lower()
+        for required_field in PILOT_BENCHMARK_CONTROL_V030_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{control_id}: v0.30 control row missing {required_field}")
+        if row.get("pilot_target_id") not in observed_v030_target_ids:
+            errors.append(f"{control_id}: v0.30 control references unknown pilot_target_id")
+        if "not Benchmark result" not in row.get("evidence_boundary", ""):
+            errors.append(f"{control_id}: v0.30 control evidence boundary must say not Benchmark result")
+        for forbidden in ["benchmark_completed", "best_performing", "performance_ranking", "benchmark_ready", "smoke_test_ready", "wet_lab_validated"]:
+            if forbidden in text:
+                errors.append(f"{control_id}: v0.30 control row overclaims {forbidden}")
+
+    wave_a_v030_jobs = [row for row in pilot_benchmark_job_v030_rows if row.get("execution_wave") == "wave_a"]
+    wave_b_v030_jobs = [row for row in pilot_benchmark_job_v030_rows if row.get("execution_wave") == "wave_b"]
+    blocked_v030_jobs = [row for row in pilot_benchmark_job_v030_rows if row.get("execution_wave") == "blocked"]
+    if len(wave_a_v030_jobs) != 14:
+        errors.append(f"pilot_benchmark_job_manifest_v0.30.csv should contain 14 Wave A jobs, found {len(wave_a_v030_jobs)}")
+    if len(wave_b_v030_jobs) != 2:
+        errors.append(f"pilot_benchmark_job_manifest_v0.30.csv should contain 2 Wave B jobs, found {len(wave_b_v030_jobs)}")
+    if len(blocked_v030_jobs) != 1:
+        errors.append(f"pilot_benchmark_job_manifest_v0.30.csv should contain 1 blocked job, found {len(blocked_v030_jobs)}")
+    expected_v030_wave_a_methods = {
+        "PepMLM",
+        "DiffPepBuilder",
+        "PepGLAD",
+        "D-Flow / PeptideDesign",
+        "PepMirror",
+        "RFdiffusion + ProteinMPNN",
+        "AfCycDesign / ColabDesign cyclic peptide",
+    }
+    observed_v030_wave_a_methods = {row.get("method", "") for row in wave_a_v030_jobs}
+    if observed_v030_wave_a_methods != expected_v030_wave_a_methods:
+        errors.append("pilot_benchmark_job_manifest_v0.30.csv Wave A methods do not match expected set")
+    if {row.get("random_seed", "") for row in wave_a_v030_jobs} != {"42", "43"}:
+        errors.append("pilot_benchmark_job_manifest_v0.30.csv Wave A jobs must use seeds 42 and 43")
+    job_ids_v030 = {row.get("job_id", "") for row in pilot_benchmark_job_v030_rows}
+    for row in pilot_benchmark_job_v030_rows:
+        job_id = row.get("job_id", "")
+        text = " ".join(row.values()).lower()
+        for required_field in PILOT_BENCHMARK_JOB_V030_HEADERS:
+            optional_v030_job_fields = {"target_sequence", "target_pdb", "pocket_definition"}
+            if row.get("execution_wave") == "blocked":
+                optional_v030_job_fields.update({"random_seed"})
+            if not row.get(required_field) and required_field not in optional_v030_job_fields:
+                errors.append(f"{job_id}: v0.30 job row missing {required_field}")
+        if row.get("execution_wave") != "blocked" and row.get("pilot_target_id") not in observed_v030_target_ids:
+            errors.append(f"{job_id}: v0.30 job references unknown pilot_target_id")
+        if row.get("execution_wave") == "wave_a" and row.get("status") != "planned_pilot":
+            errors.append(f"{job_id}: v0.30 Wave A job status must be planned_pilot")
+        if row.get("execution_wave") == "blocked":
+            if row.get("method") != "SaLT&PepPr" or row.get("status") != "blocked_license":
+                errors.append(f"{job_id}: v0.30 blocked lane must be SaLT&PepPr blocked_license")
+        if "not Benchmark result" not in row.get("evidence_boundary", ""):
+            errors.append(f"{job_id}: v0.30 job evidence boundary must say not Benchmark result")
+        for forbidden in ["benchmark_completed", "best_performing", "performance_ranking", "benchmark_ready", "smoke_test_ready", "wet_lab_validated"]:
+            if forbidden in text:
+                errors.append(f"{job_id}: v0.30 job row overclaims {forbidden}")
+
+    matrix_job_ids_v030 = {row.get("job_id", "") for row in pilot_execution_matrix_v030_rows}
+    if matrix_job_ids_v030 != job_ids_v030:
+        errors.append("pilot_execution_matrix_v0.30.csv job_id set must match pilot_benchmark_job_manifest_v0.30.csv")
+    if len(pilot_execution_matrix_v030_rows) != len(pilot_benchmark_job_v030_rows):
+        errors.append(
+            "pilot_execution_matrix_v0.30.csv row count must match pilot_benchmark_job_manifest_v0.30.csv"
+        )
+    for row in pilot_execution_matrix_v030_rows:
+        execution_id = row.get("execution_id", "")
+        text = " ".join(row.values()).lower()
+        for required_field in PILOT_EXECUTION_MATRIX_V030_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{execution_id}: v0.30 execution row missing {required_field}")
+        output_root = row.get("output_root", "")
+        if not (output_root.startswith("benchmark_runs/v0.31/") or output_root == "not_applicable"):
+            errors.append(f"{execution_id}: v0.30 output_root must point to benchmark_runs/v0.31 or not_applicable")
+        if "not Benchmark result" not in row.get("evidence_boundary", ""):
+            errors.append(f"{execution_id}: v0.30 execution evidence boundary must say not Benchmark result")
+        for forbidden in ["benchmark_completed", "best_performing", "performance_ranking", "benchmark_ready", "smoke_test_ready", "wet_lab_validated"]:
+            if forbidden in text:
+                errors.append(f"{execution_id}: v0.30 execution row overclaims {forbidden}")
+
+    expected_v030_wet_lab_ids = {
+        "wetlab_mdm2_p53",
+        "wetlab_gabarap_stapled",
+        "wetlab_ncam1_sequence",
+        "wetlab_amhr2_sequence",
+    }
+    observed_v030_wet_lab_ids = {row.get("wet_lab_candidate_id", "") for row in wet_lab_candidate_panel_v030_rows}
+    missing_v030_wet_lab_ids = sorted(expected_v030_wet_lab_ids - observed_v030_wet_lab_ids)
+    if missing_v030_wet_lab_ids:
+        errors.append(
+            "wet_lab_candidate_panel_v0.30.csv missing candidates: "
+            + ", ".join(missing_v030_wet_lab_ids)
+        )
+    if len(wet_lab_candidate_panel_v030_rows) != len(expected_v030_wet_lab_ids):
+        errors.append(
+            f"wet_lab_candidate_panel_v0.30.csv should contain {len(expected_v030_wet_lab_ids)} rows, "
+            f"found {len(wet_lab_candidate_panel_v030_rows)}"
+        )
+    for row in wet_lab_candidate_panel_v030_rows:
+        wet_lab_candidate_id = row.get("wet_lab_candidate_id", "")
+        text = " ".join(row.values()).lower()
+        for required_field in WET_LAB_CANDIDATE_PANEL_V030_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{wet_lab_candidate_id}: v0.30 wet-lab candidate row missing {required_field}")
+        if row.get("status") != "prospective_not_run":
+            errors.append(f"{wet_lab_candidate_id}: v0.30 wet-lab status must be prospective_not_run")
+        if "not wet-lab validated" not in row.get("evidence_boundary", ""):
+            errors.append(f"{wet_lab_candidate_id}: v0.30 wet-lab boundary must say not wet-lab validated")
+        if "not benchmark result" not in text:
+            errors.append(f"{wet_lab_candidate_id}: v0.30 wet-lab row must preserve not Benchmark result boundary")
+        for forbidden in ["wet_lab_validated", "benchmark_completed", "best_performing", "performance_ranking", "benchmark_ready", "smoke_test_ready"]:
+            if forbidden in text:
+                errors.append(f"{wet_lab_candidate_id}: v0.30 wet-lab row overclaims {forbidden}")
+
+    pilot_benchmark_design_audit_v030_text = (
+        ROOT / "ops/audits/pilot_benchmark_design_audit_v0.30.md"
+    ).read_text(encoding="utf-8")
+    for token in [
+        "Pilot Benchmark Design Audit v0.30",
+        "target_set_v0.csv remains empty",
+        "Wave A: 14 planned jobs",
+        "Wave B: 2 planned control/smoke jobs",
+        "SaLT&PepPr remains blocked",
+        "not Benchmark result",
+    ]:
+        if token not in pilot_benchmark_design_audit_v030_text:
+            errors.append(f"pilot_benchmark_design_audit_v0.30.md missing token {token}")
+
     if len(dflow_bounded_candidate_v026_rows) != 1:
         errors.append(
             "dflow_bounded_candidate_outputs_v0.26.csv should contain 1 row, "
@@ -5214,6 +5525,11 @@ def main() -> int:
             "colabdesign_dexdesign_gate_v027_rows": len(colabdesign_dexdesign_gate_v027_rows),
             "external_asset_rescue_v028_rows": len(external_asset_rescue_v028_rows),
             "bounded_generation_parser_v029_rows": len(bounded_generation_parser_v029_rows),
+            "pilot_benchmark_target_v030_rows": len(pilot_benchmark_target_v030_rows),
+            "pilot_benchmark_control_v030_rows": len(pilot_benchmark_control_v030_rows),
+            "pilot_benchmark_job_v030_rows": len(pilot_benchmark_job_v030_rows),
+            "pilot_execution_matrix_v030_rows": len(pilot_execution_matrix_v030_rows),
+            "wet_lab_candidate_panel_v030_rows": len(wet_lab_candidate_panel_v030_rows),
             "method_readiness_v08_rows": len(method_readiness_v08_rows),
             "method_preflight_v010_rows": len(method_preflight_rows),
             "adapter_preflight_v011_rows": len(adapter_preflight_rows),

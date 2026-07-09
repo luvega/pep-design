@@ -6,9 +6,9 @@ This project is an independent protocol-first Benchmark knowledge base for recen
 
 Current authoritative plan: `ops/plans/updated_plan_v0.9.md`.
 
-Current version: `1.2.17`.
+Current version: `1.2.18`.
 
-Next planned phase: promote the v0.29 ColabDesign/DexDesign/BindCraft contracts into a controlled multi-case target/control/job manifest, then run a bounded DexDesign CPU route smoke and add multi-seed parser/scoring checks only after target governance is explicit. Do not start additional clone, install, large download, or broader GPU execution unless the user explicitly requests that later phase. Additional large downloads and generated outputs must remain in gitignored external/runtime roots.
+Next planned phase: execute the v0.31 bounded Wave A pilot jobs defined by the v0.30 target/control/job manifests, then merge parser outputs into a compact candidate table and keep scoring limited to parser/QC until target controls are reviewed. Do not start additional clone, install, large download, or broader GPU execution unless the user explicitly requests that later phase. Additional large downloads and generated outputs must remain in gitignored external/runtime roots.
 
 ## Source Boundaries
 
@@ -97,6 +97,12 @@ For broad research-to-paper or multi-stage review tasks, route through `academic
 | `benchmark/results/colabdesign_bounded_*_v0.29.csv` | ColabDesign one-case bounded GPU generation parser rows | ultra-smoke evidence only; raw PDB stays gitignored; not scoring or method ranking |
 | `benchmark/results/bindcraft_accepted_candidate_outputs_v0.29.csv` | BindCraft accepted-final standard candidate parser fixture | external CD47 parser fixture only; not controlled benchmark output |
 | `ops/audits/bounded_generation_parser_audit_v0.29.md` | v0.29 bounded generation/parser audit | readiness findings only; not Benchmark result |
+| `benchmark/input_sets/pilot_benchmark_target_manifest_v0.30.csv` | v0.30 pilot target fixture manifest | controlled pilot input design only; not frozen target set |
+| `benchmark/input_sets/pilot_benchmark_control_manifest_v0.30.csv` | v0.30 pilot control manifest | parser/control governance only; not biological validation |
+| `benchmark/input_sets/pilot_benchmark_job_manifest_v0.30.csv` | v0.30 pilot job manifest | planned Wave A/Wave B jobs only; not execution evidence |
+| `benchmark/deployment/pilot_execution_matrix_v0.30.csv` | v0.30 runner/environment matrix | planned execution routing only; output roots stay gitignored |
+| `benchmark/input_sets/wet_lab_candidate_panel_v0.30.csv` | v0.30 prospective wet-lab candidate panel | planning-only; not synthesis, assay, or wet-lab validation evidence |
+| `ops/audits/pilot_benchmark_design_audit_v0.30.md` | v0.30 pilot design audit | target/control/job planning boundary only; not Benchmark result |
 | `ops/plans/protein_design_image_consolidation_plan_v0.13.md` | image consolidation plan | planning artifact only |
 | `ops/plans/adapter_parser_hardening_plan_v0.16.md` | adapter/parser hardening plan | planning artifact only |
 | `ops/audits/docker_environment_assignment_audit_v0.13.md` | Docker/environment assignment audit | readiness finding only; not local reproducibility evidence |
@@ -125,7 +131,7 @@ Method and dataset readiness must move through explicit gates:
 6. `dry_run_ready`
 7. `smoke_test_ready`
 
-Current v0.15-v0.29 KB artifacts support only `minimal_smoke_observed`, interface-planning, pilot-gate, parser-replay fixture, method-provided example/preflight readiness evidence, method-unblock findings, bounded adapter-smoke evidence, parser fixture rows for selected external examples, multi-case fixture pilot planning, v0.23 dry-run package readiness findings, one D-Flow fixture-level PepDataset LMDB load test, D-Flow full PepMerge download/load readiness, one bounded D-Flow dry-run, one ColabDesign CLI adapter package, one BindCraft wrapper classification, a ColabDesign bounded execute asset gate, a DexDesign route audit, v0.28 external asset rescue findings, one ColabDesign single-case bounded GPU generation parser row, one DexDesign synthetic D-L input-contract fixture, and one BindCraft external accepted-final standard candidate parser fixture. They do not support promotion to `smoke_test_ready` or `benchmark_ready` without controlled target governance, standardized multi-case inputs, adapter commands, multi-seed outputs, scoring artifacts, validation artifacts, and target/control governance.
+Current v0.15-v0.30 KB artifacts support only `minimal_smoke_observed`, interface-planning, pilot-gate, parser-replay fixture, method-provided example/preflight readiness evidence, method-unblock findings, bounded adapter-smoke evidence, parser fixture rows for selected external examples, multi-case fixture pilot planning, v0.23 dry-run package readiness findings, one D-Flow fixture-level PepDataset LMDB load test, D-Flow full PepMerge download/load readiness, one bounded D-Flow dry-run, one ColabDesign CLI adapter package, one BindCraft wrapper classification, a ColabDesign bounded execute asset gate, a DexDesign route audit, v0.28 external asset rescue findings, one ColabDesign single-case bounded GPU generation parser row, one DexDesign synthetic D-L input-contract fixture, one BindCraft external accepted-final standard candidate parser fixture, and v0.30 controlled pilot target/control/job planning. They do not support promotion to `smoke_test_ready` or `benchmark_ready` without controlled execution records, standardized multi-case outputs, scoring artifacts, validation artifacts, and target/control governance.
 
 ## Language And Claim Rules
 
@@ -148,6 +154,7 @@ Current v0.15-v0.29 KB artifacts support only `minimal_smoke_observed`, interfac
 - Do not treat v0.27 ColabDesign asset-gate or DexDesign route-audit rows as generation evidence, scoring evidence, method ranking, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence.
 - Do not treat v0.28 external asset rescue, ColabDesign asset gate readiness, DexDesign input-contract extraction, or BindCraft accepted-final external output classification as controlled multi-case Benchmark evidence, scoring evidence, method ranking, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence.
 - Do not treat v0.29 ColabDesign single-case bounded GPU output, DexDesign synthetic prepared D-L fixture, or BindCraft external accepted candidate parser rows as controlled multi-case Benchmark evidence, scoring evidence, method ranking, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence.
+- Do not treat v0.30 pilot target/control/job manifests, execution matrix, or prospective wet-lab panel as execution evidence, scoring evidence, frozen target-set evidence, method ranking, wet-lab validation, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence.
 - Do not treat watchlist datasets, target candidates, review-only methods, or literature examples as frozen Benchmark targets.
 - Generation ability, ranking/rescoring ability, developability proxies, structural confidence, and biological validation are separate evidence layers.
 

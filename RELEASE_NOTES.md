@@ -1,5 +1,44 @@
 # Release Notes
 
+## v1.2.18 Pilot Benchmark Design Layer - 2026-07-09
+
+This checkpoint converts the v0.29 bounded/parser evidence into a controlled
+pilot benchmark input layer for the next bounded Wave A execution phase.
+
+### Added
+
+- Added `benchmark/input_sets/pilot_benchmark_target_manifest_v0.30.csv`.
+- Added `benchmark/input_sets/pilot_benchmark_control_manifest_v0.30.csv`.
+- Added `benchmark/input_sets/pilot_benchmark_job_manifest_v0.30.csv`.
+- Added `benchmark/deployment/pilot_execution_matrix_v0.30.csv`.
+- Added `benchmark/input_sets/wet_lab_candidate_panel_v0.30.csv`.
+- Added `ops/audits/pilot_benchmark_design_audit_v0.30.md`.
+- Added `tests/test_v030_pilot_benchmark_design.py`.
+
+### Changed
+
+- Bumped project version to `1.2.18`.
+- Updated validator coverage for v0.30 target/control/job manifests, execution
+  matrix, and prospective wet-lab panel.
+- Updated README, index, Benchmark README, AGENTS and project log for v0.30.
+
+### Notification
+
+- Wave A now has 14 planned bounded pilot jobs: seven executable methods times
+  seeds `42` and `43`.
+- Wave B keeps DexDesign and BindCraft as control/smoke routes.
+- SaLT&PepPr remains blocked by license/gated access and has no executable job.
+- The prospective wet-lab panel records MDM2, GABARAP, NCAM1 and AMHR2 as
+  candidate follow-up classes only.
+
+### Boundaries
+
+- No v0.30 job was executed.
+- No `target_set_v0.csv` promotion.
+- No scoring or method-ranking evidence.
+- No wet-lab synthesis, assay, or validation claim.
+- No complete Benchmark result.
+
 ## v1.2.17 Bounded Generation and Parser Evidence - 2026-07-09
 
 This checkpoint records the v0.29 bounded/parser follow-up for ColabDesign,
