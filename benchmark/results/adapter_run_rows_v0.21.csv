@@ -1,0 +1,7 @@
+design_id,method,task_id,target_id,binder_id,input_mode,target_sequence,target_pdb,target_chains,binder_chain,pocket_definition,peptide_type,chirality,cyclic,status,notes
+bindcraft_cd47_peptide_v021_hard_stop_l7_s460097_chainb_v021_0001,BindCraft,T4_bindcraft_peptide_smoke,bindcraft_method_example_v021,CD47_peptide_v021_hard_stop_l7_s460097_chainB,method_example_pdb,,,,B,,linear,L,no,not_real_benchmark,Parsed v0.21 adapter smoke row only
+diffpepbuilder_alk1_length_8_sample_0_chaina_v021_0001,DiffPepBuilder,T2_structure_conditioned_peptide,diffpepbuilder_method_example_v021,alk1_length_8_sample_0_chainA,method_example_pdb,,,,A,,linear,L,no,not_real_benchmark,Parsed v0.21 adapter smoke row only
+pepglad_1ssc_a_b_0_chainb_v021_0001,PepGLAD,T2_structure_conditioned_peptide,pepglad_method_example_v021,1ssc_A_B_0_chainB,method_example_pdb,,,,B,,linear,L,no,not_real_benchmark,Parsed v0.21 adapter smoke row only
+pepmirror_0_chainh_v021_0001,PepMirror,T5_mirror_d_peptide,pepmirror_method_example_v021,0_chainH,method_example_pdb,,,,H,,linear,D,no,not_real_benchmark,Parsed v0.21 adapter smoke row only
+pepmlm_pepmlm_rank0_v021_0001,PepMLM,T1_sequence_binder,pepmlm_method_example_v021,pepmlm_rank0,sequence_csv,,,,A,,linear,L,no,not_real_benchmark,Parsed v0.21 adapter smoke row only
+rfdiffusion_proteinmpnn_uncond_cycpep_0_b0_d0_v021_0001,RFdiffusion + ProteinMPNN,T3_structure_to_sequence_handoff,rfdiffusion_proteinmpnn_method_example_v021,uncond_cycpep_0_b0_d0,rf_to_mpnn_handoff,,,,A,,protein_binder,L,no,not_real_benchmark,Parsed v0.21 adapter smoke row only

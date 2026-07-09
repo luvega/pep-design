@@ -1,5 +1,41 @@
 # Project Log
 
+## [2026-07-08] release | v1.2.10 multi-case fixture pilot planning
+- Bumped project version to `1.2.10`.
+- Added v0.22 method-example fixture evidence, multi-case fixture target/control/job manifests, priority gate review, pilot plan and pilot audit.
+- Converted v0.21 method-example adapter evidence into focused fixture pilot rows for PepMLM, DiffPepBuilder, PepGLAD, PepMirror and RFdiffusion + ProteinMPNN.
+- Preserved D-Flow as `blocked_input_contract`, AfCycDesign / ColabDesign cyclic peptide as `blocked_cli_adapter`, and BindCraft as `wrapper_review_only`.
+- Added validator and pytest coverage for v0.22 row counts, blocked-row invariants, target/control fixture-only boundaries and BindCraft LowConfidence output classification.
+- Updated README, index, Benchmark README, input/results READMEs, AGENTS, release notes and claim-evidence map for v0.22.
+- Maintained boundaries: no `target_set_v0.csv` promotion, no clone/download/install/Docker build/GPU run, no scoring, no method-ranking evidence, no complete Benchmark result, and no biological-validation claim.
+
+## [2026-07-08] release | v1.2.9 adapter smoke and parser fixture readiness
+- Bumped project version to `1.2.9`.
+- Added v0.21 adapter smoke manifests, result summaries, blocker asset manifest, parser method-output/candidate/run rows, and adapter smoke audit.
+- Built `pd-benchmark-methods-gpu:0.21` and `pd-pyrosetta-methods-gpu:0.21` externally under `/data/protein-design`; PyRosetta initialized in `bench-pepmirror`.
+- Downloaded PepGLAD public checkpoint assets and the PepMirror Zenodo checkpoint to the external workbench only.
+- Recorded bounded adapter/control evidence for PepMLM, DiffPepBuilder, PepGLAD, PepMirror, RFdiffusion + ProteinMPNN and BindCraft; RFdiffusion handoff now links RF PDB output to ProteinMPNN FASTA output.
+- Recorded residual blockers: D-Flow missing PepMerge cache/input contract, SaLT&PepPr license/gated-model access, ColabDesign CLI adapter route, and OSPREY3 carry-forward-only status.
+- Updated validator, README, index, Benchmark README, AGENTS, release notes and claim-evidence map for v0.21.
+- Maintained boundaries: no `target_set_v0.csv` promotion, no scoring, no method-ranking evidence, no complete Benchmark result, no biological-validation claim, and no raw logs/weights/source trees/generated structures stored in the KB.
+
+## [2026-07-08] release | v1.2.8 method unblock readiness and independent PyRosetta route
+- Bumped project version to `1.2.8`.
+- Added v0.20 method-unblock manifest and smoke result summaries for all 10 first-wave methods.
+- Added an independent external PyRosetta image route under `/data/protein-design/images/pd-pyrosetta-methods-gpu/`, separate from BindCraft.
+- Built `pd-pyrosetta-methods-gpu:0.20` from the RosettaCommons quarterly US West mirror and recorded a passing DiffPepBuilder GPU unblock smoke for one method-provided example.
+- Recorded current blockers: unresolved PepMirror checkpoint manifest/download route, unresolved PepGLAD release assets, missing D-Flow input cache/data contract, SaLT&PepPr license gate, ColabDesign CLI adapter gate, and BindCraft bounded-smoke timeout.
+- Updated validator, README, index, Benchmark README, AGENTS, release notes and claim-evidence map for v0.20.
+- Maintained boundaries: no `target_set_v0.csv` promotion, no scoring, no method-ranking evidence, no complete Benchmark result, no biological-validation claim, and no raw logs/weights/source trees/private PyRosetta credentials or non-public Rosetta materials stored in the KB.
+
+## [2026-07-07] release | v1.2.7 external method install and example-smoke readiness
+- Bumped project version to `1.2.7`.
+- Added v0.19 method source/doc verification, install smoke manifest and smoke-test result summary tables for all 10 first-wave methods.
+- Built and reused external workbench images `pd-benchmark-methods-gpu:0.19.1` and `pd-bindcraft-gpu:0.19.1`; raw logs, Docker layers, weights and generated outputs remain outside the KB.
+- Recorded GPU example/preflight evidence for PepMLM, RFdiffusion + ProteinMPNN, PepGLAD and D-Flow, CPU route-probe evidence for DexDesign / OSPREY3, and blockers for DiffPepBuilder, BindCraft, SaLT&PepPr, PepMirror and ColabDesign.
+- Updated validator, README, index, Benchmark README, AGENTS, release notes and claim-evidence map for v0.19.
+- Maintained boundaries: no `target_set_v0.csv` promotion, no scoring, no method-ranking evidence, no complete Benchmark result, no biological-validation claim, and no raw logs/weights/source trees stored in the KB.
+
 ## [2026-07-07] release | v1.2.6 Batch B pilot gates and adapter replay fixtures
 - Bumped project version to `1.2.6`.
 - Added v0.17 Batch B pilot gates for target fixtures, method scope and planned fixture jobs without promoting `target_set_v0.csv`.

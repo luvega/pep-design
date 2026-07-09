@@ -7,3 +7,5 @@
 v0.11 新增的 `example_method_output_manifest_v0.11.csv` 和 `example_candidate_outputs_v0.11.csv` 只用于 schema/adapter 说明，所有行均为 `not_real_benchmark` 或未运行占位记录，不是方法输出或性能证据。
 
 v0.18 新增的 `batch_a_replay_method_output_manifest_v0.18.csv`、`batch_a_replay_candidate_outputs_v0.18.csv` 和 `batch_a_replay_run_v0.18.csv` 是从外部 v0.15 Batch A minimal smoke outputs 解析得到的小型 replay fixtures。它们用于检查 adapter/parser 字段和 `design_id` join，不是新的方法执行、scoring evidence、head-to-head result 或 Benchmark performance finding。
+
+v0.21 新增的 `adapter_method_output_manifest_v0.21.csv`、`adapter_candidate_outputs_v0.21.csv` 和 `adapter_run_rows_v0.21.csv` 是 bounded adapter smoke 的 parser fixture rows，不是 scoring evidence 或 Benchmark results。v0.22 不新增结果表，只在 `benchmark/input_sets/` 和 `benchmark/deployment/` 中记录 multi-case fixture pilot planning manifests。

@@ -836,11 +836,206 @@ ADAPTER_REPLAY_FIXTURE_V018_HEADERS = [
     "next_action",
 ]
 
+METHOD_SOURCE_DOC_VERIFICATION_V019_HEADERS = [
+    "method",
+    "source_dir",
+    "source_commit",
+    "source_route",
+    "doc_route_checked",
+    "example_route_checked",
+    "license_access_route",
+    "model_weight_route",
+    "verification_status",
+    "blocker",
+    "next_action",
+]
+
+METHOD_INSTALL_SMOKE_MANIFEST_V019_HEADERS = [
+    "method",
+    "workbench_root",
+    "source_dir",
+    "image_tag",
+    "conda_env",
+    "gpu_policy",
+    "smoke_entrypoint",
+    "external_output_dir",
+    "command_log",
+    "stdout_log",
+    "stderr_log",
+    "runtime_json",
+    "outputs_manifest",
+    "manifest_status",
+    "evidence_boundary",
+    "next_action",
+]
+
+METHOD_SMOKE_TEST_RESULTS_V019_HEADERS = [
+    "method",
+    "smoke_test_id",
+    "task_scope",
+    "status",
+    "exit_code",
+    "runtime_sec",
+    "image_tag",
+    "conda_env",
+    "source_commit",
+    "gpu_required",
+    "gpu_evidence",
+    "output_status",
+    "parser_status",
+    "external_method_dir",
+    "command_path",
+    "stdout_log",
+    "stderr_log",
+    "runtime_json",
+    "outputs_manifest",
+    "model_or_weight_event",
+    "blocker",
+    "evidence_boundary",
+    "next_gate",
+]
+
+METHOD_UNBLOCK_MANIFEST_V020_HEADERS = METHOD_INSTALL_SMOKE_MANIFEST_V019_HEADERS
+METHOD_UNBLOCK_SMOKE_RESULTS_V020_HEADERS = METHOD_SMOKE_TEST_RESULTS_V019_HEADERS
+
+ADAPTER_SMOKE_MANIFEST_V021_HEADERS = [
+    "method",
+    "workbench_root",
+    "source_dir",
+    "image_tag",
+    "conda_env",
+    "gpu_policy",
+    "adapter_entrypoint",
+    "external_output_dir",
+    "command_log",
+    "stdout_log",
+    "stderr_log",
+    "runtime_json",
+    "outputs_manifest",
+    "manifest_status",
+    "evidence_boundary",
+    "next_action",
+]
+
+ADAPTER_SMOKE_RESULTS_V021_HEADERS = [
+    "method",
+    "adapter_smoke_id",
+    "task_scope",
+    "status",
+    "exit_code",
+    "runtime_sec",
+    "image_tag",
+    "conda_env",
+    "source_commit",
+    "gpu_required",
+    "gpu_evidence",
+    "output_status",
+    "parser_status",
+    "external_method_dir",
+    "command_path",
+    "stdout_log",
+    "stderr_log",
+    "runtime_json",
+    "outputs_manifest",
+    "model_or_weight_event",
+    "blocker",
+    "evidence_boundary",
+    "next_gate",
+]
+
+BLOCKER_ASSET_MANIFEST_V021_HEADERS = [
+    "method",
+    "asset_id",
+    "source_url",
+    "local_path",
+    "expected_sha256",
+    "observed_sha256",
+    "size_bytes",
+    "status",
+    "notes",
+]
+
+METHOD_EXAMPLE_FIXTURE_EVIDENCE_V022_HEADERS = [
+    "method",
+    "v021_adapter_smoke_id",
+    "v021_candidate_design_id",
+    "evidence_source",
+    "parsed_sequence",
+    "parse_status",
+    "evidence_type",
+    "pilot_lane",
+    "v022_decision",
+    "target_binding",
+    "contract_status",
+    "blocker",
+    "next_action",
+]
+
+MULTI_CASE_FIXTURE_TARGET_V022_HEADERS = [
+    "fixture_case_id",
+    "target_id",
+    "source_target_gate_id",
+    "task_id",
+    "target_label",
+    "target_sequence_or_ref",
+    "target_pdb_or_ref",
+    "target_chains",
+    "peptide_or_binder_chain",
+    "known_peptide_sequence",
+    "case_role",
+    "pilot_lane",
+    "target_status",
+    "control_status",
+    "allowed_use",
+    "evidence_source",
+    "blocker",
+    "next_action",
+]
+
+MULTI_CASE_FIXTURE_CONTROL_V022_HEADERS = [
+    "control_id",
+    "fixture_case_id",
+    "control_type",
+    "control_label",
+    "control_input_ref",
+    "expected_use",
+    "status",
+    "allowed_use",
+    "blocker",
+    "next_action",
+]
+
+MULTI_CASE_FIXTURE_JOB_V022_HEADERS = JOB_MANIFEST_HEADERS + [
+    "fixture_case_id",
+    "control_id",
+    "evidence_source",
+    "pilot_lane",
+    "contract_status",
+    "failure_policy",
+]
+
+PRIORITY_GATE_REVIEW_V022_HEADERS = [
+    "gate_id",
+    "method",
+    "priority_area",
+    "current_status",
+    "required_external_asset_or_adapter",
+    "required_contract_check",
+    "allowed_v022_use",
+    "hard_stop_or_blocker",
+    "promotion_condition",
+    "next_action",
+]
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "index.md",
     "ops/log.md",
     "scripts/parse_batch_a_replay_fixtures.py",
+    "scripts/collect_v019_method_smokes.py",
+    "scripts/collect_v020_method_unblock_smokes.py",
+    "scripts/collect_v021_adapter_smokes.py",
+    "scripts/parse_v021_adapter_outputs.py",
     "benchmark/README.md",
     "benchmark/availability/README.md",
     "benchmark/availability/link_availability_matrix_v0.5.csv",
@@ -862,6 +1057,9 @@ REQUIRED_FILES = [
     "benchmark/input_sets/batch_b_target_review_queue_v0.16.csv",
     "benchmark/input_sets/batch_b_pilot_target_gate_v0.17.csv",
     "benchmark/input_sets/batch_b_pilot_job_manifest_v0.17.csv",
+    "benchmark/input_sets/multi_case_fixture_target_manifest_v0.22.csv",
+    "benchmark/input_sets/multi_case_fixture_control_manifest_v0.22.csv",
+    "benchmark/input_sets/multi_case_fixture_job_manifest_v0.22.csv",
     "benchmark/input_sets/dataset_supplement_watchlist_v0.6.csv",
     "benchmark/input_sets/dataset_supplement_schema_review_v0.7.csv",
     "benchmark/input_sets/dataset_supplement_schema_review_v0.8.csv",
@@ -890,6 +1088,16 @@ REQUIRED_FILES = [
     "benchmark/deployment/adapter_parser_hardening_matrix_v0.16.csv",
     "benchmark/deployment/batch_b_pilot_method_scope_v0.17.csv",
     "benchmark/deployment/adapter_replay_fixture_manifest_v0.18.csv",
+    "benchmark/deployment/method_source_doc_verification_v0.19.csv",
+    "benchmark/deployment/method_install_smoke_manifest_v0.19.csv",
+    "benchmark/deployment/method_smoke_test_results_v0.19.csv",
+    "benchmark/deployment/method_unblock_manifest_v0.20.csv",
+    "benchmark/deployment/method_unblock_smoke_results_v0.20.csv",
+    "benchmark/deployment/adapter_smoke_manifest_v0.21.csv",
+    "benchmark/deployment/adapter_smoke_results_v0.21.csv",
+    "benchmark/deployment/blocker_asset_manifest_v0.21.csv",
+    "benchmark/deployment/method_example_fixture_evidence_v0.22.csv",
+    "benchmark/deployment/priority_gate_review_v0.22.csv",
     "benchmark/deployment/method_readiness_review_v0.8.csv",
     "benchmark/deployment/method_preflight_status_v0.10.csv",
     "benchmark/deployment/adapter_preflight_status_v0.11.csv",
@@ -905,6 +1113,9 @@ REQUIRED_FILES = [
     "benchmark/results/batch_a_replay_method_output_manifest_v0.18.csv",
     "benchmark/results/batch_a_replay_candidate_outputs_v0.18.csv",
     "benchmark/results/batch_a_replay_run_v0.18.csv",
+    "benchmark/results/adapter_method_output_manifest_v0.21.csv",
+    "benchmark/results/adapter_candidate_outputs_v0.21.csv",
+    "benchmark/results/adapter_run_rows_v0.21.csv",
     "sources/raw_snapshots/_index.md",
     "kb/references/references.bib",
     "kb/references/zotero-map.tsv",
@@ -933,6 +1144,10 @@ REQUIRED_FILES = [
     "ops/audits/batch_a_execution_audit_v0.15.md",
     "ops/audits/batch_b_pilot_readiness_audit_v0.17.md",
     "ops/audits/adapter_replay_fixture_audit_v0.18.md",
+    "ops/audits/method_install_smoke_audit_v0.19.md",
+    "ops/audits/method_unblock_audit_v0.20.md",
+    "ops/audits/adapter_smoke_audit_v0.21.md",
+    "ops/audits/multi_case_fixture_pilot_audit_v0.22.md",
     "ops/plans/updated_plan_v0.6.md",
     "ops/plans/updated_plan_v0.9.md",
     "ops/plans/updated_plan_v1.3.md",
@@ -943,6 +1158,7 @@ REQUIRED_FILES = [
     "ops/plans/target_candidate_academic_search_plan_v0.14.md",
     "ops/plans/adapter_parser_hardening_plan_v0.16.md",
     "ops/plans/batch_b_pilot_execution_plan_v0.17.md",
+    "ops/plans/multi_case_fixture_pilot_plan_v0.22.md",
     "ops/migration/file_role_map_v0.10.csv",
     "ops/audits/license_schema_input_contract_review_v0.8.md",
     "ops/audits/supervisor_skills_idea_evaluation.md",
@@ -1379,6 +1595,71 @@ def main() -> int:
         "benchmark/results/batch_a_replay_run_v0.18.csv",
         RUN_CSV_HEADERS,
     )
+    method_source_doc_v019_rows = check_headers(
+        errors,
+        "benchmark/deployment/method_source_doc_verification_v0.19.csv",
+        METHOD_SOURCE_DOC_VERIFICATION_V019_HEADERS,
+    )
+    method_install_smoke_manifest_v019_rows = check_headers(
+        errors,
+        "benchmark/deployment/method_install_smoke_manifest_v0.19.csv",
+        METHOD_INSTALL_SMOKE_MANIFEST_V019_HEADERS,
+    )
+    method_smoke_test_v019_rows = check_headers(
+        errors,
+        "benchmark/deployment/method_smoke_test_results_v0.19.csv",
+        METHOD_SMOKE_TEST_RESULTS_V019_HEADERS,
+    )
+    method_unblock_manifest_v020_rows = check_headers(
+        errors,
+        "benchmark/deployment/method_unblock_manifest_v0.20.csv",
+        METHOD_UNBLOCK_MANIFEST_V020_HEADERS,
+    )
+    method_unblock_smoke_v020_rows = check_headers(
+        errors,
+        "benchmark/deployment/method_unblock_smoke_results_v0.20.csv",
+        METHOD_UNBLOCK_SMOKE_RESULTS_V020_HEADERS,
+    )
+    adapter_smoke_manifest_v021_rows = check_headers(
+        errors,
+        "benchmark/deployment/adapter_smoke_manifest_v0.21.csv",
+        ADAPTER_SMOKE_MANIFEST_V021_HEADERS,
+    )
+    adapter_smoke_results_v021_rows = check_headers(
+        errors,
+        "benchmark/deployment/adapter_smoke_results_v0.21.csv",
+        ADAPTER_SMOKE_RESULTS_V021_HEADERS,
+    )
+    blocker_asset_manifest_v021_rows = check_headers(
+        errors,
+        "benchmark/deployment/blocker_asset_manifest_v0.21.csv",
+        BLOCKER_ASSET_MANIFEST_V021_HEADERS,
+    )
+    method_example_fixture_v022_rows = check_headers(
+        errors,
+        "benchmark/deployment/method_example_fixture_evidence_v0.22.csv",
+        METHOD_EXAMPLE_FIXTURE_EVIDENCE_V022_HEADERS,
+    )
+    multi_case_fixture_target_v022_rows = check_headers(
+        errors,
+        "benchmark/input_sets/multi_case_fixture_target_manifest_v0.22.csv",
+        MULTI_CASE_FIXTURE_TARGET_V022_HEADERS,
+    )
+    multi_case_fixture_control_v022_rows = check_headers(
+        errors,
+        "benchmark/input_sets/multi_case_fixture_control_manifest_v0.22.csv",
+        MULTI_CASE_FIXTURE_CONTROL_V022_HEADERS,
+    )
+    multi_case_fixture_job_v022_rows = check_headers(
+        errors,
+        "benchmark/input_sets/multi_case_fixture_job_manifest_v0.22.csv",
+        MULTI_CASE_FIXTURE_JOB_V022_HEADERS,
+    )
+    priority_gate_review_v022_rows = check_headers(
+        errors,
+        "benchmark/deployment/priority_gate_review_v0.22.csv",
+        PRIORITY_GATE_REVIEW_V022_HEADERS,
+    )
     method_readiness_v08_rows = check_headers(
         errors,
         "benchmark/deployment/method_readiness_review_v0.8.csv",
@@ -1458,6 +1739,21 @@ def main() -> int:
         errors,
         "benchmark/results/example_candidate_outputs_v0.11.csv",
         CANDIDATE_OUTPUT_HEADERS,
+    )
+    adapter_method_output_v021_rows = check_headers(
+        errors,
+        "benchmark/results/adapter_method_output_manifest_v0.21.csv",
+        METHOD_OUTPUT_MANIFEST_HEADERS,
+    )
+    adapter_candidate_output_v021_rows = check_headers(
+        errors,
+        "benchmark/results/adapter_candidate_outputs_v0.21.csv",
+        CANDIDATE_OUTPUT_HEADERS,
+    )
+    adapter_run_rows_v021_rows = check_headers(
+        errors,
+        "benchmark/results/adapter_run_rows_v0.21.csv",
+        RUN_CSV_HEADERS,
     )
     _map_rows = check_headers(errors, "kb/references/zotero-map.tsv", ["zotero_key", "bibtex_key", "title"], delimiter="\t")
 
@@ -3095,6 +3391,610 @@ def main() -> int:
         if row.get("task_id") not in REQUIRED_PROTOCOL_TASKS:
             errors.append(f"{design_id}: invalid v0.18 replay run task_id {row.get('task_id')}")
 
+    expected_v019_methods = {
+        "PepMLM",
+        "SaLT&PepPr",
+        "DiffPepBuilder",
+        "PepGLAD",
+        "D-Flow / PeptideDesign",
+        "PepMirror",
+        "AfCycDesign / ColabDesign cyclic peptide",
+        "DexDesign / OSPREY3",
+        "RFdiffusion + ProteinMPNN",
+        "BindCraft",
+    }
+    allowed_v019_statuses = {
+        "example_smoke_passed_gpu",
+        "example_smoke_passed_cpu_expected",
+        "example_smoke_passed_gpu_noncanonical_output_caveat",
+        "example_smoke_passed_gpu_low_confidence_caveat",
+        "preflight_passed_blocked_weights",
+        "preflight_passed_blocked_input_contract",
+        "blocked_license",
+        "deferred_notebook_route",
+        "failed_command",
+        "failed_timeout",
+        "failed_no_gpu_evidence",
+        "missing_runtime",
+    }
+    v019_doc_methods = {row.get("method", "") for row in method_source_doc_v019_rows}
+    v019_manifest_methods = {row.get("method", "") for row in method_install_smoke_manifest_v019_rows}
+    v019_result_methods = {row.get("method", "") for row in method_smoke_test_v019_rows}
+    for label, observed in [
+        ("method_source_doc_verification_v0.19.csv", v019_doc_methods),
+        ("method_install_smoke_manifest_v0.19.csv", v019_manifest_methods),
+        ("method_smoke_test_results_v0.19.csv", v019_result_methods),
+    ]:
+        missing = sorted(expected_v019_methods - observed)
+        extra = sorted(observed - expected_v019_methods)
+        if missing:
+            errors.append(f"{label} missing v0.19 methods: {', '.join(missing)}")
+        if extra:
+            errors.append(f"{label} has unexpected v0.19 methods: {', '.join(extra)}")
+        if len(observed) != len(expected_v019_methods):
+            errors.append(f"{label} should contain {len(expected_v019_methods)} method rows")
+
+    for row in method_source_doc_v019_rows:
+        method = row.get("method", "")
+        if not row.get("source_dir", "").startswith("/mnt/ssd4t/protein-design/"):
+            errors.append(f"{method}: v0.19 source_dir must point to the external source root")
+        if row.get("verification_status") not in allowed_v019_statuses:
+            errors.append(f"{method}: invalid v0.19 verification_status {row.get('verification_status')}")
+        for required_field in METHOD_SOURCE_DOC_VERIFICATION_V019_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{method}: v0.19 source/doc row missing {required_field}")
+
+    for row in method_install_smoke_manifest_v019_rows:
+        method = row.get("method", "")
+        if row.get("workbench_root") != "/data/protein-design":
+            errors.append(f"{method}: v0.19 workbench_root must remain /data/protein-design")
+        if not row.get("source_dir", "").startswith("/mnt/ssd4t/protein-design/"):
+            errors.append(f"{method}: v0.19 manifest source_dir must point to the external source root")
+        if not row.get("external_output_dir", "").startswith(
+            "/data/protein-design/data/outputs/benchmark_v0.19/method_smokes/"
+        ):
+            errors.append(f"{method}: v0.19 external_output_dir must remain under the external workbench")
+        if row.get("manifest_status") not in allowed_v019_statuses:
+            errors.append(f"{method}: invalid v0.19 manifest_status {row.get('manifest_status')}")
+        for required_field in METHOD_INSTALL_SMOKE_MANIFEST_V019_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{method}: v0.19 manifest row missing {required_field}")
+
+    for row in method_smoke_test_v019_rows:
+        method = row.get("method", "")
+        status = row.get("status", "")
+        if status not in allowed_v019_statuses:
+            errors.append(f"{method}: invalid v0.19 smoke status {status}")
+        if not row.get("external_method_dir", "").startswith(
+            "/data/protein-design/data/outputs/benchmark_v0.19/method_smokes/"
+        ):
+            errors.append(f"{method}: v0.19 external_method_dir must remain under the external workbench")
+        if row.get("next_gate") == "smoke_test_ready":
+            errors.append(f"{method}: v0.19 must not mark a method smoke_test_ready")
+        if status.startswith("example_smoke_passed") and row.get("gpu_required") == "yes":
+            if row.get("gpu_evidence") == "not_observed":
+                errors.append(f"{method}: v0.19 GPU smoke pass must include GPU evidence")
+        if ("blocked" in status or status.startswith("failed")) and not row.get("blocker"):
+            errors.append(f"{method}: v0.19 blocked/failed row must include blocker text")
+        if row.get("exit_code") != "NA":
+            try:
+                int(str(row.get("exit_code", "")))
+                float(str(row.get("runtime_sec", "")))
+            except ValueError:
+                errors.append(f"{method}: v0.19 exit_code/runtime_sec should be numeric or NA")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "benchmark completed",
+            "best-performing",
+            "experimentally validated",
+            "problem-free",
+            "benchmark_ready",
+            "performance ranking",
+            "full benchmark result achieved",
+        ]:
+            if forbidden in text:
+                errors.append(f"{method}: v0.19 smoke row overclaims {forbidden}")
+
+    expected_v020_methods = expected_v019_methods
+    allowed_v020_statuses = {
+        "carried_forward_v019_ready",
+        "carried_forward_v019_cpu_ready",
+        "blocked_license",
+        "blocked_input_contract",
+        "blocked_pyrosetta_wheel_missing",
+        "blocked_pyrosetta_image_missing",
+        "blocked_weights",
+        "deferred_cli_adapter",
+        "unblock_smoke_passed_gpu",
+        "failed_command",
+        "failed_timeout",
+        "failed_no_gpu_evidence",
+        "missing_runtime",
+    }
+    v020_manifest_methods = {row.get("method", "") for row in method_unblock_manifest_v020_rows}
+    v020_result_methods = {row.get("method", "") for row in method_unblock_smoke_v020_rows}
+    for label, observed in [
+        ("method_unblock_manifest_v0.20.csv", v020_manifest_methods),
+        ("method_unblock_smoke_results_v0.20.csv", v020_result_methods),
+    ]:
+        missing = sorted(expected_v020_methods - observed)
+        extra = sorted(observed - expected_v020_methods)
+        if missing:
+            errors.append(f"{label} missing v0.20 methods: {', '.join(missing)}")
+        if extra:
+            errors.append(f"{label} has unexpected v0.20 methods: {', '.join(extra)}")
+        if len(observed) != len(expected_v020_methods):
+            errors.append(f"{label} should contain {len(expected_v020_methods)} method rows")
+
+    for row in method_unblock_manifest_v020_rows:
+        method = row.get("method", "")
+        if row.get("workbench_root") != "/data/protein-design":
+            errors.append(f"{method}: v0.20 workbench_root must remain /data/protein-design")
+        if not row.get("source_dir", "").startswith("/mnt/ssd4t/protein-design/"):
+            errors.append(f"{method}: v0.20 manifest source_dir must point to the external source root")
+        if not row.get("external_output_dir", "").startswith(
+            "/data/protein-design/data/outputs/benchmark_v0.20/method_unblock_smokes/"
+        ):
+            errors.append(f"{method}: v0.20 external_output_dir must remain under the external workbench")
+        if row.get("manifest_status") not in allowed_v020_statuses:
+            errors.append(f"{method}: invalid v0.20 manifest_status {row.get('manifest_status')}")
+        for required_field in METHOD_UNBLOCK_MANIFEST_V020_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{method}: v0.20 manifest row missing {required_field}")
+
+    for row in method_unblock_smoke_v020_rows:
+        method = row.get("method", "")
+        status = row.get("status", "")
+        if status not in allowed_v020_statuses:
+            errors.append(f"{method}: invalid v0.20 unblock status {status}")
+        if not row.get("external_method_dir", "").startswith(
+            "/data/protein-design/data/outputs/benchmark_v0.20/method_unblock_smokes/"
+        ):
+            errors.append(f"{method}: v0.20 external_method_dir must remain under the external workbench")
+        if row.get("next_gate") == "smoke_test_ready":
+            errors.append(f"{method}: v0.20 must not mark a method smoke_test_ready")
+        if status in {"unblock_smoke_passed_gpu", "carried_forward_v019_ready"} and row.get("gpu_required") == "yes":
+            if row.get("gpu_evidence") == "not_observed":
+                errors.append(f"{method}: v0.20 GPU-ready status must include GPU evidence")
+        if (
+            status.startswith("blocked")
+            or status.startswith("failed")
+            or status.startswith("deferred")
+        ) and not row.get("blocker"):
+            errors.append(f"{method}: v0.20 blocked/failed/deferred row must include blocker text")
+        if row.get("exit_code") != "NA":
+            try:
+                int(str(row.get("exit_code", "")))
+                float(str(row.get("runtime_sec", "")))
+            except ValueError:
+                errors.append(f"{method}: v0.20 exit_code/runtime_sec should be numeric or NA")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "benchmark completed",
+            "best-performing",
+            "experimentally validated",
+            "problem-free",
+            "benchmark_ready",
+            "performance ranking",
+            "full benchmark result achieved",
+            "smoke_test_ready",
+        ]:
+            if forbidden in text:
+                errors.append(f"{method}: v0.20 unblock row overclaims {forbidden}")
+
+    expected_v021_methods = expected_v019_methods
+    allowed_v021_statuses = {
+        "adapter_smoke_passed_gpu",
+        "bounded_execution_control_passed",
+        "carried_forward_v020_ready",
+        "blocked_license",
+        "blocked_weights",
+        "blocked_input_contract",
+        "blocked_cli_adapter",
+        "failed_command",
+        "failed_timeout",
+        "failed_no_gpu_evidence",
+        "missing_runtime",
+    }
+    v021_manifest_methods = {row.get("method", "") for row in adapter_smoke_manifest_v021_rows}
+    v021_result_methods = {row.get("method", "") for row in adapter_smoke_results_v021_rows}
+    for label, observed in [
+        ("adapter_smoke_manifest_v0.21.csv", v021_manifest_methods),
+        ("adapter_smoke_results_v0.21.csv", v021_result_methods),
+    ]:
+        missing = sorted(expected_v021_methods - observed)
+        extra = sorted(observed - expected_v021_methods)
+        if missing:
+            errors.append(f"{label} missing v0.21 methods: {', '.join(missing)}")
+        if extra:
+            errors.append(f"{label} has unexpected v0.21 methods: {', '.join(extra)}")
+        if len(observed) != len(expected_v021_methods):
+            errors.append(f"{label} should contain {len(expected_v021_methods)} method rows")
+
+    for row in adapter_smoke_manifest_v021_rows:
+        method = row.get("method", "")
+        if row.get("workbench_root") != "/data/protein-design":
+            errors.append(f"{method}: v0.21 workbench_root must remain /data/protein-design")
+        if not row.get("source_dir", "").startswith("/mnt/ssd4t/protein-design/"):
+            errors.append(f"{method}: v0.21 manifest source_dir must point to the external source root")
+        if not row.get("external_output_dir", "").startswith(
+            "/data/protein-design/data/outputs/benchmark_v0.21/adapter_smokes/"
+        ):
+            errors.append(f"{method}: v0.21 external_output_dir must remain under the external workbench")
+        if row.get("manifest_status") not in allowed_v021_statuses:
+            errors.append(f"{method}: invalid v0.21 manifest_status {row.get('manifest_status')}")
+        for required_field in ADAPTER_SMOKE_MANIFEST_V021_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{method}: v0.21 manifest row missing {required_field}")
+
+    for row in adapter_smoke_results_v021_rows:
+        method = row.get("method", "")
+        status = row.get("status", "")
+        if status not in allowed_v021_statuses:
+            errors.append(f"{method}: invalid v0.21 adapter status {status}")
+        if not row.get("external_method_dir", "").startswith(
+            "/data/protein-design/data/outputs/benchmark_v0.21/adapter_smokes/"
+        ):
+            errors.append(f"{method}: v0.21 external_method_dir must remain under the external workbench")
+        if row.get("next_gate") == "smoke_test_ready":
+            errors.append(f"{method}: v0.21 must not mark a method smoke_test_ready")
+        if status in {"adapter_smoke_passed_gpu", "bounded_execution_control_passed"} and row.get("gpu_required") == "yes":
+            if row.get("gpu_evidence") == "not_observed":
+                errors.append(f"{method}: v0.21 GPU adapter pass must include GPU evidence")
+        if (
+            status.startswith("blocked")
+            or status.startswith("failed")
+        ) and not row.get("blocker"):
+            errors.append(f"{method}: v0.21 blocked/failed row must include blocker text")
+        if row.get("exit_code") != "NA":
+            try:
+                int(str(row.get("exit_code", "")))
+                float(str(row.get("runtime_sec", "")))
+            except ValueError:
+                errors.append(f"{method}: v0.21 exit_code/runtime_sec should be numeric or NA")
+        for required_field in ADAPTER_SMOKE_RESULTS_V021_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{method}: v0.21 result row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "benchmark completed",
+            "best-performing",
+            "experimentally validated",
+            "problem-free",
+            "benchmark_ready",
+            "performance ranking",
+            "full benchmark result achieved",
+            "smoke_test_ready",
+        ]:
+            if forbidden in text:
+                errors.append(f"{method}: v0.21 adapter row overclaims {forbidden}")
+
+    expected_v021_assets = {
+        "pepmirror_commutator_both_v1",
+        "pepglad_checkpoints_zip",
+        "dflow_source_local_weight",
+        "dflow_pepmerge_cache",
+    }
+    observed_v021_assets = {row.get("asset_id", "") for row in blocker_asset_manifest_v021_rows}
+    missing_v021_assets = sorted(expected_v021_assets - observed_v021_assets)
+    if missing_v021_assets:
+        errors.append("blocker_asset_manifest_v0.21.csv missing assets: " + ", ".join(missing_v021_assets))
+    for row in blocker_asset_manifest_v021_rows:
+        asset_id = row.get("asset_id", "")
+        if row.get("status") not in {"present", "missing"}:
+            errors.append(f"{asset_id}: invalid v0.21 asset status {row.get('status')}")
+        if not row.get("local_path", "").startswith("/data/protein-design/data/"):
+            errors.append(f"{asset_id}: v0.21 asset local_path must remain outside the KB")
+        if row.get("status") == "present":
+            try:
+                if int(row.get("size_bytes", "0")) <= 0:
+                    errors.append(f"{asset_id}: present v0.21 asset must record a positive size")
+            except ValueError:
+                errors.append(f"{asset_id}: v0.21 asset size_bytes should be integer-like")
+
+    allowed_v021_parse_status = {"parsed", "partial", "failed", "not_applicable"}
+    if len(adapter_method_output_v021_rows) != len(expected_v021_methods):
+        errors.append(
+            "adapter_method_output_manifest_v0.21.csv should contain "
+            f"{len(expected_v021_methods)} method rows, found {len(adapter_method_output_v021_rows)}"
+        )
+    for row in adapter_method_output_v021_rows:
+        run_record_id = row.get("run_record_id", "")
+        if row.get("execution_stage") != "v0.21_adapter_smoke_fixture":
+            errors.append(f"{run_record_id}: v0.21 method output execution_stage must remain adapter smoke fixture")
+        if row.get("parser_status") not in allowed_v021_parse_status:
+            errors.append(f"{run_record_id}: invalid v0.21 parser_status {row.get('parser_status')}")
+        if not row.get("raw_output_root", "").startswith(
+            "/data/protein-design/data/outputs/benchmark_v0.21/adapter_smokes/"
+        ):
+            errors.append(f"{run_record_id}: v0.21 raw_output_root must remain external")
+        if row.get("exit_code") != "NA":
+            try:
+                int(str(row.get("exit_code", "")))
+                float(str(row.get("runtime_seconds", "")))
+            except ValueError:
+                errors.append(f"{run_record_id}: v0.21 runtime_seconds and exit_code should be numeric or NA")
+        for forbidden in ["benchmark completed", "best-performing", "experimentally validated", "benchmark_ready"]:
+            if forbidden in " ".join(row.values()).lower():
+                errors.append(f"{run_record_id}: v0.21 method output row overclaims {forbidden}")
+
+    v021_candidate_by_design = {row.get("design_id", ""): row for row in adapter_candidate_output_v021_rows}
+    v021_run_by_design = {row.get("design_id", ""): row for row in adapter_run_rows_v021_rows}
+    if set(v021_candidate_by_design) != set(v021_run_by_design):
+        errors.append("v0.21 candidate_outputs and run rows design_id sets must match")
+    for row in adapter_candidate_output_v021_rows:
+        design_id = row.get("design_id", "")
+        if row.get("parse_status") not in allowed_v021_parse_status:
+            errors.append(f"{design_id}: invalid v0.21 candidate parse_status {row.get('parse_status')}")
+        if row.get("structure_path") and not row.get("structure_path", "").startswith(
+            "/data/protein-design/data/outputs/benchmark_v0.21/adapter_smokes/"
+        ):
+            errors.append(f"{design_id}: v0.21 structure_path must remain external")
+    for row in adapter_run_rows_v021_rows:
+        design_id = row.get("design_id", "")
+        if row.get("status") != "not_real_benchmark":
+            errors.append(f"{design_id}: v0.21 adapter run rows must remain not_real_benchmark")
+
+    expected_v022_methods = expected_v021_methods
+    observed_v022_methods = {row.get("method", "") for row in method_example_fixture_v022_rows}
+    missing_v022_methods = sorted(expected_v022_methods - observed_v022_methods)
+    extra_v022_methods = sorted(observed_v022_methods - expected_v022_methods)
+    if missing_v022_methods:
+        errors.append("method_example_fixture_evidence_v0.22.csv missing methods: " + ", ".join(missing_v022_methods))
+    if extra_v022_methods:
+        errors.append("method_example_fixture_evidence_v0.22.csv has unexpected methods: " + ", ".join(extra_v022_methods))
+    if len(method_example_fixture_v022_rows) != len(expected_v022_methods):
+        errors.append(
+            "method_example_fixture_evidence_v0.22.csv should contain "
+            f"{len(expected_v022_methods)} method rows, found {len(method_example_fixture_v022_rows)}"
+        )
+    allowed_v022_parse_status = {"parsed", "partial", "failed", "not_applicable"}
+    allowed_v022_decisions = {
+        "scheduled_adapter_multi_case_fixture",
+        "blocked_input_contract_prep",
+        "blocked_cli_adapter_prep",
+        "wrapper_control_review_only",
+        "license_blocked_carry_forward",
+        "deferred_cpu_carry_forward",
+    }
+    for row in method_example_fixture_v022_rows:
+        method = row.get("method", "")
+        if row.get("evidence_type") != "method_example_adapter_smoke":
+            errors.append(f"{method}: v0.22 evidence_type must remain method_example_adapter_smoke")
+        if row.get("parse_status") not in allowed_v022_parse_status:
+            errors.append(f"{method}: invalid v0.22 parse_status {row.get('parse_status')}")
+        if row.get("v022_decision") not in allowed_v022_decisions:
+            errors.append(f"{method}: invalid v0.22 decision {row.get('v022_decision')}")
+        if row.get("v021_adapter_smoke_id") and not row.get("v021_adapter_smoke_id", "").startswith("v021_"):
+            errors.append(f"{method}: v0.22 evidence row must reference v0.21 adapter smoke id")
+        if method == "PepMLM" and row.get("parse_status") != "partial":
+            errors.append("PepMLM v0.22 evidence must retain partial parser caveat")
+        if method == "D-Flow / PeptideDesign" and row.get("v022_decision") != "blocked_input_contract_prep":
+            errors.append("D-Flow v0.22 evidence must remain blocked_input_contract_prep")
+        if method == "AfCycDesign / ColabDesign cyclic peptide" and row.get("v022_decision") != "blocked_cli_adapter_prep":
+            errors.append("ColabDesign v0.22 evidence must remain blocked_cli_adapter_prep")
+        if method == "BindCraft" and row.get("v022_decision") != "wrapper_control_review_only":
+            errors.append("BindCraft v0.22 evidence must remain wrapper_control_review_only")
+        for required_field in METHOD_EXAMPLE_FIXTURE_EVIDENCE_V022_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{method}: v0.22 evidence row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "benchmark_completed",
+            "best_performing",
+            "experimentally_validated",
+            "problem-free",
+            "smoke_test_ready",
+            "benchmark_ready",
+            "performance_ranking",
+        ]:
+            if forbidden in text:
+                errors.append(f"{method}: v0.22 evidence row overclaims {forbidden}")
+
+    expected_v022_fixture_ids = {
+        "pepmlm_sequence_contract_fixture",
+        "mdm2_p53_3eqs_fixture",
+        "gabarap_7zkr_fixture",
+        "mhcii_hiv_1sjh_fixture",
+        "pdl1_workbench_fixture",
+    }
+    observed_v022_fixture_ids = {row.get("fixture_case_id", "") for row in multi_case_fixture_target_v022_rows}
+    missing_v022_fixture_ids = sorted(expected_v022_fixture_ids - observed_v022_fixture_ids)
+    if missing_v022_fixture_ids:
+        errors.append("multi_case_fixture_target_manifest_v0.22.csv missing fixtures: " + ", ".join(missing_v022_fixture_ids))
+    if len(multi_case_fixture_target_v022_rows) != len(expected_v022_fixture_ids):
+        errors.append(
+            f"multi_case_fixture_target_manifest_v0.22.csv should contain {len(expected_v022_fixture_ids)} rows, "
+            f"found {len(multi_case_fixture_target_v022_rows)}"
+        )
+    allowed_v022_target_statuses = {
+        "fixture_ready_not_frozen",
+        "review_blocked_not_frozen",
+        "parser_fixture_only_not_frozen",
+    }
+    v022_allowed_tasks = set(REQUIRED_PROTOCOL_TASKS) | {"T4_bindcraft_peptide_smoke"}
+    for row in multi_case_fixture_target_v022_rows:
+        fixture_case_id = row.get("fixture_case_id", "")
+        if row.get("task_id") not in v022_allowed_tasks:
+            errors.append(f"{fixture_case_id}: invalid v0.22 fixture task_id {row.get('task_id')}")
+        if row.get("target_status") not in allowed_v022_target_statuses:
+            errors.append(f"{fixture_case_id}: invalid v0.22 target_status {row.get('target_status')}")
+        if "not_frozen" not in row.get("target_status", ""):
+            errors.append(f"{fixture_case_id}: v0.22 target manifest must retain not_frozen status")
+        for required_field in MULTI_CASE_FIXTURE_TARGET_V022_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{fixture_case_id}: v0.22 target row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "ready_for_target_set",
+            "target_set_v0.csv 已冻结",
+            "benchmark_completed",
+            "best_performing",
+            "performance_ranking",
+            "smoke_test_ready",
+            "benchmark_ready",
+        ]:
+            if forbidden in text:
+                errors.append(f"{fixture_case_id}: v0.22 target row overclaims {forbidden}")
+
+    expected_v022_control_ids = {
+        "pepmlm_sequence_noncanonical_parser_control",
+        "mdm2_positive_complex_chain_control",
+        "mdm2_negative_control_placeholder",
+        "gabarap_noncanonical_parser_control",
+        "mhcii_chain_d_confounder_control",
+        "pdl1_local_provenance_control",
+        "bindcraft_low_confidence_output_control",
+    }
+    observed_v022_control_ids = {row.get("control_id", "") for row in multi_case_fixture_control_v022_rows}
+    missing_v022_control_ids = sorted(expected_v022_control_ids - observed_v022_control_ids)
+    if missing_v022_control_ids:
+        errors.append("multi_case_fixture_control_manifest_v0.22.csv missing controls: " + ", ".join(missing_v022_control_ids))
+    if len(multi_case_fixture_control_v022_rows) != len(expected_v022_control_ids):
+        errors.append(
+            f"multi_case_fixture_control_manifest_v0.22.csv should contain {len(expected_v022_control_ids)} rows, "
+            f"found {len(multi_case_fixture_control_v022_rows)}"
+        )
+    allowed_v022_control_statuses = {"available_metadata_only", "missing", "blocked", "wrapper_review_required"}
+    for row in multi_case_fixture_control_v022_rows:
+        control_id = row.get("control_id", "")
+        fixture_case_id = row.get("fixture_case_id", "")
+        if fixture_case_id not in expected_v022_fixture_ids and fixture_case_id != "bindcraft_cd47_method_example_control":
+            errors.append(f"{control_id}: v0.22 control references unknown fixture_case_id {fixture_case_id}")
+        if row.get("status") not in allowed_v022_control_statuses:
+            errors.append(f"{control_id}: invalid v0.22 control status {row.get('status')}")
+        if control_id == "bindcraft_low_confidence_output_control":
+            control_text = " ".join(row.values()).lower()
+            if "lowconfidence" not in control_text or "not accepted final" not in control_text:
+                errors.append("BindCraft v0.22 control must explicitly reject LowConfidence as accepted final")
+        for required_field in MULTI_CASE_FIXTURE_CONTROL_V022_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{control_id}: v0.22 control row missing {required_field}")
+
+    expected_v022_job_ids = {
+        "v022_pilot_pepmlm_sequence_seed42",
+        "v022_pilot_diffpepbuilder_3eqs_seed42",
+        "v022_pilot_pepglad_3eqs_seed42",
+        "v022_pilot_pepmirror_3eqs_seed42",
+        "v022_pilot_rfdiffusion_mpnn_7zkr_seed42",
+        "v022_pilot_dflow_3eqs_seed42",
+        "v022_pilot_colabdesign_7zkr_seed42",
+        "v022_pilot_bindcraft_cd47_wrapper_seed42",
+    }
+    observed_v022_job_ids = {row.get("job_id", "") for row in multi_case_fixture_job_v022_rows}
+    missing_v022_job_ids = sorted(expected_v022_job_ids - observed_v022_job_ids)
+    if missing_v022_job_ids:
+        errors.append("multi_case_fixture_job_manifest_v0.22.csv missing job ids: " + ", ".join(missing_v022_job_ids))
+    if len(multi_case_fixture_job_v022_rows) != len(expected_v022_job_ids):
+        errors.append(
+            f"multi_case_fixture_job_manifest_v0.22.csv should contain {len(expected_v022_job_ids)} rows, "
+            f"found {len(multi_case_fixture_job_v022_rows)}"
+        )
+    allowed_v022_job_statuses = {
+        "planned_fixture_only",
+        "blocked_input_contract",
+        "blocked_cli_adapter",
+        "wrapper_review_only",
+    }
+    planned_v022_methods = {
+        "PepMLM",
+        "DiffPepBuilder",
+        "PepGLAD",
+        "PepMirror",
+        "RFdiffusion + ProteinMPNN",
+    }
+    job_methods = {row.get("method", ""): row for row in multi_case_fixture_job_v022_rows}
+    for row in multi_case_fixture_job_v022_rows:
+        job_id = row.get("job_id", "")
+        fixture_case_id = row.get("fixture_case_id", "")
+        control_id = row.get("control_id", "")
+        method = row.get("method", "")
+        status = row.get("status", "")
+        if status not in allowed_v022_job_statuses:
+            errors.append(f"{job_id}: invalid v0.22 pilot job status {status}")
+        if row.get("n_designs_requested") != "1" or row.get("random_seed") != "42":
+            errors.append(f"{job_id}: v0.22 pilot job must use n_designs=1 and seed=42")
+        if row.get("task_id") not in v022_allowed_tasks:
+            errors.append(f"{job_id}: invalid v0.22 pilot job task_id {row.get('task_id')}")
+        if fixture_case_id not in expected_v022_fixture_ids and fixture_case_id != "bindcraft_cd47_method_example_control":
+            errors.append(f"{job_id}: v0.22 pilot job references unknown fixture_case_id {fixture_case_id}")
+        if control_id not in expected_v022_control_ids:
+            errors.append(f"{job_id}: v0.22 pilot job references unknown control_id {control_id}")
+        if method in planned_v022_methods and status != "planned_fixture_only":
+            errors.append(f"{job_id}: v0.22 first-lane method should be planned_fixture_only")
+        if method == "D-Flow / PeptideDesign" and status != "blocked_input_contract":
+            errors.append("D-Flow v0.22 job must remain blocked_input_contract")
+        if method == "AfCycDesign / ColabDesign cyclic peptide" and status != "blocked_cli_adapter":
+            errors.append("ColabDesign v0.22 job must remain blocked_cli_adapter")
+        if method == "BindCraft":
+            if status != "wrapper_review_only":
+                errors.append("BindCraft v0.22 job must remain wrapper_review_only")
+            if "low_confidence_only" not in row.get("failure_policy", ""):
+                errors.append("BindCraft v0.22 job failure_policy must include low_confidence_only")
+        text = " ".join(row.values()).lower()
+        for forbidden in [
+            "generated_output",
+            "scored",
+            "benchmark_completed",
+            "best_performing",
+            "performance_ranking",
+            "smoke_test_ready",
+            "benchmark_ready",
+        ]:
+            if forbidden in text:
+                errors.append(f"{job_id}: v0.22 pilot job row overclaims {forbidden}")
+    if job_methods.get("D-Flow / PeptideDesign", {}).get("contract_status") != "blocked_missing_pepmerge_lmdb":
+        errors.append("D-Flow v0.22 contract_status must be blocked_missing_pepmerge_lmdb")
+    if job_methods.get("AfCycDesign / ColabDesign cyclic peptide", {}).get("contract_status") != "blocked_cli_adapter":
+        errors.append("ColabDesign v0.22 contract_status must be blocked_cli_adapter")
+    if job_methods.get("BindCraft", {}).get("contract_status") != "wrapper_review_required":
+        errors.append("BindCraft v0.22 contract_status must be wrapper_review_required")
+
+    expected_v022_gate_ids = {
+        "v022_dflow_input_contract",
+        "v022_colabdesign_cli_adapter",
+        "v022_bindcraft_wrapper_review",
+        "v022_formal_manifest_gate",
+    }
+    observed_v022_gate_ids = {row.get("gate_id", "") for row in priority_gate_review_v022_rows}
+    missing_v022_gate_ids = sorted(expected_v022_gate_ids - observed_v022_gate_ids)
+    if missing_v022_gate_ids:
+        errors.append("priority_gate_review_v0.22.csv missing gates: " + ", ".join(missing_v022_gate_ids))
+    if len(priority_gate_review_v022_rows) != len(expected_v022_gate_ids):
+        errors.append(
+            f"priority_gate_review_v0.22.csv should contain {len(expected_v022_gate_ids)} rows, "
+            f"found {len(priority_gate_review_v022_rows)}"
+        )
+    for row in priority_gate_review_v022_rows:
+        gate_id = row.get("gate_id", "")
+        for required_field in PRIORITY_GATE_REVIEW_V022_HEADERS:
+            if not row.get(required_field):
+                errors.append(f"{gate_id}: v0.22 priority gate row missing {required_field}")
+        text = " ".join(row.values()).lower()
+        if gate_id == "v022_dflow_input_contract":
+            if "pep_pocket_test_structure_cache.lmdb missing" not in text:
+                errors.append("D-Flow v0.22 gate must retain missing LMDB blocker")
+            if row.get("allowed_v022_use") != "blocked_contract_row_only":
+                errors.append("D-Flow v0.22 gate must remain blocked_contract_row_only")
+        if gate_id == "v022_colabdesign_cli_adapter":
+            if row.get("allowed_v022_use") != "blocked_cli_row_only":
+                errors.append("ColabDesign v0.22 gate must remain blocked_cli_row_only")
+        if gate_id == "v022_bindcraft_wrapper_review":
+            if row.get("allowed_v022_use") != "wrapper_control_only":
+                errors.append("BindCraft v0.22 gate must remain wrapper_control_only")
+            for token in ["accepted_final", "low_confidence_only", "timeout_only", "no_output", "failed"]:
+                if token not in text:
+                    errors.append(f"BindCraft v0.22 gate missing output class token {token}")
+        for forbidden in [
+            "benchmark_completed",
+            "best_performing",
+            "performance_ranking",
+            "smoke_test_ready",
+            "benchmark_ready",
+        ]:
+            if forbidden in text:
+                errors.append(f"{gate_id}: v0.22 priority gate row overclaims {forbidden}")
+
     pilot_plan_text = (ROOT / "ops/plans/batch_b_pilot_execution_plan_v0.17.md").read_text(
         encoding="utf-8"
     )
@@ -3123,6 +4023,21 @@ def main() -> int:
     replay_audit_text = (ROOT / "ops/audits/adapter_replay_fixture_audit_v0.18.md").read_text(
         encoding="utf-8"
     )
+    method_install_smoke_audit_text = (ROOT / "ops/audits/method_install_smoke_audit_v0.19.md").read_text(
+        encoding="utf-8"
+    )
+    method_unblock_audit_text = (ROOT / "ops/audits/method_unblock_audit_v0.20.md").read_text(
+        encoding="utf-8"
+    )
+    adapter_smoke_audit_text = (ROOT / "ops/audits/adapter_smoke_audit_v0.21.md").read_text(
+        encoding="utf-8"
+    )
+    multi_case_fixture_plan_text = (ROOT / "ops/plans/multi_case_fixture_pilot_plan_v0.22.md").read_text(
+        encoding="utf-8"
+    )
+    multi_case_fixture_audit_text = (ROOT / "ops/audits/multi_case_fixture_pilot_audit_v0.22.md").read_text(
+        encoding="utf-8"
+    )
     for token in [
         "Adapter Replay Fixture Audit v0.18",
         "adapter_replay_fixture_manifest_v0.18.csv",
@@ -3132,10 +4047,62 @@ def main() -> int:
     ]:
         if token not in replay_audit_text:
             errors.append(f"adapter_replay_fixture_audit_v0.18.md missing token {token}")
+    for token in [
+        "Method Install Smoke Audit v0.19",
+        "method_source_doc_verification_v0.19.csv",
+        "method_install_smoke_manifest_v0.19.csv",
+        "method_smoke_test_results_v0.19.csv",
+        "not Benchmark result",
+    ]:
+        if token not in method_install_smoke_audit_text:
+            errors.append(f"method_install_smoke_audit_v0.19.md missing token {token}")
+    for token in [
+        "Method Unblock Audit v0.20",
+        "method_unblock_manifest_v0.20.csv",
+        "method_unblock_smoke_results_v0.20.csv",
+        "not Benchmark result",
+    ]:
+        if token not in method_unblock_audit_text:
+            errors.append(f"method_unblock_audit_v0.20.md missing token {token}")
+    for token in [
+        "Adapter Smoke Audit v0.21",
+        "adapter_smoke_manifest_v0.21.csv",
+        "adapter_smoke_results_v0.21.csv",
+        "adapter_method_output_manifest_v0.21.csv",
+        "not Benchmark result",
+    ]:
+        if token not in adapter_smoke_audit_text:
+            errors.append(f"adapter_smoke_audit_v0.21.md missing token {token}")
+    for token in [
+        "Multi-case Fixture Pilot Plan v0.22",
+        "method_example_fixture_evidence_v0.22.csv",
+        "multi_case_fixture_target_manifest_v0.22.csv",
+        "priority_gate_review_v0.22.csv",
+        "D-Flow",
+        "ColabDesign",
+        "BindCraft",
+    ]:
+        if token not in multi_case_fixture_plan_text:
+            errors.append(f"multi_case_fixture_pilot_plan_v0.22.md missing token {token}")
+    for token in [
+        "Multi-case Fixture Pilot Audit v0.22",
+        "method_example_fixture_evidence_v0.22.csv",
+        "multi_case_fixture_job_manifest_v0.22.csv",
+        "priority_gate_review_v0.22.csv",
+        "not Benchmark result",
+        "No-Overclaim Boundary",
+    ]:
+        if token not in multi_case_fixture_audit_text:
+            errors.append(f"multi_case_fixture_pilot_audit_v0.22.md missing token {token}")
     for text_name, text_value in [
         ("batch_b_pilot_execution_plan_v0.17.md", pilot_plan_text.lower()),
         ("batch_b_pilot_readiness_audit_v0.17.md", pilot_audit_text.lower()),
         ("adapter_replay_fixture_audit_v0.18.md", replay_audit_text.lower()),
+        ("method_install_smoke_audit_v0.19.md", method_install_smoke_audit_text.lower()),
+        ("method_unblock_audit_v0.20.md", method_unblock_audit_text.lower()),
+        ("adapter_smoke_audit_v0.21.md", adapter_smoke_audit_text.lower()),
+        ("multi_case_fixture_pilot_plan_v0.22.md", multi_case_fixture_plan_text.lower()),
+        ("multi_case_fixture_pilot_audit_v0.22.md", multi_case_fixture_audit_text.lower()),
     ]:
         for forbidden_phrase in [
             "benchmark completed",
@@ -3287,6 +4254,10 @@ def main() -> int:
         "v0.16 Batch B target review queue 不是 frozen target set",
         "v0.17 Batch B pilot gate 不是 frozen target set 或正式运行结果",
         "v0.18 adapter replay fixtures 是 parser evidence 不是 Benchmark results",
+        "v0.19 方法安装与示例 smoke 是 external readiness evidence 不是 Benchmark results",
+        "v0.20 方法解阻 smoke 是 external readiness evidence 不是 Benchmark results",
+        "v0.21 adapter smoke 与 parser 输出是 external readiness evidence 不是 Benchmark results",
+        "v0.22 multi-case fixture pilot 是标准化计划层不是 Benchmark results",
     ]:
         if claim not in claim_texts:
             errors.append(f"benchmark_manuscript_claim_evidence_map.csv missing claim boundary: {claim}")
@@ -3364,6 +4335,22 @@ def main() -> int:
             "batch_a_replay_method_output_v018_rows": len(batch_a_replay_method_output_v018_rows),
             "batch_a_replay_candidate_v018_rows": len(batch_a_replay_candidate_v018_rows),
             "batch_a_replay_run_v018_rows": len(batch_a_replay_run_v018_rows),
+            "method_source_doc_v019_rows": len(method_source_doc_v019_rows),
+            "method_install_smoke_manifest_v019_rows": len(method_install_smoke_manifest_v019_rows),
+            "method_smoke_test_v019_rows": len(method_smoke_test_v019_rows),
+            "method_unblock_manifest_v020_rows": len(method_unblock_manifest_v020_rows),
+            "method_unblock_smoke_v020_rows": len(method_unblock_smoke_v020_rows),
+            "adapter_smoke_manifest_v021_rows": len(adapter_smoke_manifest_v021_rows),
+            "adapter_smoke_results_v021_rows": len(adapter_smoke_results_v021_rows),
+            "blocker_asset_manifest_v021_rows": len(blocker_asset_manifest_v021_rows),
+            "adapter_method_output_v021_rows": len(adapter_method_output_v021_rows),
+            "adapter_candidate_output_v021_rows": len(adapter_candidate_output_v021_rows),
+            "adapter_run_rows_v021_rows": len(adapter_run_rows_v021_rows),
+            "method_example_fixture_v022_rows": len(method_example_fixture_v022_rows),
+            "multi_case_fixture_target_v022_rows": len(multi_case_fixture_target_v022_rows),
+            "multi_case_fixture_control_v022_rows": len(multi_case_fixture_control_v022_rows),
+            "multi_case_fixture_job_v022_rows": len(multi_case_fixture_job_v022_rows),
+            "priority_gate_review_v022_rows": len(priority_gate_review_v022_rows),
             "method_readiness_v08_rows": len(method_readiness_v08_rows),
             "method_preflight_v010_rows": len(method_preflight_rows),
             "adapter_preflight_v011_rows": len(adapter_preflight_rows),

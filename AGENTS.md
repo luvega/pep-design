@@ -6,9 +6,9 @@ This project is an independent protocol-first Benchmark knowledge base for recen
 
 Current authoritative plan: `ops/plans/updated_plan_v0.9.md`.
 
-Current version: `1.2.6`.
+Current version: `1.2.10`.
 
-Next planned phase: v0.19 controlled external multi-seed fixture pilot after v0.17 pilot gates and v0.18 adapter replay fixtures. Do not start additional clone, download, install, or GPU execution unless the user explicitly requests that later phase.
+Next planned phase: v0.23 approved external dry-run package preparation after v0.22 multi-case fixture pilot planning. Do not start additional clone, download, install, or GPU execution unless the user explicitly requests that later phase.
 
 ## Source Boundaries
 
@@ -57,6 +57,23 @@ For broad research-to-paper or multi-stage review tasks, route through `academic
 | `benchmark/deployment/batch_b_pilot_method_scope_v0.17.csv` | Batch B pilot method scope | method gating only; not performance evidence |
 | `benchmark/deployment/adapter_replay_fixture_manifest_v0.18.csv` | adapter replay fixture manifest | parser replay fixture only; not new method execution |
 | `benchmark/results/batch_a_replay_*_v0.18.csv` | small adapter replay fixture outputs | parsed v0.15 minimal smoke fixtures only; not Benchmark results |
+| `benchmark/deployment/method_source_doc_verification_v0.19.csv` | method source/doc verification summary | external readiness evidence only; not Benchmark results |
+| `benchmark/deployment/method_install_smoke_manifest_v0.19.csv` | method install/example-smoke manifest | external command/log pointer summary only; raw logs and outputs stay outside KB |
+| `benchmark/deployment/method_smoke_test_results_v0.19.csv` | method smoke-test result summary | method-provided example/preflight evidence only; not scoring, ranking, or full reproducibility evidence |
+| `ops/audits/method_install_smoke_audit_v0.19.md` | v0.19 install/smoke audit | readiness findings and blockers only |
+| `benchmark/deployment/method_unblock_manifest_v0.20.csv` | method unblock manifest | external command/log pointer summary only; raw logs and outputs stay outside KB |
+| `benchmark/deployment/method_unblock_smoke_results_v0.20.csv` | method unblock result summary | external unblock/readiness evidence only; not Benchmark results |
+| `ops/audits/method_unblock_audit_v0.20.md` | v0.20 unblock audit | readiness findings and blockers only |
+| `benchmark/deployment/adapter_smoke_manifest_v0.21.csv` | v0.21 adapter smoke manifest | external command/log pointer summary only; raw logs and outputs stay outside KB |
+| `benchmark/deployment/adapter_smoke_results_v0.21.csv` | v0.21 adapter smoke result summary | bounded external adapter/readiness evidence only; not Benchmark results |
+| `benchmark/deployment/blocker_asset_manifest_v0.21.csv` | v0.21 blocker asset manifest | external asset status pointers only; weights/checkpoints stay outside KB |
+| `benchmark/results/adapter_*_v0.21.csv` | v0.21 parser fixture outputs | compact parser rows only; not scoring or Benchmark results |
+| `ops/audits/adapter_smoke_audit_v0.21.md` | v0.21 adapter smoke audit | readiness findings, parser boundaries and blockers only |
+| `benchmark/deployment/method_example_fixture_evidence_v0.22.csv` | v0.22 evidence-to-fixture map | method-example adapter evidence only; not target-set, scoring, or performance evidence |
+| `benchmark/input_sets/multi_case_fixture_*_v0.22.csv` | v0.22 target/control/job fixture manifests | fixture planning only; not frozen target set or run evidence |
+| `benchmark/deployment/priority_gate_review_v0.22.csv` | v0.22 D-Flow/ColabDesign/BindCraft gate review | blocked/planning gate only; not execution evidence |
+| `ops/plans/multi_case_fixture_pilot_plan_v0.22.md` | v0.22 pilot plan | planning artifact only |
+| `ops/audits/multi_case_fixture_pilot_audit_v0.22.md` | v0.22 pilot audit | readiness findings and no-overclaim boundary only |
 | `ops/plans/protein_design_image_consolidation_plan_v0.13.md` | image consolidation plan | planning artifact only |
 | `ops/plans/adapter_parser_hardening_plan_v0.16.md` | adapter/parser hardening plan | planning artifact only |
 | `ops/audits/docker_environment_assignment_audit_v0.13.md` | Docker/environment assignment audit | readiness finding only; not local reproducibility evidence |
@@ -85,7 +102,7 @@ Method and dataset readiness must move through explicit gates:
 6. `dry_run_ready`
 7. `smoke_test_ready`
 
-Current v0.15-v0.18 KB artifacts support only `minimal_smoke_observed`, interface-planning, pilot-gate, and parser-replay fixture evidence for selected external examples. They do not support promotion to `smoke_test_ready` without controlled target governance, standardized inputs, adapter commands, multi-seed outputs, scoring artifacts, validation artifacts, and target/control governance. PepMirror remains dependency-blocked until PyRosetta/license and checkpoint/dependency routes are resolved.
+Current v0.15-v0.22 KB artifacts support only `minimal_smoke_observed`, interface-planning, pilot-gate, parser-replay fixture, method-provided example/preflight readiness evidence, method-unblock findings, bounded adapter-smoke evidence, parser fixture rows for selected external examples, and multi-case fixture pilot planning. They do not support promotion to `smoke_test_ready` or `benchmark_ready` without controlled target governance, standardized inputs, adapter commands, multi-seed outputs, scoring artifacts, validation artifacts, and target/control governance. PepMirror and PepGLAD have v0.21 checkpoint/weight unblock evidence; D-Flow remains input-contract blocked by the missing PepMerge cache.
 
 ## Language And Claim Rules
 
@@ -98,6 +115,9 @@ Current v0.15-v0.18 KB artifacts support only `minimal_smoke_observed`, interfac
 - Do not treat v0.16 adapter/parser hardening or Batch B target review queue rows as new run evidence, frozen targets, scoring evidence, or performance findings.
 - Do not treat v0.17 pilot gates as frozen targets, completed runs, or head-to-head evidence.
 - Do not treat v0.18 replay fixtures as new execution, scoring results, method ranking, or Benchmark results.
+- Do not treat v0.20 method-unblock rows as target-set evidence, scoring evidence, method ranking, or Benchmark results.
+- Do not treat v0.21 adapter-smoke or parser rows as target-set evidence, scoring evidence, method ranking, full reproducibility evidence, or Benchmark results.
+- Do not treat v0.22 multi-case fixture target/control/job manifests or priority gates as frozen target-set evidence, execution evidence, scoring evidence, method ranking, full reproducibility evidence, or Benchmark results.
 - Do not treat watchlist datasets, target candidates, review-only methods, or literature examples as frozen Benchmark targets.
 - Generation ability, ranking/rescoring ability, developability proxies, structural confidence, and biological validation are separate evidence layers.
 

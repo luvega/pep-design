@@ -1,5 +1,198 @@
 # Release Notes
 
+## v1.2.10 Multi-case Fixture Pilot Planning - 2026-07-08
+
+This checkpoint adds the v0.22 controlled multi-case fixture pilot planning
+layer. It converts v0.21 method-example adapter evidence into standardized
+fixture target/control/job manifests and priority gates while keeping all
+execution and scoring out of scope.
+
+### Added
+
+- Added `benchmark/deployment/method_example_fixture_evidence_v0.22.csv`.
+- Added `benchmark/input_sets/multi_case_fixture_target_manifest_v0.22.csv`.
+- Added `benchmark/input_sets/multi_case_fixture_control_manifest_v0.22.csv`.
+- Added `benchmark/input_sets/multi_case_fixture_job_manifest_v0.22.csv`.
+- Added `benchmark/deployment/priority_gate_review_v0.22.csv`.
+- Added `ops/plans/multi_case_fixture_pilot_plan_v0.22.md`.
+- Added `ops/audits/multi_case_fixture_pilot_audit_v0.22.md`.
+- Added `tests/test_v022_multi_case_fixture_plan.py`.
+
+### Changed
+
+- Bumped project version to `1.2.10`.
+- Updated validator coverage for v0.22 evidence rows, target/control/job
+  manifests, priority gates, blocked-row invariants and no-overclaim checks.
+- Updated README, index, Benchmark README, input/results READMEs, AGENTS,
+  project log and claim-evidence map for v0.22.
+
+### Notification
+
+- PepMLM, DiffPepBuilder, PepGLAD, PepMirror and RFdiffusion + ProteinMPNN now
+  have focused `planned_fixture_only` rows for a future multi-case pilot.
+- D-Flow remains `blocked_input_contract` until the external PepMerge structure
+  directory and `pep_pocket_test_structure_cache.lmdb` are recorded and
+  loadable.
+- AfCycDesign / ColabDesign cyclic peptide remains `blocked_cli_adapter` until
+  a non-notebook Python CLI adapter is defined.
+- BindCraft remains `wrapper_review_only`; the v0.21 LowConfidence trajectory
+  is not accepted-final design evidence.
+
+### Boundaries
+
+- No `target_set_v0.csv` promotion.
+- No clone, download, install, Docker build, GPU run or new parser output.
+- No scoring or method-ranking evidence.
+- No complete Benchmark result.
+- No biological or experimental validation claim.
+
+## v1.2.9 Adapter Smoke And Parser Fixture Readiness - 2026-07-08
+
+This checkpoint adds the v0.21 adapter-smoke and parser-fixture readiness
+layer. It records bounded external adapter/control evidence and compact parser
+rows while keeping all raw logs, weights, Docker layers and generated structures
+outside the KB.
+
+### Added
+
+- Added `benchmark/deployment/adapter_smoke_manifest_v0.21.csv`.
+- Added `benchmark/deployment/adapter_smoke_results_v0.21.csv`.
+- Added `benchmark/deployment/blocker_asset_manifest_v0.21.csv`.
+- Added `benchmark/results/adapter_method_output_manifest_v0.21.csv`.
+- Added `benchmark/results/adapter_candidate_outputs_v0.21.csv`.
+- Added `benchmark/results/adapter_run_rows_v0.21.csv`.
+- Added `ops/audits/adapter_smoke_audit_v0.21.md`.
+- Added `scripts/collect_v021_adapter_smokes.py` and
+  `scripts/parse_v021_adapter_outputs.py`.
+- Added external workbench files under `/data/protein-design` for
+  `pd-benchmark-methods-gpu:0.21`, `pd-pyrosetta-methods-gpu:0.21`, and
+  `run_v021_adapter_smokes.py`.
+
+### Changed
+
+- Bumped project version to `1.2.9`.
+- Updated validator coverage for v0.21 adapter rows, asset pointers, parser
+  rows, external path boundaries and no-overclaim checks.
+- Updated README, index, Benchmark README, AGENTS, project log and claim map for
+  v0.21.
+- Hardened the v0.21 parser to use method-specific binder-chain selection for
+  PDB outputs.
+
+### Notification
+
+- `pd-pyrosetta-methods-gpu:0.21` was built externally and passes PyRosetta
+  initialization in `bench-pepmirror`.
+- PepGLAD public checkpoint assets and the PepMirror Zenodo checkpoint are now
+  present in the external workbench.
+- PepMLM, DiffPepBuilder, PepGLAD, PepMirror, RFdiffusion + ProteinMPNN and
+  BindCraft have bounded v0.21 adapter/control evidence on method-provided or
+  synthetic examples.
+- RFdiffusion + ProteinMPNN now records an explicit handoff manifest from RF PDB
+  output to ProteinMPNN FASTA output.
+- D-Flow remains blocked by the missing PepMerge cache/input contract.
+- SaLT&PepPr remains license/gated-model blocked; ColabDesign remains blocked
+  by non-notebook CLI adapter definition; OSPREY3 remains carry-forward only.
+
+### Boundaries
+
+- No `target_set_v0.csv` promotion.
+- No scoring or method-ranking evidence.
+- No complete Benchmark result.
+- No biological or experimental validation claim.
+- No raw logs, Docker layers, model weights, checkpoints, third-party source
+  trees, generated structures or large outputs are stored in the KB.
+
+## v1.2.8 Method Unblock Readiness And Independent PyRosetta Route - 2026-07-08
+
+This checkpoint adds the v0.20 method-unblock readiness layer. It prepares an
+independent PyRosetta image route outside the KB, records a successful
+DiffPepBuilder unblock smoke, and keeps unresolved blockers explicit before any
+controlled multi-case fixture pilot.
+
+### Added
+
+- Added `benchmark/deployment/method_unblock_manifest_v0.20.csv`.
+- Added `benchmark/deployment/method_unblock_smoke_results_v0.20.csv`.
+- Added `ops/audits/method_unblock_audit_v0.20.md`.
+- Added `scripts/collect_v020_method_unblock_smokes.py`.
+- Added external workbench files under `/data/protein-design` for
+  `pd-pyrosetta-methods-gpu:0.20` and `run_v020_unblock_smokes.py`.
+
+### Changed
+
+- Bumped project version to `1.2.8`.
+- Updated validator coverage for v0.20 unblock rows, external path boundaries,
+  timeout/blocker checks and claim gates.
+- Updated index, README, Benchmark README, AGENTS and project log for v0.20.
+
+### Notification
+
+- The independent PyRosetta Dockerfile no longer relies on the BindCraft image.
+- `pd-pyrosetta-methods-gpu:0.20` now builds from the RosettaCommons quarterly
+  US West mirror and passes `pyrosetta.init("-mute all")` in both
+  `bench-diffpepbuilder` and `bench-pyrosetta`.
+- DiffPepBuilder v0.20 unblock smoke passed on GPU for one method-provided
+  example after setting `experiment.num_loader_workers=1`.
+- PepMirror is no longer blocked by the PyRosetta image route, but remains
+  blocked by unresolved checkpoint manifest/download evidence.
+- PepGLAD remains blocked by unresolved GitHub release asset names.
+- D-Flow remains blocked by missing `test_set`/`PepMerge`/`pep_cache` inputs.
+- BindCraft reached GPU trajectory execution with smoke-only settings but exited
+  by timeout with code `124`; no new permission blocker was observed.
+
+### Boundaries
+
+- No `target_set_v0.csv` promotion.
+- No scoring or method-ranking evidence.
+- No complete Benchmark result.
+- No biological or experimental validation claim.
+- No raw logs, Docker layers, private PyRosetta credentials or non-public Rosetta materials, model weights,
+  third-party source trees, generated structures or large outputs are stored in
+  the KB.
+
+## v1.2.7 External Method Install And Example-Smoke Readiness - 2026-07-07
+
+This checkpoint adds the v0.19 external method install/example-smoke readiness
+layer. It records method-provided example or preflight outcomes for all 10
+first-wave methods while keeping formal Benchmark results out of scope.
+
+### Added
+
+- Added `benchmark/deployment/method_source_doc_verification_v0.19.csv`.
+- Added `benchmark/deployment/method_install_smoke_manifest_v0.19.csv`.
+- Added `benchmark/deployment/method_smoke_test_results_v0.19.csv`.
+- Added `ops/audits/method_install_smoke_audit_v0.19.md`.
+- Added `scripts/collect_v019_method_smokes.py`.
+
+### Changed
+
+- Bumped project version to `1.2.7`.
+- Updated validator coverage for v0.19 method smoke rows, external path
+  boundaries, no-overclaim checks and claim gates.
+- Updated index, README, Benchmark README and project log for v0.19.
+
+### Notification
+
+- PepMLM and RFdiffusion + ProteinMPNN have GPU example-smoke evidence, with a
+  PepMLM noncanonical-output caveat and an RFdiffusion-to-ProteinMPNN handoff
+  gap.
+- OSPREY3 has CPU route probe evidence.
+- PepGLAD and D-Flow have GPU preflight evidence but remain blocked by
+  checkpoint and input-contract gaps.
+- DiffPepBuilder progressed through receptor processing and ESM embedding but
+  remains blocked at `pyrosetta` import.
+- BindCraft received a `libgfortran5` image repair but the CD47 peptide quick
+  example timed out before accepted design generation.
+
+### Boundaries
+
+- No `target_set_v0.csv` promotion.
+- No scoring or method-ranking evidence.
+- No complete Benchmark result.
+- No biological or experimental validation claim.
+- No raw logs, Docker layers, model weights, ESM checkpoints, third-party source
+  trees, generated structures or large outputs are stored in the KB.
+
 ## v1.2.6 Batch B Pilot Gates And Adapter Replay Fixtures - 2026-07-07
 
 This checkpoint adds the v0.17 pilot-gate layer and v0.18 adapter replay

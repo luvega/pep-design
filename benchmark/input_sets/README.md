@@ -17,6 +17,9 @@
 | `batch_b_target_review_queue_v0.16.csv` | active | v0.16 Batch B target/control review queue；不是 frozen target set |
 | `batch_b_pilot_target_gate_v0.17.csv` | active | v0.17 pilot fixture/review gate；不是 frozen target set |
 | `batch_b_pilot_job_manifest_v0.17.csv` | active | v0.17 planned fixture jobs；不是运行证据 |
+| `multi_case_fixture_target_manifest_v0.22.csv` | active | v0.22 multi-case fixture target manifest；不是 frozen target set |
+| `multi_case_fixture_control_manifest_v0.22.csv` | active | v0.22 fixture control manifest；不是 assay validation 或 scoring evidence |
+| `multi_case_fixture_job_manifest_v0.22.csv` | active | v0.22 planned/blocked fixture jobs；不是运行证据 |
 | `dataset_supplement_schema_review_v0.7.csv` | active | v0.7 数据集补充材料 schema-review 队列，记录 license/schema/controls/leakage 的下一步审查状态 |
 | `dataset_supplement_schema_review_v0.8.csv` | active | v0.8 数据源 license/schema/controls/leakage 审计结果；仍不代表 target-set promotion |
 | `example_run.csv` | active | v0.7 人工 run.csv placeholder，用于服务器 dry-run 输入合同检查；不是 benchmark target 或结果 |
@@ -34,6 +37,8 @@ v0.8 的 `dataset_supplement_schema_review_v0.8.csv` 可以记录外部 API 或�
 v0.14 的 `target_candidate_academic_search_v0.14.csv` 只记录方法论文案例、PDB 案例和公开 panel 的 metadata-level 候选。它不能替代 `target_set_v0.csv`，也不能作为数据下载、assay 复核、leakage clearance 或 Benchmark 结果证据。
 
 v0.17 的 `batch_b_pilot_target_gate_v0.17.csv` 和 `batch_b_pilot_job_manifest_v0.17.csv` 只记录 pilot gate 和 planned fixture jobs。它们不冻结 `target_set_v0.csv`，不证明 target/control 已闭环，也不是运行或性能证据。
+
+v0.22 的 `multi_case_fixture_target_manifest_v0.22.csv`、`multi_case_fixture_control_manifest_v0.22.csv` 和 `multi_case_fixture_job_manifest_v0.22.csv` 只把 v0.21 method-example adapter 证据标准化为 multi-case fixture pilot 计划。它们不冻结 `target_set_v0.csv`，不代表 D-Flow、ColabDesign 或 BindCraft gate 已解决，也不是运行、scoring、ranking 或 Benchmark result。
 
 ## Required Target Classes
 

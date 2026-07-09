@@ -1,7 +1,7 @@
 # 多肽设计方法 Benchmark 知识库
 
 ## Current Status
-- Project version: 1.2.6
+- Project version: 1.2.10
 - Manuscript outline layer: v1.0
 - Supplementary-source synthesis layer: v1.1
 - Chinese manuscript figure/table embedding layer: v1.2
@@ -13,8 +13,12 @@
 - Adapter/parser hardening layer: v0.16 planning supplement
 - Batch B pilot gate layer: v0.17 planning supplement
 - Adapter replay fixture layer: v0.18 parser supplement
-- Repository checkpoint: v1.2.6
-- Build date: 2026-07-07
+- Method install/example smoke layer: v0.19 external readiness supplement
+- Method unblock layer: v0.20 external readiness supplement
+- Adapter smoke/parser fixture layer: v0.21 external readiness supplement
+- Multi-case fixture pilot planning layer: v0.22 planning supplement
+- Repository checkpoint: v1.2.10
+- Build date: 2026-07-08
 - Time window: 2021-06-03 to 2026-06-03
 - Unique Zotero-derived records after dedupe: 432
 - First-wave included methods: 10
@@ -83,9 +87,25 @@
 - [Adapter/parser hardening matrix v0.16](benchmark/deployment/adapter_parser_hardening_matrix_v0.16.csv)
 - [Batch B pilot method scope v0.17](benchmark/deployment/batch_b_pilot_method_scope_v0.17.csv)
 - [Adapter replay fixture manifest v0.18](benchmark/deployment/adapter_replay_fixture_manifest_v0.18.csv)
+- [Method source/doc verification v0.19](benchmark/deployment/method_source_doc_verification_v0.19.csv)
+- [Method install smoke manifest v0.19](benchmark/deployment/method_install_smoke_manifest_v0.19.csv)
+- [Method smoke-test results v0.19](benchmark/deployment/method_smoke_test_results_v0.19.csv)
+- [Method unblock manifest v0.20](benchmark/deployment/method_unblock_manifest_v0.20.csv)
+- [Method unblock smoke results v0.20](benchmark/deployment/method_unblock_smoke_results_v0.20.csv)
+- [Adapter smoke manifest v0.21](benchmark/deployment/adapter_smoke_manifest_v0.21.csv)
+- [Adapter smoke results v0.21](benchmark/deployment/adapter_smoke_results_v0.21.csv)
+- [Blocker asset manifest v0.21](benchmark/deployment/blocker_asset_manifest_v0.21.csv)
+- [Method example fixture evidence v0.22](benchmark/deployment/method_example_fixture_evidence_v0.22.csv)
+- [Priority gate review v0.22](benchmark/deployment/priority_gate_review_v0.22.csv)
 - [Batch A replay method output manifest v0.18](benchmark/results/batch_a_replay_method_output_manifest_v0.18.csv)
 - [Batch A replay candidate outputs v0.18](benchmark/results/batch_a_replay_candidate_outputs_v0.18.csv)
 - [Batch A replay run rows v0.18](benchmark/results/batch_a_replay_run_v0.18.csv)
+- [Adapter method output manifest v0.21](benchmark/results/adapter_method_output_manifest_v0.21.csv)
+- [Adapter candidate outputs v0.21](benchmark/results/adapter_candidate_outputs_v0.21.csv)
+- [Adapter run rows v0.21](benchmark/results/adapter_run_rows_v0.21.csv)
+- [Multi-case fixture target manifest v0.22](benchmark/input_sets/multi_case_fixture_target_manifest_v0.22.csv)
+- [Multi-case fixture control manifest v0.22](benchmark/input_sets/multi_case_fixture_control_manifest_v0.22.csv)
+- [Multi-case fixture job manifest v0.22](benchmark/input_sets/multi_case_fixture_job_manifest_v0.22.csv)
 - [Adapter preflight status v0.11](benchmark/deployment/adapter_preflight_status_v0.11.csv)
 - [Target/control freeze checklist v0.10](benchmark/input_sets/target_control_freeze_checklist_v0.10.md)
 - [File role map v0.10](ops/migration/file_role_map_v0.10.csv)
@@ -108,6 +128,11 @@
 - [Batch B pilot execution plan v0.17](ops/plans/batch_b_pilot_execution_plan_v0.17.md)
 - [Batch B pilot readiness audit v0.17](ops/audits/batch_b_pilot_readiness_audit_v0.17.md)
 - [Adapter replay fixture audit v0.18](ops/audits/adapter_replay_fixture_audit_v0.18.md)
+- [Method install smoke audit v0.19](ops/audits/method_install_smoke_audit_v0.19.md)
+- [Method unblock audit v0.20](ops/audits/method_unblock_audit_v0.20.md)
+- [Adapter smoke audit v0.21](ops/audits/adapter_smoke_audit_v0.21.md)
+- [Multi-case fixture pilot plan v0.22](ops/plans/multi_case_fixture_pilot_plan_v0.22.md)
+- [Multi-case fixture pilot audit v0.22](ops/audits/multi_case_fixture_pilot_audit_v0.22.md)
 - [Target candidate academic-search audit v0.14](ops/audits/target_candidate_academic_search_audit_v0.14.md)
 - [Target candidate academic-search plan v0.14](ops/plans/target_candidate_academic_search_plan_v0.14.md)
 - [Dataset supplement schema review v0.8](benchmark/input_sets/dataset_supplement_schema_review_v0.8.csv)
@@ -138,6 +163,6 @@
 - [Method landscape patch candidates v1.1](kb/tables/method_landscape_patch_candidates_v1.1.csv)
 
 ## Next Phase
-`ops/plans/updated_plan_v0.9.md` remains the current plan. The manuscript layer now contains separate Chinese and English v1.0 outlines, v1.1 supplementary-source synthesis, v1.2 Chinese figure/table embedding, and v1.3 grant-style mock review planning. v1.1 converts six read-only Markdown notes into scoring rationale, cyclic/D/ncAA protocol boundaries, method-landscape patch candidates, TODOs and claim gates. v1.2 embeds four conceptual figures and four CSV-derived Markdown tables into the Chinese outline; the four figures have now been regenerated as built-in `$imagegen` PNG schematics with a QC record. v1.3 converts `research-grants` style review findings into NIH/NSF-like strengths, weaknesses, action items and v0.10 preflight planning gates. v0.12 records external source-only checkouts for 11 first-wave method repositories. v0.13 records existing Docker image reuse and a shared multi-conda benchmark image scaffold for methods without dedicated images. v0.14 records academic-search-derived method-paper cases and candidate target/panel suggestions. v0.15 records external import-level preflight and three minimal Batch A smoke-test summaries. v0.16 records adapter/parser hardening and Batch B target review planning. v0.17 records controlled Batch B pilot target/method/job gates. v0.18 parses v0.15 Batch A smoke outputs into small adapter replay fixture tables. These layers keep the 10-method include set unchanged, leave `target_set_v0.csv` unfrozen, perform no scoring or performance comparison, and make no full local reproducibility claim.
+`ops/plans/updated_plan_v0.9.md` remains the current plan. The manuscript layer now contains separate Chinese and English v1.0 outlines, v1.1 supplementary-source synthesis, v1.2 Chinese figure/table embedding, and v1.3 grant-style mock review planning. v0.12 records external source-only checkouts, v0.13 records Docker image reuse/environment assignment, v0.14 records academic-search-derived method-paper cases and target candidates, v0.15 records external import-level preflight and three minimal Batch A smoke-test summaries, v0.16 records adapter/parser hardening and Batch B target review planning, v0.17 records controlled Batch B pilot gates, v0.18 parses v0.15 outputs into replay fixtures, v0.19 records external method install/example-smoke readiness, v0.20 records method-unblock readiness, v0.21 records bounded adapter smoke plus parser fixture rows for the 10 first-wave methods, and v0.22 converts those examples into controlled multi-case fixture target/control/job manifests and priority gates. These layers keep the 10-method include set unchanged, leave `target_set_v0.csv` unfrozen, perform no scoring or performance comparison, and make no full local reproducibility claim.
 
-The next execution phase is v0.19 controlled external multi-seed fixture pilot. That phase should reuse v0.17 job gates and v0.18 parser replay outputs, run only approved external fixture jobs, continue deferring unresolved methods, and keep data, weights, third-party source and GPU outputs outside this KB.
+The next execution phase is v0.23 approved external dry-run package preparation. It should keep D-Flow PepMerge cache as an input-contract blocker until resolved, define the ColabDesign CLI adapter before any run, review BindCraft wrapper output classes, and require explicit user approval before clone, download, install or GPU execution.

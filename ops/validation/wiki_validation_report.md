@@ -47,6 +47,22 @@
 - batch_a_replay_method_output_v018_rows: 3
 - batch_a_replay_candidate_v018_rows: 3
 - batch_a_replay_run_v018_rows: 3
+- method_source_doc_v019_rows: 10
+- method_install_smoke_manifest_v019_rows: 10
+- method_smoke_test_v019_rows: 10
+- method_unblock_manifest_v020_rows: 10
+- method_unblock_smoke_v020_rows: 10
+- adapter_smoke_manifest_v021_rows: 10
+- adapter_smoke_results_v021_rows: 10
+- blocker_asset_manifest_v021_rows: 4
+- adapter_method_output_v021_rows: 10
+- adapter_candidate_output_v021_rows: 6
+- adapter_run_rows_v021_rows: 6
+- method_example_fixture_v022_rows: 10
+- multi_case_fixture_target_v022_rows: 5
+- multi_case_fixture_control_v022_rows: 7
+- multi_case_fixture_job_v022_rows: 8
+- priority_gate_review_v022_rows: 4
 - method_readiness_v08_rows: 4
 - method_preflight_v010_rows: 3
 - adapter_preflight_v011_rows: 3
@@ -57,7 +73,7 @@
 - method_classification_v1_rows: 27
 - reference_dataset_sources_v1_rows: 8
 - manuscript_todo_v1_rows: 18
-- manuscript_claim_rows: 68
+- manuscript_claim_rows: 72
 - supplementary_material_rows: 6
 - scoring_rationale_rows: 10
 - method_landscape_patch_v11_rows: 8
@@ -67,8 +83,8 @@
 - method_cards: 12
 - literature_cards: 120
 - bibtex_entries: 432
-- markdown_links_checked: 154
-- tracked_files_checked: 369
+- markdown_links_checked: 175
+- tracked_files_checked: 397
 
 ## Errors
 - None
@@ -127,6 +143,22 @@
     "batch_a_replay_method_output_v018_rows": 3,
     "batch_a_replay_candidate_v018_rows": 3,
     "batch_a_replay_run_v018_rows": 3,
+    "method_source_doc_v019_rows": 10,
+    "method_install_smoke_manifest_v019_rows": 10,
+    "method_smoke_test_v019_rows": 10,
+    "method_unblock_manifest_v020_rows": 10,
+    "method_unblock_smoke_v020_rows": 10,
+    "adapter_smoke_manifest_v021_rows": 10,
+    "adapter_smoke_results_v021_rows": 10,
+    "blocker_asset_manifest_v021_rows": 4,
+    "adapter_method_output_v021_rows": 10,
+    "adapter_candidate_output_v021_rows": 6,
+    "adapter_run_rows_v021_rows": 6,
+    "method_example_fixture_v022_rows": 10,
+    "multi_case_fixture_target_v022_rows": 5,
+    "multi_case_fixture_control_v022_rows": 7,
+    "multi_case_fixture_job_v022_rows": 8,
+    "priority_gate_review_v022_rows": 4,
     "method_readiness_v08_rows": 4,
     "method_preflight_v010_rows": 3,
     "adapter_preflight_v011_rows": 3,
@@ -137,7 +169,7 @@
     "method_classification_v1_rows": 27,
     "reference_dataset_sources_v1_rows": 8,
     "manuscript_todo_v1_rows": 18,
-    "manuscript_claim_rows": 68,
+    "manuscript_claim_rows": 72,
     "supplementary_material_rows": 6,
     "scoring_rationale_rows": 10,
     "method_landscape_patch_v11_rows": 8,
@@ -147,8 +179,8 @@
     "method_cards": 12,
     "literature_cards": 120,
     "bibtex_entries": 432,
-    "markdown_links_checked": 154,
-    "tracked_files_checked": 369
+    "markdown_links_checked": 175,
+    "tracked_files_checked": 397
   },
   "errors": [],
   "warnings": []
