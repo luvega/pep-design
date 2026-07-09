@@ -88,6 +88,7 @@
 - pilot_method_output_v031_rows: 14
 - pilot_candidate_output_v031_rows: 14
 - pilot_run_v031_rows: 14
+- supervisor_skills_installation_v032_files: 1
 - method_readiness_v08_rows: 4
 - method_preflight_v010_rows: 3
 - adapter_preflight_v011_rows: 3
@@ -108,8 +109,8 @@
 - method_cards: 12
 - literature_cards: 120
 - bibtex_entries: 432
-- markdown_links_checked: 211
-- tracked_files_checked: 451
+- markdown_links_checked: 212
+- tracked_files_checked: 453
 
 ## Errors
 - None
@@ -209,6 +210,7 @@
     "pilot_method_output_v031_rows": 14,
     "pilot_candidate_output_v031_rows": 14,
     "pilot_run_v031_rows": 14,
+    "supervisor_skills_installation_v032_files": 1,
     "method_readiness_v08_rows": 4,
     "method_preflight_v010_rows": 3,
     "adapter_preflight_v011_rows": 3,
@@ -229,8 +231,8 @@
     "method_cards": 12,
     "literature_cards": 120,
     "bibtex_entries": 432,
-    "markdown_links_checked": 211,
-    "tracked_files_checked": 451
+    "markdown_links_checked": 212,
+    "tracked_files_checked": 453
   },
   "errors": [],
   "warnings": []

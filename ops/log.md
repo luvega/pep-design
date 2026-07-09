@@ -1,5 +1,21 @@
 # Project Log
 
+## [2026-07-09] release | v1.2.20 Supervisor-Skills installation memory
+- Bumped project version to `1.2.20`.
+- Installed selected Supervisor-Skills from `HKUSTDial/Supervisor-Skills` at
+  source commit `0b77a1b98794f8341d57685a0e829a3fa175d05f`:
+  `benchmark-paper-template`, `intro-drafter`, `figure-designer`,
+  `pre-submission-reviewer`, and `idea-evaluator`.
+- Added `ops/audits/supervisor_skills_installation_v0.32.md` and
+  `tests/test_v032_supervisor_skills_memory.py`.
+- Updated `AGENTS.md` and `ops/audits/skill_selection.md` with
+  Supervisor-Skills routing, `CC BY-NC-SA 4.0` license boundary and no-overclaim
+  memory.
+- Extended validator coverage for the v0.32 memory layer.
+- Maintained boundaries: no new method execution, no scoring, no method
+  ranking, no target-set promotion, no wet-lab validation, and no complete
+  Benchmark result.
+
 ## [2026-07-09] release | v1.2.19 bounded Wave A pilot execution/parser layer
 - Bumped project version to `1.2.19`.
 - Added `scripts/run_v031_wave_a_pilot.py` and

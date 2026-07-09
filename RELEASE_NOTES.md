@@ -1,5 +1,40 @@
 # Release Notes
 
+## v1.2.20 Supervisor-Skills Installation Memory - 2026-07-09
+
+This checkpoint records installation and project-memory routing for selected
+Supervisor-Skills manuscript-support skills.
+
+### Added
+
+- Added `ops/audits/supervisor_skills_installation_v0.32.md`.
+- Added `tests/test_v032_supervisor_skills_memory.py`.
+
+### Changed
+
+- Bumped project version to `1.2.20`.
+- Updated `AGENTS.md` with Supervisor-Skills routing for Benchmark manuscript,
+  Introduction consistency check, figure planning, pre-submission review and
+  idea reassessment.
+- Updated `ops/audits/skill_selection.md` with source commit
+  `0b77a1b98794f8341d57685a0e829a3fa175d05f`, installed skill list and
+  `CC BY-NC-SA 4.0` boundary.
+- Updated validator coverage for the v0.32 Supervisor-Skills memory layer.
+
+### Notification
+
+- Installed local skills: `benchmark-paper-template`, `intro-drafter`,
+  `figure-designer`, `pre-submission-reviewer`, and `idea-evaluator`.
+- Restart Codex to pick up new skills.
+
+### Boundaries
+
+- Supervisor-Skills entries are manuscript-support memory only.
+- They are not Benchmark result, not scoring evidence, and not method-ranking
+  evidence.
+- No new method execution, target-set promotion, wet-lab validation or
+  performance comparison was added.
+
 ## v1.2.19 Bounded Wave A Pilot Execution Parser Layer - 2026-07-09
 
 This checkpoint executes and merges the v0.31 bounded Wave A pilot package from

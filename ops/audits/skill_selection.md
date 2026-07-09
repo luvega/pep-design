@@ -10,6 +10,19 @@
 - benchmark-paper-template：作为 manuscript skeleton、Introduction 六段链和 v0.9 当前计划同步的主模板，用于五支柱审计、§2-§7 骨架、pre-submission gate 和 Benchmark-vs-technical-paper 边界。
 - intro-drafter：仅作为二次一致性检查，确认背景、gap、RQs、design considerations、proposal 和 contributions 连续；不作为 Benchmark paper 的主模板。
 
+## Supervisor-Skills 安装记忆
+
+- Source: `HKUSTDial/Supervisor-Skills`
+- Installed source commit: `0b77a1b98794f8341d57685a0e829a3fa175d05f`
+- Installed local skills: `benchmark-paper-template`, `intro-drafter`, `figure-designer`, `pre-submission-reviewer`, `idea-evaluator`
+- License boundary: `CC BY-NC-SA 4.0`; keep use in this academic, non-commercial Benchmark KB context with attribution.
+- `benchmark-paper-template` is the primary route for this Benchmark manuscript.
+- `intro-drafter` is consistency-check only because Benchmark papers use a different Introduction flow from technical papers.
+- `figure-designer` is for manuscript figure planning and QC; it does not create Benchmark result evidence.
+- `pre-submission-reviewer` is for final manuscript audit; it is not scoring evidence.
+- `idea-evaluator` is for scope reassessment; it does not prove method readiness.
+- Boundary: Supervisor-Skills records are not Benchmark result, not scoring evidence, and not method-ranking evidence.
+
 ## 替代说明
 `biomedical-research-framework` 未在本机 skill 目录中发现；本阶段用固定 CSV schema、method card 的证据字段、以及 overclaim/hedging 规则替代其产物。
 

@@ -6,7 +6,7 @@ This project is an independent protocol-first Benchmark knowledge base for recen
 
 Current authoritative plan: `ops/plans/updated_plan_v0.9.md`.
 
-Current version: `1.2.19`.
+Current version: `1.2.20`.
 
 Next planned phase: implement real Wave A adapters/parsers for the v0.31 placeholder-failed methods before any scoring layer is attempted. Do not start additional clone, install, large download, broad GPU execution, or scoring/ranking unless the user explicitly requests that later phase. Additional large downloads and generated outputs must remain in gitignored external/runtime roots.
 
@@ -27,12 +27,18 @@ Use the smallest skill set that covers the task.
 |:---|:---|
 | Maintain KB structure, indexes, logs, raw/kb/wiki/schema boundaries, or `AGENTS.md` | `building-llm-wiki` |
 | Literature review, Zotero/BibTeX provenance, citation checks, claim-evidence review, manuscript pipeline or integrity gate | `academic-research-suite` |
-| Benchmark manuscript structure, Introduction logic, five-pillar audit, section skeleton, pre-submission checklist | `benchmark-paper-template` |
+| Benchmark manuscript structure, Introduction logic, five-pillar audit, section skeleton, pre-submission checklist | `benchmark-paper-template`; Supervisor-Skills `benchmark-paper-template` is the primary route |
+| Benchmark Introduction consistency check after structure is fixed | Supervisor-Skills `intro-drafter` is consistency-check only; do not use it as the primary Benchmark paper template |
+| Manuscript figure planning or result-figure design | Supervisor-Skills `figure-designer` plus local `academic-plotting` / `nature-figure-compliance` when publication figures are generated |
+| Manuscript near-submission audit, AI-tone scan, grammar/LaTeX/figure review | Supervisor-Skills `pre-submission-reviewer` |
+| Research-scope or idea-level reassessment before changing the Benchmark paper thesis | Supervisor-Skills `idea-evaluator` |
 | Chinese academic prose, hedging, overclaim control, or reader-facing report style | `academic-chinese-style` / `nature-language-style` when relevant |
 | Zotero library access or BibTeX export | `zotero:Zotero` and `citation-management`; Zotero writes remain forbidden unless the user explicitly approves |
 | External literature or dataset freshness checks | use web/API verification and cite authoritative sources; keep source libraries read-only |
 
 For broad research-to-paper or multi-stage review tasks, route through `academic-research-suite` first and then use `benchmark-paper-template` for Benchmark-paper-specific structure.
+
+Supervisor-Skills `benchmark-paper-template is the primary route` for Benchmark manuscript structure. Supervisor-Skills `intro-drafter is consistency-check only` and must not replace the Benchmark-specific paper template.
 
 ## Current Artifact Roles
 
@@ -106,6 +112,8 @@ For broad research-to-paper or multi-stage review tasks, route through `academic
 | `benchmark/deployment/pilot_execution_results_v0.31.csv` | v0.31 bounded Wave A execution summary | bounded pilot/parser evidence only; not scoring or Benchmark result |
 | `benchmark/results/pilot_*_v0.31.*` | v0.31 merged method/candidate/run parser rows | compact parser rows only; raw outputs stay gitignored; not method ranking |
 | `ops/audits/pilot_wave_a_execution_audit_v0.31.md` | v0.31 Wave A execution audit | bounded execution/parser boundary only; not Benchmark result |
+| `ops/audits/supervisor_skills_installation_v0.32.md` | Supervisor-Skills installation and memory record | writing-skill routing evidence only; not Benchmark result |
+| `ops/audits/skill_selection.md` | active skill-routing memory | includes HKUSTDial/Supervisor-Skills commit/license notes; not scoring evidence |
 | `ops/plans/protein_design_image_consolidation_plan_v0.13.md` | image consolidation plan | planning artifact only |
 | `ops/plans/adapter_parser_hardening_plan_v0.16.md` | adapter/parser hardening plan | planning artifact only |
 | `ops/audits/docker_environment_assignment_audit_v0.13.md` | Docker/environment assignment audit | readiness finding only; not local reproducibility evidence |
@@ -158,6 +166,7 @@ Current v0.15-v0.30 KB artifacts support only `minimal_smoke_observed`, interfac
 - Do not treat v0.28 external asset rescue, ColabDesign asset gate readiness, DexDesign input-contract extraction, or BindCraft accepted-final external output classification as controlled multi-case Benchmark evidence, scoring evidence, method ranking, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence.
 - Do not treat v0.29 ColabDesign single-case bounded GPU output, DexDesign synthetic prepared D-L fixture, or BindCraft external accepted candidate parser rows as controlled multi-case Benchmark evidence, scoring evidence, method ranking, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence.
 - Do not treat v0.30 pilot target/control/job manifests, execution matrix, or prospective wet-lab panel as execution evidence, scoring evidence, frozen target-set evidence, method ranking, wet-lab validation, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence.
+- Do not treat Supervisor-Skills idea, benchmark, figure, or submission-review guidance as Benchmark execution, scoring evidence, method-ranking evidence, or biological validation evidence.
 - Do not treat watchlist datasets, target candidates, review-only methods, or literature examples as frozen Benchmark targets.
 - Generation ability, ranking/rescoring ability, developability proxies, structural confidence, and biological validation are separate evidence layers.
 

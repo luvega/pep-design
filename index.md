@@ -1,7 +1,7 @@
 # 多肽设计方法 Benchmark 知识库
 
 ## Current Status
-- Project version: 1.2.19
+- Project version: 1.2.20
 - Manuscript outline layer: v1.0
 - Supplementary-source synthesis layer: v1.1
 - Chinese manuscript figure/table embedding layer: v1.2
@@ -26,7 +26,8 @@
 - Bounded generation/parser layer: v0.29 project-local readiness supplement
 - Pilot benchmark design layer: v0.30 planning supplement
 - Bounded Wave A pilot execution/parser layer: v0.31 project-local bounded evidence supplement
-- Repository checkpoint: v1.2.19
+- Supervisor-Skills installation/memory layer: v0.32 manuscript-support supplement
+- Repository checkpoint: v1.2.20
 - Build date: 2026-07-09
 - Time window: 2021-06-03 to 2026-06-03
 - Unique Zotero-derived records after dedupe: 432
@@ -178,6 +179,7 @@
 - [Bounded generation/parser audit v0.29](ops/audits/bounded_generation_parser_audit_v0.29.md)
 - [Pilot benchmark design audit v0.30](ops/audits/pilot_benchmark_design_audit_v0.30.md)
 - [Pilot Wave A execution audit v0.31](ops/audits/pilot_wave_a_execution_audit_v0.31.md)
+- [Supervisor-Skills installation audit v0.32](ops/audits/supervisor_skills_installation_v0.32.md)
 - [Target candidate academic-search audit v0.14](ops/audits/target_candidate_academic_search_audit_v0.14.md)
 - [Target candidate academic-search plan v0.14](ops/plans/target_candidate_academic_search_plan_v0.14.md)
 - [Dataset supplement schema review v0.8](benchmark/input_sets/dataset_supplement_schema_review_v0.8.csv)
@@ -208,6 +210,6 @@
 - [Method landscape patch candidates v1.1](kb/tables/method_landscape_patch_candidates_v1.1.csv)
 
 ## Next Phase
-`ops/plans/updated_plan_v0.9.md` remains the current plan. The manuscript layer now contains separate Chinese and English v1.0 outlines, v1.1 supplementary-source synthesis, v1.2 Chinese figure/table embedding, and v1.3 grant-style mock review planning. v0.12 records external source-only checkouts, v0.13 records Docker image reuse/environment assignment, v0.14 records academic-search-derived method-paper cases and target candidates, v0.15 records external import-level preflight and three minimal Batch A smoke-test summaries, v0.16 records adapter/parser hardening and Batch B target review planning, v0.17 records controlled Batch B pilot gates, v0.18 parses v0.15 outputs into replay fixtures, v0.19 records external method install/example-smoke readiness, v0.20 records method-unblock readiness, v0.21 records bounded adapter smoke plus parser fixture rows for the 10 first-wave methods, v0.22 converts those examples into controlled multi-case fixture target/control/job manifests and priority gates, v0.23 records project-local notebook CLI plus D-Flow readiness findings, v0.24 records one D-Flow fixture-level PepDataset LMDB load test, v0.25 records full PepMerge download plus official LMDB load readiness, v0.26 records D-Flow bounded dry-run plus ColabDesign/BindCraft gate updates, v0.27 records ColabDesign bounded execute asset gate plus DexDesign route audit, v0.28 records ColabDesign AF parameter/target route rescue, DexDesign input-contract extraction and BindCraft accepted-final classification, v0.29 records one ColabDesign single-case bounded generation/parser row, one DexDesign synthetic prepared D-L fixture, and one BindCraft accepted-final standard candidate parser fixture, v0.30 records controlled pilot target/control/job manifests, execution routing, and a prospective wet-lab panel, and v0.31 records bounded Wave A execution/parser rows. These layers keep the 10-method include set unchanged, leave `target_set_v0.csv` unfrozen, perform no scoring or performance comparison, and make no complete Benchmark claim.
+`ops/plans/updated_plan_v0.9.md` remains the current plan. The manuscript layer now contains separate Chinese and English v1.0 outlines, v1.1 supplementary-source synthesis, v1.2 Chinese figure/table embedding, and v1.3 grant-style mock review planning. v0.12 records external source-only checkouts, v0.13 records Docker image reuse/environment assignment, v0.14 records academic-search-derived method-paper cases and target candidates, v0.15 records external import-level preflight and three minimal Batch A smoke-test summaries, v0.16 records adapter/parser hardening and Batch B target review planning, v0.17 records controlled Batch B pilot gates, v0.18 parses v0.15 outputs into replay fixtures, v0.19 records external method install/example-smoke readiness, v0.20 records method-unblock readiness, v0.21 records bounded adapter smoke plus parser fixture rows for the 10 first-wave methods, v0.22 converts those examples into controlled multi-case fixture target/control/job manifests and priority gates, v0.23 records project-local notebook CLI plus D-Flow readiness findings, v0.24 records one D-Flow fixture-level PepDataset LMDB load test, v0.25 records full PepMerge download plus official LMDB load readiness, v0.26 records D-Flow bounded dry-run plus ColabDesign/BindCraft gate updates, v0.27 records ColabDesign bounded execute asset gate plus DexDesign route audit, v0.28 records ColabDesign AF parameter/target route rescue, DexDesign input-contract extraction and BindCraft accepted-final classification, v0.29 records one ColabDesign single-case bounded generation/parser row, one DexDesign synthetic prepared D-L fixture, and one BindCraft accepted-final standard candidate parser fixture, v0.30 records controlled pilot target/control/job manifests, execution routing, and a prospective wet-lab panel, v0.31 records bounded Wave A execution/parser rows, and v0.32 records Supervisor-Skills installation/memory for manuscript support. These layers keep the 10-method include set unchanged, leave `target_set_v0.csv` unfrozen, perform no scoring or performance comparison, and make no complete Benchmark claim.
 
 The next execution phase should replace the v0.31 placeholder-failed Wave A rows with real method adapters/parsers, keep DexDesign/BindCraft as Wave B control routes, and restrict scoring to parser/QC until target controls and negative panels are reviewed.

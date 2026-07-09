@@ -1526,6 +1526,7 @@ REQUIRED_FILES = [
     "ops/audits/bounded_generation_parser_audit_v0.29.md",
     "ops/audits/pilot_benchmark_design_audit_v0.30.md",
     "ops/audits/pilot_wave_a_execution_audit_v0.31.md",
+    "ops/audits/supervisor_skills_installation_v0.32.md",
     "ops/plans/updated_plan_v0.6.md",
     "ops/plans/updated_plan_v0.9.md",
     "ops/plans/updated_plan_v1.3.md",
@@ -1578,6 +1579,7 @@ REQUIRED_FILES = [
     "kb/wiki/benchmark_candidates/_index.md",
     "tests/test_v030_pilot_benchmark_design.py",
     "tests/test_v031_wave_a_pilot.py",
+    "tests/test_v032_supervisor_skills_memory.py",
 ]
 
 METHOD_REQUIRED_TOKENS = [
@@ -1787,6 +1789,9 @@ def main() -> int:
         "building-llm-wiki",
         "academic-research-suite",
         "benchmark-paper-template",
+        "Supervisor-Skills",
+        "benchmark-paper-template is the primary route",
+        "intro-drafter is consistency-check only",
         "Execution Gates",
         "download_performed=no",
         "not_real_benchmark",
@@ -5194,6 +5199,36 @@ def main() -> int:
         if token not in pilot_wave_a_execution_audit_v031_text:
             errors.append(f"pilot_wave_a_execution_audit_v0.31.md missing token {token}")
 
+    supervisor_skills_installation_v032_text = (
+        ROOT / "ops/audits/supervisor_skills_installation_v0.32.md"
+    ).read_text(encoding="utf-8")
+    skill_selection_text = (ROOT / "ops/audits/skill_selection.md").read_text(encoding="utf-8")
+    supervisor_memory_text = "\n".join(
+        [agents_text, skill_selection_text, supervisor_skills_installation_v032_text]
+    )
+    for token in [
+        "Supervisor-Skills",
+        "HKUSTDial/Supervisor-Skills",
+        "0b77a1b98794f8341d57685a0e829a3fa175d05f",
+        "CC BY-NC-SA 4.0",
+        "benchmark-paper-template",
+        "intro-drafter",
+        "figure-designer",
+        "pre-submission-reviewer",
+        "idea-evaluator",
+        "not Benchmark result",
+        "not scoring evidence",
+        "not method-ranking evidence",
+    ]:
+        if token not in supervisor_memory_text:
+            errors.append(f"Supervisor-Skills memory missing token {token}")
+    if "benchmark-paper-template is the primary route" not in agents_text:
+        errors.append("AGENTS.md must record Supervisor-Skills benchmark-paper-template primary route")
+    if "intro-drafter is consistency-check only" not in agents_text:
+        errors.append("AGENTS.md must record Supervisor-Skills intro-drafter consistency-check boundary")
+    if "Restart Codex to pick up new skills" not in supervisor_skills_installation_v032_text:
+        errors.append("supervisor_skills_installation_v0.32.md must remind to restart Codex")
+
     if len(dflow_bounded_candidate_v026_rows) != 1:
         errors.append(
             "dflow_bounded_candidate_outputs_v0.26.csv should contain 1 row, "
@@ -5711,6 +5746,7 @@ def main() -> int:
             "pilot_method_output_v031_rows": len(pilot_method_output_v031_rows),
             "pilot_candidate_output_v031_rows": len(pilot_candidate_output_v031_rows),
             "pilot_run_v031_rows": len(pilot_run_v031_rows),
+            "supervisor_skills_installation_v032_files": 1,
             "method_readiness_v08_rows": len(method_readiness_v08_rows),
             "method_preflight_v010_rows": len(method_preflight_rows),
             "adapter_preflight_v011_rows": len(adapter_preflight_rows),
