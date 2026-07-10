@@ -1,0 +1,13 @@
+{
+  "contract_id": "pep_design_project_acceptance",
+  "contract_version": "1.0.0",
+  "contract_digest": "1a80f7b6b407a941eb5ba6f36c023fd24b2b6cb9186afbb6d2654f9de99d4b15",
+  "profile_id": "governance",
+  "evaluation_id": "evaluation_c3ecefc463b3f5c6a80faedb",
+  "evidence_digest": "ccd9591ea53d910a488e5091860ddd8f4e28eda688a49843417446e5c815e631",
+  "role": "governance_owner",
+  "reviewer_id": "project_owner",
+  "decision": "approved",
+  "rationale": "The project owner explicitly approved this digest-bound governance checkpoint after reviewing the machine report. This decision does not approve failed gates or full-project acceptance.",
+  "reviewed_at": "2026-07-10T11:48:35+08:00"
+}
