@@ -1,5 +1,50 @@
 # Project Log
 
+## [2026-07-11] governance | 对话签核安全收口（待实际批准）
+- 将 source manifest 的 SHA-256 绑定到 Git clean 后实际进入 commit 的 blob；CRLF/text normalization 与 binary blob 均按提交字节验证。
+- Transport、staging、history、diff-check 与 clean-checkout materialization 改用受控配置或隔离 gitdir，阻断 late hooks、clean/smudge/process filters、fsmonitor、external diff/textconv、URL rewrite、replacement refs 与 deprecated grafts。
+- Push 在隔离对象图中验证真实 fast-forward ancestry，再以 card-bound expected-old-OID lease 执行 receive-time CAS，并确认远端 OID；不允许 non-fast-forward 或无条件 force-push。
+- `governance` 与 `current_phase` 复签均优先 supersede 完整 current evaluation context 的最新前序签核；首次签核仍为 `null`，stale predecessor 只在没有 current predecessor 时作为审计链回退。
+- Production signoff 在任何读取或 Git 检查前必须通过 `lstat` direct-regular-file 判定；FIFO、目录、symlink 或其他非普通文件均为 untrusted。
+- Source-only recovery 在 source commit 的临时 clean checkout 中执行 prepare/clean 验证；若 pre-ref 失败留下 staged signoff，只接受与卡片派生 manifest 的 path/mode/blob SHA-256 完全一致的 index，extra/different staged 状态 fail closed，且恢复不重复 source/signoff。
+- 保持边界：尚未生成真实审批卡，尚未提交或 push；`VERSION=1.2.21`，v0.33 仍为 10 条 blocker rows 与 0 parsed/generated candidates。
+
+## [2026-07-10] governance | 对话签核事务（待实际批准）
+- 新增当前受信任 Codex 会话内的审批卡流程：运行 `prepare-review` 和展示卡片前必须停止全部 subagents 并确认其 quiescent；只有展示未过期卡后的消息经 NFC 规范化和 trim 后完整内容恰好为 `批准` 才有效，该会话信任不是 cryptographic identity。卡片展示后任何介入的非精确 `批准` 用户消息都会使卡失效，必须重新 prepare 并展示新卡。
+- 固定 bundle 同时审阅 `governance` 与 `current_phase`，并生成两份 profile-bound `governance_owner` signoff；任何签核均不能 waiver Critical/Major failure，也不批准 `release_checkpoint` 或 `full_project`。
+- 事务绑定完整 evaluation/digests、source manifest、proposed tree、remote baseline 和 fixed rationales；仅当 source manifest 非空时在当前 `main` 创建 source checkpoint，空 manifest 复用卡片 HEAD，随后创建一个 signoff commit，并只向 `git@github.com:luvega/pep-design.git` 的 `refs/heads/main` 执行显式 fast-forward push。最终 receive-time CAS/隔离边界见 2026-07-11 安全收口记录。
+- Generated report、审批卡和 journal 保持 non-evidence；production signoff 必须是 `harness/signoffs/` 下 committed、clean、非 symlink 的直接 regular file。Durable `local_committed_push_failed`/`verified` 只用 `resume-push` 恢复且无需重新批准：final OID 已存在时复用且不重复 commits/signoffs；只有 source OID 时先重验 source，再创建或复用缺失 signoff，并至多创建一个 signoff commit，且不重复 source；`verified` 可在 remote 已为 final OID 时协调实际成功但结果不明确的 push，不重复 push。
+- 设计、测试、编码、文档及独立 spec/quality review 采用 `subagent-driven-development` 分工完成。
+- 保持边界：未授权 clone、install、download、GPU generation、scoring 或 ranking；v0.33 仍为 10 条 blocker rows、0 parsed/generated candidates，`VERSION=1.2.21` 直到实际 digest 获 governance approval 后才可准备下一 release candidate。
+
+## [2026-07-10] governance | harness engineering v1.0 unsigned checkpoint
+- Added a standard-library acceptance harness with four profiles, eight evidence domains, dependency-aware gates, deterministic evidence digests, and separate `harness_status` / `project_status` axes.
+- Added tracked semantic derivations for D-Flow train overlap, the unconditional RFdiffusion `[12-18]` example, and the PepMirror mirror-transformation gap.
+- Added read-only `check`, explicit `render`, digest-bound signoff validation, generated JSON/Markdown reports, and focused regression/adversarial tests.
+- Preserved the pre-harness `AGENTS.md` as a SHA-256-bound migration snapshot and replaced the active file with a concise progressive-disclosure map.
+- Kept `VERSION=1.2.21` pending human acceptance. No generation, scoring, ranking, target-set promotion, download, install, or wet-lab evidence was added.
+
+## [2026-07-10] release | v1.2.21 Wave A adapter/parser completion attempt
+- Bumped project version to `1.2.21`.
+- Added v0.33 runner/parser scripts:
+  `scripts/run_v033_wave_a_pilot.py` and
+  `scripts/parse_v033_pilot_outputs.py`.
+- Executed v0.33 dry-run and lightweight adapter/parser wrapper over the 10
+  v0.31 placeholder-failed Wave A jobs.
+- Added compact v0.33 tables:
+  `benchmark/deployment/pilot_execution_results_v0.33.csv`,
+  `benchmark/results/pilot_method_output_manifest_v0.33.csv`,
+  `benchmark/results/pilot_candidate_outputs_v0.33.csv`,
+  `benchmark/results/pilot_run_v0.33.csv`, and
+  `benchmark/results/pilot_v033_merge_summary.json`.
+- Recorded v0.33 status as 10 method-specific
+  `no_supported_output_found` blocker rows and 0 parsed/generated candidates.
+- Added `ops/plans/updated_plan_v0.33.md` and
+  `ops/audits/wave_a_adapter_parser_completion_audit_v0.33.md`.
+- Extended validator and tests for the v0.33 adapter/parser completion layer.
+- Boundary: v0.33 is not Benchmark result evidence, not scoring evidence, not
+  method-ranking evidence, and not wet-lab validation evidence.
+
 ## [2026-07-09] release | v1.2.20 Supervisor-Skills installation memory
 - Bumped project version to `1.2.20`.
 - Installed selected Supervisor-Skills from `HKUSTDial/Supervisor-Skills` at

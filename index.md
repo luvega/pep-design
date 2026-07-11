@@ -1,7 +1,7 @@
 # 多肽设计方法 Benchmark 知识库
 
 ## Current Status
-- Project version: 1.2.20
+- Project version: 1.2.21
 - Manuscript outline layer: v1.0
 - Supplementary-source synthesis layer: v1.1
 - Chinese manuscript figure/table embedding layer: v1.2
@@ -27,14 +27,32 @@
 - Pilot benchmark design layer: v0.30 planning supplement
 - Bounded Wave A pilot execution/parser layer: v0.31 project-local bounded evidence supplement
 - Supervisor-Skills installation/memory layer: v0.32 manuscript-support supplement
-- Repository checkpoint: v1.2.20
-- Build date: 2026-07-09
+- Wave A adapter/parser completion attempt layer: v0.33 project-local bounded blocker supplement
+- Repository checkpoint: v1.2.21
+- Evidence/release checkpoint build date: 2026-07-09（当前对话 harness workflow 更新于 2026-07-10）
 - Time window: 2021-06-03 to 2026-06-03
 - Unique Zotero-derived records after dedupe: 432
 - First-wave included methods: 10
 - Project boundary: this folder is the working KB; Zotero/EndNote/PD-wiki remain source systems.
+- Acceptance contract: v1.0.0; unsigned current-phase report is machine-valid and pending `governance_owner` signoff.
+- Full-project acceptance: not accepted; controlled generation, target/control, scoring, and empirical findings remain incomplete.
+
+## 对话签核
+
+运行 `prepare-review` 和展示审批卡前，必须停止全部 subagents 并确认其 quiescent。当前对话工作流只在同一受信任 Codex 会话展示未过期审批卡后，接受经 Unicode NFC 规范化并 trim 后完整内容恰好为 `批准` 的回复；该信任不是 cryptographic identity。卡片展示后任何介入的非精确 `批准` 用户消息都会使卡失效，必须重新 prepare 并展示新卡。固定 bundle 为 `governance` + `current_phase`，最终写入两份 profile-bound signoff，不能 waiver Critical/Major failure，也不批准 `release_checkpoint` 或 `full_project`。
+
+事务仅在 source manifest 非空时于当前 `main` 创建 source checkpoint；manifest 绑定 Git clean 后实际提交的 blob SHA-256，空 manifest 复用卡片 HEAD，随后创建一个 signoff commit。Transport、staging、history 和 clean-checkout 均使用受控配置/隔离 gitdir；重验后通过真实 ancestry 检查与 card-bound expected-old-OID lease，向 `git@github.com:luvega/pep-design.git` 的 `refs/heads/main` 执行显式 fast-forward push，不允许 non-fast-forward 或无条件 force-push。Generated report、card 和 journal 均为 non-evidence；production signoff 必须是 `harness/signoffs/` 下 committed、clean 的直接 regular file。
+
+Durable `local_committed_push_failed` 或 `verified` 只通过 `resume-push --card-id <card_id>` 恢复。已有 final OID 时复用且不重复 commits/signoffs；仅有 source OID 时在 source 的临时 clean checkout 中重验，再创建或复用缺失 signoff，并至多创建一个 signoff commit。若 index 已暂存 signoff，只接受与 card-derived manifest 的路径、mode、blob SHA-256 完全一致的状态；extra/different staged 内容一律拒绝。`verified` 在 remote 已为 final OID 时可协调实际成功但结果不明确的 push，仅推进 journal 而不重复 push。
+
+该流程不授权 clone、install、download、GPU generation、scoring 或 ranking。v0.33 仍记录 10 条 blockers 和 0 parsed/generated candidates；版本保持 `1.2.21`，直到实际 digest 获 governance approval 后才可准备后续 release candidate。
 
 ## Navigation
+- [Project acceptance contract](harness/PROJECT_ACCEPTANCE.md)
+- [Current acceptance report](ops/acceptance/project_acceptance_report.md)
+- [Harness engineering plan v1.0](ops/plans/harness_engineering_plan_v1.0.md)
+- [Machine acceptance contract JSON](harness/contracts/project_acceptance_v1.json)
+- [Harness signoff 与对话审批规则](harness/signoffs/README.md)
 - [Raw source snapshots](sources/raw_snapshots/_index.md)
 - [References and search log](kb/references/search_log.md)
 - [Literature cards](kb/wiki/literature/_index.md)
@@ -73,7 +91,8 @@
 - [Target candidate matrix v0.5](benchmark/input_sets/target_candidate_matrix_v0.5.csv)
 - [ARS review v0.6](ops/audits/academic_research_suite_review_v0.6.md)
 - [Updated plan v0.6](ops/plans/updated_plan_v0.6.md)
-- [Current updated plan v0.9](ops/plans/updated_plan_v0.9.md)
+- [Historical updated plan v0.9](ops/plans/updated_plan_v0.9.md)
+- [Current updated plan v0.33](ops/plans/updated_plan_v0.33.md)
 - [Grant-style mock review v1.3](ops/audits/grant_style_mock_review_v1.3.md)
 - [Updated plan v1.3](ops/plans/updated_plan_v1.3.md)
 - [Grant review action items v1.3](kb/tables/grant_review_action_items_v1.3.csv)
@@ -119,6 +138,7 @@
 - [Bounded generation/parser evidence v0.29](benchmark/deployment/bounded_generation_parser_v0.29.csv)
 - [Pilot benchmark execution matrix v0.30](benchmark/deployment/pilot_execution_matrix_v0.30.csv)
 - [Pilot Wave A execution results v0.31](benchmark/deployment/pilot_execution_results_v0.31.csv)
+- [Pilot Wave A adapter/parser execution results v0.33](benchmark/deployment/pilot_execution_results_v0.33.csv)
 - [Batch A replay method output manifest v0.18](benchmark/results/batch_a_replay_method_output_manifest_v0.18.csv)
 - [Batch A replay candidate outputs v0.18](benchmark/results/batch_a_replay_candidate_outputs_v0.18.csv)
 - [Batch A replay run rows v0.18](benchmark/results/batch_a_replay_run_v0.18.csv)
@@ -135,6 +155,10 @@
 - [Pilot candidate outputs v0.31](benchmark/results/pilot_candidate_outputs_v0.31.csv)
 - [Pilot run rows v0.31](benchmark/results/pilot_run_v0.31.csv)
 - [Pilot merge summary v0.31](benchmark/results/pilot_v031_merge_summary.json)
+- [Pilot method output manifest v0.33](benchmark/results/pilot_method_output_manifest_v0.33.csv)
+- [Pilot candidate outputs v0.33](benchmark/results/pilot_candidate_outputs_v0.33.csv)
+- [Pilot run rows v0.33](benchmark/results/pilot_run_v0.33.csv)
+- [Pilot merge summary v0.33](benchmark/results/pilot_v033_merge_summary.json)
 - [Multi-case fixture target manifest v0.22](benchmark/input_sets/multi_case_fixture_target_manifest_v0.22.csv)
 - [Multi-case fixture control manifest v0.22](benchmark/input_sets/multi_case_fixture_control_manifest_v0.22.csv)
 - [Multi-case fixture job manifest v0.22](benchmark/input_sets/multi_case_fixture_job_manifest_v0.22.csv)
@@ -180,6 +204,7 @@
 - [Pilot benchmark design audit v0.30](ops/audits/pilot_benchmark_design_audit_v0.30.md)
 - [Pilot Wave A execution audit v0.31](ops/audits/pilot_wave_a_execution_audit_v0.31.md)
 - [Supervisor-Skills installation audit v0.32](ops/audits/supervisor_skills_installation_v0.32.md)
+- [Wave A adapter/parser completion audit v0.33](ops/audits/wave_a_adapter_parser_completion_audit_v0.33.md)
 - [Target candidate academic-search audit v0.14](ops/audits/target_candidate_academic_search_audit_v0.14.md)
 - [Target candidate academic-search plan v0.14](ops/plans/target_candidate_academic_search_plan_v0.14.md)
 - [Dataset supplement schema review v0.8](benchmark/input_sets/dataset_supplement_schema_review_v0.8.csv)
@@ -210,6 +235,6 @@
 - [Method landscape patch candidates v1.1](kb/tables/method_landscape_patch_candidates_v1.1.csv)
 
 ## Next Phase
-`ops/plans/updated_plan_v0.9.md` remains the current plan. The manuscript layer now contains separate Chinese and English v1.0 outlines, v1.1 supplementary-source synthesis, v1.2 Chinese figure/table embedding, and v1.3 grant-style mock review planning. v0.12 records external source-only checkouts, v0.13 records Docker image reuse/environment assignment, v0.14 records academic-search-derived method-paper cases and target candidates, v0.15 records external import-level preflight and three minimal Batch A smoke-test summaries, v0.16 records adapter/parser hardening and Batch B target review planning, v0.17 records controlled Batch B pilot gates, v0.18 parses v0.15 outputs into replay fixtures, v0.19 records external method install/example-smoke readiness, v0.20 records method-unblock readiness, v0.21 records bounded adapter smoke plus parser fixture rows for the 10 first-wave methods, v0.22 converts those examples into controlled multi-case fixture target/control/job manifests and priority gates, v0.23 records project-local notebook CLI plus D-Flow readiness findings, v0.24 records one D-Flow fixture-level PepDataset LMDB load test, v0.25 records full PepMerge download plus official LMDB load readiness, v0.26 records D-Flow bounded dry-run plus ColabDesign/BindCraft gate updates, v0.27 records ColabDesign bounded execute asset gate plus DexDesign route audit, v0.28 records ColabDesign AF parameter/target route rescue, DexDesign input-contract extraction and BindCraft accepted-final classification, v0.29 records one ColabDesign single-case bounded generation/parser row, one DexDesign synthetic prepared D-L fixture, and one BindCraft accepted-final standard candidate parser fixture, v0.30 records controlled pilot target/control/job manifests, execution routing, and a prospective wet-lab panel, v0.31 records bounded Wave A execution/parser rows, and v0.32 records Supervisor-Skills installation/memory for manuscript support. These layers keep the 10-method include set unchanged, leave `target_set_v0.csv` unfrozen, perform no scoring or performance comparison, and make no complete Benchmark claim.
+`ops/plans/updated_plan_v0.33.md` is the current plan. The manuscript layer now contains separate Chinese and English v1.0 outlines, v1.1 supplementary-source synthesis, v1.2 Chinese figure/table embedding, and v1.3 grant-style mock review planning. v0.12 records external source-only checkouts, v0.13 records Docker image reuse/environment assignment, v0.14 records academic-search-derived method-paper cases and target candidates, v0.15 records external import-level preflight and three minimal Batch A smoke-test summaries, v0.16 records adapter/parser hardening and Batch B target review planning, v0.17 records controlled Batch B pilot gates, v0.18 parses v0.15 outputs into replay fixtures, v0.19 records external method install/example-smoke readiness, v0.20 records method-unblock readiness, v0.21 records bounded adapter smoke plus parser fixture rows for the 10 first-wave methods, v0.22 converts those examples into controlled multi-case fixture target/control/job manifests and priority gates, v0.23 records project-local notebook CLI plus D-Flow readiness findings, v0.24 records one D-Flow fixture-level PepDataset LMDB load test, v0.25 records full PepMerge download plus official LMDB load readiness, v0.26 records D-Flow bounded dry-run plus ColabDesign/BindCraft gate updates, v0.27 records ColabDesign bounded execute asset gate plus DexDesign route audit, v0.28 records ColabDesign AF parameter/target route rescue, DexDesign input-contract extraction and BindCraft accepted-final classification, v0.29 records one ColabDesign single-case bounded generation/parser row, one DexDesign synthetic prepared D-L fixture, and one BindCraft accepted-final standard candidate parser fixture, v0.30 records controlled pilot target/control/job manifests, execution routing, and a prospective wet-lab panel, v0.31 records bounded Wave A execution/parser rows, v0.32 records Supervisor-Skills installation/memory for manuscript support, and v0.33 records method-specific no-supported-output adapter/parser blocker rows for the 10 v0.31 placeholder-failed jobs. These layers keep the 10-method include set unchanged, leave `target_set_v0.csv` unfrozen, perform no scoring or performance comparison, and make no complete Benchmark claim.
 
-The next execution phase should replace the v0.31 placeholder-failed Wave A rows with real method adapters/parsers, keep DexDesign/BindCraft as Wave B control routes, and restrict scoring to parser/QC until target controls and negative panels are reviewed.
+The next execution phase should implement real generation entrypoints for the v0.33 no-supported-output blockers, keep DexDesign/BindCraft as Wave B control routes, and restrict scoring until parseable candidates, target controls and negative panels are reviewed.

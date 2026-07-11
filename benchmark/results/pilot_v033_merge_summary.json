@@ -1,0 +1,8 @@
+{
+  "candidate_rows": 10,
+  "evidence_boundary": "Bounded Wave A adapter/parser completion merge only; not Benchmark result; not scoring evidence",
+  "execution_rows": 10,
+  "method_rows": 10,
+  "run_rows": 10,
+  "wave_a_jobs": 10
+}

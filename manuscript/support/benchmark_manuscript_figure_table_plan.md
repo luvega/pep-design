@@ -155,6 +155,29 @@ Columns:
 
 Message: metrics must be interpreted according to output type; sequence-only methods require different treatment from structure-generating methods, and developability proxies do not equal experimental developability.
 
+## Table 5. Bounded Pilot Parser And Adapter Status
+
+Source: `benchmark/deployment/pilot_execution_results_v0.31.csv`,
+`benchmark/deployment/pilot_execution_results_v0.33.csv`,
+`benchmark/results/pilot_candidate_outputs_v0.31.csv`, and
+`benchmark/results/pilot_candidate_outputs_v0.33.csv`.
+
+Columns:
+- evidence layer
+- method
+- target fixture
+- seed count
+- parser status
+- active blocker reason
+- evidence boundary
+- next action
+
+Message: v0.31 provides bounded parser evidence for PepMLM and ColabDesign and
+records placeholder failures for five other methods. v0.33 converts those
+placeholder failures into method-specific `no_supported_output_found` blocker
+rows. This table is an adapter/parser readiness table, not a performance
+ranking or scoring result.
+
 ## Extended Data
 
 - Extended Data 1: search query blocks and screening counts.

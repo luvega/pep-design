@@ -3,14 +3,55 @@
 
 from __future__ import annotations
 
+import argparse
 import csv
 import json
+import os
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from harness.engine.path_policy import is_acceptance_state_path
+
+
+_GIT_CONFIG_ARGUMENTS = (
+    "-c",
+    "core.hooksPath=/dev/null",
+    "-c",
+    "core.fsmonitor=false",
+    "-c",
+    "core.attributesFile=/dev/null",
+)
+
+
+def _sanitized_git_environment() -> dict[str, str]:
+    environment = {
+        key: value
+        for key, value in os.environ.items()
+        if key in {"LANG", "TMPDIR", "TMP", "TEMP"} or key.startswith("LC_")
+    }
+    environment.update(
+        {
+            "PATH": os.defpath,
+            "HOME": os.devnull,
+            "XDG_CONFIG_HOME": os.devnull,
+            "GIT_ATTR_NOSYSTEM": "1",
+            "GIT_CONFIG_GLOBAL": os.devnull,
+            "GIT_CONFIG_NOSYSTEM": "1",
+            "GIT_LITERAL_PATHSPECS": "1",
+            "GIT_NO_REPLACE_OBJECTS": "1",
+            "GIT_OPTIONAL_LOCKS": "0",
+            "GIT_TERMINAL_PROMPT": "0",
+        }
+    )
+    return environment
+
 
 MASTER_HEADERS = [
     "source_id",
@@ -1363,8 +1404,17 @@ PILOT_RUN_V031_HEADERS = [
 
 REQUIRED_FILES = [
     "AGENTS.md",
+    "harness/contracts/project_acceptance_v1.json",
+    "harness/registry/artifacts_v1.json",
+    "harness/registry/claims_v1.json",
+    "harness/registry/migration_parity_v1.json",
+    "harness/policies/legacy_agents_v1.md",
+    "harness/signoffs/README.md",
+    "harness/signoffs/signoff.schema.json",
     "index.md",
     "ops/log.md",
+    "ops/plans/harness_engineering_plan_v1.0.md",
+    "scripts/run_project_acceptance.py",
     "scripts/parse_batch_a_replay_fixtures.py",
     "scripts/collect_v019_method_smokes.py",
     "scripts/collect_v020_method_unblock_smokes.py",
@@ -1379,6 +1429,8 @@ REQUIRED_FILES = [
     "scripts/parse_bindcraft_accepted_outputs.py",
     "scripts/run_v031_wave_a_pilot.py",
     "scripts/parse_v031_pilot_outputs.py",
+    "scripts/run_v033_wave_a_pilot.py",
+    "scripts/parse_v033_pilot_outputs.py",
     "benchmark/README.md",
     "benchmark/availability/README.md",
     "benchmark/availability/link_availability_matrix_v0.5.csv",
@@ -1457,6 +1509,7 @@ REQUIRED_FILES = [
     "benchmark/deployment/bounded_generation_parser_v0.29.csv",
     "benchmark/deployment/pilot_execution_matrix_v0.30.csv",
     "benchmark/deployment/pilot_execution_results_v0.31.csv",
+    "benchmark/deployment/pilot_execution_results_v0.33.csv",
     "benchmark/deployment/method_readiness_review_v0.8.csv",
     "benchmark/deployment/method_preflight_status_v0.10.csv",
     "benchmark/deployment/adapter_preflight_status_v0.11.csv",
@@ -1485,6 +1538,10 @@ REQUIRED_FILES = [
     "benchmark/results/pilot_candidate_outputs_v0.31.csv",
     "benchmark/results/pilot_run_v0.31.csv",
     "benchmark/results/pilot_v031_merge_summary.json",
+    "benchmark/results/pilot_method_output_manifest_v0.33.csv",
+    "benchmark/results/pilot_candidate_outputs_v0.33.csv",
+    "benchmark/results/pilot_run_v0.33.csv",
+    "benchmark/results/pilot_v033_merge_summary.json",
     "sources/raw_snapshots/_index.md",
     "kb/references/references.bib",
     "kb/references/zotero-map.tsv",
@@ -1527,8 +1584,10 @@ REQUIRED_FILES = [
     "ops/audits/pilot_benchmark_design_audit_v0.30.md",
     "ops/audits/pilot_wave_a_execution_audit_v0.31.md",
     "ops/audits/supervisor_skills_installation_v0.32.md",
+    "ops/audits/wave_a_adapter_parser_completion_audit_v0.33.md",
     "ops/plans/updated_plan_v0.6.md",
     "ops/plans/updated_plan_v0.9.md",
+    "ops/plans/updated_plan_v0.33.md",
     "ops/plans/updated_plan_v1.3.md",
     "ops/plans/server_preflight_plan_v0.10.md",
     "ops/plans/server_from_scratch_run_plan_v0.10.md",
@@ -1580,6 +1639,7 @@ REQUIRED_FILES = [
     "tests/test_v030_pilot_benchmark_design.py",
     "tests/test_v031_wave_a_pilot.py",
     "tests/test_v032_supervisor_skills_memory.py",
+    "tests/test_v033_wave_a_adapter_completion.py",
 ]
 
 METHOD_REQUIRED_TOKENS = [
@@ -1686,6 +1746,8 @@ def check_markdown_links(errors: list[str]) -> int:
     link_pattern = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
     for path in ROOT.rglob("*.md"):
         rel_path = path.relative_to(ROOT)
+        if is_acceptance_state_path(rel_path):
+            continue
         if rel_path.parts and rel_path.parts[0] in RUNTIME_MARKDOWN_SKIP_DIRS:
             continue
         if len(rel_path.parts) >= 2 and rel_path.parts[:2] == ("sources", "raw_snapshots"):
@@ -1699,8 +1761,10 @@ def check_markdown_links(errors: list[str]) -> int:
                 continue
             target_path = (path.parent / target).resolve()
             try:
-                target_path.relative_to(ROOT.resolve())
+                target_relative = target_path.relative_to(ROOT.resolve())
             except ValueError:
+                continue
+            if is_acceptance_state_path(target_relative):
                 continue
             checked += 1
             if not target_path.exists():
@@ -1740,15 +1804,26 @@ def has_unqualified_forbidden_wording(text: str, phrase: str) -> bool:
 
 def check_tracked_large_or_forbidden_files(errors: list[str]) -> int:
     completed = subprocess.run(
-        ["git", "ls-files", "--cached", "--others", "--exclude-standard"],
+        [
+            "git",
+            *_GIT_CONFIG_ARGUMENTS,
+            "ls-files",
+            "--cached",
+            "--others",
+            "--exclude-standard",
+        ],
         cwd=ROOT,
         check=True,
         capture_output=True,
         text=True,
         encoding="utf-8",
+        timeout=30,
+        env=_sanitized_git_environment(),
     )
     checked = 0
     for rel in completed.stdout.splitlines():
+        if is_acceptance_state_path(rel):
+            continue
         path = ROOT / rel
         if not path.is_file():
             continue
@@ -1763,7 +1838,18 @@ def check_tracked_large_or_forbidden_files(errors: list[str]) -> int:
     return checked
 
 
-def main() -> int:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--no-write-report",
+        action="store_true",
+        help="Run all checks and print JSON without updating the tracked report.",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
     errors: list[str] = []
     warnings: list[str] = []
 
@@ -1773,12 +1859,13 @@ def main() -> int:
 
     if errors:
         result = {"status": "fail", "errors": errors, "warnings": warnings}
-        (ROOT / "ops/validation/wiki_validation_report.md").write_text(
-            "# Wiki Validation Report\n\n```json\n"
-            + json.dumps(result, ensure_ascii=False, indent=2)
-            + "\n```\n",
-            encoding="utf-8",
-        )
+        if not args.no_write_report:
+            (ROOT / "ops/validation/wiki_validation_report.md").write_text(
+                "# Wiki Validation Report\n\n```json\n"
+                + json.dumps(result, ensure_ascii=False, indent=2)
+                + "\n```\n",
+                encoding="utf-8",
+            )
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 1
 
@@ -2137,6 +2224,11 @@ def main() -> int:
         "benchmark/deployment/pilot_execution_results_v0.31.csv",
         PILOT_EXECUTION_RESULTS_V031_HEADERS,
     )
+    pilot_execution_results_v033_rows = check_headers(
+        errors,
+        "benchmark/deployment/pilot_execution_results_v0.33.csv",
+        PILOT_EXECUTION_RESULTS_V031_HEADERS,
+    )
     method_readiness_v08_rows = check_headers(
         errors,
         "benchmark/deployment/method_readiness_review_v0.8.csv",
@@ -2275,6 +2367,21 @@ def main() -> int:
     pilot_run_v031_rows = check_headers(
         errors,
         "benchmark/results/pilot_run_v0.31.csv",
+        PILOT_RUN_V031_HEADERS,
+    )
+    pilot_method_output_v033_rows = check_headers(
+        errors,
+        "benchmark/results/pilot_method_output_manifest_v0.33.csv",
+        METHOD_OUTPUT_MANIFEST_HEADERS,
+    )
+    pilot_candidate_output_v033_rows = check_headers(
+        errors,
+        "benchmark/results/pilot_candidate_outputs_v0.33.csv",
+        CANDIDATE_OUTPUT_HEADERS,
+    )
+    pilot_run_v033_rows = check_headers(
+        errors,
+        "benchmark/results/pilot_run_v0.33.csv",
         PILOT_RUN_V031_HEADERS,
     )
     _map_rows = check_headers(errors, "kb/references/zotero-map.tsv", ["zotero_key", "bibtex_key", "title"], delimiter="\t")
@@ -2744,13 +2851,20 @@ def main() -> int:
             if not row.get(required_field):
                 errors.append(f"{row.get('method')}: v0.9 method landscape row missing {required_field}")
 
-    current_plan_text = (ROOT / "ops/plans/updated_plan_v0.9.md").read_text(encoding="utf-8")
-    for token in ["Current Authoritative Plan Files", "Benchmark Paper Template", "v0.9 Method Landscape Policy", "Next Work Package", "Claim Gate"]:
+    current_plan_text = (ROOT / "ops/plans/updated_plan_v0.33.md").read_text(encoding="utf-8")
+    for token in [
+        "Updated Plan v0.33",
+        "Current Position",
+        "v0.33 Work Package",
+        "Execution Boundary",
+        "Next Work Package",
+        "Claim Gate",
+    ]:
         if token not in current_plan_text:
-            errors.append(f"updated_plan_v0.9.md missing required section {token}")
+            errors.append(f"updated_plan_v0.33.md missing required section {token}")
     for forbidden in ["download_performed=yes", "smoke_test_ready | reached", "target_set_v0.csv 已冻结"]:
         if forbidden in current_plan_text:
-            errors.append(f"updated_plan_v0.9.md contains overclaim boundary violation: {forbidden}")
+            errors.append(f"updated_plan_v0.33.md contains overclaim boundary violation: {forbidden}")
 
     benchmark_template_text = (ROOT / "manuscript/support/benchmark_template_audit.md").read_text(encoding="utf-8")
     for token in ["Five-Pillar Completeness Table", "Introduction Six-Part Logic Chain", "Pre-Submission Self-Check", "NOT READY"]:
@@ -5199,6 +5313,94 @@ def main() -> int:
         if token not in pilot_wave_a_execution_audit_v031_text:
             errors.append(f"pilot_wave_a_execution_audit_v0.31.md missing token {token}")
 
+    v031_placeholder_job_ids = {
+        row.get("job_id", "")
+        for row in pilot_candidate_output_v031_rows
+        if row.get("parse_status") == "failed"
+        and row.get("status_reason") == "adapter_execution_failed_or_not_implemented_exit_86"
+    }
+    v033_table_sets = {
+        "pilot_execution_results_v0.33.csv": {row.get("job_id", "") for row in pilot_execution_results_v033_rows},
+        "pilot_method_output_manifest_v0.33.csv": {row.get("job_id", "") for row in pilot_method_output_v033_rows},
+        "pilot_candidate_outputs_v0.33.csv": {row.get("job_id", "") for row in pilot_candidate_output_v033_rows},
+        "pilot_run_v0.33.csv": {row.get("parent_job_id", "") for row in pilot_run_v033_rows},
+    }
+    for artifact_name, observed_job_ids in v033_table_sets.items():
+        if observed_job_ids != v031_placeholder_job_ids:
+            errors.append(f"{artifact_name} job set must exactly match v0.31 placeholder-failed Wave A jobs")
+    for artifact_name, rows in [
+        ("pilot_execution_results_v0.33.csv", pilot_execution_results_v033_rows),
+        ("pilot_method_output_manifest_v0.33.csv", pilot_method_output_v033_rows),
+        ("pilot_candidate_outputs_v0.33.csv", pilot_candidate_output_v033_rows),
+        ("pilot_run_v0.33.csv", pilot_run_v033_rows),
+    ]:
+        if len(rows) != 10:
+            errors.append(f"{artifact_name} should contain 10 v0.33 adapter completion rows, found {len(rows)}")
+        for row in rows:
+            text = " ".join(row.values()).lower()
+            if "not benchmark result" not in text or "not scoring evidence" not in text:
+                errors.append(f"{artifact_name}: {row.get('job_id') or row.get('parent_job_id') or row.get('design_id')} missing evidence boundary")
+            for forbidden in ["benchmark_completed", "best_performing", "performance_ranking", "benchmark_ready", "smoke_test_ready", "wet_lab_validated"]:
+                if forbidden in text:
+                    errors.append(
+                        f"{artifact_name}: {row.get('job_id') or row.get('parent_job_id') or row.get('design_id')} overclaims {forbidden}"
+                    )
+    if sum(1 for row in pilot_execution_results_v033_rows if row.get("status") == "failed") != 10:
+        errors.append("pilot_execution_results_v0.33.csv should contain 10 failed rows")
+    if sum(1 for row in pilot_method_output_v033_rows if row.get("parser_status") == "failed") != 10:
+        errors.append("pilot_method_output_manifest_v0.33.csv should contain 10 failed parser rows")
+    if sum(1 for row in pilot_candidate_output_v033_rows if row.get("parse_status") == "failed") != 10:
+        errors.append("pilot_candidate_outputs_v0.33.csv should contain 10 failed candidate rows")
+    if sum(1 for row in pilot_run_v033_rows if row.get("status") == "failed") != 10:
+        errors.append("pilot_run_v0.33.csv should contain 10 failed run rows")
+    v033_failed_methods = {
+        row.get("method", "")
+        for row in pilot_candidate_output_v033_rows
+        if row.get("parse_status") == "failed"
+    }
+    if v033_failed_methods != {"DiffPepBuilder", "PepGLAD", "D-Flow / PeptideDesign", "PepMirror", "RFdiffusion + ProteinMPNN"}:
+        errors.append("pilot_candidate_outputs_v0.33.csv failed methods must be the five v0.31 placeholder methods")
+    for row in pilot_candidate_output_v033_rows:
+        reason = row.get("status_reason", "")
+        if reason == "adapter_execution_failed_or_not_implemented_exit_86":
+            errors.append(f"{row.get('design_id')}: v0.33 rows must not reuse v0.31 placeholder exit_86 reason")
+        if not reason.endswith("_adapter_attempt_no_supported_output_found"):
+            errors.append(f"{row.get('design_id')}: v0.33 status_reason must record method-specific no-supported-output blocker")
+    for row in pilot_method_output_v033_rows:
+        if row.get("execution_stage") != "bounded_wave_a_adapter_completion_v0.33":
+            errors.append(f"{row.get('job_id')}: v0.33 method row has wrong execution_stage")
+    summary_v033_path = ROOT / "benchmark/results/pilot_v033_merge_summary.json"
+    try:
+        summary_v033 = json.loads(summary_v033_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        errors.append(f"pilot_v033_merge_summary.json is not valid JSON: {exc}")
+        summary_v033 = {}
+    for key, expected in {
+        "wave_a_jobs": 10,
+        "method_rows": 10,
+        "candidate_rows": 10,
+        "run_rows": 10,
+        "execution_rows": 10,
+    }.items():
+        if summary_v033.get(key) != expected:
+            errors.append(f"pilot_v033_merge_summary.json {key} should be {expected}")
+    if "not Benchmark result" not in summary_v033.get("evidence_boundary", ""):
+        errors.append("pilot_v033_merge_summary.json must preserve not Benchmark result boundary")
+
+    wave_a_adapter_parser_completion_audit_v033_text = (
+        ROOT / "ops/audits/wave_a_adapter_parser_completion_audit_v0.33.md"
+    ).read_text(encoding="utf-8")
+    for token in [
+        "Wave A Adapter/Parser Completion Audit v0.33",
+        "10 v0.31 placeholder-failed jobs",
+        "10 failed",
+        "no_supported_output_found",
+        "not Benchmark result",
+        "not scoring evidence",
+    ]:
+        if token not in wave_a_adapter_parser_completion_audit_v033_text:
+            errors.append(f"wave_a_adapter_parser_completion_audit_v0.33.md missing token {token}")
+
     supervisor_skills_installation_v032_text = (
         ROOT / "ops/audits/supervisor_skills_installation_v0.32.md"
     ).read_text(encoding="utf-8")
@@ -5747,6 +5949,10 @@ def main() -> int:
             "pilot_candidate_output_v031_rows": len(pilot_candidate_output_v031_rows),
             "pilot_run_v031_rows": len(pilot_run_v031_rows),
             "supervisor_skills_installation_v032_files": 1,
+            "pilot_execution_results_v033_rows": len(pilot_execution_results_v033_rows),
+            "pilot_method_output_v033_rows": len(pilot_method_output_v033_rows),
+            "pilot_candidate_output_v033_rows": len(pilot_candidate_output_v033_rows),
+            "pilot_run_v033_rows": len(pilot_run_v033_rows),
             "method_readiness_v08_rows": len(method_readiness_v08_rows),
             "method_preflight_v010_rows": len(method_preflight_rows),
             "adapter_preflight_v011_rows": len(adapter_preflight_rows),
@@ -5788,7 +5994,10 @@ def main() -> int:
     report += "\n\n## Raw JSON\n\n```json\n"
     report += json.dumps(result, ensure_ascii=False, indent=2)
     report += "\n```\n"
-    (ROOT / "ops/validation/wiki_validation_report.md").write_text(report, encoding="utf-8")
+    if not args.no_write_report:
+        (ROOT / "ops/validation/wiki_validation_report.md").write_text(
+            report, encoding="utf-8"
+        )
 
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0 if not errors else 1

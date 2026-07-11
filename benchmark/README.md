@@ -2,6 +2,10 @@
 
 本目录是 Pep_design 后续 Benchmark 的工作层。当前阶段定义协议、schema、审计表、smoke-test 计划和少量已批准的 bounded/parser 证据摘要；不保存大模型权重、不保存大规模 GPU 输出、不声称正式 benchmark 完成或本地完整复现。
 
+## Governance Harness
+
+Benchmark artifact 的证据用途由 [`../harness/registry/artifacts_v1.json`](../harness/registry/artifacts_v1.json) 约束，profile/gate 由 [`../harness/contracts/project_acceptance_v1.json`](../harness/contracts/project_acceptance_v1.json) 定义。当前报告见 [`../ops/acceptance/project_acceptance_report.md`](../ops/acceptance/project_acceptance_report.md)。v0.33 blocker rows 不支持 generation success、scoring、ranking 或 complete Benchmark claim。
+
 ## Directory Map
 
 | path | purpose |
@@ -69,3 +73,5 @@ v0.29 records bounded/parser follow-up evidence through `deployment/bounded_gene
 v0.30 records the pilot benchmark design layer through `input_sets/pilot_benchmark_target_manifest_v0.30.csv`, `input_sets/pilot_benchmark_control_manifest_v0.30.csv`, `input_sets/pilot_benchmark_job_manifest_v0.30.csv`, `deployment/pilot_execution_matrix_v0.30.csv`, `input_sets/wet_lab_candidate_panel_v0.30.csv`, and `ops/audits/pilot_benchmark_design_audit_v0.30.md`. The layer defines 7 pilot target/control fixtures, 17 planned jobs across Wave A/Wave B/blocked lanes, and 4 prospective wet-lab candidate classes. These rows are planning and governance artifacts only, not execution evidence, scoring evidence, frozen target-set evidence, wet-lab validation, `smoke_test_ready`, or Benchmark results.
 
 v0.31 records bounded Wave A execution/parser summaries through `deployment/pilot_execution_results_v0.31.csv`, `results/pilot_method_output_manifest_v0.31.csv`, `results/pilot_candidate_outputs_v0.31.csv`, `results/pilot_run_v0.31.csv`, `results/pilot_v031_merge_summary.json`, and `ops/audits/pilot_wave_a_execution_audit_v0.31.md`. The layer represents 14 Wave A jobs, with 4 parsed/generated rows from PepMLM and ColabDesign and 10 placeholder-failed adapter rows for methods that still need real Wave A adapters. These rows are bounded parser evidence only, not scoring evidence, method-ranking evidence, frozen target-set evidence, wet-lab validation, `smoke_test_ready`, or Benchmark results.
+
+v0.33 records Wave A adapter/parser completion attempts through `deployment/pilot_execution_results_v0.33.csv`, `results/pilot_method_output_manifest_v0.33.csv`, `results/pilot_candidate_outputs_v0.33.csv`, `results/pilot_run_v0.33.csv`, `results/pilot_v033_merge_summary.json`, and `ops/audits/wave_a_adapter_parser_completion_audit_v0.33.md`. The layer represents the 10 v0.31 placeholder-failed jobs, with 10 method-specific `no_supported_output_found` blocker rows and 0 parsed/generated candidates. These rows replace placeholder exit 86 as the active blocker state but are still not scoring evidence, method-ranking evidence, frozen target-set evidence, wet-lab validation, `smoke_test_ready`, or Benchmark results.

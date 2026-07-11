@@ -1,0 +1,9 @@
+{
+  "evidence_id": "dflow_3eqs_train_overlap_v1",
+  "source_path": "data/dflow/pepmerge_lmdb/train_names.txt",
+  "source_sha256": "ff168c194c225c8a117c1e1cfff365edc5ba2f812a0dcc9836e1d3238590da44",
+  "match_rule": "exact_line_match",
+  "matched_value": "3eqs_B",
+  "split": "train",
+  "conclusion": "known_training_overlap_fixture_only_scoring_prohibited"
+}

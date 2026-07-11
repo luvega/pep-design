@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pep-design-signoff-v1",
+  "title": "Pep Design acceptance signoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "contract_version",
+    "contract_digest",
+    "profile_id",
+    "evaluation_id",
+    "evidence_digest",
+    "role",
+    "reviewer_id",
+    "decision",
+    "rationale",
+    "reviewed_at"
+  ],
+  "properties": {
+    "contract_id": {"const": "pep_design_project_acceptance"},
+    "contract_version": {"type": "string"},
+    "contract_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "profile_id": {
+      "enum": ["governance", "current_phase", "release_checkpoint", "full_project"]
+    },
+    "evaluation_id": {"type": "string", "pattern": "^evaluation_[0-9a-f]{24}$"},
+    "evidence_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "role": {
+      "enum": ["governance_owner", "engineering_reviewer", "scientific_reviewer"]
+    },
+    "reviewer_id": {"type": "string", "minLength": 1},
+    "decision": {"const": "approved"},
+    "rationale": {"type": "string", "minLength": 1},
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "supersedes": {"type": ["string", "null"]},
+    "approval_card_id": {
+      "type": "string",
+      "pattern": "^approval_[0-9a-f]{24}$"
+    },
+    "approval_card_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "approval_event_id": {
+      "type": "string",
+      "pattern": "^approval_event_[0-9a-f]{24}$"
+    }
+  },
+  "dependentRequired": {
+    "approval_card_id": ["approval_card_digest", "approval_event_id"],
+    "approval_card_digest": ["approval_card_id", "approval_event_id"],
+    "approval_event_id": ["approval_card_id", "approval_card_digest"]
+  },
+  "allOf": [
+    {
+      "if": {"required": ["approval_card_id"]},
+      "then": {
+        "properties": {
+          "reviewer_id": {"const": "project_owner"},
+          "profile_id": {"enum": ["governance", "current_phase"]}
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {"profile_id": {"const": "governance"}},
+              "required": ["profile_id"]
+            },
+            "then": {
+              "properties": {
+                "rationale": {
+                  "const": "仅批准 contract/registry/migration/validator 的治理完整性；不豁免任何失败 gate，也不批准 release_checkpoint 或 full_project。"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {"profile_id": {"const": "current_phase"}},
+              "required": ["profile_id"]
+            },
+            "then": {
+              "properties": {
+                "rationale": {
+                  "const": "接受 v0.33 的诚实边界：10 条 method-specific blockers，0 个 parsed/generated candidates，target/control 尚未冻结，scoring/ranking 尚未启动。"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

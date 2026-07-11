@@ -1,0 +1,92 @@
+{
+  "registry_id": "pep_design_migration_parity",
+  "registry_version": "1.0.0",
+  "legacy_agents_path": "harness/policies/legacy_agents_v1.md",
+  "legacy_agents_sha256": "c5955cbd72e706c075185603b07da182395e1afc0be54a64c36ef7cc29a2533d",
+  "legacy_agents_line_count": 209,
+  "legacy_artifact_role_count": 89,
+  "active_agents_sha256": "64f83176396f0801a9e11c9cbdd37676e41dfc6ddd8260f55e5025ee17184427",
+  "active_policy_map": {
+    "purpose_and_current_plan": [
+      "## Purpose",
+      "ops/plans/updated_plan_v0.33.md",
+      "ops/plans/harness_engineering_plan_v1.0.md"
+    ],
+    "source_boundaries": [
+      "## Source Boundaries",
+      "sources/raw_snapshots/",
+      "third-party sources"
+    ],
+    "skill_routing": [
+      "## Skill Routing",
+      "academic-research-suite",
+      "benchmark-paper-template is the primary route"
+    ],
+    "artifact_roles": [
+      "## Harness Authority",
+      "harness/registry/artifacts_v1.json",
+      "harness/registry/claims_v1.json"
+    ],
+    "execution_gates": [
+      "## Execution Gates",
+      "metadata_ready",
+      "smoke_test_ready",
+      "download_performed=no"
+    ],
+    "language_and_claim_rules": [
+      "## Language And Claim Rules",
+      "Reader-facing prose is Chinese by default",
+      "harness/registry/claims_v1.json"
+    ],
+    "update_order": [
+      "## Update Order",
+      "scripts/run_project_acceptance.py check",
+      "scripts/run_project_acceptance.py render"
+    ],
+    "validation_rules": [
+      "PYTHONUTF8=1",
+      "scripts/validate_benchmark_kb.py",
+      "git diff --check"
+    ],
+    "git_and_safety": [
+      "## Git And Safety",
+      "never revert unrelated",
+      "Do not commit or push unless the user asks"
+    ]
+  },
+  "legacy_policy_keys": [
+    "purpose_and_current_plan",
+    "source_boundaries",
+    "skill_routing",
+    "artifact_roles",
+    "execution_gates",
+    "language_and_claim_rules",
+    "update_order",
+    "validation_rules",
+    "git_and_safety"
+  ],
+  "legacy_artifact_role_patterns": [
+    {"path_pattern": "ops/plans/*.md", "policy": "planning_only"},
+    {"path_pattern": "ops/audits/*.md", "policy": "audit_boundary_only"},
+    {"path_pattern": "ops/validation/*.md", "policy": "machine_validation_only"},
+    {"path_pattern": "benchmark/deployment/*.csv", "policy": "readiness_or_execution_summary_only"},
+    {"path_pattern": "benchmark/results/*", "policy": "version_specific_evidence_boundary"},
+    {"path_pattern": "benchmark/input_sets/*", "policy": "target_control_or_fixture_boundary"},
+    {"path_pattern": "benchmark/protocols/*", "policy": "protocol_not_execution"},
+    {"path_pattern": "benchmark/method_sources/*", "policy": "source_or_literature_evidence_only"},
+    {"path_pattern": "manuscript/support/*", "policy": "manuscript_support_not_result"},
+    {"path_pattern": "kb/tables/*", "policy": "structured_knowledge_artifact"}
+  ],
+  "required_operating_tokens": [
+    "updated_plan_v0.33.md",
+    "building-llm-wiki",
+    "academic-research-suite",
+    "benchmark-paper-template",
+    "benchmark-paper-template is the primary route",
+    "intro-drafter is consistency-check only",
+    "download_performed=no",
+    "not_real_benchmark",
+    "PYTHONUTF8",
+    "scripts/validate_benchmark_kb.py"
+  ]
+}

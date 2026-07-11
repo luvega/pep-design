@@ -488,7 +488,7 @@ must have no value; remote ref must exist; and the merge-base check must exit
 
 - [ ] **Step 3: Implement source manifest and proposed tree construction**
 
-Collect modified/deleted names with `git diff --name-only -z HEAD` and untracked names with `git ls-files --others --exclude-standard -z`; filter with `is_workspace_source_path()`. For each path, record status, Git mode and file SHA-256 or an explicit deletion marker.
+Collect modified/deleted and untracked names in an ephemeral config-free Git view; filter with `is_workspace_source_path()`. For each path, record status, Git mode and the SHA-256 of the Git-clean blob that will actually enter the commit, or an explicit deletion marker. Hash binary blobs as raw bytes.
 
 Build the tree using an isolated temporary index:
 
@@ -512,17 +512,22 @@ git add -A -- "$MANIFEST_PATH_1" "$MANIFEST_PATH_2"
 git diff --cached --name-only -z
 git commit -m "chore: checkpoint dialog approval source" \
   -m "Approval-Card: $APPROVAL_CARD_ID"
-git worktree add --detach "$TEMP_WORKTREE" "$SOURCE_COMMIT_OID"
+git worktree add --detach --no-checkout "$TEMP_WORKTREE" "$SOURCE_COMMIT_OID"
 git add -- "$SIGNOFF_PATH_1" "$SIGNOFF_PATH_2"
 git commit -m "governance: approve acceptance profiles" \
   -m "Approval-Card: $APPROVAL_CARD_ID"
-git push origin "$FINAL_COMMIT_OID:refs/heads/main"
-git ls-remote --heads origin refs/heads/main
+git send-pack --force-with-lease="refs/heads/main:$CARD_REMOTE_OID" \
+  git@github.com:luvega/pep-design.git \
+  "$FINAL_COMMIT_OID:refs/heads/main"
+git fetch-pack git@github.com:luvega/pep-design.git refs/heads/main
 ```
 
-The implementation compares the NUL-delimited cached path set to the card
-manifest before each commit, removes only the temporary worktree it created,
-and requires `ls-remote` to return `$FINAL_COMMIT_OID`.
+The implementation compares the NUL-delimited cached path set and canonical
+blob hashes to the card manifest before each commit. Transport, staging,
+history and checkout materialization run in isolated config-free Git dirs with
+replacement refs/grafts excluded. The expected-old lease is used only after a
+raw-object fast-forward check and remote confirmation must return
+`$FINAL_COMMIT_OID`; unrestricted force push remains forbidden.
 
 Add a `GitBackend` facade that stores `root` and delegates to these functions;
 the transaction layer receives this facade through dependency injection rather
@@ -629,7 +634,7 @@ retry reuses the same values.
 
 - [ ] **Step 4: Implement idempotent `resume_push()`**
 
-Only `local_committed_push_failed` may resume. It must reuse stored final OID, require the same remote baseline, re-run accepted checks, and push without recreating timestamps, filenames, commits or signoffs.
+Only `local_committed_push_failed` may resume. It must reuse stored final OID, require the same remote baseline, re-run accepted checks, and push without recreating timestamps, filenames, commits or signoffs. For source-only recovery, run verification in the exact clean source checkout. A dirty index is accepted only when its paths, modes and blob SHA-256 values exactly equal the persisted card-derived signoff manifest; every extra/different staged state is rejected without reset or manual cleanup.
 
 - [ ] **Step 5: Run transaction tests**
 

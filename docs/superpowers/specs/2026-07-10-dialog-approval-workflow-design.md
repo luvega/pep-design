@@ -31,7 +31,7 @@ signoff，但人工流程仍要求用户查看命令输出、手工复制字段�
 3. 远端 clean checkout 能复现被签核的 evaluation 和 evidence digest。
 4. 人工 signoff、审批卡和 generated report 不直接或间接改变 evidence digest。
 5. 任一验证、并发修改、remote 移动或 push 失败均 fail closed，且不执行
-   reset、amend、rebase、force-push 或历史删除。
+   reset、amend、rebase、non-fast-forward/无条件 force-push 或历史删除。
 
 ## 3. 非目标
 
@@ -118,16 +118,21 @@ prepared -> approved -> source_committed -> signoffs_committed
 Push 失败后的重试只能从既有本地 commits 续推，不能重新生成 signoff、时间戳或
 文件名。Journal 使用原子替换写入，不进入 Git 或 evidence digest。
 
+若 signoff 在 staging 后、ref publication 前失败，source-only recovery 可接受 dirty
+index 的唯一例外是：cached paths、modes 与 blob SHA-256 必须和 card-derived signoff
+manifest 完全一致。恢复期的 prepare/clean 验证在 source commit 的隔离 clean checkout
+中执行；任何 extra/different staged 状态停止，不执行 reset 或人工清理约定。
+
 ### 5.3 Git Transaction Backend
 
 Git backend 只接受参数数组，不执行 shell 字符串。它负责：
 
 - fetch 和 remote OID 校验；
-- source manifest、index 和 proposed tree 校验；
-- 精确 path staging；
+- Git-clean blob source manifest、index 和 proposed tree 校验；
+- 隔离配置下的精确 path staging 与 clean-checkout materialization；
 - source/signoff commits；
 - clean-worktree reproducibility；
-- 普通 refspec push 和远端 OID 确认。
+- 隔离对象图 ancestry、card-bound expected-old-OID lease push 和远端 OID 确认。
 
 它不包含 profile/gate 业务逻辑，也不能提供 `--force`、`--no-verify`、自动 merge、
 rebase 或 reset 接口。
@@ -157,18 +162,20 @@ python scripts/run_project_acceptance.py approve-card \
 1. 要求当前 branch 为 `main`，index 无预先 staged 内容。
 2. 核对 fetch/push URL 均为预期仓库，目标 ref 为 `refs/heads/main`。
 3. 拒绝 `origin/main` 不是当前 HEAD ancestor 的 behind/diverged 状态。
-4. 检查 `core.hooksPath`、活动 commit/push hooks、`url.*.insteadOf`、
-   `pushInsteadOf` 和 `core.sshCommand`；存在未纳入卡片的行为时停止。
+4. 检查 `core.hooksPath`、活动 hooks、filters、fsmonitor、attributes、external diff、
+   `url.*.insteadOf`、`pushInsteadOf` 和 `core.sshCommand`；存在未纳入卡片的行为时停止。
 5. 运行 `pytest -q`、默认 validator、第二次 validator 稳定性检查和
    `git diff --check`。
 6. 确认 `governance` 与 `current_phase` 使用相同 contract/evaluation/evidence
    identity，各自 machine gates 全部通过，且没有 invalid signoff。
 7. 枚举所有进入 workspace evidence surface 的 dirty/untracked/deleted 路径；
    所有这些路径必须进入 proposed source commit。
-8. 用临时 Git index 构造 proposed tree，记录 mode、blob/content hash 和状态。
+8. 用隔离 gitdir 与临时 Git index 构造 proposed tree，记录 mode、Git-clean blob
+   SHA-256 和状态；binary content 按原始 blob bytes 哈希。
 9. 记录当前比 `origin/main` 超前且将一并 push 的全部 commits。
-10. 选择 append-only signoff 文件名：Governance 新文件 supersede 同 profile 的旧
-    Governance；首次 Current Phase signoff 的 `supersedes` 为 `null`。
+10. 选择 append-only signoff 文件名：两个 profile 首次签核均使用 `null`；复签优先
+    supersede 完整 current evaluation context 的最新同 profile/role 前序签核，没有
+    current predecessor 时才回退到最新 stale 审计链。
 11. 生成 immutable card 和 journal，在对话中展示中文审批卡。
 
 审批卡不得倾倒完整 JSON。用户可见内容必须包括完整 card/evaluation/evidence
@@ -187,13 +194,15 @@ Benchmark 完成，不授权 clone/download/GPU/generation/scoring/ranking。唯
 1. 原子地把 journal 从 `prepared` 改为 `approved`。
 2. 再次 fetch，并核对 remote URL/OID、初始 HEAD、index、card digest、manifest、
    evaluation 和 gate-result digests。
-3. 对 card manifest 执行精确 `git add -- <paths>`，核对 staged 集合完全相等。
+3. 在隔离 Git 配置中对 card manifest 执行精确 staging，核对 staged 集合与
+   Git-clean blob hashes 完全相等。
 4. 如存在 source changes，创建 source checkpoint commit；commit message 带
    `Approval-Card: <card_id>` trailer。
 5. Source commit 后核对 commit tree 与 proposed tree；重新计算两个 profiles，
    要求 evaluation/evidence/contract/gate digests 与卡片相同。
-6. 从新 HEAD 建立临时 clean worktree，运行 focused evaluator、validator
-   `--no-write-report` 和必要测试，证明 clean checkout 可复现。
+6. 以 `worktree add --no-checkout` 注册临时 worktree，再在配置隔离 gitdir 中通过
+   显式 index materialize 新 HEAD；运行 focused evaluator、validator
+   `--no-write-report` 和必要测试，证明 clean checkout 可复现且 filters/hooks 未执行。
 7. 生成两个独立 profile-bound signoff。它们共享 `approval_event_id`，并记录
    `approval_card_id` 与 `approval_card_digest`；reviewer/rationale 必须与卡片逐字
    相同。
@@ -202,17 +211,21 @@ Benchmark 完成，不授权 clone/download/GPU/generation/scoring/ranking。唯
    `current_phase` render 为 canonical 当前报告；Governance accepted 状态保留在
    machine check、审批卡和 journal 中。Generated reports 不进入 commit。
 10. Push 前再次 fetch；remote OID 变化则停止。
-11. 使用显式普通 refspec：
+11. 在不读取 replacement refs/grafts 的隔离对象图中再次证明 card remote OID 是
+    final commit 的 ancestor，再使用显式 refspec 与 card-bound expected-old-OID lease：
 
     ```text
-    git push origin <final_commit_oid>:refs/heads/main
+    git send-pack --force-with-lease=refs/heads/main:<card_remote_oid> \
+      git@github.com:luvega/pep-design.git \
+      <final_commit_oid>:refs/heads/main
     ```
 
 12. 用远端查询确认 `refs/heads/main` 等于 final commit OID，再把 journal 标记为
     `pushed`。
 
 Push、认证或 branch-protection 失败时保留本地 commits，journal 标记
-`local_committed_push_failed`。不得 reset、amend、force-push 或自动改到新 remote
+`local_committed_push_failed`。Lease 仅提供 receive-time exact-old CAS，不能放宽
+fast-forward ancestor 条件；不得 reset、amend、无条件 force-push 或自动改到新 remote
 baseline。错误输出必须脱敏，不记录 token、secret-bearing URL 或 SSH 环境。
 
 ## 8. Signoff 与 Supersession 加固

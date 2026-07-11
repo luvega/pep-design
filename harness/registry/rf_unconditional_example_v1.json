@@ -1,0 +1,9 @@
+{
+  "evidence_id": "rf_unconditional_example_v1",
+  "source_path": "/data/protein-design/data/outputs/benchmark_v0.21/adapter_smokes/rfdiffusion_proteinmpnn/command.sh",
+  "source_sha256": "44dc40d2a793d9b69636ef02acae9688f08f6fed85dcd5d93adb1f756242913d",
+  "observation_rule": "exact_command_argument",
+  "observed_contig": "[12-18]",
+  "target_conditioned": false,
+  "conclusion": "example_unconditional_not_target_conditioned_generation"
+}

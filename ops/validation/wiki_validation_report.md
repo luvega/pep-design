@@ -89,6 +89,10 @@
 - pilot_candidate_output_v031_rows: 14
 - pilot_run_v031_rows: 14
 - supervisor_skills_installation_v032_files: 1
+- pilot_execution_results_v033_rows: 10
+- pilot_method_output_v033_rows: 10
+- pilot_candidate_output_v033_rows: 10
+- pilot_run_v033_rows: 10
 - method_readiness_v08_rows: 4
 - method_preflight_v010_rows: 3
 - adapter_preflight_v011_rows: 3
@@ -99,7 +103,7 @@
 - method_classification_v1_rows: 27
 - reference_dataset_sources_v1_rows: 8
 - manuscript_todo_v1_rows: 18
-- manuscript_claim_rows: 72
+- manuscript_claim_rows: 73
 - supplementary_material_rows: 6
 - scoring_rationale_rows: 10
 - method_landscape_patch_v11_rows: 8
@@ -109,8 +113,8 @@
 - method_cards: 12
 - literature_cards: 120
 - bibtex_entries: 432
-- markdown_links_checked: 212
-- tracked_files_checked: 453
+- markdown_links_checked: 226
+- tracked_files_checked: 517
 
 ## Errors
 - None
@@ -211,6 +215,10 @@
     "pilot_candidate_output_v031_rows": 14,
     "pilot_run_v031_rows": 14,
     "supervisor_skills_installation_v032_files": 1,
+    "pilot_execution_results_v033_rows": 10,
+    "pilot_method_output_v033_rows": 10,
+    "pilot_candidate_output_v033_rows": 10,
+    "pilot_run_v033_rows": 10,
     "method_readiness_v08_rows": 4,
     "method_preflight_v010_rows": 3,
     "adapter_preflight_v011_rows": 3,
@@ -221,7 +229,7 @@
     "method_classification_v1_rows": 27,
     "reference_dataset_sources_v1_rows": 8,
     "manuscript_todo_v1_rows": 18,
-    "manuscript_claim_rows": 72,
+    "manuscript_claim_rows": 73,
     "supplementary_material_rows": 6,
     "scoring_rationale_rows": 10,
     "method_landscape_patch_v11_rows": 8,
@@ -231,8 +239,8 @@
     "method_cards": 12,
     "literature_cards": 120,
     "bibtex_entries": 432,
-    "markdown_links_checked": 212,
-    "tracked_files_checked": 453
+    "markdown_links_checked": 226,
+    "tracked_files_checked": 517
   },
   "errors": [],
   "warnings": []

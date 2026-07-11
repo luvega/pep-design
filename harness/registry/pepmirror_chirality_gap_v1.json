@@ -1,0 +1,9 @@
+{
+  "evidence_id": "pepmirror_chirality_gap_v1",
+  "source_path": "/data/protein-design/data/outputs/benchmark_v0.21/adapter_smokes/pepmirror/command.sh",
+  "source_sha256": "77c332e3739f58f607b0cc5e0d9b52ffc8c1fc41786ef3664a143049f54316f2",
+  "observation_rule": "command_and_output_contract_review",
+  "requested_chirality": "D",
+  "mirror_transform_observed": false,
+  "conclusion": "d_peptide_claim_blocked_without_mirror_transform"
+}

@@ -132,11 +132,17 @@ verification scopes.
 A signoff binds its decision to the contract digest, gate or profile, evidence
 digests, reviewer role, reviewer ID, rationale, timestamp, and optional
 superseded signoff. Git history is the accountability mechanism; v1 does not
-add cryptographic identity infrastructure.
+add cryptographic identity infrastructure. Production approval therefore
+requires a committed, clean, non-symlink signoff under `harness/signoffs/`.
 
 An evaluation result contains a deterministic ID computed from the contract,
 registry, evaluator version, and evidence digests. Rendering timestamps do not
-participate in this identity.
+participate in this identity. Generated acceptance reports, signoff files, and
+their rendering timestamps are excluded from the evidence digest so rendering
+or signing cannot invalidate the evaluation being signed. The evidence digest
+does include the Git-visible evaluator/validator source and input surface, so a
+code or governed-source change invalidates prior signoffs even if a version
+string was not manually bumped.
 
 ## Evaluation Flow
 
@@ -181,6 +187,18 @@ The expected unsigned baseline is:
 - `current_phase=machine_pass` with human signoff pending;
 - `release_checkpoint=pending_human_signoff` until release checks and approval;
 - `full_project=not_accepted`.
+
+For this baseline, "zero generated candidates" means zero rows whose
+`parse_status` is `parsed` or whose run status is `generated`. The ten compact
+failure rows remain required evidence rows and are not counted as candidates.
+The observed `3eqs_B` training overlap is preserved as a small tracked
+derivation containing the source path, source SHA-256, match rule, matched
+value, split, and conclusion; clean-clone validation does not depend on the
+large gitignored PepMerge assets.
+
+Governance acceptance requires `governance_owner`. A release checkpoint
+requires separate `engineering_reviewer` and `scientific_reviewer` roles.
+Signoff proves review of an existing machine evaluation and is never a waiver.
 
 ## Non-Goals
 

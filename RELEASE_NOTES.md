@@ -1,5 +1,62 @@
 # Release Notes
 
+## Unreleased Harness Engineering Workflow (`VERSION=1.2.21`) - 2026-07-10
+
+This unsigned checkpoint introduces contract-driven project acceptance without changing the v0.33 scientific evidence state.
+
+### Added
+
+- Added the `harness/` contract, artifact/claim registries, read-only domain evaluators, dependency-aware profile roll-up, digest-bound signoff validation, and generated acceptance views.
+- Added `scripts/run_project_acceptance.py`, focused harness tests, and `ops/plans/harness_engineering_plan_v1.0.md`.
+- Preserved the full pre-harness operating rules as a digest-bound migration snapshot while reducing `AGENTS.md` to a progressive-disclosure entry map.
+- 新增对话审批卡与 durable journal：运行 `prepare-review` 和展示卡片前必须停止全部 subagents 并确认其 quiescent；仅在当前受信任 Codex 会话展示未过期卡后，接受 NFC 规范化并 trim 后完整内容恰好为 `批准` 的回复，该机制不是 cryptographic identity。卡片展示后任何介入的非精确 `批准` 用户消息都会使卡失效，必须重新 prepare 并展示新卡。
+- 固定 `governance` + `current_phase` bundle 生成两份 profile-bound signoff；首次签核的 `supersedes` 为 `null`，复签优先选择完整 current evaluation context 的最新前序签核。
+- Source manifest 绑定 Git clean 后实际提交的 blob SHA-256；transport、staging、history、diff-check 和 clean-checkout materialization 使用受控配置/隔离 gitdir，并拒绝 hooks、filters、fsmonitor、URL rewrite、replacement refs 与 grafts。
+- 仅当 source manifest 非空时创建 source checkpoint，空 manifest 复用卡片 HEAD，然后创建一个 signoff commit；通过真实 ancestry 检查与 card-bound expected-old-OID lease，以显式 refspec fast-forward push 到 `refs/heads/main`，不允许 non-fast-forward 或无条件 force-push。
+- 采用 `subagent-driven-development`，将设计、red tests、编码、文档和独立 spec/quality review 分工执行。
+
+### Pending
+
+- `VERSION` remains `1.2.21` until digest-bound governance signoff authorizes a 1.2.22 candidate; engineering/scientific signoff must then be repeated against the final 1.2.22 digest.
+- `governance` and `current_phase` are expected to remain `pending_human_signoff`; `full_project` remains `not_accepted`.
+- 实际批准前，审批卡与 journal 仅是 generated non-evidence；production signoff 必须是 `harness/signoffs/` 下 committed、clean、非 symlink 的直接 regular file。
+- Durable `local_committed_push_failed` 或 `verified` 只允许 `resume-push --card-id <card_id>` 恢复且无需重新批准。已有 final OID 时复用且不重复 commits/signoffs；仅有 source OID 时在临时 clean source checkout 中重验。若失败已留下 staged signoff，只接受与 card-derived manifest 的 path/mode/blob SHA-256 完全一致的 index，再创建或复用至多一个 signoff commit；extra/different staged 状态 fail closed。`verified` 可在 remote 已是 final OID 时协调实际成功但结果不明确的 push，而不重复 push。
+
+### Boundary
+
+- No clone, install, download, GPU generation, scoring, ranking, target freeze, or wet-lab evidence was added.
+- The v0.33 baseline remains 10 method-specific blocker rows and 0 parsed/generated candidates.
+- 对话 signoff 不能 waiver Critical/Major failure，也不批准 `release_checkpoint`、`full_project` 或发布；当前目标仍是实际 digest 的 governance approval，而非 release/full acceptance。
+
+## v1.2.21 Wave A Adapter/Parser Completion Attempt - 2026-07-10
+
+This checkpoint adds the v0.33 adapter/parser completion attempt layer for the
+10 v0.31 placeholder-failed Wave A jobs.
+
+### Added
+
+- Added `scripts/run_v033_wave_a_pilot.py`.
+- Added `scripts/parse_v033_pilot_outputs.py`.
+- Added `benchmark/deployment/pilot_execution_results_v0.33.csv`.
+- Added `benchmark/results/pilot_method_output_manifest_v0.33.csv`.
+- Added `benchmark/results/pilot_candidate_outputs_v0.33.csv`.
+- Added `benchmark/results/pilot_run_v0.33.csv`.
+- Added `benchmark/results/pilot_v033_merge_summary.json`.
+- Added `ops/plans/updated_plan_v0.33.md`.
+- Added `ops/audits/wave_a_adapter_parser_completion_audit_v0.33.md`.
+- Added `tests/test_v033_wave_a_adapter_completion.py`.
+
+### Changed
+
+- Bumped project version to `1.2.21`.
+- Promoted `ops/plans/updated_plan_v0.33.md` as the current authoritative plan.
+- Extended validator coverage for v0.33 compact tables and no-overclaim checks.
+
+### Boundary
+
+- v0.33 records 10 method-specific `no_supported_output_found` blocker rows.
+- v0.33 is not Benchmark result evidence, not scoring evidence, not method-ranking evidence and not wet-lab validation evidence.
+
 ## v1.2.20 Supervisor-Skills Installation Memory - 2026-07-09
 
 This checkpoint records installation and project-memory routing for selected

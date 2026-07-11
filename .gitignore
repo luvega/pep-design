@@ -54,3 +54,10 @@ weights/
 *.xlsx
 *.enl
 *.Data/
+
+/harness/PROJECT_ACCEPTANCE.md
+/harness/signoffs/signoff_request_v1.json
+/ops/acceptance/project_acceptance_report.json
+/ops/acceptance/project_acceptance_report.md
+/ops/acceptance/dialog_cards/
+/ops/acceptance/dialog_transactions/
