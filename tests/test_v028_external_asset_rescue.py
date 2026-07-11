@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 import importlib.util
 from pathlib import Path
 
@@ -35,11 +36,16 @@ def test_bindcraft_classifier_accepts_native_accepted_layout(tmp_path: Path) -> 
     (trajectory / "trajectory.pdb").write_text("ATOM      1  N   GLY A   1\n", encoding="utf-8")
 
     row = module.classify_bindcraft_output(output_root)
+    out_csv = tmp_path / "bindcraft_accepted_final_classification_v0.28.csv"
+    module.write_csv(out_csv, row)
 
     assert row["classification"] == "accepted_final"
     assert row["accepted_pdb_count"] == 1
     assert row["trajectory_pdb_count"] == 1
     assert row["reason"] == "accepted_pdb_present"
+    assert b"\r" not in out_csv.read_bytes()
+    with out_csv.open(newline="", encoding="utf-8") as handle:
+        assert list(csv.DictReader(handle))[0]["classification"] == "accepted_final"
 
 
 def test_dexdesign_audit_exports_input_contract_fields(tmp_path: Path) -> None:

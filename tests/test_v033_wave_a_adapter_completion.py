@@ -328,8 +328,18 @@ def test_v033_parser_merges_only_v033_placeholder_completion_jobs(tmp_path: Path
 
     assert result["wave_a_jobs"] == 1
     assert result["candidate_rows"] == 1
-    candidates = read_csv(tmp_path / "out" / "pilot_candidate_outputs_v0.33.csv")
-    execution_rows = read_csv(tmp_path / "deploy" / "pilot_execution_results_v0.33.csv")
+    tracked_outputs = [
+        tmp_path / "out" / "pilot_method_output_manifest_v0.33.csv",
+        tmp_path / "out" / "pilot_candidate_outputs_v0.33.csv",
+        tmp_path / "out" / "pilot_run_v0.33.csv",
+        tmp_path / "deploy" / "pilot_execution_results_v0.33.csv",
+    ]
+    for output_path in tracked_outputs:
+        assert b"\r\n" not in output_path.read_bytes()
+        assert read_csv(output_path)
+
+    candidates = read_csv(tracked_outputs[1])
+    execution_rows = read_csv(tracked_outputs[3])
     assert [row["job_id"] for row in candidates] == ["v030_dflow_3eqs_seed42"]
     assert [row["job_id"] for row in execution_rows] == ["v030_dflow_3eqs_seed42"]
     assert execution_rows[0]["status"] == "parsed"

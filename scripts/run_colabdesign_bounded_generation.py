@@ -91,7 +91,7 @@ AA3_TO_1 = {
 def write_csv(path: Path, headers: list[str], rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=headers)
+        writer = csv.DictWriter(handle, fieldnames=headers, lineterminator="\n")
         writer.writeheader()
         for row in rows:
             writer.writerow({header: row.get(header, "") for header in headers})

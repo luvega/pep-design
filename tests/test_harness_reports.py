@@ -90,6 +90,10 @@ def test_signoff_schema_has_no_failure_override_field() -> None:
 
 
 def test_release_profile_detects_a_stale_generated_report() -> None:
+    rendered = evaluate_project(
+        ROOT, "release_checkpoint", require_fresh_generated=False
+    )
+    render_outputs(ROOT, rendered)
     payload = json.loads(REPORT_JSON.read_bytes())
     payload["evaluation_id"] = "evaluation_000000000000000000000000"
     REPORT_JSON.write_text(json.dumps(payload), encoding="utf-8")

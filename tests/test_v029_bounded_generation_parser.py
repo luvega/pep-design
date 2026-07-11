@@ -113,11 +113,17 @@ def test_colabdesign_runner_can_write_inner_command_without_overwriting_outer_wr
         inner_command_filename="colabdesign_inner_command.sh",
     )
 
-    method_rows = read_csv(output_dir / "method_output_manifest.csv")
+    method_output_manifest = output_dir / "method_output_manifest.csv"
+    candidate_outputs = output_dir / "candidate_outputs.csv"
+    method_rows = read_csv(method_output_manifest)
+    candidate_rows = read_csv(candidate_outputs)
     assert result["parser_status"] == "parsed"
     assert (output_dir / "colabdesign_inner_command.sh").is_file()
     assert not (output_dir / "command.sh").exists()
     assert method_rows[0]["command"].endswith("colabdesign_inner_command.sh")
+    assert candidate_rows[0]["sequence"] == "AL"
+    assert b"\r" not in method_output_manifest.read_bytes()
+    assert b"\r" not in candidate_outputs.read_bytes()
 
 
 def test_dexdesign_minimal_fixture_contains_contract_chains(tmp_path: Path) -> None:
@@ -170,6 +176,7 @@ def test_bindcraft_accepted_parser_emits_standard_candidate_rows(tmp_path: Path)
 
     assert result["status"] == "accepted_candidate_parser_passed"
     assert result["candidate_count"] == 2
+    assert b"\r" not in out_csv.read_bytes()
     rows = read_csv(out_csv)
     assert [row["sequence"] for row in rows] == ["APTGKELWRKRLAE", "SPKEEWRKRLAE"]
     assert {row["method"] for row in rows} == {"BindCraft"}

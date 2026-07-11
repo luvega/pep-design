@@ -101,7 +101,7 @@ def classify_bindcraft_output(output_root: Path) -> dict[str, Any]:
 def write_csv(path: Path, row: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=HEADERS)
+        writer = csv.DictWriter(handle, fieldnames=HEADERS, lineterminator="\n")
         writer.writeheader()
         writer.writerow({header: row.get(header, "") for header in HEADERS})
 

@@ -98,6 +98,50 @@ def git_visible_paths(
     return tuple(sorted(value for value in values if value))
 
 
+def test_tracked_csv_worktree_bytes_follow_lf_policy(tmp_path: Path) -> None:
+    auxiliary = tmp_path / "git-environment"
+    environment = sanitized_git_environment(auxiliary / "home")
+    hooks = auxiliary / "hooks"
+    completed = run_git(
+        ROOT,
+        environment,
+        hooks,
+        "ls-files",
+        "-z",
+        "--",
+        "*.csv",
+    )
+    relative_paths = tuple(
+        value
+        for value in completed.stdout.decode(
+            "utf-8", errors="surrogateescape"
+        ).split("\0")
+        if value
+    )
+
+    violations: list[str] = []
+    for relative_path in relative_paths:
+        path = ROOT / relative_path
+        try:
+            metadata = path.lstat()
+        except FileNotFoundError:
+            violations.append(f"{relative_path} (missing)")
+            continue
+        if stat.S_ISLNK(metadata.st_mode):
+            violations.append(f"{relative_path} (symlink)")
+            continue
+        if not stat.S_ISREG(metadata.st_mode):
+            violations.append(f"{relative_path} (not a regular file)")
+            continue
+        if b"\r" in path.read_bytes():
+            violations.append(f"{relative_path} (contains CR byte)")
+
+    assert not violations, (
+        "tracked CSV worktree files must be regular LF-only files:\n"
+        + "\n".join(violations)
+    )
+
+
 def make_isolated_repository(tmp_path: Path) -> tuple[Path, dict[str, str]]:
     auxiliary = tmp_path / "git-environment"
     environment = sanitized_git_environment(auxiliary / "home")

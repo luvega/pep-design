@@ -323,6 +323,15 @@ def test_v031_parser_merges_outputs_and_inserts_missing_failed_rows(tmp_path: Pa
     assert result["method_rows"] == 2
     assert result["candidate_rows"] == 2
     assert result["execution_rows"] == 2
+    tracked_outputs = [
+        tmp_path / "out" / "pilot_method_output_manifest_v0.31.csv",
+        tmp_path / "out" / "pilot_candidate_outputs_v0.31.csv",
+        tmp_path / "out" / "pilot_run_v0.31.csv",
+        tmp_path / "deploy" / "pilot_execution_results_v0.31.csv",
+    ]
+    for output_path in tracked_outputs:
+        assert b"\r" not in output_path.read_bytes()
+        assert read_csv(output_path)
     candidates = read_csv(tmp_path / "out" / "pilot_candidate_outputs_v0.31.csv")
     execution_rows = read_csv(tmp_path / "deploy" / "pilot_execution_results_v0.31.csv")
     assert {row["job_id"] for row in candidates} == {"parsed_job", "missing_job"}
