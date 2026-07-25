@@ -5,11 +5,17 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
+import importlib
 import json
+import math
 import os
 import re
+import stat
 import subprocess
 import sys
+import tempfile
+from datetime import datetime
 from pathlib import Path
 
 
@@ -198,6 +204,39 @@ METHOD_SOURCE_HEADERS = [
     "clone_recommended",
     "next_action",
 ]
+
+HOMEPAGE_METHOD_SOURCE_HEADERS = [
+    "method",
+    "task_id",
+    "method_family",
+    "input_contract",
+    "output_contract",
+    "repo_url",
+    "pinned_commit",
+    "publication_title",
+    "publication_url",
+    "persistent_id",
+    "publication_status",
+    "verified_on",
+    "evidence_boundary",
+]
+
+HOMEPAGE_INCLUDED_METHODS = {
+    "PepMLM",
+    "SaLT&PepPr",
+    "DiffPepBuilder",
+    "PepGLAD",
+    "D-Flow / PeptideDesign",
+    "PepMirror",
+    "AfCycDesign / ColabDesign cyclic peptide",
+    "DexDesign / OSPREY3",
+    "RFdiffusion + ProteinMPNN",
+    "BindCraft",
+}
+
+HOMEPAGE_SOURCE_BOUNDARY = (
+    "source_and_interface_navigation_only_not_runnability_or_performance"
+)
 
 ENVIRONMENT_HEADERS = [
     "method",
@@ -1402,6 +1441,641 @@ PILOT_RUN_V031_HEADERS = [
     "status_reason",
 ]
 
+PILOT_BENCHMARK_JOB_V034_HEADERS = PILOT_BENCHMARK_JOB_V030_HEADERS + [
+    "length_min",
+    "length_max",
+    "expected_target_chain",
+    "expected_binder_chain",
+    "chirality_check_mode",
+    "cyclic_check_mode",
+    "noncanonical_policy",
+    "seed_stage",
+    "primary_job_id",
+    "effective_seed_required",
+    "target_pdb_path",
+    "target_pdb_sha256",
+    "target_binding_check_mode",
+]
+
+PILOT_EXECUTION_MATRIX_V034_HEADERS = PILOT_EXECUTION_MATRIX_V030_HEADERS + [
+    "seed_stage",
+    "primary_job_id",
+]
+
+PILOT_EXECUTION_RESULTS_V034_HEADERS = [
+    "execution_id",
+    "job_id",
+    "method",
+    "seed_stage",
+    "random_seed",
+    "attempt_id",
+    "attempt_dir",
+    "status",
+    "overall_qc_status",
+    "supported_candidate",
+    "merge_status",
+    "status_reason",
+    "candidate_parse_status",
+    "qc_status_reason",
+    "chirality_evaluable",
+    "chirality_l_count",
+    "chirality_d_count",
+    "chirality_unknown_count",
+    "method_contract_status",
+    "handoff_status",
+]
+
+PILOT_METHOD_OUTPUT_V034_HEADERS = [
+    "run_record_id",
+    "job_id",
+    "method",
+    "task_id",
+    "execution_stage",
+    "source_commit",
+    "model_revision",
+    "environment_id",
+    "command",
+    "raw_output_root",
+    "stdout_log",
+    "stderr_log",
+    "runtime_seconds",
+    "exit_code",
+    "parser_status",
+    "overall_qc_status",
+    "status",
+    "status_reason",
+    "created_at",
+]
+
+PILOT_CANDIDATE_OUTPUT_V034_HEADERS = [
+    "design_id",
+    "job_id",
+    "method",
+    "target_id",
+    "binder_id",
+    "source_output_id",
+    "generation_rank",
+    "sequence",
+    "structure_path",
+    "source_output_path",
+    "binder_chain",
+    "peptide_type",
+    "chirality",
+    "cyclic",
+    "parse_status",
+    "status_reason",
+    "notes",
+    "supported_candidate",
+]
+
+PILOT_CANDIDATE_QC_V034_HEADERS = [
+    "job_id",
+    "design_id",
+    "overall_qc_status",
+    "status_reason",
+    "backbone_to_fasta_handoff_status",
+    "chain_status",
+    "chirality_d_count",
+    "chirality_evaluable",
+    "chirality_gly_count",
+    "chirality_l_count",
+    "chirality_status",
+    "chirality_unknown_count",
+    "cyclic_status",
+    "file_reason",
+    "file_sha256",
+    "file_size_bytes",
+    "file_status",
+    "handoff_status",
+    "length_status",
+    "method_contract_status",
+    "mirror_output_atom_count",
+    "mirror_output_atom_identity_status",
+    "mirror_output_central_inversion_max_residual",
+    "mirror_output_central_inversion_status",
+    "mirror_output_central_inversion_tolerance",
+    "mirror_target_atom_count",
+    "mirror_target_atom_identity_status",
+    "mirror_target_central_inversion_max_residual",
+    "mirror_target_central_inversion_status",
+    "mirror_target_central_inversion_tolerance",
+    "noncanonical_residues",
+    "noncanonical_status",
+    "parse_status",
+    "seed_status",
+    "sequence_length",
+    "sequence_structure_status",
+    "supported_candidate",
+    "target_binding_status",
+    "terminal_cn_distance",
+]
+
+PILOT_RUN_V034_HEADERS = [
+    "design_id",
+    "job_id",
+    "method",
+    "task_id",
+    "target_id",
+    "input_mode",
+    "peptide_type",
+    "chirality",
+    "cyclic",
+    "random_seed",
+    "seed_stage",
+    "attempt_id",
+    "status",
+    "overall_qc_status",
+    "supported_candidate",
+    "sequence",
+    "structure_path",
+    "status_reason",
+    "notes",
+]
+
+V034_JOB_METHODS = {
+    "v034_pepmlm_sequence": "PepMLM",
+    "v034_diffpepbuilder_3eqs": "DiffPepBuilder",
+    "v034_pepglad_3eqs": "PepGLAD",
+    "v034_dflow_3eqs": "D-Flow / PeptideDesign",
+    "v034_pepmirror_3eqs": "PepMirror",
+    "v034_colabdesign_7zkr": "AfCycDesign / ColabDesign cyclic peptide",
+    "v034_rfdiffusion_mpnn_7zkr": "RFdiffusion + ProteinMPNN",
+}
+
+V034_RUNTIME_PAYLOAD_FIELDS = frozenset(
+    {"schema_version", "evidence_boundary", "records"}
+)
+V034_RUNTIME_RECORD_FIELDS = frozenset(
+    {
+        "job_id",
+        "method",
+        "seed_stage",
+        "random_seed",
+        "attempt_id",
+        "runtime_evidence_path",
+        "runtime_evidence_sha256",
+        "evidence_semantic_sha256",
+        "evidence",
+    }
+)
+V034_RUNTIME_EVIDENCE_FIELDS = {
+    "PepMLM": frozenset(
+        """conda_environment container_image effective_seed model_id model_revision
+        model_weights_sha256 requested_seed sampling_strategy seed_control_status
+        source_commit source_entrypoint_sha256 top_k""".split()
+    ),
+    "DiffPepBuilder": frozenset(
+        """conda_environment container_image effective_seed filtered_receptor_sha256
+        model_asset_sha256 requested_seed seed_control_status source_candidate_path
+        source_commit source_entrypoint_sha256 target_context_chain target_context_mode
+        target_context_path target_context_sha256""".split()
+    ),
+    "D-Flow / PeptideDesign": frozenset(
+        """candidate_path candidate_sha256 checkpoint_path checkpoint_resolved_path
+        checkpoint_sha256 containerized effective_seed execution_environment_declared
+        execution_environment_type host_environment_path method python_base_prefix
+        python_executable_path python_executable_realpath python_executable_sha256
+        python_invocation_path python_prefix python_version requested_seed
+        seed_control_status seed_patch_path seed_patch_sha256 source_checkout_path
+        source_commit source_content_manifest_path source_content_manifest_sha256
+        source_copy_mode source_entrypoint_patched_sha256 source_entrypoint_path
+        source_entrypoint_prepatch_sha256 source_git_tracked_paths_clean
+        source_tracked_file_count target_context_chain target_context_mode
+        target_context_path target_context_sha256 x_mirror_applied""".split()
+    ),
+    "PepMirror": frozenset(
+        """checkpoint_container_binding_verified checkpoint_container_path
+        checkpoint_mount_mode checkpoint_path checkpoint_pin_verified
+        checkpoint_revision checkpoint_sha256 checkpoint_verified_pre_run
+        compose_config_command compose_config_output_sha256 compose_file_path
+        compose_file_sha256 compose_file_verified_pre_run compose_image_tag
+        compose_profile compose_service compose_service_verified effective_seed
+        executed_source_manifest_path executed_source_manifest_sha256
+        executed_source_manifest_verified_pre_run execution_environment_id
+        execution_environment_verified execution_preflight_evidence_path
+        execution_preflight_evidence_sha256 generate_py_post_path
+        generate_py_post_sha256 generate_py_pre_path generate_py_pre_sha256
+        image_id_observed_at_prepare image_id_observed_pre_run
+        image_identity_stable_pre_run image_inspect_command
+        image_inspect_execution_command image_inspect_execution_output_sha256
+        image_inspect_execution_stage image_inspect_output_sha256 image_inspect_stage
+        image_repo_tags_observed_at_prepare method mirror_commands_in_pinned_container
+        mirror_input_path mirror_input_sha256 mirror_output_path mirror_output_sha256
+        mirror_pdb_py_post_path mirror_pdb_py_post_sha256 mirror_pdb_py_pre_path
+        mirror_pdb_py_pre_sha256 mirror_roundtrip_applied
+        mirror_runtime_conda_environment mirror_runtime_scope mirrored_generated_path
+        mirrored_generated_sha256 mirrored_target_path mirrored_target_sha256
+        package_evidence_path package_evidence_sha256 provenance_capture_stage
+        requested_seed seed_control_status seed_patch_path seed_patch_sha256
+        source_commit_command source_commit_expected source_commit_observed
+        source_commit_verified source_git_checkout_clean source_git_paths
+        source_git_paths_clean source_root source_status_command
+        source_tracked_file_count target_input_verified_pre_run target_pdb_path
+        target_pdb_sha256 target_preflight_verified""".split()
+    ),
+    "AfCycDesign / ColabDesign cyclic peptide": frozenset(
+        """alphafold_model_name alphafold_params_sha256 candidate_path candidate_sha256
+        container_image container_image_id cyclic_offset_applied cyclic_offset_type
+        effective_seed requested_seed seed_control_status source_commit
+        source_notebook_sha256 terminal_offset""".split()
+    ),
+    "RFdiffusion + ProteinMPNN": frozenset(
+        """effective_seed mpnn_checkpoint_sha256 mpnn_container_image
+        mpnn_container_image_id mpnn_designed_chain mpnn_fasta_path mpnn_fasta_sha256
+        mpnn_fixed_chains mpnn_record_type mpnn_seed mpnn_selected_record_id
+        mpnn_source_commit mpnn_source_entrypoint_sha256 requested_seed
+        rf_backbone_path rf_backbone_sha256 rf_checkpoint_sha256 rf_container_image
+        rf_container_image_id rf_contig rf_cyclic rf_design_startnum rf_deterministic
+        rf_hotspots rf_source_commit rf_source_entrypoint_sha256 rf_target_conditioned
+        rf_trb_path rf_trb_semantic_extract rf_trb_semantic_parser
+        rf_trb_semantic_sha256 rf_trb_sha256 seed_control_status
+        sequence_representation sequence_threaded_onto_backbone
+        structure_representation""".split()
+    ),
+}
+V034_RUNTIME_INT_FIELDS = {
+    "PepMLM": frozenset({"requested_seed", "effective_seed", "top_k"}),
+    "DiffPepBuilder": frozenset({"requested_seed", "effective_seed"}),
+    "D-Flow / PeptideDesign": frozenset(
+        {"requested_seed", "effective_seed", "source_tracked_file_count"}
+    ),
+    "PepMirror": frozenset(
+        {"requested_seed", "effective_seed", "source_tracked_file_count"}
+    ),
+    "AfCycDesign / ColabDesign cyclic peptide": frozenset(
+        {"requested_seed", "effective_seed", "cyclic_offset_type", "terminal_offset"}
+    ),
+    "RFdiffusion + ProteinMPNN": frozenset(
+        {"requested_seed", "effective_seed", "rf_design_startnum", "mpnn_seed"}
+    ),
+}
+V034_RUNTIME_BOOL_FIELDS = {
+    "D-Flow / PeptideDesign": frozenset(
+        {"containerized", "source_git_tracked_paths_clean", "x_mirror_applied"}
+    ),
+    "PepMirror": frozenset(
+        """checkpoint_container_binding_verified checkpoint_pin_verified
+        checkpoint_verified_pre_run compose_file_verified_pre_run
+        compose_service_verified executed_source_manifest_verified_pre_run
+        execution_environment_verified image_identity_stable_pre_run
+        mirror_commands_in_pinned_container mirror_roundtrip_applied
+        source_commit_verified source_git_checkout_clean source_git_paths_clean
+        target_input_verified_pre_run target_preflight_verified""".split()
+    ),
+    "AfCycDesign / ColabDesign cyclic peptide": frozenset(
+        {"cyclic_offset_applied"}
+    ),
+    "RFdiffusion + ProteinMPNN": frozenset(
+        {
+            "rf_cyclic",
+            "rf_deterministic",
+            "rf_target_conditioned",
+            "sequence_threaded_onto_backbone",
+        }
+    ),
+}
+V034_RUNTIME_LIST_FIELDS = {
+    "PepMirror": frozenset(
+        {
+            "compose_config_command",
+            "image_inspect_command",
+            "image_inspect_execution_command",
+            "image_repo_tags_observed_at_prepare",
+            "source_commit_command",
+            "source_git_paths",
+            "source_status_command",
+        }
+    ),
+    "RFdiffusion + ProteinMPNN": frozenset(
+        {"mpnn_fixed_chains", "rf_hotspots"}
+    ),
+}
+V034_DIFFPEPBUILDER_MODEL_ASSET_FIELDS = frozenset(
+    {
+        "diffpepbuilder_v1.pth",
+        "esm2_t33_650M_UR50D.pt",
+        "esm2_t33_650M_UR50D-contact-regression.pt",
+    }
+)
+V034_RF_TRB_FIELDS = frozenset(
+    {
+        "input_pdb",
+        "contigs",
+        "cyclic",
+        "design_startnum",
+        "deterministic",
+        "hotspot_res",
+        "num_designs",
+        "sampled_mask",
+    }
+)
+V034_REPLAY_FILES = {
+    "PepMLM": ("raw/pepmlm_generated.csv",),
+    "DiffPepBuilder": (
+        "raw/diffpepbuilder_candidate.pdb",
+        "raw/diffpepbuilder_target_context.pdb",
+    ),
+    "D-Flow / PeptideDesign": (
+        "raw/dflow_candidate.pdb",
+        "raw/dflow_target_context.pdb",
+    ),
+    "PepMirror": (
+        "raw/mirror_input.pdb",
+        "raw/mirrored_target.pdb",
+        "raw/mirrored_generated.pdb",
+        "raw/pepmirror_candidate.pdb",
+    ),
+    "AfCycDesign / ColabDesign cyclic peptide": (
+        "raw/afcycdesign_candidate.pdb",
+    ),
+    "RFdiffusion + ProteinMPNN": (
+        "raw/rf/design.pdb",
+        "raw/rf/design.trb",
+        "raw/mpnn/design.fa",
+    ),
+}
+V034_RUNTIME_PATHS = {
+    "PepMLM": "raw/runtime_evidence.json",
+    "DiffPepBuilder": "raw/runtime_evidence.json",
+    "PepGLAD": "raw/runtime_evidence.json",
+    "D-Flow / PeptideDesign": "runtime_evidence.json",
+    "PepMirror": "runtime_evidence.json",
+    "AfCycDesign / ColabDesign cyclic peptide": "raw/runtime_evidence.json",
+    "RFdiffusion + ProteinMPNN": "raw/runtime_evidence.json",
+}
+V034_METHOD_SLUGS = {
+    "PepMLM": "pepmlm",
+    "DiffPepBuilder": "diffpepbuilder",
+    "PepGLAD": "pepglad",
+    "D-Flow / PeptideDesign": "dflow",
+    "PepMirror": "pepmirror",
+    "AfCycDesign / ColabDesign cyclic peptide": "colabdesign",
+    "RFdiffusion + ProteinMPNN": "rfdiffusion_proteinmpnn",
+}
+V034_FIXED_IDENTITY_CONTRACTS = {
+    "PepMLM": {
+        "manifest": {
+            "source_commit": "3169c4920f8c383948e0a5d3a7c8f87e5e7d2436",
+            "model_revision": "898fca941a9057aebdd1a6164b5ee09a1a71780e",
+            "environment_id": "pd-benchmark-methods-gpu:0.21/bench-pepmlm",
+        },
+        "source": {
+            "source_commit": "3169c4920f8c383948e0a5d3a7c8f87e5e7d2436",
+            "source_entrypoint_sha256": (
+                "2c1844028c459e8e96d756da795b620b4ccaa65b98dd62c6f904100f0dc1e49b"
+            ),
+        },
+        "model": {
+            "model_id": "TianlaiChen/PepMLM-650M",
+            "model_revision": "898fca941a9057aebdd1a6164b5ee09a1a71780e",
+            "model_weights_sha256": (
+                "8a3225bca1f9acd9f701ca2e46597c12bab92320e32b68f380ddf3b6d3b20770"
+            ),
+        },
+        "environment": {
+            "container_image": "pd-benchmark-methods-gpu:0.21",
+            "conda_environment": "bench-pepmlm",
+        },
+    },
+    "DiffPepBuilder": {
+        "manifest": {
+            "source_commit": "c19eb4f0cd2419d3bcc116184c0868243b6c4169",
+            "model_revision": "diffpepbuilder_v1.pth_external_manifest_v0.20",
+            "environment_id": (
+                "pd-pyrosetta-methods-gpu:0.20/bench-diffpepbuilder"
+            ),
+        },
+        "source": {
+            "source_commit": "c19eb4f0cd2419d3bcc116184c0868243b6c4169",
+            "source_entrypoint_sha256": (
+                "872868f48e3cf66f0ce159ada589ca2126a3b2ba98470ab3bbcb9ffc4481f7c6"
+            ),
+        },
+        "model": {
+            "model_asset_sha256": {
+                "diffpepbuilder_v1.pth": (
+                    "dbc4283257d27e38a1ce90c9344063b046ab7161745ebed1fd98a4b0439b992a"
+                ),
+                "esm2_t33_650M_UR50D.pt": (
+                    "ea9d0522b335a8778dea6535a65301f10208dece28cd5865482b0b1fc446168c"
+                ),
+                "esm2_t33_650M_UR50D-contact-regression.pt": (
+                    "8ffe6edbd4173dc8d45c2cd5cb27d43aad77ec26b4c768200c58ae1f96693575"
+                ),
+            }
+        },
+        "environment": {
+            "container_image": "pd-pyrosetta-methods-gpu:0.20",
+            "conda_environment": "bench-diffpepbuilder",
+        },
+    },
+    "PepGLAD": {
+        "manifest": {
+            "source_commit": "bad015ca50c312a89482adb5220c3d907f13df5c",
+            "model_revision": "codesign.ckpt_external_manifest_v0.21",
+            "environment_id": "pd-benchmark-methods-gpu:0.21/bench-pepglad",
+        },
+        "source": {
+            "source_commit": "bad015ca50c312a89482adb5220c3d907f13df5c",
+            "source_entrypoint_sha256": (
+                "af888f4e441cf2b051cfa52df60920fdb55cb89c25bb319d08ccdf10dd073dac"
+            ),
+            "source_entrypoint_prepatch_sha256": (
+                "af888f4e441cf2b051cfa52df60920fdb55cb89c25bb319d08ccdf10dd073dac"
+            ),
+            "source_entrypoint_instrumented_sha256": (
+                "c3b127e39be1b335ff6046bb2435451acfc1b323839377033bf438ccd4a32954"
+            ),
+            "observer_source_sha256": (
+                "a0a98420dd2fd5382479abe77526fb8fc206ffb1e69a8780912fb821dded0c61"
+            ),
+            "observer_patch_sha256": (
+                "cd9ec19f6605fd2b067824d4e02971b3a203e827b6398a4ffd1c68c64464311a"
+            ),
+            "seed_wrapper_sha256": (
+                "6a9b4c9012205d27526e13dbccbd7d11c010eddc3c85acdb2796c2fa6668aaba"
+            ),
+        },
+        "model": {
+            "model_weights_sha256": (
+                "5f05dc0f678ed7a75c2ce8fc19f63cc145bd4568f75cbfc7f15aeacdddbd3cfe"
+            )
+        },
+        "environment": {
+            "container_image": "pd-benchmark-methods-gpu:0.21",
+            "conda_environment": "bench-pepglad",
+        },
+    },
+    "D-Flow / PeptideDesign": {
+        "manifest": {
+            "source_commit": "3e3e9f501ee16db318e9bf52643513636a07699a",
+            "model_revision": (
+                "sha256:95020b5a25ff66df78a563c127c4f6958f8e10a6c472729634cdd8322e9cef17"
+            ),
+            "environment_id": "host:.venv/dflow-v023",
+        },
+        "source": {
+            "source_commit": "3e3e9f501ee16db318e9bf52643513636a07699a",
+            "source_entrypoint_prepatch_sha256": (
+                "6be8b50b876cc94c8a212165d7327bd46c0e906d2c85fc6c2b03a66ff9e2cd9d"
+            ),
+            "source_entrypoint_patched_sha256": (
+                "e55db330d920d0c189a5f539ede4344219177430619228418062d0c4b4e73cad"
+            ),
+            "seed_patch_sha256": (
+                "e55db330d920d0c189a5f539ede4344219177430619228418062d0c4b4e73cad"
+            ),
+            "source_content_manifest_sha256": (
+                "93c91653d2184354015432316ad111e434ff6893cc5509b1cc7654c8cd841b34"
+            ),
+            "source_git_tracked_paths_clean": True,
+            "source_tracked_file_count": 141,
+        },
+        "model": {
+            "checkpoint_sha256": (
+                "95020b5a25ff66df78a563c127c4f6958f8e10a6c472729634cdd8322e9cef17"
+            )
+        },
+        "environment": {
+            "execution_environment_declared": "host:.venv/dflow-v023",
+            "execution_environment_type": "host_local_python_environment",
+            "containerized": False,
+            "python_executable_sha256": (
+                "b1220424db191e57100891b277192f24cbae078324ffdf2242c68ce526590c3d"
+            ),
+        },
+    },
+    "PepMirror": {
+        "manifest": {
+            "source_commit": "41cb31f3974d91e1a2ca88f0db060405833e4a9c",
+            "model_revision": (
+                "sha256:a86aac3ea26509282f89ee99a9d42028fc4dd3ad404617b3754a1dea4c1867f2"
+            ),
+            "environment_id": (
+                "pd-pyrosetta-methods-gpu:0.21/bench-pepmirror"
+            ),
+        },
+        "source": {
+            "source_commit_expected": "41cb31f3974d91e1a2ca88f0db060405833e4a9c",
+            "source_commit_observed": "41cb31f3974d91e1a2ca88f0db060405833e4a9c",
+            "generate_py_pre_sha256": (
+                "452ba18b29d9647785a2a4160fcaacd97e3769af4b58e5c532fb6b3394881459"
+            ),
+            "generate_py_post_sha256": (
+                "32cb77ec34c9f10b2223c0bb19ef09e7fad3c7d9c2c0798a5ff9e72a699e5ecb"
+            ),
+            "seed_patch_sha256": (
+                "32cb77ec34c9f10b2223c0bb19ef09e7fad3c7d9c2c0798a5ff9e72a699e5ecb"
+            ),
+            "mirror_pdb_py_pre_sha256": (
+                "d8438835c3c26fbf3a1971c577be037e3bfe7114338d0c6e1fb32a2a4a11a233"
+            ),
+            "mirror_pdb_py_post_sha256": (
+                "d8438835c3c26fbf3a1971c577be037e3bfe7114338d0c6e1fb32a2a4a11a233"
+            ),
+        },
+        "model": {
+            "checkpoint_revision": (
+                "sha256:a86aac3ea26509282f89ee99a9d42028fc4dd3ad404617b3754a1dea4c1867f2"
+            ),
+            "checkpoint_sha256": (
+                "a86aac3ea26509282f89ee99a9d42028fc4dd3ad404617b3754a1dea4c1867f2"
+            ),
+        },
+        "environment": {
+            "compose_image_tag": "pd-pyrosetta-methods-gpu:0.21",
+            "compose_file_sha256": (
+                "e3a9e6e2b67d6eb13635238bf50aa519a30b70febc8cced57276c77b26831b5d"
+            ),
+            "compose_config_output_sha256": (
+                "01c739107786aa12af5c38813fe3b578835658fef5aef51fb12c6f078e48c6f1"
+            ),
+            "image_id_observed_at_prepare": (
+                "sha256:6b0dd1b775ad1e3e91c618f4ab245db88d9964b20faa2331f4fe9870496d2992"
+            ),
+            "image_id_observed_pre_run": (
+                "sha256:6b0dd1b775ad1e3e91c618f4ab245db88d9964b20faa2331f4fe9870496d2992"
+            ),
+            "image_inspect_output_sha256": (
+                "0a6541eb1bb07831e3baad628ab06db49c0c2e31c0e792ed1a49f675dfbb00bf"
+            ),
+            "image_inspect_execution_output_sha256": (
+                "0a6541eb1bb07831e3baad628ab06db49c0c2e31c0e792ed1a49f675dfbb00bf"
+            ),
+            "execution_environment_id": (
+                "pd-pyrosetta-methods-gpu:0.21/bench-pepmirror"
+            ),
+            "mirror_runtime_conda_environment": "bench-pepmirror",
+        },
+    },
+    "AfCycDesign / ColabDesign cyclic peptide": {
+        "manifest": {
+            "source_commit": "e31a56fe1d9b4de25c8697f3a28b75892941cc72",
+            "model_revision": (
+                "alphafold_model_1_ptm@sha256:"
+                "5e564f79af5bcd54ccef6e2a6bb0ff01015d01650ebc41d4575e35f0de9ecc84"
+            ),
+            "environment_id": "pd-benchmark-methods-gpu:0.21/bench-colabdesign",
+        },
+        "source": {
+            "source_commit": "e31a56fe1d9b4de25c8697f3a28b75892941cc72",
+            "source_notebook_sha256": (
+                "ca3bd3cc14daa95e1529fd2d5c1ca18263d12341a75d2967715ec23720b129ed"
+            ),
+        },
+        "model": {
+            "alphafold_model_name": "model_1_ptm",
+            "alphafold_params_sha256": (
+                "5e564f79af5bcd54ccef6e2a6bb0ff01015d01650ebc41d4575e35f0de9ecc84"
+            ),
+        },
+        "environment": {
+            "container_image": "pd-benchmark-methods-gpu:0.21",
+            "container_image_id": (
+                "sha256:4e7936534ca8ec60d9d19ef267d6fb2444e8889973ed17be7cb1adba8d421af2"
+            ),
+        },
+    },
+    "RFdiffusion + ProteinMPNN": {
+        "manifest": {
+            "source_commit": (
+                "RFdiffusion@2d0c003df46b9db41d119321f15403dec3716cd9;"
+                "ProteinMPNN@8907e6671bfbfc92303b5f79c4b5e6ce47cdef57"
+            ),
+            "model_revision": "RFdiffusion_external_models;proteinmpnn_v_48_020.pt",
+            "environment_id": "pd-rfpeptide-gpu:fixed + pd-foundry-gpu:latest",
+        },
+        "source": {
+            "rf_source_commit": "2d0c003df46b9db41d119321f15403dec3716cd9",
+            "rf_source_entrypoint_sha256": (
+                "a22624d7d40d3d207d91e92163441da5a778c867ed6ea85aa546cc9fdbeb2105"
+            ),
+            "mpnn_source_commit": "8907e6671bfbfc92303b5f79c4b5e6ce47cdef57",
+            "mpnn_source_entrypoint_sha256": (
+                "61f2c519a7f73fa12da9eb90da97b97ec2f8d5f31d42605639c7600cbd321cbe"
+            ),
+        },
+        "model": {
+            "rf_checkpoint_sha256": (
+                "76e4e260aefee3b582bd76b77ab95d2592e64f00c51bf344968ab9239f3250bc"
+            ),
+            "mpnn_checkpoint_sha256": (
+                "c9cb4a671d79604111231f8dbfc7c590e06f1197453b7a6854ac6661a642f5bd"
+            ),
+        },
+        "environment": {
+            "rf_container_image": "pd-rfpeptide-gpu:fixed",
+            "rf_container_image_id": (
+                "sha256:95e2a19e4adf4b6e8bcdd1777b609bf717472a91643dc92f0ce6aaffbc5219f1"
+            ),
+            "mpnn_container_image": "pd-foundry-gpu:latest",
+            "mpnn_container_image_id": (
+                "sha256:23f8612f4537f90078d54a5ac9669df7a6d5f436a48740e5d2884cfe856a5be4"
+            ),
+        },
+    },
+}
+
 REQUIRED_FILES = [
     "AGENTS.md",
     "harness/contracts/project_acceptance_v1.json",
@@ -1412,6 +2086,9 @@ REQUIRED_FILES = [
     "harness/signoffs/README.md",
     "harness/signoffs/signoff.schema.json",
     "index.md",
+    "docs/assets/readme/pep_design_icon_v1.png",
+    "docs/assets/readme/pep_design_homepage_workflow_v1.png",
+    "docs/assets/readme/readme_imagegen_record_v1.md",
     "ops/log.md",
     "ops/plans/harness_engineering_plan_v1.0.md",
     "scripts/run_project_acceptance.py",
@@ -1431,6 +2108,24 @@ REQUIRED_FILES = [
     "scripts/parse_v031_pilot_outputs.py",
     "scripts/run_v033_wave_a_pilot.py",
     "scripts/parse_v033_pilot_outputs.py",
+    "scripts/run_v034_wave_a_generation.py",
+    "scripts/parse_v034_generation_outputs.py",
+    "scripts/v034_adapters/__init__.py",
+    "scripts/v034_adapters/common.py",
+    "scripts/v034_adapters/pepmlm.py",
+    "scripts/v034_adapters/diffpepbuilder.py",
+    "scripts/v034_adapters/pepglad.py",
+    "scripts/v034_adapters/dflow.py",
+    "scripts/v034_adapters/pepmirror.py",
+    "scripts/v034_adapters/colabdesign.py",
+    "scripts/v034_adapters/rfdiffusion_mpnn.py",
+    "tests/test_v034_wave_a_generation.py",
+    "tests/test_v034_runner.py",
+    "tests/test_v034_merge.py",
+    "tests/test_v034_adapters_linear.py",
+    "tests/test_v034_adapters_chiral.py",
+    "tests/test_v034_adapters_topology.py",
+    "tests/test_v034_validator.py",
     "benchmark/README.md",
     "benchmark/availability/README.md",
     "benchmark/availability/link_availability_matrix_v0.5.csv",
@@ -1458,6 +2153,7 @@ REQUIRED_FILES = [
     "benchmark/input_sets/pilot_benchmark_target_manifest_v0.30.csv",
     "benchmark/input_sets/pilot_benchmark_control_manifest_v0.30.csv",
     "benchmark/input_sets/pilot_benchmark_job_manifest_v0.30.csv",
+    "benchmark/input_sets/pilot_benchmark_job_manifest_v0.34.csv",
     "benchmark/input_sets/wet_lab_candidate_panel_v0.30.csv",
     "benchmark/input_sets/dataset_supplement_watchlist_v0.6.csv",
     "benchmark/input_sets/dataset_supplement_schema_review_v0.7.csv",
@@ -1470,6 +2166,7 @@ REQUIRED_FILES = [
     "benchmark/input_sets/negative_design_panel_schema.md",
     "benchmark/method_sources/README.md",
     "benchmark/method_sources/method_source_manifest.csv",
+    "benchmark/method_sources/method_homepage_source_map_v0.35.csv",
     "benchmark/method_sources/source_pin_audit_v0.4.csv",
     "benchmark/method_sources/source_pin_audit_v0.5.csv",
     "benchmark/method_sources/method_paper_case_matrix_v0.14.csv",
@@ -1510,6 +2207,8 @@ REQUIRED_FILES = [
     "benchmark/deployment/pilot_execution_matrix_v0.30.csv",
     "benchmark/deployment/pilot_execution_results_v0.31.csv",
     "benchmark/deployment/pilot_execution_results_v0.33.csv",
+    "benchmark/deployment/pilot_execution_matrix_v0.34.csv",
+    "benchmark/deployment/pilot_execution_results_v0.34.csv",
     "benchmark/deployment/method_readiness_review_v0.8.csv",
     "benchmark/deployment/method_preflight_status_v0.10.csv",
     "benchmark/deployment/adapter_preflight_status_v0.11.csv",
@@ -1542,6 +2241,13 @@ REQUIRED_FILES = [
     "benchmark/results/pilot_candidate_outputs_v0.33.csv",
     "benchmark/results/pilot_run_v0.33.csv",
     "benchmark/results/pilot_v033_merge_summary.json",
+    "benchmark/results/pilot_method_output_manifest_v0.34.csv",
+    "benchmark/results/pilot_candidate_outputs_v0.34.csv",
+    "benchmark/results/pilot_candidate_qc_v0.34.csv",
+    "benchmark/results/pilot_run_v0.34.csv",
+    "benchmark/results/pilot_v034_merge_summary.json",
+    "benchmark/results/pilot_runtime_provenance_v0.34.json",
+    "benchmark/results/pilot_failure_diagnostics_v0.34.json",
     "sources/raw_snapshots/_index.md",
     "kb/references/references.bib",
     "kb/references/zotero-map.tsv",
@@ -1585,9 +2291,11 @@ REQUIRED_FILES = [
     "ops/audits/pilot_wave_a_execution_audit_v0.31.md",
     "ops/audits/supervisor_skills_installation_v0.32.md",
     "ops/audits/wave_a_adapter_parser_completion_audit_v0.33.md",
+    "ops/audits/v034_bounded_connectivity_audit.md",
     "ops/plans/updated_plan_v0.6.md",
     "ops/plans/updated_plan_v0.9.md",
     "ops/plans/updated_plan_v0.33.md",
+    "ops/plans/updated_plan_v0.34.md",
     "ops/plans/updated_plan_v1.3.md",
     "ops/plans/server_preflight_plan_v0.10.md",
     "ops/plans/server_from_scratch_run_plan_v0.10.md",
@@ -1739,6 +2447,2688 @@ def check_headers(errors: list[str], rel: str, expected: list[str], delimiter: s
     if headers != expected:
         errors.append(f"{rel}: header mismatch: {headers}")
     return rows
+
+
+def check_homepage_method_sources(errors: list[str]) -> int:
+    rel = "benchmark/method_sources/method_homepage_source_map_v0.35.csv"
+    rows = check_headers(errors, rel, HOMEPAGE_METHOD_SOURCE_HEADERS)
+    by_method: dict[str, dict[str, str]] = {}
+    for row in rows:
+        method = row.get("method", "")
+        if not method:
+            errors.append(
+                "method_homepage_source_map_v0.35.csv row missing method"
+            )
+            continue
+        if method in by_method:
+            errors.append(
+                "method_homepage_source_map_v0.35.csv duplicate method: "
+                + method
+            )
+        by_method[method] = row
+
+    missing = sorted(HOMEPAGE_INCLUDED_METHODS - set(by_method))
+    if missing:
+        errors.append(
+            "method_homepage_source_map_v0.35.csv missing included methods: "
+            + ", ".join(missing)
+        )
+    unexpected = sorted(set(by_method) - HOMEPAGE_INCLUDED_METHODS)
+    if unexpected:
+        errors.append(
+            "method_homepage_source_map_v0.35.csv has unexpected methods: "
+            + ", ".join(unexpected)
+        )
+
+    for method, row in by_method.items():
+        for field in (
+            "method_family",
+            "input_contract",
+            "output_contract",
+            "publication_title",
+            "persistent_id",
+            "publication_status",
+        ):
+            if not row.get(field):
+                errors.append(
+                    f"{method}: homepage source map missing {field}"
+                )
+
+        task_id = row.get("task_id", "")
+        if task_id not in REQUIRED_PROTOCOL_TASKS:
+            errors.append(
+                f"{method}: homepage source map has invalid task_id {task_id}"
+            )
+
+        repo_urls = [
+            value.strip()
+            for value in row.get("repo_url", "").split(";")
+            if value.strip()
+        ]
+        if not repo_urls or any(
+            not value.startswith("https://github.com/")
+            for value in repo_urls
+        ):
+            errors.append(
+                f"{method}: homepage source map repo_url must use GitHub HTTPS routes"
+            )
+
+        pins = [
+            value.strip()
+            for value in row.get("pinned_commit", "").split(";")
+            if value.strip()
+        ]
+        if not pins:
+            errors.append(
+                f"{method}: homepage source map missing pinned_commit"
+            )
+        elif any(not re.fullmatch(r"[0-9a-f]{40}", value) for value in pins):
+            errors.append(
+                f"{method}: homepage source map pinned_commit must use 40-character lowercase Git SHAs"
+            )
+
+        publication_urls = [
+            value.strip()
+            for value in row.get("publication_url", "").split(";")
+            if value.strip()
+        ]
+        if not publication_urls or any(
+            not value.startswith("https://") for value in publication_urls
+        ):
+            errors.append(
+                f"{method}: homepage source map publication_url must use HTTPS"
+            )
+
+        verified_on = row.get("verified_on", "")
+        try:
+            datetime.strptime(verified_on, "%Y-%m-%d")
+        except ValueError:
+            errors.append(
+                f"{method}: homepage source map verified_on must be YYYY-MM-DD"
+            )
+
+        if row.get("evidence_boundary") != HOMEPAGE_SOURCE_BOUNDARY:
+            errors.append(
+                f"{method}: homepage source map has invalid evidence_boundary"
+            )
+
+    return len(rows)
+
+
+def _v034_rows_by_job(
+    errors: list[str], artifact_name: str, rows: list[dict[str, str]]
+) -> dict[str, dict[str, str]]:
+    indexed: dict[str, dict[str, str]] = {}
+    for row in rows:
+        job_id = row.get("job_id", "")
+        if not job_id:
+            errors.append(f"{artifact_name}: row missing job_id")
+            continue
+        if job_id in indexed:
+            errors.append(f"{artifact_name}: duplicate job_id {job_id}")
+        indexed[job_id] = row
+    return indexed
+
+
+def _v034_unique_json_object(
+    pairs: list[tuple[str, object]],
+) -> dict[str, object]:
+    value: dict[str, object] = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError(f"duplicate JSON object key: {key}")
+        value[key] = item
+    return value
+
+
+def _v034_json_object(
+    errors: list[str], path: Path, artifact_name: str
+) -> dict[str, object]:
+    try:
+        value = json.loads(
+            path.read_text(encoding="utf-8"),
+            object_pairs_hook=_v034_unique_json_object,
+        )
+    except (OSError, UnicodeError, ValueError) as exc:
+        errors.append(f"{artifact_name} is not valid JSON: {exc}")
+        return {}
+    if not isinstance(value, dict):
+        errors.append(f"{artifact_name} must contain a JSON object")
+        return {}
+    return value
+
+
+def _v034_validate_exact_json_contract(
+    errors: list[str],
+    artifact_name: str,
+    observed: object,
+    expected: object,
+    path: str = "",
+) -> None:
+    location = f"{artifact_name} {path}".strip()
+    if isinstance(expected, dict):
+        if not isinstance(observed, dict):
+            errors.append(f"{location} must be a JSON object")
+            return
+        expected_keys = set(expected)
+        observed_keys = set(observed)
+        if observed_keys != expected_keys:
+            errors.append(
+                f"{location} keys mismatch; "
+                f"missing={sorted(expected_keys - observed_keys)}, "
+                f"extra={sorted(observed_keys - expected_keys)}"
+            )
+        for key, expected_value in expected.items():
+            if key in observed:
+                child_path = f"{path}.{key}" if path else key
+                _v034_validate_exact_json_contract(
+                    errors,
+                    artifact_name,
+                    observed[key],
+                    expected_value,
+                    child_path,
+                )
+        return
+    if isinstance(expected, list):
+        if not isinstance(observed, list):
+            errors.append(f"{location} must be a JSON array")
+            return
+        if len(observed) != len(expected):
+            item_label = "item" if len(expected) == 1 else "items"
+            errors.append(
+                f"{location} must contain exactly {len(expected)} {item_label}"
+            )
+            return
+        for index, expected_value in enumerate(expected):
+            _v034_validate_exact_json_contract(
+                errors,
+                artifact_name,
+                observed[index],
+                expected_value,
+                f"{path}[{index}]",
+            )
+        return
+    if type(observed) is not type(expected) or observed != expected:
+        errors.append(f"{location} must be {expected!r}")
+
+
+def _v034_runtime_value_is_finite(value: object) -> bool:
+    if type(value) is float:
+        return math.isfinite(value)
+    if isinstance(value, dict):
+        return all(
+            type(key) is str and _v034_runtime_value_is_finite(item)
+            for key, item in value.items()
+        )
+    if isinstance(value, list):
+        return all(_v034_runtime_value_is_finite(item) for item in value)
+    return True
+
+
+def _v034_string_list(value: object) -> bool:
+    return isinstance(value, list) and all(type(item) is str for item in value)
+
+
+def _v034_runtime_evidence_exact_schema(
+    method: object, evidence: object
+) -> bool:
+    if type(method) is not str or not isinstance(evidence, dict):
+        return False
+    expected = V034_RUNTIME_EVIDENCE_FIELDS.get(method)
+    if expected is None or set(evidence) != expected:
+        return False
+    int_fields = V034_RUNTIME_INT_FIELDS.get(method, frozenset())
+    bool_fields = V034_RUNTIME_BOOL_FIELDS.get(method, frozenset())
+    list_fields = V034_RUNTIME_LIST_FIELDS.get(method, frozenset())
+    nested_fields = (
+        frozenset({"model_asset_sha256"})
+        if method == "DiffPepBuilder"
+        else frozenset({"rf_trb_semantic_extract"})
+        if method == "RFdiffusion + ProteinMPNN"
+        else frozenset()
+    )
+    if any(type(evidence.get(field)) is not int for field in int_fields):
+        return False
+    if any(type(evidence.get(field)) is not bool for field in bool_fields):
+        return False
+    if any(not _v034_string_list(evidence.get(field)) for field in list_fields):
+        return False
+    string_fields = expected - int_fields - bool_fields - list_fields - nested_fields
+    if any(type(evidence.get(field)) is not str for field in string_fields):
+        return False
+    if method == "DiffPepBuilder":
+        assets = evidence.get("model_asset_sha256")
+        if not (
+            isinstance(assets, dict)
+            and set(assets) == V034_DIFFPEPBUILDER_MODEL_ASSET_FIELDS
+            and all(
+                type(value) is str
+                and re.fullmatch(r"[0-9a-f]{64}", value) is not None
+                for value in assets.values()
+            )
+        ):
+            return False
+    if method == "RFdiffusion + ProteinMPNN":
+        semantics = evidence.get("rf_trb_semantic_extract")
+        if not (
+            isinstance(semantics, dict)
+            and set(semantics) == V034_RF_TRB_FIELDS
+            and type(semantics.get("input_pdb")) is str
+            and _v034_string_list(semantics.get("contigs"))
+            and type(semantics.get("cyclic")) is bool
+            and type(semantics.get("design_startnum")) is int
+            and type(semantics.get("deterministic")) is bool
+            and _v034_string_list(semantics.get("hotspot_res"))
+            and type(semantics.get("num_designs")) is int
+            and _v034_string_list(semantics.get("sampled_mask"))
+        ):
+            return False
+    return _v034_runtime_value_is_finite(evidence)
+
+
+def _v034_runtime_provenance_exact_schema(provenance: object) -> bool:
+    if not isinstance(provenance, dict) or set(provenance) != V034_RUNTIME_PAYLOAD_FIELDS:
+        return False
+    records = provenance.get("records")
+    if not isinstance(records, list):
+        return False
+    sha256_pattern = re.compile(r"[0-9a-f]{64}")
+    for record in records:
+        if not isinstance(record, dict) or set(record) != V034_RUNTIME_RECORD_FIELDS:
+            return False
+        if not all(
+            (
+                type(record.get("job_id")) is str,
+                type(record.get("method")) is str,
+                type(record.get("seed_stage")) is str,
+                type(record.get("random_seed")) is int,
+                type(record.get("attempt_id")) is str,
+                type(record.get("runtime_evidence_path")) is str,
+                type(record.get("runtime_evidence_sha256")) is str,
+                sha256_pattern.fullmatch(record.get("runtime_evidence_sha256", ""))
+                is not None,
+                type(record.get("evidence_semantic_sha256")) is str,
+                sha256_pattern.fullmatch(record.get("evidence_semantic_sha256", ""))
+                is not None,
+                _v034_runtime_evidence_exact_schema(
+                    record.get("method"), record.get("evidence")
+                ),
+            )
+        ):
+            return False
+    return True
+
+
+def _v034_attempt_directory(
+    job: dict[str, str], execution: dict[str, str]
+) -> Path | None:
+    method = job.get("method", "")
+    slug = V034_METHOD_SLUGS.get(method)
+    job_id = job.get("job_id", "")
+    attempt_id = execution.get("attempt_id", "")
+    path_text = execution.get("attempt_dir", "")
+    if (
+        slug is None
+        or not job_id
+        or not attempt_id
+        or Path(attempt_id).name != attempt_id
+        or not path_text
+        or not Path(path_text).is_absolute()
+    ):
+        return None
+    path = Path(path_text)
+    code_root = Path(__file__).resolve().parents[1]
+    allowed_roots = {
+        ROOT / "benchmark_runs/v0.34",
+        code_root / "benchmark_runs/v0.34",
+    }
+    for run_root in allowed_roots:
+        expected = run_root / slug / job_id / attempt_id
+        try:
+            if path != expected or path.is_symlink():
+                continue
+            resolved_root = run_root.resolve(strict=True)
+            resolved = path.resolve(strict=True)
+            if resolved != expected.resolve(strict=True) or not resolved.is_dir():
+                continue
+            current = run_root
+            if current.is_symlink():
+                continue
+            valid = True
+            for part in (slug, job_id, attempt_id, "raw"):
+                current /= part
+                if current.is_symlink():
+                    valid = False
+                    break
+            if valid and current.is_dir():
+                return resolved
+        except (OSError, RuntimeError, ValueError):
+            continue
+    return None
+
+
+def _v034_parse_captured_json(path: Path) -> dict[str, object] | None:
+    def reject_constant(value: str) -> object:
+        raise ValueError(f"non-finite JSON constant: {value}")
+
+    try:
+        value = json.loads(
+            path.read_text(encoding="utf-8"),
+            object_pairs_hook=_v034_unique_json_object,
+            parse_constant=reject_constant,
+        )
+    except (OSError, UnicodeError, ValueError):
+        return None
+    return value if isinstance(value, dict) else None
+
+
+def _v034_replay_path_matches(
+    replay_root: Path, replay_text: str, attempt: Path, compact_text: str
+) -> bool:
+    if not replay_text or not compact_text:
+        return replay_text == compact_text
+    try:
+        replay_relative = Path(os.path.abspath(replay_text)).relative_to(replay_root)
+        compact_path = Path(compact_text)
+        compact_absolute = (
+            compact_path if compact_path.is_absolute() else attempt / compact_path
+        )
+        compact_relative = Path(os.path.abspath(compact_absolute)).relative_to(attempt)
+    except ValueError:
+        return False
+    return replay_relative == compact_relative
+
+
+def _v034_fixed_identity_mismatches(
+    job: dict[str, str],
+    execution: dict[str, str],
+    compact_manifest: dict[str, str],
+    compact_provenance: dict[str, object] | None,
+) -> set[str]:
+    from scripts import parse_v034_generation_outputs as merge
+
+    categories = {"source", "model", "environment"}
+    method = job.get("method", "")
+    contract = V034_FIXED_IDENTITY_CONTRACTS.get(method)
+    attempt = _v034_attempt_directory(job, execution)
+    runtime_relative = V034_RUNTIME_PATHS.get(method)
+    if contract is None or attempt is None or runtime_relative is None:
+        return categories
+    runtime_capture = merge._bound_relative_attempt_file(attempt, runtime_relative)
+    manifest_capture = merge._bound_relative_attempt_file(
+        attempt, "method_output_manifest.csv"
+    )
+    if runtime_capture is None or manifest_capture is None:
+        return categories
+    runtime = _v034_parse_captured_json(runtime_capture)
+    manifest_rows = merge._strict_csv_rows(manifest_capture)
+    if runtime is None or manifest_rows is None or len(manifest_rows) != 1:
+        return categories
+    attempt_manifest = manifest_rows[0]
+    mismatches: set[str] = set()
+    manifest_contract = contract["manifest"]
+    manifest_fields = {
+        "source": "source_commit",
+        "model": "model_revision",
+        "environment": "environment_id",
+    }
+    for category in categories:
+        expected_runtime = contract[category]
+        if not isinstance(expected_runtime, dict) or any(
+            runtime.get(field) != expected
+            for field, expected in expected_runtime.items()
+        ):
+            mismatches.add(category)
+        manifest_field = manifest_fields[category]
+        expected_manifest = manifest_contract[manifest_field]
+        if (
+            attempt_manifest.get(manifest_field) != expected_manifest
+            or compact_manifest.get(manifest_field) != expected_manifest
+            or attempt_manifest.get(manifest_field)
+            != compact_manifest.get(manifest_field)
+        ):
+            mismatches.add(category)
+
+    compact_evidence = (
+        compact_provenance.get("evidence")
+        if isinstance(compact_provenance, dict)
+        else None
+    )
+    if compact_provenance is not None and compact_evidence != runtime:
+        mismatches.update(categories)
+
+    derived_manifest: dict[str, str]
+    if method == "PepMLM":
+        derived_manifest = {
+            "source_commit": str(runtime.get("source_commit", "")),
+            "model_revision": str(runtime.get("model_revision", "")),
+            "environment_id": (
+                f"{runtime.get('container_image', '')}/"
+                f"{runtime.get('conda_environment', '')}"
+            ),
+        }
+    elif method == "DiffPepBuilder":
+        derived_manifest = {
+            "source_commit": str(runtime.get("source_commit", "")),
+            "model_revision": str(manifest_contract["model_revision"]),
+            "environment_id": (
+                f"{runtime.get('container_image', '')}/"
+                f"{runtime.get('conda_environment', '')}"
+            ),
+        }
+    elif method == "PepGLAD":
+        derived_manifest = {
+            "source_commit": str(runtime.get("source_commit", "")),
+            "model_revision": str(manifest_contract["model_revision"]),
+            "environment_id": (
+                f"{runtime.get('container_image', '')}/"
+                f"{runtime.get('conda_environment', '')}"
+            ),
+        }
+    elif method == "D-Flow / PeptideDesign":
+        derived_manifest = {
+            "source_commit": str(runtime.get("source_commit", "")),
+            "model_revision": f"sha256:{runtime.get('checkpoint_sha256', '')}",
+            "environment_id": str(
+                runtime.get("execution_environment_declared", "")
+            ),
+        }
+    elif method == "PepMirror":
+        derived_manifest = {
+            "source_commit": str(runtime.get("source_commit_observed", "")),
+            "model_revision": str(runtime.get("checkpoint_revision", "")),
+            "environment_id": str(runtime.get("execution_environment_id", "")),
+        }
+    elif method == "AfCycDesign / ColabDesign cyclic peptide":
+        derived_manifest = {
+            "source_commit": str(runtime.get("source_commit", "")),
+            "model_revision": (
+                f"alphafold_{runtime.get('alphafold_model_name', '')}@sha256:"
+                f"{runtime.get('alphafold_params_sha256', '')}"
+            ),
+            "environment_id": (
+                f"{runtime.get('container_image', '')}/bench-colabdesign"
+            ),
+        }
+    elif method == "RFdiffusion + ProteinMPNN":
+        derived_manifest = {
+            "source_commit": (
+                f"RFdiffusion@{runtime.get('rf_source_commit', '')};"
+                f"ProteinMPNN@{runtime.get('mpnn_source_commit', '')}"
+            ),
+            "model_revision": str(manifest_contract["model_revision"]),
+            "environment_id": (
+                f"{runtime.get('rf_container_image', '')} + "
+                f"{runtime.get('mpnn_container_image', '')}"
+            ),
+        }
+    else:
+        return categories
+    for category, manifest_field in manifest_fields.items():
+        if derived_manifest[manifest_field] != attempt_manifest.get(manifest_field):
+            mismatches.add(category)
+    return mismatches
+
+
+def _v034_stable_raw_replay(
+    job: dict[str, str],
+    execution: dict[str, str],
+    method_row: dict[str, str],
+    candidate: dict[str, str],
+    qc: dict[str, str],
+    run: dict[str, str],
+    provenance: dict[str, object],
+) -> bool:
+    from scripts import parse_v034_generation_outputs as merge
+    from scripts.run_v034_wave_a_generation import CANDIDATE_HEADERS, _candidate_row
+    from scripts.v034_adapters.common import evaluate_candidate_qc
+
+    attempt = _v034_attempt_directory(job, execution)
+    evidence = provenance.get("evidence")
+    method = job.get("method", "")
+    replay_files = V034_REPLAY_FILES.get(method)
+    runtime_relative = V034_RUNTIME_PATHS.get(method)
+    if (
+        attempt is None
+        or not isinstance(evidence, dict)
+        or replay_files is None
+        or runtime_relative is None
+        or provenance.get("runtime_evidence_path") != runtime_relative
+    ):
+        return False
+    store = merge._ACTIVE_CAPTURE_STORE
+    if store is None:
+        return False
+    runtime_capture = merge._bound_relative_attempt_file(
+        attempt,
+        runtime_relative,
+        provenance.get("runtime_evidence_sha256"),
+    )
+    if runtime_capture is None:
+        return False
+    raw_evidence = _v034_parse_captured_json(runtime_capture)
+    if raw_evidence != evidence:
+        return False
+    replay = store.root / "validator-replay" / job["job_id"] / attempt.name
+    try:
+        replay.mkdir(parents=True, exist_ok=False)
+        for relative_text in replay_files:
+            if merge._copy_captured_relative_file(attempt, replay, relative_text) is None:
+                return False
+        source = attempt.resolve(strict=True)
+        destination = replay.resolve(strict=True)
+        if method == "PepMirror":
+            replay_evidence = merge._prepare_pepmirror_replay(
+                attempt, replay, raw_evidence
+            )
+            if replay_evidence is None:
+                return False
+        else:
+            rewritten = merge._rewrite_attempt_paths(
+                raw_evidence, source, destination
+            )
+            if not isinstance(rewritten, dict):
+                return False
+            replay_evidence = rewritten
+        merge._write_replay_json(replay / runtime_relative, replay_evidence)
+
+        adapter = importlib.import_module(
+            {
+                "PepMLM": "scripts.v034_adapters.pepmlm",
+                "DiffPepBuilder": "scripts.v034_adapters.diffpepbuilder",
+                "D-Flow / PeptideDesign": "scripts.v034_adapters.dflow",
+                "PepMirror": "scripts.v034_adapters.pepmirror",
+                "AfCycDesign / ColabDesign cyclic peptide": (
+                    "scripts.v034_adapters.colabdesign"
+                ),
+                "RFdiffusion + ProteinMPNN": (
+                    "scripts.v034_adapters.rfdiffusion_mpnn"
+                ),
+            }[method]
+        )
+        replay_value, replay_runtime = adapter.parse(job, replay)
+        replay_candidate = _candidate_row(job, replay_value)
+        if set(replay_candidate) != set(CANDIDATE_HEADERS):
+            return False
+        for field in set(CANDIDATE_HEADERS) - {
+            "structure_path",
+            "source_output_path",
+        }:
+            if str(replay_candidate.get(field, "")) != candidate.get(field, ""):
+                return False
+        for field in ("structure_path", "source_output_path"):
+            if not _v034_replay_path_matches(
+                destination,
+                str(replay_candidate.get(field, "")),
+                source,
+                candidate.get(field, ""),
+            ):
+                return False
+
+        normalized_runtime = merge._rewrite_attempt_paths(
+            replay_runtime, destination, source
+        )
+        if not isinstance(normalized_runtime, dict):
+            return False
+        if method == "PepMirror":
+            normalized_runtime["package_evidence_sha256"] = raw_evidence.get(
+                "package_evidence_sha256"
+            )
+            normalized_runtime["execution_preflight_evidence_sha256"] = (
+                raw_evidence.get("execution_preflight_evidence_sha256")
+            )
+        if normalized_runtime != raw_evidence:
+            return False
+
+        job_snapshot = dict(job)
+        if job.get("target_pdb_path"):
+            target = merge._hash_bound_job_target(job)
+            if target is None:
+                return False
+            job_snapshot["target_pdb_path"] = str(target)
+        observed_qc = evaluate_candidate_qc(
+            job_snapshot, replay_candidate, replay_runtime, replay / "raw"
+        )
+        expected_qc = {
+            field: (
+                job["job_id"]
+                if field == "job_id"
+                else candidate.get("design_id", "")
+                if field == "design_id"
+                else "yes"
+                if field == "supported_candidate"
+                else "not_applicable"
+                if field
+                in {
+                    "backbone_to_fasta_handoff_status",
+                    "mirror_target_atom_identity_status",
+                    "mirror_target_central_inversion_status",
+                    "mirror_output_atom_identity_status",
+                    "mirror_output_central_inversion_status",
+                }
+                and field not in observed_qc
+                else str(observed_qc.get(field, ""))
+            )
+            for field in PILOT_CANDIDATE_QC_V034_HEADERS
+        }
+        if qc != expected_qc:
+            return False
+
+        manifest_capture = merge._bound_relative_attempt_file(
+            attempt, "method_output_manifest.csv"
+        )
+        result_capture = merge._bound_relative_attempt_file(attempt, "run_result.json")
+        if manifest_capture is None or result_capture is None:
+            return False
+        manifest_rows = merge._strict_csv_rows(manifest_capture)
+        result = _v034_parse_captured_json(result_capture)
+        if manifest_rows is None or len(manifest_rows) != 1 or result is None:
+            return False
+        if manifest_rows[0] != method_row:
+            return False
+
+        expected_execution = {
+            "execution_id": f"exec_{job['job_id']}",
+            "job_id": job["job_id"],
+            "method": method,
+            "seed_stage": job.get("seed_stage", ""),
+            "random_seed": job.get("random_seed", ""),
+            "attempt_id": attempt.name,
+            "attempt_dir": str(attempt),
+            "status": str(result.get("status", "")),
+            "overall_qc_status": str(result.get("overall_qc_status", "")),
+            "supported_candidate": "yes",
+            "merge_status": "supported",
+            "status_reason": str(result.get("status_reason", "")),
+            "candidate_parse_status": str(result.get("parser_status", "")),
+            "qc_status_reason": str(observed_qc.get("status_reason", "")),
+            "chirality_evaluable": str(observed_qc.get("chirality_evaluable", "")),
+            "chirality_l_count": str(observed_qc.get("chirality_l_count", "")),
+            "chirality_d_count": str(observed_qc.get("chirality_d_count", "")),
+            "chirality_unknown_count": str(
+                observed_qc.get("chirality_unknown_count", "")
+            ),
+            "method_contract_status": str(
+                observed_qc.get("method_contract_status", "")
+            ),
+            "handoff_status": str(observed_qc.get("handoff_status", "")),
+        }
+        if execution != expected_execution:
+            return False
+        expected_run = {
+            "design_id": candidate.get("design_id", ""),
+            "job_id": job["job_id"],
+            "method": method,
+            "task_id": job.get("task_id", ""),
+            "target_id": job.get("target_id", ""),
+            "input_mode": job.get("input_mode", ""),
+            "peptide_type": job.get("peptide_type", ""),
+            "chirality": job.get("chirality", ""),
+            "cyclic": job.get("cyclic", ""),
+            "random_seed": job.get("random_seed", ""),
+            "seed_stage": job.get("seed_stage", ""),
+            "attempt_id": attempt.name,
+            "status": str(result.get("status", "")),
+            "overall_qc_status": str(result.get("overall_qc_status", "")),
+            "supported_candidate": "yes",
+            "sequence": candidate.get("sequence", ""),
+            "structure_path": candidate.get("structure_path", ""),
+            "status_reason": str(result.get("status_reason", "")),
+            "notes": (
+                "Bounded connectivity evidence only; not scoring, ranking, or "
+                "Benchmark result"
+            ),
+        }
+        return run == expected_run
+    except (
+        csv.Error,
+        OSError,
+        UnicodeError,
+        ValueError,
+        TypeError,
+        RuntimeError,
+        KeyError,
+    ):
+        return False
+
+
+_V035_HISTORICAL_NAMES = frozenset(
+    {
+        "pilot_benchmark_job_manifest_v0.34.csv",
+        "pilot_execution_matrix_v0.34.csv",
+        "pilot_execution_results_v0.34.csv",
+        "pilot_method_output_manifest_v0.34.csv",
+        "pilot_candidate_outputs_v0.34.csv",
+        "pilot_candidate_qc_v0.34.csv",
+        "pilot_run_v0.34.csv",
+        "pilot_runtime_provenance_v0.34.json",
+        "pilot_failure_diagnostics_v0.34.json",
+        "pilot_v034_merge_summary.json",
+    }
+)
+_V035_HISTORICAL_PATHS = (
+    "benchmark/input_sets/pilot_benchmark_job_manifest_v0.34.csv",
+    "benchmark/deployment/pilot_execution_matrix_v0.34.csv",
+    "benchmark/deployment/pilot_execution_results_v0.34.csv",
+    "benchmark/results/pilot_method_output_manifest_v0.34.csv",
+    "benchmark/results/pilot_candidate_outputs_v0.34.csv",
+    "benchmark/results/pilot_candidate_qc_v0.34.csv",
+    "benchmark/results/pilot_run_v0.34.csv",
+    "benchmark/results/pilot_runtime_provenance_v0.34.json",
+    "benchmark/results/pilot_failure_diagnostics_v0.34.json",
+    "benchmark/results/pilot_v034_merge_summary.json",
+)
+_V035_PUBLIC_FILES = frozenset(
+    {
+        "raw/pepglad_candidate.pdb",
+        "raw/pepglad_pre_relax.pdb",
+        "raw/pepglad_summary.jsonl",
+        "raw/runtime_evidence.json",
+        "work/codesign/3EQS_0.pdb",
+    }
+)
+_V035_REPLAY_FILES = _V035_PUBLIC_FILES | frozenset(
+    {
+        "execution.json",
+        "job.json",
+        "observer_patch_evidence.json",
+        "pepglad_instrument_source.py",
+        "pepglad_observer.py",
+        "pepglad_seeded_entry.py",
+        "run_result.json",
+        "work/api/run.py",
+    }
+)
+_V035_RUN_RESULT_FIELDS = frozenset(
+    {
+        "attempt_dir",
+        "created_at",
+        "design_id",
+        "exit_code",
+        "job_id",
+        "method",
+        "overall_qc_status",
+        "parser_status",
+        "runtime_seconds",
+        "status",
+        "status_reason",
+    }
+)
+_V035_BUNDLE_FIELDS = frozenset(
+    {
+        "schema_version",
+        "evidence_boundary",
+        "historical_v034_bindings",
+        "job",
+        "execution",
+        "candidate",
+        "qc",
+        "runtime_provenance",
+    }
+)
+_V035_HISTORICAL_FIELDS = frozenset(
+    {"primary_supported", "pepglad_status", "artifacts"}
+)
+_V035_JOB_FIELDS = frozenset(
+    {
+        "job_id",
+        "method",
+        "random_seed",
+        "seed_stage",
+        "target_sha256",
+        "target_chain",
+        "binder_chain",
+        "length",
+        "chirality_constraint",
+        "chirality_check_mode",
+        "baseline_replay_policy",
+    }
+)
+_V035_EXECUTION_FIELDS = frozenset(
+    {"attempt_id", "attempt_dir", "exit_code", "status", "supported_candidate"}
+)
+_V035_CANDIDATE_FIELDS = frozenset(
+    {
+        "design_id",
+        "sequence",
+        "structure_path",
+        "file_sha256",
+        "binder_chain",
+        "parse_status",
+        "chirality",
+    }
+)
+_V035_QC_FIELDS = frozenset(
+    {
+        "observed_chirality_class",
+        "chirality_status",
+        "chirality_evaluable",
+        "chirality_l_count",
+        "chirality_d_count",
+        "chirality_unknown_count",
+        "baseline_replay_status",
+        "overall_qc_status",
+    }
+)
+_V035_RUNTIME_FIELDS = frozenset(
+    {
+        "attempt_id",
+        "requested_seed",
+        "effective_seed",
+        "seed_control_status",
+        "runtime_evidence_path",
+        "runtime_evidence_sha256",
+        "runtime_semantic_sha256",
+        "baseline_expected_sha256",
+        "baseline_observed_sha256",
+        "files",
+        "producer_bindings",
+    }
+)
+_V035_PRODUCER_FIELDS = frozenset(
+    {
+        "source_commit",
+        "source_entrypoint_sha256",
+        "model_weights_sha256",
+        "target_input_sha256",
+        "container_image",
+        "conda_environment",
+        "observer_source_sha256",
+        "observer_patch_sha256",
+        "seed_wrapper_sha256",
+        "source_entrypoint_instrumented_sha256",
+    }
+)
+_V035_BASELINE_SHA256 = (
+    "dc358b2e64c31c16a649627e1f75a71c77c558b62affa6c50b20d3ac25b3fa26"
+)
+_V035_FORBIDDEN_RESULT = re.compile(
+    r"(?<![a-z0-9])(?:score|scoring|rank|ranking|leaderboard|"
+    r"benchmark[_ -]?result|seed[_ -]?43|best[_ -]?performing)(?![a-z0-9])",
+    re.IGNORECASE,
+)
+
+
+def _v035_sha256(value: object) -> bool:
+    return type(value) is str and re.fullmatch(r"[0-9a-f]{64}", value) is not None
+
+
+def _v035_forbidden_result_content(
+    value: object, path: tuple[str, ...] = ()
+) -> bool:
+    if type(value) is dict:
+        return any(
+            _V035_FORBIDDEN_RESULT.search(key) is not None
+            or _v035_forbidden_result_content(item, path + (key,))
+            for key, item in value.items()
+        )
+    if type(value) is list:
+        return any(
+            _v035_forbidden_result_content(item, path + (str(index),))
+            for index, item in enumerate(value)
+        )
+    if type(value) is str:
+        if (
+            path == ("evidence_boundary",)
+            and value == "bounded_connectivity_only_not_scoring_or_ranking"
+        ):
+            return False
+        return _V035_FORBIDDEN_RESULT.search(value) is not None
+    return False
+
+
+def _v035_bundle_schema_valid(bundle: object) -> bool:
+    if (
+        type(bundle) is not dict
+        or set(bundle) != _V035_BUNDLE_FIELDS
+        or _v035_forbidden_result_content(bundle)
+    ):
+        return False
+    historical = bundle.get("historical_v034_bindings")
+    job = bundle.get("job")
+    execution = bundle.get("execution")
+    candidate = bundle.get("candidate")
+    qc = bundle.get("qc")
+    runtime = bundle.get("runtime_provenance")
+    if not all(
+        type(value) is dict
+        for value in (historical, job, execution, candidate, qc, runtime)
+    ):
+        return False
+    files = runtime.get("files")
+    producer = runtime.get("producer_bindings")
+    artifacts = historical.get("artifacts")
+    if not all(type(value) is dict for value in (files, producer, artifacts)):
+        return False
+    if not all(
+        (
+            set(historical) == _V035_HISTORICAL_FIELDS,
+            set(job) == _V035_JOB_FIELDS,
+            set(execution) == _V035_EXECUTION_FIELDS,
+            set(candidate) == _V035_CANDIDATE_FIELDS,
+            set(qc) == _V035_QC_FIELDS,
+            set(runtime) == _V035_RUNTIME_FIELDS,
+            set(files) == _V035_PUBLIC_FILES,
+            set(producer) == _V035_PRODUCER_FIELDS,
+            set(artifacts) == _V035_HISTORICAL_NAMES,
+            all(_v035_sha256(value) for value in artifacts.values()),
+            all(_v035_sha256(value) for value in files.values()),
+        )
+    ):
+        return False
+    if not all(
+        (
+            bundle.get("schema_version") == "v0.35",
+            bundle.get("evidence_boundary")
+            == "bounded_connectivity_only_not_scoring_or_ranking",
+            type(historical.get("primary_supported")) is int,
+            historical.get("primary_supported") == 6,
+            historical.get("pepglad_status")
+            == "historical_failure_not_promoted",
+            job.get("job_id") == "v035_pepglad_3eqs_seed42",
+            job.get("method") == "PepGLAD",
+            type(job.get("random_seed")) is int,
+            job.get("random_seed") == 42,
+            job.get("seed_stage") == "primary",
+            _v035_sha256(job.get("target_sha256")),
+            job.get("target_chain") == "A",
+            job.get("binder_chain") == "B",
+            type(job.get("length")) is int,
+            job.get("length") == 11,
+            job.get("chirality_constraint") == "unrestricted",
+            job.get("chirality_check_mode") == "report_only",
+            job.get("baseline_replay_policy") == "warn_on_mismatch",
+        )
+    ):
+        return False
+    attempt_dir = execution.get("attempt_dir")
+    if not all(
+        (
+            execution.get("attempt_id") == "attempt_001",
+            type(attempt_dir) is str,
+            Path(attempt_dir).is_absolute() if type(attempt_dir) is str else False,
+            Path(attempt_dir).name == "attempt_001"
+            if type(attempt_dir) is str
+            else False,
+            Path(attempt_dir).parent.name == "v035_pepglad_3eqs_seed42"
+            if type(attempt_dir) is str
+            else False,
+            Path(attempt_dir).parent.parent.name == "pepglad"
+            if type(attempt_dir) is str
+            else False,
+            type(execution.get("exit_code")) is int,
+            execution.get("exit_code") == 0,
+            execution.get("status") == "passed",
+            type(execution.get("supported_candidate")) is bool,
+            execution.get("supported_candidate") is True,
+        )
+    ):
+        return False
+    sequence = candidate.get("sequence")
+    if not all(
+        (
+            candidate.get("design_id")
+            == "v035_pepglad_3eqs_seed42_candidate_1",
+            type(sequence) is str,
+            re.fullmatch(r"[A-Z]{11}", sequence) is not None
+            if type(sequence) is str
+            else False,
+            candidate.get("structure_path") == "raw/pepglad_candidate.pdb",
+            _v035_sha256(candidate.get("file_sha256")),
+            candidate.get("binder_chain") == "B",
+            candidate.get("parse_status") == "parsed",
+            candidate.get("chirality") in {"L", "D", "mixed"},
+        )
+    ):
+        return False
+    count_fields = (
+        "chirality_evaluable",
+        "chirality_l_count",
+        "chirality_d_count",
+        "chirality_unknown_count",
+    )
+    if any(type(qc.get(field)) is not int or qc[field] < 0 for field in count_fields):
+        return False
+    observed = qc.get("observed_chirality_class")
+    l_count = qc.get("chirality_l_count")
+    d_count = qc.get("chirality_d_count")
+    if observed == "mixed":
+        class_valid = l_count > 0 and d_count > 0
+        chirality_status = "warn"
+    elif observed == "L":
+        class_valid = l_count == 11 and d_count == 0
+        chirality_status = "pass"
+    elif observed == "D":
+        class_valid = l_count == 0 and d_count == 11
+        chirality_status = "pass"
+    else:
+        return False
+    if not all(
+        (
+            qc.get("chirality_evaluable") == 11,
+            l_count + d_count == 11,
+            qc.get("chirality_unknown_count") == 0,
+            observed == candidate.get("chirality"),
+            class_valid,
+            qc.get("chirality_status") == chirality_status,
+        )
+    ):
+        return False
+    if not all(
+        (
+            runtime.get("attempt_id") == execution.get("attempt_id"),
+            type(runtime.get("requested_seed")) is int,
+            runtime.get("requested_seed") == 42,
+            type(runtime.get("effective_seed")) is int,
+            runtime.get("effective_seed") == 42,
+            runtime.get("seed_control_status") == "honored",
+            runtime.get("runtime_evidence_path") == "raw/runtime_evidence.json",
+            _v035_sha256(runtime.get("runtime_evidence_sha256")),
+            _v035_sha256(runtime.get("runtime_semantic_sha256")),
+            runtime.get("baseline_expected_sha256") == _V035_BASELINE_SHA256,
+            runtime.get("baseline_observed_sha256")
+            == candidate.get("file_sha256"),
+            files.get("raw/pepglad_candidate.pdb")
+            == candidate.get("file_sha256"),
+            files.get("work/codesign/3EQS_0.pdb")
+            == candidate.get("file_sha256"),
+            files.get("raw/runtime_evidence.json")
+            == runtime.get("runtime_evidence_sha256"),
+            type(producer.get("source_commit")) is str,
+            re.fullmatch(r"[0-9a-f]{40}", producer.get("source_commit", ""))
+            is not None,
+            producer.get("target_input_sha256") == job.get("target_sha256"),
+            all(
+                _v035_sha256(producer.get(field))
+                for field in _V035_PRODUCER_FIELDS
+                - {"source_commit", "container_image", "conda_environment"}
+            ),
+            all(
+                type(producer.get(field)) is str and bool(producer.get(field))
+                for field in ("container_image", "conda_environment")
+            ),
+        )
+    ):
+        return False
+    baseline_status = (
+        "pass"
+        if runtime.get("baseline_observed_sha256") == _V035_BASELINE_SHA256
+        else "warn"
+    )
+    overall_status = (
+        "pass_with_warning"
+        if "warn" in {chirality_status, baseline_status}
+        else "pass"
+    )
+    return all(
+        (
+            qc.get("baseline_replay_status") == baseline_status,
+            qc.get("overall_qc_status") == overall_status,
+        )
+    )
+
+
+def _v035_stat_identity(value: os.stat_result) -> tuple[int, ...]:
+    return (
+        value.st_dev,
+        value.st_ino,
+        value.st_size,
+        value.st_mode,
+        value.st_mtime_ns,
+        value.st_ctime_ns,
+    )
+
+
+def _v035_directory_identity(value: os.stat_result) -> tuple[int, ...]:
+    return (value.st_mode, value.st_dev, value.st_ino)
+
+
+def _v035_directory_flags() -> int:
+    return (
+        os.O_RDONLY
+        | getattr(os, "O_CLOEXEC", 0)
+        | getattr(os, "O_DIRECTORY", 0)
+        | getattr(os, "O_NOFOLLOW", 0)
+    )
+
+
+def _v035_close_descriptors(descriptors: list[int]) -> None:
+    for descriptor in reversed(descriptors):
+        try:
+            os.close(descriptor)
+        except OSError:
+            pass
+
+
+def _v035_open_directory_chain(
+    directory: Path,
+) -> tuple[list[int], list[os.stat_result]] | None:
+    logical = Path(directory)
+    if not logical.is_absolute() or Path(os.path.abspath(logical)) != logical:
+        return None
+    descriptors: list[int] = []
+    identities: list[os.stat_result] = []
+    try:
+        current = os.open(logical.anchor, _v035_directory_flags())
+        descriptors.append(current)
+        opened = os.fstat(current)
+        if not stat.S_ISDIR(opened.st_mode):
+            _v035_close_descriptors(descriptors)
+            return None
+        identities.append(opened)
+        for part in logical.parts[1:]:
+            child = os.open(part, _v035_directory_flags(), dir_fd=current)
+            descriptors.append(child)
+            opened = os.fstat(child)
+            if not stat.S_ISDIR(opened.st_mode):
+                _v035_close_descriptors(descriptors)
+                return None
+            identities.append(opened)
+            current = child
+    except (OSError, ValueError):
+        _v035_close_descriptors(descriptors)
+        return None
+    return descriptors, identities
+
+
+def _v035_directory_chain_stable(
+    directory: Path,
+    descriptors: list[int],
+    identities: list[os.stat_result],
+) -> bool:
+    parts = Path(directory).parts
+    if len(descriptors) != len(parts) or len(identities) != len(parts):
+        return False
+    try:
+        for descriptor, expected in zip(descriptors, identities):
+            current = os.fstat(descriptor)
+            if (
+                not stat.S_ISDIR(current.st_mode)
+                or _v035_directory_identity(current)
+                != _v035_directory_identity(expected)
+            ):
+                return False
+        for index, part in enumerate(parts[1:], start=1):
+            current = os.stat(
+                part,
+                dir_fd=descriptors[index - 1],
+                follow_symlinks=False,
+            )
+            if (
+                not stat.S_ISDIR(current.st_mode)
+                or _v035_directory_identity(current)
+                != _v035_directory_identity(identities[index])
+            ):
+                return False
+        current_path = os.lstat(directory)
+    except OSError:
+        return False
+    return (
+        stat.S_ISDIR(current_path.st_mode)
+        and _v035_directory_identity(current_path)
+        == _v035_directory_identity(identities[-1])
+    )
+
+
+def _v035_stable_file(
+    path: Path, *, confined_root: Path | None = None
+) -> tuple[Path, bytes, str, tuple[int, ...]] | None:
+    logical = Path(path)
+    if not logical.is_absolute() or Path(os.path.abspath(logical)) != logical:
+        return None
+    root = Path(confined_root) if confined_root is not None else None
+    try:
+        if root is not None:
+            if not root.is_absolute() or Path(os.path.abspath(root)) != root:
+                return None
+            logical.relative_to(root)
+    except ValueError:
+        return None
+    opened = _v035_open_directory_chain(logical.parent)
+    if opened is None:
+        return None
+    descriptors, directory_stats = opened
+    file_descriptor: int | None = None
+    try:
+        file_flags = (
+            os.O_RDONLY
+            | getattr(os, "O_CLOEXEC", 0)
+            | getattr(os, "O_NOFOLLOW", 0)
+            | getattr(os, "O_NONBLOCK", 0)
+        )
+        file_descriptor = os.open(
+            logical.name,
+            file_flags,
+            dir_fd=descriptors[-1],
+        )
+        before = os.fstat(file_descriptor)
+        if not stat.S_ISREG(before.st_mode) or before.st_size <= 0:
+            return None
+        chunks: list[bytes] = []
+        while True:
+            chunk = os.read(file_descriptor, 1024 * 1024)
+            if not chunk:
+                break
+            chunks.append(chunk)
+        after = os.fstat(file_descriptor)
+        current_file = os.stat(
+            logical.name,
+            dir_fd=descriptors[-1],
+            follow_symlinks=False,
+        )
+        identity = _v035_stat_identity(before)
+        payload = b"".join(chunks)
+        if not all(
+            (
+                identity == _v035_stat_identity(after),
+                identity == _v035_stat_identity(current_file),
+                len(payload) == before.st_size,
+                _v035_directory_chain_stable(
+                    logical.parent,
+                    descriptors,
+                    directory_stats,
+                ),
+            )
+        ):
+            return None
+        return logical, payload, hashlib.sha256(payload).hexdigest(), identity
+    except (OSError, RuntimeError, ValueError):
+        return None
+    finally:
+        if file_descriptor is not None:
+            try:
+                os.close(file_descriptor)
+            except OSError:
+                pass
+        _v035_close_descriptors(descriptors)
+
+
+def _v035_strict_json_bytes(payload: bytes) -> dict[str, object] | None:
+    def reject_constant(value: str) -> None:
+        raise ValueError(f"non-finite JSON number: {value}")
+
+    try:
+        value = json.loads(
+            payload.decode("utf-8"),
+            object_pairs_hook=_v034_unique_json_object,
+            parse_constant=reject_constant,
+        )
+    except (UnicodeError, ValueError):
+        return None
+    return value if type(value) is dict else None
+
+
+def _v035_run_result_valid(
+    result: object,
+    *,
+    attempt: Path,
+    job: dict[str, object],
+    execution: dict[str, object],
+    candidate: dict[str, object],
+    qc: dict[str, object],
+    replay_candidate: dict[str, object],
+    replay_qc: dict[str, object],
+) -> bool:
+    if type(result) is not dict or set(result) != _V035_RUN_RESULT_FIELDS:
+        return False
+    string_fields = _V035_RUN_RESULT_FIELDS - {"exit_code"}
+    if any(type(result.get(field)) is not str for field in string_fields):
+        return False
+    if type(result.get("exit_code")) is not int:
+        return False
+    try:
+        runtime_seconds = float(result["runtime_seconds"])
+        created_at = datetime.fromisoformat(
+            result["created_at"].replace("Z", "+00:00")
+        )
+    except (TypeError, ValueError):
+        return False
+    if (
+        not math.isfinite(runtime_seconds)
+        or runtime_seconds <= 0
+        or created_at.tzinfo is None
+        or created_at.utcoffset() is None
+    ):
+        return False
+    expected = {
+        "attempt_dir": str(attempt),
+        "design_id": candidate.get("design_id"),
+        "exit_code": execution.get("exit_code"),
+        "job_id": job.get("job_id"),
+        "method": job.get("method"),
+        "overall_qc_status": qc.get("overall_qc_status"),
+        "parser_status": candidate.get("parse_status"),
+        "status": execution.get("status"),
+        "status_reason": "bounded_connectivity_candidate_qc_passed",
+    }
+    if any(result.get(field) != value for field, value in expected.items()):
+        return False
+    return all(
+        (
+            result["design_id"]
+            == "v035_pepglad_3eqs_seed42_candidate_1",
+            replay_candidate.get("parse_status") == result["parser_status"],
+            replay_qc.get("overall_qc_status") == result["overall_qc_status"],
+            result["exit_code"] == 0,
+            result["status"] == "passed",
+            bool(result["status_reason"]),
+        )
+    )
+
+
+def _v035_authorized_attempt_is_unique(attempt: Path) -> bool:
+    logical = Path(attempt)
+    if (
+        not logical.is_absolute()
+        or Path(os.path.abspath(logical)) != logical
+        or logical.name != "attempt_001"
+        or logical.parent.name != "v035_pepglad_3eqs_seed42"
+        or logical.parent.parent.name != "pepglad"
+    ):
+        return False
+    run_root = logical.parents[2]
+    opened = _v035_open_directory_chain(run_root)
+    if opened is None:
+        return False
+    descriptors, directory_stats = opened
+    attempts: list[Path] = []
+
+    def scan(directory_fd: int, directory: Path) -> bool:
+        try:
+            before = os.fstat(directory_fd)
+            names = tuple(sorted(os.listdir(directory_fd)))
+            for name in names:
+                entry = os.stat(
+                    name,
+                    dir_fd=directory_fd,
+                    follow_symlinks=False,
+                )
+                if stat.S_ISLNK(entry.st_mode):
+                    return False
+                is_attempt = re.fullmatch(r"attempt_[0-9]{3}", name) is not None
+                if is_attempt and not stat.S_ISDIR(entry.st_mode):
+                    return False
+                if not stat.S_ISDIR(entry.st_mode):
+                    continue
+                child_fd = os.open(
+                    name,
+                    _v035_directory_flags(),
+                    dir_fd=directory_fd,
+                )
+                try:
+                    child = os.fstat(child_fd)
+                    if _v035_directory_identity(child) != _v035_directory_identity(
+                        entry
+                    ):
+                        return False
+                    if is_attempt:
+                        attempts.append(directory / name)
+                    elif not scan(child_fd, directory / name):
+                        return False
+                    current_child = os.fstat(child_fd)
+                    current_entry = os.stat(
+                        name,
+                        dir_fd=directory_fd,
+                        follow_symlinks=False,
+                    )
+                    if not all(
+                        _v035_directory_identity(value)
+                        == _v035_directory_identity(entry)
+                        for value in (current_child, current_entry)
+                    ):
+                        return False
+                finally:
+                    os.close(child_fd)
+            after = os.fstat(directory_fd)
+            return all(
+                (
+                    _v035_directory_identity(after)
+                    == _v035_directory_identity(before),
+                    tuple(sorted(os.listdir(directory_fd))) == names,
+                )
+            )
+        except (OSError, ValueError):
+            return False
+
+    try:
+        topology_stable = scan(descriptors[-1], run_root)
+        chain_stable = _v035_directory_chain_stable(
+            run_root,
+            descriptors,
+            directory_stats,
+        )
+        return topology_stable and chain_stable and attempts == [logical]
+    finally:
+        _v035_close_descriptors(descriptors)
+
+
+def _v035_capture_attempt(
+    attempt: Path,
+) -> dict[str, tuple[Path, bytes, str, tuple[int, ...]]] | None:
+    if (
+        not attempt.is_absolute()
+        or Path(os.path.abspath(attempt)) != attempt
+        or attempt.name != "attempt_001"
+        or attempt.parent.name != "v035_pepglad_3eqs_seed42"
+        or attempt.parent.parent.name != "pepglad"
+    ):
+        return None
+    try:
+        attempt_lstat = os.lstat(attempt)
+        if stat.S_ISLNK(attempt_lstat.st_mode) or not stat.S_ISDIR(
+            attempt_lstat.st_mode
+        ):
+            return None
+    except OSError:
+        return None
+    captured: dict[str, tuple[Path, bytes, str, tuple[int, ...]]] = {}
+    for relative in _V035_REPLAY_FILES:
+        value = _v035_stable_file(attempt / relative, confined_root=attempt)
+        if value is None:
+            return None
+        captured[relative] = value
+    return captured
+
+
+def _v035_raw_replay_valid(bundle: object) -> bool:
+    if not _v035_bundle_schema_valid(bundle):
+        return False
+    from scripts.run_v035_pepglad_connectivity import (
+        AUTHORIZED_EXECUTION,
+        AUTHORIZED_JOB,
+    )
+    from scripts.v035_adapters import pepglad
+
+    execution = bundle["execution"]
+    candidate = bundle["candidate"]
+    qc = bundle["qc"]
+    provenance = bundle["runtime_provenance"]
+    job_summary = bundle["job"]
+    attempt = Path(execution["attempt_dir"])
+    if not _v035_authorized_attempt_is_unique(attempt):
+        return False
+    captured = _v035_capture_attempt(attempt)
+    if captured is None:
+        return False
+    captured_job = _v035_strict_json_bytes(captured["job.json"][1])
+    captured_execution = _v035_strict_json_bytes(captured["execution.json"][1])
+    run_result = _v035_strict_json_bytes(captured["run_result.json"][1])
+    if not all(
+        (
+            captured_job == dict(AUTHORIZED_JOB),
+            captured_execution == dict(AUTHORIZED_EXECUTION),
+            run_result is not None,
+        )
+    ):
+        return False
+    expected_bindings = pepglad.expected_runtime_bindings()
+    files = provenance["files"]
+    if not all(
+        (
+            provenance["producer_bindings"] == expected_bindings,
+            job_summary["target_sha256"]
+            == expected_bindings["target_input_sha256"],
+            all(files[relative] == captured[relative][2] for relative in files),
+            captured["raw/pepglad_candidate.pdb"][1]
+            == captured["work/codesign/3EQS_0.pdb"][1],
+            captured["raw/pepglad_candidate.pdb"][2]
+            == candidate["file_sha256"],
+        )
+    ):
+        return False
+    runtime_capture = captured["raw/runtime_evidence.json"]
+    runtime = _v035_strict_json_bytes(runtime_capture[1])
+    if runtime is None:
+        return False
+    try:
+        semantic = json.dumps(
+            runtime, sort_keys=True, separators=(",", ":"), allow_nan=False
+        ).encode("utf-8")
+    except (TypeError, ValueError):
+        return False
+    if not all(
+        (
+            runtime_capture[2] == provenance["runtime_evidence_sha256"],
+            hashlib.sha256(semantic).hexdigest()
+            == provenance["runtime_semantic_sha256"],
+            all(runtime.get(field) == value for field, value in expected_bindings.items()),
+            runtime.get("requested_seed") == 42,
+            type(runtime.get("requested_seed")) is int,
+            runtime.get("effective_seed") == 42,
+            type(runtime.get("effective_seed")) is int,
+            runtime.get("seed_control_status") == "honored",
+            runtime.get("baseline_replay_expected_sha256")
+            == _V035_BASELINE_SHA256,
+            runtime.get("baseline_replay_observed_sha256")
+            == candidate["file_sha256"],
+            runtime.get("post_relax_sha256") == candidate["file_sha256"],
+        )
+    ):
+        return False
+    job = dict(AUTHORIZED_JOB)
+    if not all(
+        (
+            job_summary["job_id"] == job["job_id"],
+            job_summary["method"] == job["method"],
+            str(job_summary["random_seed"]) == job["random_seed"],
+            job_summary["seed_stage"] == job["seed_stage"],
+            job_summary["target_sha256"] == job["target_pdb_sha256"],
+            job_summary["target_chain"] == job["expected_target_chain"],
+            job_summary["binder_chain"] == job["expected_binder_chain"],
+            str(job_summary["length"]) == job["length_min"] == job["length_max"],
+            job_summary["chirality_constraint"] == job["chirality_constraint"],
+            job_summary["chirality_check_mode"] == job["chirality_check_mode"],
+            job_summary["baseline_replay_policy"]
+            == job["baseline_replay_policy"],
+        )
+    ):
+        return False
+    target_path = Path(job["target_pdb_path"])
+    if not target_path.is_absolute():
+        target_path = ROOT / target_path
+    target_capture = _v035_stable_file(target_path, confined_root=ROOT)
+    if (
+        target_capture is None
+        or target_capture[2] != expected_bindings["target_input_sha256"]
+    ):
+        return False
+    try:
+        with tempfile.TemporaryDirectory(prefix="v035-validator-replay-") as temporary:
+            snapshot = (
+                Path(temporary)
+                / "pepglad"
+                / "v035_pepglad_3eqs_seed42"
+                / "attempt_001"
+            )
+            snapshot.mkdir(parents=True)
+            for relative, value in captured.items():
+                destination = snapshot / relative
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(value[1])
+            snapshot_target = Path(temporary) / "target" / "3EQS.pdb"
+            snapshot_target.parent.mkdir()
+            snapshot_target.write_bytes(target_capture[1])
+            replay_job = {**job, "target_pdb_path": str(snapshot_target)}
+            replay_candidate, replay_runtime = pepglad.parse(replay_job, snapshot)
+            replay_qc = pepglad.evaluate_candidate(
+                replay_job, replay_candidate, replay_runtime, snapshot / "raw"
+            )
+            structure = Path(replay_candidate.get("structure_path", ""))
+            structure_relative = structure.resolve(strict=True).relative_to(
+                snapshot.resolve(strict=True)
+            )
+            if structure_relative.as_posix() != candidate["structure_path"]:
+                return False
+            candidate_checks = {
+                "sequence": replay_candidate.get("sequence"),
+                "binder_chain": replay_candidate.get("binder_chain"),
+                "parse_status": replay_candidate.get("parse_status"),
+                "chirality": replay_candidate.get("chirality"),
+            }
+            if any(
+                candidate_checks[field] != candidate[field]
+                for field in candidate_checks
+            ):
+                return False
+            if replay_runtime != runtime:
+                return False
+            if any(replay_qc.get(field) != qc[field] for field in _V035_QC_FIELDS):
+                return False
+            if not _v035_run_result_valid(
+                run_result,
+                attempt=attempt,
+                job=job_summary,
+                execution=execution,
+                candidate=candidate,
+                qc=qc,
+                replay_candidate=replay_candidate,
+                replay_qc=replay_qc,
+            ):
+                return False
+    except (
+        KeyError,
+        OSError,
+        RuntimeError,
+        TypeError,
+        UnicodeError,
+        ValueError,
+    ):
+        return False
+    repeated = _v035_capture_attempt(attempt)
+    repeated_target = _v035_stable_file(target_path, confined_root=ROOT)
+    return all(
+        (
+            repeated == captured,
+            repeated_target == target_capture,
+            _v035_authorized_attempt_is_unique(attempt),
+        )
+    )
+
+
+def _v035_historical_bindings_valid(
+    bundle: object, *, artifact_paths: list[Path] | tuple[Path, ...] | None = None
+) -> bool:
+    if type(bundle) is not dict:
+        return False
+    historical = bundle.get("historical_v034_bindings")
+    if type(historical) is not dict or set(historical) != _V035_HISTORICAL_FIELDS:
+        return False
+    artifacts = historical.get("artifacts")
+    if not all(
+        (
+            type(historical.get("primary_supported")) is int,
+            historical.get("primary_supported") == 6,
+            historical.get("pepglad_status")
+            == "historical_failure_not_promoted",
+            type(artifacts) is dict,
+            set(artifacts) == _V035_HISTORICAL_NAMES
+            if type(artifacts) is dict
+            else False,
+        )
+    ):
+        return False
+    paths = (
+        tuple(ROOT / relative for relative in _V035_HISTORICAL_PATHS)
+        if artifact_paths is None
+        else tuple(Path(path) for path in artifact_paths)
+    )
+    if len(paths) != 10 or len({path.name for path in paths}) != 10:
+        return False
+    by_name: dict[str, tuple[Path, bytes, str, tuple[int, ...]]] = {}
+    for path in paths:
+        capture = _v035_stable_file(Path(os.path.abspath(path)))
+        if capture is None:
+            return False
+        by_name[path.name] = capture
+    if set(by_name) != _V035_HISTORICAL_NAMES or any(
+        artifacts[name] != capture[2] for name, capture in by_name.items()
+    ):
+        return False
+    repeated = {
+        name: _v035_stable_file(capture[0]) for name, capture in by_name.items()
+    }
+    return all(repeated[name] == capture for name, capture in by_name.items())
+
+
+def validate_v035_pepglad_bundle(
+    errors: list[str],
+    warnings: list[str],
+    *,
+    bundle: object | None = None,
+) -> None:
+    del warnings
+    selected = bundle
+    if selected is None:
+        path = ROOT / "benchmark/results/pilot_pepglad_connectivity_v0.35.json"
+        capture = _v035_stable_file(path)
+        selected = _v035_strict_json_bytes(capture[1]) if capture is not None else None
+    schema_valid = _v035_bundle_schema_valid(selected)
+    raw_valid = _v035_raw_replay_valid(selected)
+    historical_valid = _v035_historical_bindings_valid(selected)
+    if not schema_valid:
+        errors.append("v0.35 bundle schema or scoring boundary is invalid")
+    if not raw_valid:
+        errors.append("v0.35 raw replay is invalid or stale")
+    if not historical_valid:
+        errors.append("v0.35 historical bindings are invalid or stale")
+
+
+def _v034_positive_int(
+    errors: list[str], job_id: str, field: str, value: str
+) -> int:
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError):
+        errors.append(f"{job_id}: {field} must be an integer")
+        return -1
+    if parsed <= 0:
+        errors.append(f"{job_id}: {field} must be positive")
+    return parsed
+
+
+def check_v034_bounded_connectivity(errors: list[str]) -> dict[str, int]:
+    """Validate the truthful, currently incomplete v0.34 connectivity snapshot."""
+
+    job_rows = check_headers(
+        errors,
+        "benchmark/input_sets/pilot_benchmark_job_manifest_v0.34.csv",
+        PILOT_BENCHMARK_JOB_V034_HEADERS,
+    )
+    matrix_rows = check_headers(
+        errors,
+        "benchmark/deployment/pilot_execution_matrix_v0.34.csv",
+        PILOT_EXECUTION_MATRIX_V034_HEADERS,
+    )
+    execution_rows = check_headers(
+        errors,
+        "benchmark/deployment/pilot_execution_results_v0.34.csv",
+        PILOT_EXECUTION_RESULTS_V034_HEADERS,
+    )
+    method_rows = check_headers(
+        errors,
+        "benchmark/results/pilot_method_output_manifest_v0.34.csv",
+        PILOT_METHOD_OUTPUT_V034_HEADERS,
+    )
+    candidate_rows = check_headers(
+        errors,
+        "benchmark/results/pilot_candidate_outputs_v0.34.csv",
+        PILOT_CANDIDATE_OUTPUT_V034_HEADERS,
+    )
+    qc_rows = check_headers(
+        errors,
+        "benchmark/results/pilot_candidate_qc_v0.34.csv",
+        PILOT_CANDIDATE_QC_V034_HEADERS,
+    )
+    run_rows = check_headers(
+        errors,
+        "benchmark/results/pilot_run_v0.34.csv",
+        PILOT_RUN_V034_HEADERS,
+    )
+
+    expected_specs: dict[str, tuple[str, str, str, str]] = {}
+    for job_base, method in V034_JOB_METHODS.items():
+        primary_job_id = f"{job_base}_seed42"
+        expected_specs[primary_job_id] = (method, "primary", "42", "")
+        expected_specs[f"{job_base}_seed43"] = (
+            method,
+            "extension",
+            "43",
+            primary_job_id,
+        )
+    expected_job_ids = set(expected_specs)
+    pepglad_primary = "v034_pepglad_3eqs_seed42"
+    pepglad_extension = "v034_pepglad_3eqs_seed43"
+    expected_supported = expected_job_ids - {pepglad_primary, pepglad_extension}
+    expected_method_jobs = expected_supported | {pepglad_primary}
+
+    table_rows = {
+        "pilot_benchmark_job_manifest_v0.34.csv": job_rows,
+        "pilot_execution_matrix_v0.34.csv": matrix_rows,
+        "pilot_execution_results_v0.34.csv": execution_rows,
+        "pilot_method_output_manifest_v0.34.csv": method_rows,
+        "pilot_candidate_outputs_v0.34.csv": candidate_rows,
+        "pilot_candidate_qc_v0.34.csv": qc_rows,
+        "pilot_run_v0.34.csv": run_rows,
+    }
+    indexed = {
+        name: _v034_rows_by_job(errors, name, rows)
+        for name, rows in table_rows.items()
+    }
+    jobs_by_id = indexed["pilot_benchmark_job_manifest_v0.34.csv"]
+    matrix_by_id = indexed["pilot_execution_matrix_v0.34.csv"]
+    execution_by_id = indexed["pilot_execution_results_v0.34.csv"]
+    method_by_id = indexed["pilot_method_output_manifest_v0.34.csv"]
+    candidate_by_id = indexed["pilot_candidate_outputs_v0.34.csv"]
+    qc_by_id = indexed["pilot_candidate_qc_v0.34.csv"]
+    run_by_id = indexed["pilot_run_v0.34.csv"]
+
+    expected_sets = {
+        "pilot_benchmark_job_manifest_v0.34.csv": expected_job_ids,
+        "pilot_execution_matrix_v0.34.csv": expected_job_ids,
+        "pilot_execution_results_v0.34.csv": expected_job_ids,
+        "pilot_method_output_manifest_v0.34.csv": expected_method_jobs,
+        "pilot_candidate_outputs_v0.34.csv": expected_supported,
+        "pilot_candidate_qc_v0.34.csv": expected_supported,
+        "pilot_run_v0.34.csv": expected_job_ids,
+    }
+    for artifact_name, expected_ids in expected_sets.items():
+        observed_ids = set(indexed[artifact_name])
+        if observed_ids != expected_ids:
+            errors.append(
+                f"{artifact_name}: v0.34 job set mismatch; "
+                f"missing={sorted(expected_ids - observed_ids)}, "
+                f"extra={sorted(observed_ids - expected_ids)}"
+            )
+
+    expected_lengths = {
+        "pilot_benchmark_job_manifest_v0.34.csv": 14,
+        "pilot_execution_matrix_v0.34.csv": 14,
+        "pilot_execution_results_v0.34.csv": 14,
+        "pilot_method_output_manifest_v0.34.csv": 13,
+        "pilot_candidate_outputs_v0.34.csv": 12,
+        "pilot_candidate_qc_v0.34.csv": 12,
+        "pilot_run_v0.34.csv": 14,
+    }
+    for artifact_name, expected_length in expected_lengths.items():
+        observed_length = len(table_rows[artifact_name])
+        if observed_length != expected_length:
+            errors.append(
+                f"{artifact_name}: expected {expected_length} v0.34 rows, "
+                f"found {observed_length}"
+            )
+
+    for job_id, (method, stage, seed, primary_job_id) in expected_specs.items():
+        job = jobs_by_id.get(job_id, {})
+        matrix = matrix_by_id.get(job_id, {})
+        execution = execution_by_id.get(job_id, {})
+        run = run_by_id.get(job_id, {})
+        for artifact_name, row in [
+            ("job manifest", job),
+            ("execution matrix", matrix),
+            ("execution results", execution),
+            ("run table", run),
+        ]:
+            if row and row.get("method") != method:
+                errors.append(f"{job_id}: {artifact_name} method must be {method}")
+            if row and row.get("seed_stage") != stage:
+                errors.append(f"{job_id}: {artifact_name} seed_stage must be {stage}")
+        for artifact_name, row in [
+            ("job manifest", job),
+            ("execution results", execution),
+            ("run table", run),
+        ]:
+            if row and row.get("random_seed") != seed:
+                errors.append(f"{job_id}: {artifact_name} random_seed must be {seed}")
+        for artifact_name, row in [("job manifest", job), ("execution matrix", matrix)]:
+            if row and row.get("primary_job_id") != primary_job_id:
+                errors.append(
+                    f"{job_id}: {artifact_name} primary_job_id must be {primary_job_id!r}"
+                )
+        if job:
+            if job.get("n_designs_requested") != "1":
+                errors.append(f"{job_id}: n_designs_requested must be 1")
+            if job.get("status") != "planned_bounded_generation":
+                errors.append(f"{job_id}: job status must remain planned_bounded_generation")
+            if "not Benchmark result" not in job.get("evidence_boundary", ""):
+                errors.append(f"{job_id}: job manifest missing bounded evidence boundary")
+        if matrix:
+            if matrix.get("execution_id") != f"exec_{job_id}":
+                errors.append(f"{job_id}: execution_id must be exec_{job_id}")
+            if matrix.get("status") != "planned_bounded_generation":
+                errors.append(f"{job_id}: matrix status must remain planned_bounded_generation")
+            if "not Benchmark result" not in matrix.get("evidence_boundary", ""):
+                errors.append(f"{job_id}: execution matrix missing bounded evidence boundary")
+
+    supported_execution_ids = {
+        job_id
+        for job_id, row in execution_by_id.items()
+        if row.get("supported_candidate") == "yes"
+        and row.get("merge_status") == "supported"
+        and row.get("status") == "passed"
+    }
+    if supported_execution_ids != expected_supported:
+        errors.append(
+            "pilot_execution_results_v0.34.csv must contain exactly 12 supported "
+            "rows (6 primary + 6 extension)"
+        )
+    for artifact_name, rows_by_id in [
+        ("pilot_candidate_outputs_v0.34.csv", candidate_by_id),
+        ("pilot_candidate_qc_v0.34.csv", qc_by_id),
+    ]:
+        if {pepglad_primary, pepglad_extension} & set(rows_by_id):
+            errors.append(f"{artifact_name} must not contain PepGLAD rows")
+        supported_ids = {
+            job_id
+            for job_id, row in rows_by_id.items()
+            if row.get("supported_candidate") == "yes"
+        }
+        if supported_ids != expected_supported:
+            errors.append(
+                f"{artifact_name} must contain exactly 12 supported rows "
+                "(6 primary + 6 extension)"
+            )
+
+    for job_id in expected_supported:
+        execution = execution_by_id.get(job_id, {})
+        method_row = method_by_id.get(job_id, {})
+        candidate = candidate_by_id.get(job_id, {})
+        qc = qc_by_id.get(job_id, {})
+        run = run_by_id.get(job_id, {})
+        if execution.get("overall_qc_status") not in {"pass", "pass_with_warning"}:
+            errors.append(f"{job_id}: supported execution must have passing QC")
+        if execution.get("method_contract_status") != "pass":
+            errors.append(f"{job_id}: supported execution method_contract_status must be pass")
+        if method_row.get("status") != "passed":
+            errors.append(f"{job_id}: method output status must be passed")
+        if method_row.get("overall_qc_status") not in {"pass", "pass_with_warning"}:
+            errors.append(f"{job_id}: method output must have passing QC")
+        if not candidate.get("design_id") or candidate.get("generation_rank") != "1":
+            errors.append(f"{job_id}: supported candidate must have one rank-1 design")
+        if candidate.get("supported_candidate") != "yes":
+            errors.append(f"{job_id}: candidate row must be marked supported")
+        if qc.get("overall_qc_status") not in {"pass", "pass_with_warning"}:
+            errors.append(f"{job_id}: candidate QC must pass or pass_with_warning")
+        if qc.get("method_contract_status") != "pass":
+            errors.append(f"{job_id}: candidate QC method_contract_status must be pass")
+        if qc.get("supported_candidate") != "yes":
+            errors.append(f"{job_id}: candidate QC row must be marked supported")
+        if run.get("status") != "passed" or run.get("supported_candidate") != "yes":
+            errors.append(f"{job_id}: run row must record a supported passed candidate")
+        if run.get("overall_qc_status") not in {"pass", "pass_with_warning"}:
+            errors.append(f"{job_id}: run row must have passing QC")
+        if "not scoring" not in run.get("notes", "") or "Benchmark result" not in run.get("notes", ""):
+            errors.append(f"{job_id}: run row missing no-scoring/no-Benchmark boundary")
+        candidate_boundary = candidate.get("notes", "")
+        if (
+            "not Benchmark result" not in candidate_boundary
+            or "scoring evidence" not in candidate_boundary
+        ):
+            errors.append(f"{job_id}: candidate row missing bounded evidence boundary")
+
+    pepglad_primary_execution = execution_by_id.get(pepglad_primary, {})
+    if (
+        pepglad_primary_execution.get("status") != "parse_failed"
+        or pepglad_primary_execution.get("overall_qc_status") != "fail"
+        or pepglad_primary_execution.get("supported_candidate") != "no"
+        or pepglad_primary_execution.get("merge_status") != "evidence_incomplete"
+        or pepglad_primary_execution.get("candidate_parse_status") != "failed"
+        or pepglad_primary_execution.get("method_contract_status") != "pass"
+    ):
+        errors.append(
+            "PepGLAD execution must remain parse_failed/evidence_incomplete and unsupported"
+        )
+    if (
+        pepglad_primary_execution.get("attempt_id") != "attempt_003"
+        or Path(pepglad_primary_execution.get("attempt_dir", "")).name
+        != "attempt_003"
+    ):
+        errors.append("PepGLAD execution must bind attempt_003")
+    if (
+        pepglad_primary_execution.get("status_reason")
+        != "pepglad_seed42_replay_mismatch"
+    ):
+        errors.append(
+            "PepGLAD execution status_reason must be pepglad_seed42_replay_mismatch"
+        )
+    if any(
+        pepglad_primary_execution.get(field)
+        for field in [
+            "chirality_evaluable",
+            "chirality_l_count",
+            "chirality_d_count",
+            "chirality_unknown_count",
+        ]
+    ):
+        errors.append("PepGLAD execution must not promote replay diagnostics to candidate QC")
+
+    pepglad_primary_method = method_by_id.get(pepglad_primary, {})
+    if (
+        pepglad_primary_method.get("status") != "parse_failed"
+        or pepglad_primary_method.get("overall_qc_status") != "fail"
+        or pepglad_primary_method.get("parser_status") != "failed"
+        or pepglad_primary_method.get("exit_code") != "0"
+    ):
+        errors.append("PepGLAD method manifest must remain parse_failed")
+    if (
+        pepglad_primary_method.get("run_record_id")
+        != "v034_pepglad_3eqs_seed42_attempt_003"
+        or Path(pepglad_primary_method.get("raw_output_root", "")).parent.name
+        != "attempt_003"
+        or Path(pepglad_primary_method.get("stdout_log", "")).parent.name
+        != "attempt_003"
+        or Path(pepglad_primary_method.get("stderr_log", "")).parent.name
+        != "attempt_003"
+        or "/attempt_003/command.sh"
+        not in pepglad_primary_method.get("command", "")
+    ):
+        errors.append("PepGLAD method manifest must bind attempt_003")
+    if (
+        pepglad_primary_method.get("status_reason")
+        != "pepglad_seed42_replay_mismatch"
+    ):
+        errors.append(
+            "PepGLAD method manifest status_reason must be "
+            "pepglad_seed42_replay_mismatch"
+        )
+
+    pepglad_primary_run = run_by_id.get(pepglad_primary, {})
+    if (
+        pepglad_primary_run.get("status") != "parse_failed"
+        or pepglad_primary_run.get("overall_qc_status") != "fail"
+        or pepglad_primary_run.get("supported_candidate") != "no"
+    ):
+        errors.append("PepGLAD run row must remain parse_failed and unsupported")
+    if pepglad_primary_run.get("attempt_id") != "attempt_003":
+        errors.append("PepGLAD run row must bind attempt_003")
+    if (
+        pepglad_primary_run.get("status_reason")
+        != "pepglad_seed42_replay_mismatch"
+    ):
+        errors.append(
+            "PepGLAD run row status_reason must be pepglad_seed42_replay_mismatch"
+        )
+    if any(
+        pepglad_primary_run.get(field)
+        for field in ["design_id", "sequence", "structure_path"]
+    ):
+        errors.append("PepGLAD run row must not contain a promoted candidate")
+    if (
+        "not scoring" not in pepglad_primary_run.get("notes", "")
+        or "Benchmark result" not in pepglad_primary_run.get("notes", "")
+    ):
+        errors.append("PepGLAD run row missing no-scoring/no-Benchmark boundary")
+
+    pepglad_extension_execution = execution_by_id.get(pepglad_extension, {})
+    if (
+        pepglad_extension_execution.get("status") != "not_run"
+        or pepglad_extension_execution.get("overall_qc_status") != "not_run"
+        or pepglad_extension_execution.get("supported_candidate") != "no"
+        or pepglad_extension_execution.get("merge_status") != "not_run"
+        or pepglad_extension_execution.get("attempt_id")
+        or pepglad_extension_execution.get("status_reason") != "no_attempt_recorded"
+    ):
+        errors.append("PepGLAD extension must remain not_run after failed primary")
+    pepglad_extension_run = run_by_id.get(pepglad_extension, {})
+    if (
+        pepglad_extension_run.get("status") != "not_run"
+        or pepglad_extension_run.get("overall_qc_status") != "not_run"
+        or pepglad_extension_run.get("supported_candidate") != "no"
+        or pepglad_extension_run.get("attempt_id")
+        or pepglad_extension_run.get("design_id")
+        or pepglad_extension_run.get("sequence")
+        or pepglad_extension_run.get("structure_path")
+        or pepglad_extension_run.get("status_reason") != "no_attempt_recorded"
+    ):
+        errors.append("PepGLAD extension run row must remain not_run without a candidate")
+
+    for job_id in ["v034_pepmlm_sequence_seed42", "v034_pepmlm_sequence_seed43"]:
+        candidate = candidate_by_id.get(job_id, {})
+        qc = qc_by_id.get(job_id, {})
+        execution = execution_by_id.get(job_id, {})
+        if (
+            "X" not in candidate.get("sequence", "")
+            or candidate.get("parse_status") != "partial"
+            or "X" not in qc.get("noncanonical_residues", "")
+            or qc.get("noncanonical_status") != "warn"
+            or qc.get("overall_qc_status") != "pass_with_warning"
+            or execution.get("candidate_parse_status") != "partial"
+            or execution.get("overall_qc_status") != "pass_with_warning"
+        ):
+            errors.append(f"{job_id}: PepMLM partial-X warning evidence is incomplete")
+
+    for job_id in [
+        "v034_rfdiffusion_mpnn_7zkr_seed42",
+        "v034_rfdiffusion_mpnn_7zkr_seed43",
+    ]:
+        if qc_by_id.get(job_id, {}).get("handoff_status") != "pass":
+            errors.append(f"{job_id}: RF handoff_status must be pass")
+        if execution_by_id.get(job_id, {}).get("handoff_status") != "pass":
+            errors.append(f"{job_id}: RF execution handoff_status must be pass")
+
+    for job_base, method in [
+        ("v034_dflow_3eqs", "D-Flow / PeptideDesign"),
+        ("v034_pepmirror_3eqs", "PepMirror"),
+    ]:
+        for seed in (42, 43):
+            job_id = f"{job_base}_seed{seed}"
+            candidate = candidate_by_id.get(job_id, {})
+            qc = qc_by_id.get(job_id, {})
+            execution = execution_by_id.get(job_id, {})
+            if candidate.get("chirality") != "D":
+                errors.append(f"{job_id}: {method} candidate chirality must be D")
+            if qc.get("chirality_status") != "pass":
+                errors.append(f"{job_id}: {method} chirality_status must be pass")
+            _v034_positive_int(errors, job_id, "chirality_d_count", qc.get("chirality_d_count", ""))
+            if qc.get("chirality_l_count") != "0" or qc.get("chirality_unknown_count") != "0":
+                errors.append(f"{job_id}: {method} QC must contain no L or unknown residues")
+            if execution.get("chirality_l_count") != "0" or execution.get("chirality_unknown_count") != "0":
+                errors.append(f"{job_id}: {method} execution must contain no L or unknown residues")
+
+    for job_id in ["v034_colabdesign_7zkr_seed42", "v034_colabdesign_7zkr_seed43"]:
+        candidate = candidate_by_id.get(job_id, {})
+        qc = qc_by_id.get(job_id, {})
+        if candidate.get("cyclic") != "yes" or candidate.get("peptide_type") != "cyclic":
+            errors.append(f"{job_id}: ColabDesign candidate must remain cyclic")
+        if qc.get("cyclic_status") != "pass":
+            errors.append(f"{job_id}: ColabDesign cyclic_status must be pass")
+        try:
+            terminal_distance = float(qc.get("terminal_cn_distance", ""))
+        except (TypeError, ValueError):
+            errors.append(f"{job_id}: ColabDesign terminal C-N distance must be numeric")
+        else:
+            if not 0.9 <= terminal_distance <= 2.0:
+                errors.append(f"{job_id}: ColabDesign terminal C-N distance is out of range")
+
+    provenance_path = ROOT / "benchmark/results/pilot_runtime_provenance_v0.34.json"
+    provenance = _v034_json_object(
+        errors,
+        provenance_path,
+        "pilot_runtime_provenance_v0.34.json",
+    )
+    if not _v034_runtime_provenance_exact_schema(provenance):
+        errors.append(
+            "pilot_runtime_provenance_v0.34.json runtime provenance exact schema "
+            "must contain only the registered finite fields and strict value types"
+        )
+    if provenance.get("schema_version") != "v0.34":
+        errors.append("pilot_runtime_provenance_v0.34.json schema_version must be v0.34")
+    if provenance.get("evidence_boundary") != "bounded_connectivity_only_not_scoring_or_ranking":
+        errors.append("pilot_runtime_provenance_v0.34.json has an invalid evidence boundary")
+    provenance_records_value = provenance.get("records", [])
+    if not isinstance(provenance_records_value, list):
+        errors.append("pilot_runtime_provenance_v0.34.json records must be a list")
+        provenance_records: list[dict[str, object]] = []
+    else:
+        provenance_records = []
+        for index, record in enumerate(provenance_records_value):
+            if not isinstance(record, dict):
+                errors.append(f"runtime provenance record {index} must be an object")
+                continue
+            provenance_records.append(record)
+    if len(provenance_records) != 12:
+        errors.append(
+            "pilot_runtime_provenance_v0.34.json must contain 12 supported-job records"
+        )
+    provenance_by_id: dict[str, dict[str, object]] = {}
+    for record in provenance_records:
+        job_id = record.get("job_id")
+        if not isinstance(job_id, str) or not job_id:
+            errors.append("runtime provenance record missing job_id")
+            continue
+        if job_id in provenance_by_id:
+            errors.append(f"runtime provenance contains duplicate job_id {job_id}")
+        provenance_by_id[job_id] = record
+    if set(provenance_by_id) != expected_supported:
+        errors.append(
+            "pilot_runtime_provenance_v0.34.json runtime provenance job set must "
+            "match the 12 supported jobs"
+        )
+
+    sha256_pattern = re.compile(r"[0-9a-f]{64}")
+    for job_id in expected_supported:
+        record = provenance_by_id.get(job_id, {})
+        method, stage, seed_text, _ = expected_specs[job_id]
+        seed = int(seed_text)
+        execution = execution_by_id.get(job_id, {})
+        run = run_by_id.get(job_id, {})
+        candidate = candidate_by_id.get(job_id, {})
+        qc = qc_by_id.get(job_id, {})
+        if record.get("method") != method:
+            errors.append(f"{job_id}: runtime provenance method must be {method}")
+        if record.get("seed_stage") != stage or record.get("random_seed") != seed:
+            errors.append(f"{job_id}: runtime provenance seed/stage binding is invalid")
+        attempt_id = record.get("attempt_id")
+        if (
+            not isinstance(attempt_id, str)
+            or attempt_id != execution.get("attempt_id")
+            or attempt_id != run.get("attempt_id")
+            or Path(execution.get("attempt_dir", "")).name != attempt_id
+        ):
+            errors.append(f"{job_id}: runtime provenance attempt_id is not bound to compact rows")
+        if record.get("runtime_evidence_path") not in {
+            "runtime_evidence.json",
+            "raw/runtime_evidence.json",
+        }:
+            errors.append(f"{job_id}: runtime_evidence_path is not an allowed attempt-relative path")
+        raw_sha = record.get("runtime_evidence_sha256")
+        if not isinstance(raw_sha, str) or sha256_pattern.fullmatch(raw_sha) is None:
+            errors.append(f"{job_id}: runtime_evidence_sha256 must be a lowercase SHA-256")
+        evidence = record.get("evidence")
+        if not isinstance(evidence, dict) or not evidence:
+            errors.append(f"{job_id}: runtime provenance evidence must be a non-empty object")
+            evidence = {}
+        try:
+            semantic_payload = json.dumps(
+                evidence,
+                sort_keys=True,
+                separators=(",", ":"),
+                allow_nan=False,
+            ).encode("utf-8")
+        except (TypeError, ValueError):
+            semantic_payload = b""
+            errors.append(
+                f"{job_id}: runtime provenance exact schema requires finite "
+                "JSON semantic values"
+            )
+        expected_semantic_sha = hashlib.sha256(semantic_payload).hexdigest()
+        semantic_sha = record.get("evidence_semantic_sha256")
+        if (
+            not isinstance(semantic_sha, str)
+            or sha256_pattern.fullmatch(semantic_sha) is None
+        ):
+            errors.append(
+                f"{job_id}: evidence_semantic_sha256 must be a lowercase SHA-256"
+            )
+        elif semantic_sha != expected_semantic_sha:
+            errors.append(f"{job_id}: evidence_semantic_sha256 mismatch")
+        if not all(
+            (
+                evidence.get("requested_seed") == seed,
+                evidence.get("effective_seed") == seed,
+                evidence.get("seed_control_status") == "honored",
+            )
+        ):
+            errors.append(f"{job_id}: runtime evidence seed binding must be honored")
+
+        if method == "PepMirror":
+            for path_field, sha_field in [
+                ("mirror_input_path", "mirror_input_sha256"),
+                ("mirrored_target_path", "mirrored_target_sha256"),
+                ("mirrored_generated_path", "mirrored_generated_sha256"),
+                ("mirror_output_path", "mirror_output_sha256"),
+                ("seed_patch_path", "seed_patch_sha256"),
+            ]:
+                if not evidence.get(path_field):
+                    errors.append(f"{job_id}: PepMirror provenance missing {path_field}")
+                value = evidence.get(sha_field)
+                if not isinstance(value, str) or sha256_pattern.fullmatch(value) is None:
+                    errors.append(f"{job_id}: PepMirror provenance missing {sha_field}")
+            if not evidence.get("checkpoint_path") or not str(
+                evidence.get("checkpoint_revision", "")
+            ).startswith("sha256:"):
+                errors.append(f"{job_id}: PepMirror provenance missing checkpoint binding")
+            if evidence.get("mirror_roundtrip_applied") is not True:
+                errors.append(f"{job_id}: PepMirror provenance must record mirror roundtrip")
+            if evidence.get("mirror_input_sha256") != jobs_by_id.get(job_id, {}).get(
+                "target_pdb_sha256"
+            ):
+                errors.append(f"{job_id}: PepMirror input SHA is not target-bound")
+            if evidence.get("mirror_input_sha256") == evidence.get(
+                "mirrored_target_sha256"
+            ):
+                errors.append(f"{job_id}: PepMirror mirrored target must differ from input")
+            if (
+                evidence.get("mirror_output_sha256") != qc.get("file_sha256")
+                or evidence.get("mirror_output_path") != candidate.get("structure_path")
+                or evidence.get("mirror_output_path")
+                != candidate.get("source_output_path")
+            ):
+                errors.append(f"{job_id}: PepMirror output provenance is not candidate-bound")
+
+        if method == "RFdiffusion + ProteinMPNN":
+            for path_field, sha_field in [
+                ("rf_backbone_path", "rf_backbone_sha256"),
+                ("rf_trb_path", "rf_trb_sha256"),
+                ("mpnn_fasta_path", "mpnn_fasta_sha256"),
+            ]:
+                if not evidence.get(path_field):
+                    errors.append(f"{job_id}: RF provenance missing {path_field}")
+                value = evidence.get(sha_field)
+                if not isinstance(value, str) or sha256_pattern.fullmatch(value) is None:
+                    errors.append(f"{job_id}: RF provenance missing {sha_field}")
+            rf_contract = all(
+                (
+                    evidence.get("rf_target_conditioned") is True,
+                    evidence.get("rf_contig") == "[A3-117/0 70-100]",
+                    set(evidence.get("rf_hotspots", []))
+                    == {"A48", "A50", "A51", "A52", "A62", "A65"},
+                    evidence.get("rf_cyclic") is False,
+                    evidence.get("rf_deterministic") is True,
+                    evidence.get("rf_design_startnum") == seed,
+                    evidence.get("mpnn_seed") == seed,
+                    evidence.get("mpnn_designed_chain") == "B",
+                    set(evidence.get("mpnn_fixed_chains", [])) == {"A"},
+                    evidence.get("mpnn_record_type") == "generated_sample",
+                    bool(evidence.get("mpnn_selected_record_id")),
+                )
+            )
+            if not rf_contract:
+                errors.append(f"{job_id}: RF-to-MPNN provenance contract is incomplete")
+            if (
+                evidence.get("rf_backbone_sha256") != qc.get("file_sha256")
+                or evidence.get("rf_backbone_path") != candidate.get("structure_path")
+                or evidence.get("mpnn_fasta_path")
+                != candidate.get("source_output_path")
+            ):
+                errors.append(f"{job_id}: RF provenance is not candidate/handoff-bound")
+
+    from scripts import parse_v034_generation_outputs as v034_merge
+
+    if v034_merge._ACTIVE_CAPTURE_STORE is not None:
+        for job_id in expected_method_jobs:
+            for category in ("source", "model", "environment"):
+                errors.append(
+                    f"{job_id}: fixed identity/pin mismatch ({category})"
+                )
+        for job_id in expected_supported:
+            errors.append(f"{job_id}: stable raw replay mismatch")
+    else:
+        capture_store = v034_merge._CaptureStore()
+        v034_merge._ACTIVE_CAPTURE_STORE = capture_store
+        try:
+            for job_id in expected_method_jobs:
+                mismatches = _v034_fixed_identity_mismatches(
+                    jobs_by_id.get(job_id, {}),
+                    execution_by_id.get(job_id, {}),
+                    method_by_id.get(job_id, {}),
+                    provenance_by_id.get(job_id),
+                )
+                for category in sorted(mismatches):
+                    errors.append(
+                        f"{job_id}: fixed identity/pin mismatch ({category})"
+                    )
+            for job_id in expected_supported:
+                replay_ok = _v034_stable_raw_replay(
+                    jobs_by_id.get(job_id, {}),
+                    execution_by_id.get(job_id, {}),
+                    method_by_id.get(job_id, {}),
+                    candidate_by_id.get(job_id, {}),
+                    qc_by_id.get(job_id, {}),
+                    run_by_id.get(job_id, {}),
+                    provenance_by_id.get(job_id, {}),
+                )
+                if not replay_ok:
+                    errors.append(f"{job_id}: stable raw replay mismatch")
+        finally:
+            v034_merge._ACTIVE_CAPTURE_STORE = None
+            capture_store.close()
+
+    summary_path = ROOT / "benchmark/results/pilot_v034_merge_summary.json"
+    summary = _v034_json_object(
+        errors,
+        summary_path,
+        "pilot_v034_merge_summary.json",
+    )
+    for key, expected in {
+        "schema_version": "v0.34",
+        "primary_total": 7,
+        "primary_passed": 6,
+        "primary_complete": False,
+        "extension_total": 7,
+        "extension_passed": 6,
+        "extension_complete": False,
+        "parsed_candidate_rows": 12,
+        "qc_failed_rows": 0,
+        "runtime_provenance_rows": 12,
+        "evidence_boundary": "bounded_connectivity_only_not_scoring_or_ranking",
+    }.items():
+        if summary.get(key) != expected:
+            expected_text = str(expected).lower() if isinstance(expected, bool) else expected
+            errors.append(f"pilot_v034_merge_summary.json {key} must be {expected_text}")
+    expected_summary_status = {
+        job_id: (
+            "evidence_incomplete"
+            if job_id == pepglad_primary
+            else "not_run"
+            if job_id == pepglad_extension
+            else "supported"
+        )
+        for job_id in expected_job_ids
+    }
+    if summary.get("job_status") != expected_summary_status:
+        errors.append(
+            "pilot_v034_merge_summary.json job_status must match the replay-failure snapshot"
+        )
+
+    failure_diagnostic_name = "pilot_failure_diagnostics_v0.34.json"
+    failure_diagnostic_path = ROOT / f"benchmark/results/{failure_diagnostic_name}"
+    failure_diagnostics = _v034_json_object(
+        errors,
+        failure_diagnostic_path,
+        failure_diagnostic_name,
+    )
+    failure_diagnostic_attempt_dir = pepglad_primary_execution.get(
+        "attempt_dir", ""
+    )
+    expected_failure_diagnostic = {
+        "schema_version": "v0.34",
+        "evidence_boundary": "failure_diagnostic_only_not_candidate_or_scoring",
+        "records": [
+            {
+                "job_id": pepglad_primary,
+                "method": "PepGLAD",
+                "seed_stage": "primary",
+                "random_seed": 42,
+                "attempt_id": "attempt_003",
+                "attempt_dir": failure_diagnostic_attempt_dir,
+                "candidate_eligible": False,
+                "seed43_status": "not_run",
+                "process": {"exit_code": 0},
+                "parser": {
+                    "status": "failed",
+                    "status_reason": "pepglad_seed42_replay_mismatch",
+                },
+                "merge": {"status": "evidence_incomplete"},
+                "runtime_evidence": {
+                    "path": "raw/runtime_evidence.json",
+                    "sha256": (
+                        "06d65928279969e0289038c2f0d1801459a698ceccf1cc87b6a0474a68eb3e85"
+                    ),
+                    "semantic_sha256": (
+                        "e0db9a3380984fb8232ce36e5dae7bc4cea91612a0f6529c3e950dfe58e92fae"
+                    ),
+                },
+                "summary": {
+                    "path": "raw/pepglad_summary.jsonl",
+                    "sha256": (
+                        "2f6fdc775c44e0ab525fbe26f9baf7d44760fcedc041a302a86d6529b634b76c"
+                    ),
+                    "sequence": "AWHITLLIFTH",
+                },
+                "pre_openmm": {
+                    "path": "raw/pepglad_pre_relax.pdb",
+                    "sha256": (
+                        "b17784a92a782f3d84c077952d6bd8b999bcf943dc6fe5dd6b0938c3a47bf71b"
+                    ),
+                    "chirality": {
+                        "chain": "B",
+                        "calculation_status": "pass",
+                        "evaluable": 11,
+                        "l_count": 6,
+                        "d_count": 5,
+                        "gly_count": 0,
+                        "unknown_count": 0,
+                    },
+                },
+                "post_openmm": {
+                    "path": "raw/pepglad_candidate.pdb",
+                    "sha256": (
+                        "e8501460a0fa0d59420a253bb26412b661d8213f6d76eb5ed15d40cf6167abd6"
+                    ),
+                    "chirality": {
+                        "chain": "B",
+                        "calculation_status": "pass",
+                        "evaluable": 11,
+                        "l_count": 4,
+                        "d_count": 7,
+                        "gly_count": 0,
+                        "unknown_count": 0,
+                    },
+                },
+                "baseline": {
+                    "expected_sha256": (
+                        "dc358b2e64c31c16a649627e1f75a71c77c558b62affa6c50b20d3ac25b3fa26"
+                    ),
+                    "observed_sha256": (
+                        "e8501460a0fa0d59420a253bb26412b661d8213f6d76eb5ed15d40cf6167abd6"
+                    ),
+                    "status": "mismatch",
+                    "failure_stage": "pre_openmm_snapshot",
+                },
+                "producer_bindings": {
+                    "target": {
+                        "path": "/data/input/3EQS.pdb",
+                        "sha256": (
+                            "7086cf2bc4723ccbb4be5ff7f86a50d9db59bc307f4fbb0395a3c6ce3569827d"
+                        ),
+                        "preflight_verified": True,
+                    },
+                    "source": {
+                        "commit": "bad015ca50c312a89482adb5220c3d907f13df5c",
+                        "entrypoint_sha256": (
+                            "af888f4e441cf2b051cfa52df60920fdb55cb89c25bb319d08ccdf10dd073dac"
+                        ),
+                    },
+                    "model": {
+                        "weights_sha256": (
+                            "5f05dc0f678ed7a75c2ce8fc19f63cc145bd4568f75cbfc7f15aeacdddbd3cfe"
+                        )
+                    },
+                    "container": {"image": "pd-benchmark-methods-gpu:0.21"},
+                    "environment": {"conda_environment": "bench-pepglad"},
+                    "observer": {
+                        "path": "pepglad_observer.py",
+                        "sha256": (
+                            "a0a98420dd2fd5382479abe77526fb8fc206ffb1e69a8780912fb821dded0c61"
+                        ),
+                    },
+                    "patch": {
+                        "evidence_path": "observer_patch_evidence.json",
+                        "evidence_sha256": (
+                            "0342297b2094fe43fe2e7bf49d720e58eccdc3103b0a02e943c0861ca160a9aa"
+                        ),
+                        "instrumenter_path": "pepglad_instrument_source.py",
+                        "instrumenter_sha256": (
+                            "cd9ec19f6605fd2b067824d4e02971b3a203e827b6398a4ffd1c68c64464311a"
+                        ),
+                        "injection_status": "applied",
+                        "source_copy_mode": "attempt_local_copy",
+                    },
+                    "wrapper": {
+                        "path": "pepglad_seeded_entry.py",
+                        "sha256": (
+                            "6a9b4c9012205d27526e13dbccbd7d11c010eddc3c85acdb2796c2fa6668aaba"
+                        ),
+                    },
+                    "instrumented_source": {
+                        "path": "work/api/run.py",
+                        "prepatch_sha256": (
+                            "af888f4e441cf2b051cfa52df60920fdb55cb89c25bb319d08ccdf10dd073dac"
+                        ),
+                        "sha256": (
+                            "c3b127e39be1b335ff6046bb2435451acfc1b323839377033bf438ccd4a32954"
+                        ),
+                    },
+                },
+            }
+        ],
+    }
+    _v034_validate_exact_json_contract(
+        errors,
+        failure_diagnostic_name,
+        failure_diagnostics,
+        expected_failure_diagnostic,
+    )
+    failure_diagnostic_records_value = failure_diagnostics.get("records", [])
+    failure_diagnostic_records = (
+        failure_diagnostic_records_value
+        if isinstance(failure_diagnostic_records_value, list)
+        else []
+    )
+    failure_diagnostic_record = (
+        failure_diagnostic_records[0]
+        if len(failure_diagnostic_records) == 1
+        and isinstance(failure_diagnostic_records[0], dict)
+        else {}
+    )
+    manifest_raw_root = pepglad_primary_method.get("raw_output_root", "")
+    manifest_attempt_dir = (
+        str(Path(manifest_raw_root).parent) if manifest_raw_root else ""
+    )
+    expected_attempt_suffix = (
+        "benchmark_runs/v0.34/pepglad/"
+        "v034_pepglad_3eqs_seed42/attempt_003"
+    )
+    summary_job_status = summary.get("job_status", {})
+    if not isinstance(summary_job_status, dict):
+        summary_job_status = {}
+    if failure_diagnostic_record and not all(
+        (
+            failure_diagnostic_record.get("attempt_id")
+            == pepglad_primary_execution.get("attempt_id")
+            == pepglad_primary_run.get("attempt_id")
+            == "attempt_003",
+            failure_diagnostic_record.get("attempt_dir")
+            == pepglad_primary_execution.get("attempt_dir")
+            == manifest_attempt_dir,
+            isinstance(failure_diagnostic_record.get("attempt_dir"), str),
+            str(failure_diagnostic_record.get("attempt_dir", "")).replace(
+                "\\", "/"
+            ).endswith(expected_attempt_suffix),
+            pepglad_primary_method.get("run_record_id")
+            == "v034_pepglad_3eqs_seed42_attempt_003",
+            pepglad_primary_method.get("exit_code") == "0",
+            pepglad_primary_method.get("status_reason")
+            == "pepglad_seed42_replay_mismatch",
+            summary_job_status.get(pepglad_primary) == "evidence_incomplete",
+            summary_job_status.get(pepglad_extension) == "not_run",
+        )
+    ):
+        errors.append(
+            f"{failure_diagnostic_name} record is not cross-bound to the "
+            "PepGLAD attempt_003 failure rows"
+        )
+    if (
+        pepglad_primary in candidate_by_id
+        or pepglad_primary in qc_by_id
+        or pepglad_primary in provenance_by_id
+    ):
+        errors.append(
+            f"{failure_diagnostic_name} requires PepGLAD to remain absent from "
+            "candidate, QC, and runtime provenance artifacts"
+        )
+
+    for artifact_name, rows in table_rows.items():
+        for row in rows:
+            text = " ".join(str(value) for value in row.values()).lower()
+            for forbidden in [
+                "benchmark_completed",
+                "benchmark_ready",
+                "best_performing",
+                "performance_ranking",
+                "scoring_passed",
+                "ranking_passed",
+                "scored_candidate",
+                "ranked_candidate",
+                "wet_lab_validated",
+            ]:
+                if forbidden in text:
+                    errors.append(
+                        f"{artifact_name}: {row.get('job_id', 'unknown')} overclaims {forbidden}"
+                    )
+
+    replay_diagnostic_tokens = [
+        "attempt_003",
+        "L6/D5",
+        "L4/D7",
+        "b17784a92a782f3d84c077952d6bd8b999bcf943dc6fe5dd6b0938c3a47bf71b",
+        "e8501460a0fa0d59420a253bb26412b661d8213f6d76eb5ed15d40cf6167abd6",
+        "dc358b2e64c31c16a649627e1f75a71c77c558b62affa6c50b20d3ac25b3fa26",
+        "pre_openmm_snapshot",
+    ]
+    plan_text = (ROOT / "ops/plans/updated_plan_v0.34.md").read_text(encoding="utf-8")
+    for token in [
+        "Updated Plan v0.34",
+        "7 种方法",
+        "seed42",
+        "seed43",
+        "current.v034_bounded_connectivity",
+        "不支持方法排名",
+        "本阶段不启动 scoring",
+        "不执行 ranking",
+        "D-Flow",
+        "PepGLAD seed43",
+        *replay_diagnostic_tokens,
+    ]:
+        if token not in plan_text:
+            errors.append(f"updated_plan_v0.34.md missing required token {token}")
+    audit_text = (ROOT / "ops/audits/v034_bounded_connectivity_audit.md").read_text(
+        encoding="utf-8"
+    )
+    for token in [
+        "v0.34 受限生成连通性审计",
+        "7 种方法",
+        "12 条 compact runtime provenance",
+        "没有 scoring、ranking",
+        "target_set_v0.csv",
+        "1.2.21",
+        "PepGLAD seed43",
+        "not_run",
+        *replay_diagnostic_tokens,
+    ]:
+        if token not in audit_text:
+            errors.append(f"v034_bounded_connectivity_audit.md missing required token {token}")
+
+    return {
+        "jobs": len(job_rows),
+        "execution_rows": len(execution_rows),
+        "method_rows": len(method_rows),
+        "candidate_rows": len(candidate_rows),
+        "qc_rows": len(qc_rows),
+        "run_rows": len(run_rows),
+        "runtime_provenance_records": len(provenance_records),
+        "failure_diagnostic_records": len(failure_diagnostic_records),
+        "primary_supported": sum(
+            1
+            for job_id in supported_execution_ids
+            if expected_specs.get(job_id, ("", "", "", ""))[1] == "primary"
+        ),
+        "extension_supported": sum(
+            1
+            for job_id in supported_execution_ids
+            if expected_specs.get(job_id, ("", "", "", ""))[1] == "extension"
+        ),
+    }
 
 
 def check_markdown_links(errors: list[str]) -> int:
@@ -1908,6 +5298,7 @@ def main(argv: list[str] | None = None) -> int:
         "benchmark/method_sources/method_source_manifest.csv",
         METHOD_SOURCE_HEADERS,
     )
+    homepage_method_source_count = check_homepage_method_sources(errors)
     environment_rows = check_headers(
         errors,
         "benchmark/environments/environment_feasibility_matrix.csv",
@@ -2384,6 +5775,12 @@ def main(argv: list[str] | None = None) -> int:
         "benchmark/results/pilot_run_v0.33.csv",
         PILOT_RUN_V031_HEADERS,
     )
+    v034_counts = check_v034_bounded_connectivity(errors)
+    v035_bundle_path = (
+        ROOT / "benchmark/results/pilot_pepglad_connectivity_v0.35.json"
+    )
+    if v035_bundle_path.is_file():
+        validate_v035_pepglad_bundle(errors, warnings)
     _map_rows = check_headers(errors, "kb/references/zotero-map.tsv", ["zotero_key", "bibtex_key", "title"], delimiter="\t")
 
     included_master = [row for row in master_rows if row.get("screening_status") == "included"]
@@ -5872,6 +9269,7 @@ def main(argv: list[str] | None = None) -> int:
             "target_set_rows": len(target_set_rows),
             "candidate_dataset_rows": len(dataset_candidate_rows),
             "method_source_rows": len(method_source_rows),
+            "homepage_method_source_rows": homepage_method_source_count,
             "environment_rows": len(environment_rows),
             "expert_review_rows": len(expert_review_rows),
             "dataset_readiness_rows": len(dataset_readiness_rows),
@@ -5953,6 +9351,20 @@ def main(argv: list[str] | None = None) -> int:
             "pilot_method_output_v033_rows": len(pilot_method_output_v033_rows),
             "pilot_candidate_output_v033_rows": len(pilot_candidate_output_v033_rows),
             "pilot_run_v033_rows": len(pilot_run_v033_rows),
+            "pilot_job_v034_rows": v034_counts["jobs"],
+            "pilot_execution_results_v034_rows": v034_counts["execution_rows"],
+            "pilot_method_output_v034_rows": v034_counts["method_rows"],
+            "pilot_candidate_output_v034_rows": v034_counts["candidate_rows"],
+            "pilot_candidate_qc_v034_rows": v034_counts["qc_rows"],
+            "pilot_run_v034_rows": v034_counts["run_rows"],
+            "pilot_runtime_provenance_v034_records": v034_counts[
+                "runtime_provenance_records"
+            ],
+            "pilot_failure_diagnostics_v034_records": v034_counts[
+                "failure_diagnostic_records"
+            ],
+            "pilot_primary_supported_v034_rows": v034_counts["primary_supported"],
+            "pilot_extension_supported_v034_rows": v034_counts["extension_supported"],
             "method_readiness_v08_rows": len(method_readiness_v08_rows),
             "method_preflight_v010_rows": len(method_preflight_rows),
             "adapter_preflight_v011_rows": len(adapter_preflight_rows),

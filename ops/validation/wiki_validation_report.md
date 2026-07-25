@@ -12,6 +12,7 @@
 - target_set_rows: 0
 - candidate_dataset_rows: 7
 - method_source_rows: 10
+- homepage_method_source_rows: 10
 - environment_rows: 10
 - expert_review_rows: 15
 - dataset_readiness_rows: 7
@@ -93,6 +94,16 @@
 - pilot_method_output_v033_rows: 10
 - pilot_candidate_output_v033_rows: 10
 - pilot_run_v033_rows: 10
+- pilot_job_v034_rows: 14
+- pilot_execution_results_v034_rows: 14
+- pilot_method_output_v034_rows: 13
+- pilot_candidate_output_v034_rows: 12
+- pilot_candidate_qc_v034_rows: 12
+- pilot_run_v034_rows: 14
+- pilot_runtime_provenance_v034_records: 12
+- pilot_failure_diagnostics_v034_records: 1
+- pilot_primary_supported_v034_rows: 6
+- pilot_extension_supported_v034_rows: 6
 - method_readiness_v08_rows: 4
 - method_preflight_v010_rows: 3
 - adapter_preflight_v011_rows: 3
@@ -103,7 +114,7 @@
 - method_classification_v1_rows: 27
 - reference_dataset_sources_v1_rows: 8
 - manuscript_todo_v1_rows: 18
-- manuscript_claim_rows: 73
+- manuscript_claim_rows: 78
 - supplementary_material_rows: 6
 - scoring_rationale_rows: 10
 - method_landscape_patch_v11_rows: 8
@@ -113,8 +124,8 @@
 - method_cards: 12
 - literature_cards: 120
 - bibtex_entries: 432
-- markdown_links_checked: 226
-- tracked_files_checked: 517
+- markdown_links_checked: 291
+- tracked_files_checked: 567
 
 ## Errors
 - None
@@ -138,6 +149,7 @@
     "target_set_rows": 0,
     "candidate_dataset_rows": 7,
     "method_source_rows": 10,
+    "homepage_method_source_rows": 10,
     "environment_rows": 10,
     "expert_review_rows": 15,
     "dataset_readiness_rows": 7,
@@ -219,6 +231,16 @@
     "pilot_method_output_v033_rows": 10,
     "pilot_candidate_output_v033_rows": 10,
     "pilot_run_v033_rows": 10,
+    "pilot_job_v034_rows": 14,
+    "pilot_execution_results_v034_rows": 14,
+    "pilot_method_output_v034_rows": 13,
+    "pilot_candidate_output_v034_rows": 12,
+    "pilot_candidate_qc_v034_rows": 12,
+    "pilot_run_v034_rows": 14,
+    "pilot_runtime_provenance_v034_records": 12,
+    "pilot_failure_diagnostics_v034_records": 1,
+    "pilot_primary_supported_v034_rows": 6,
+    "pilot_extension_supported_v034_rows": 6,
     "method_readiness_v08_rows": 4,
     "method_preflight_v010_rows": 3,
     "adapter_preflight_v011_rows": 3,
@@ -229,7 +251,7 @@
     "method_classification_v1_rows": 27,
     "reference_dataset_sources_v1_rows": 8,
     "manuscript_todo_v1_rows": 18,
-    "manuscript_claim_rows": 73,
+    "manuscript_claim_rows": 78,
     "supplementary_material_rows": 6,
     "scoring_rationale_rows": 10,
     "method_landscape_patch_v11_rows": 8,
@@ -239,8 +261,8 @@
     "method_cards": 12,
     "literature_cards": 120,
     "bibtex_entries": 432,
-    "markdown_links_checked": 226,
-    "tracked_files_checked": 517
+    "markdown_links_checked": 291,
+    "tracked_files_checked": 567
   },
   "errors": [],
   "warnings": []

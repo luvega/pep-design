@@ -137,10 +137,26 @@ def collect_evidence_digests(
             raise ContractError(
                 f"digest artifact {artifact_id} must stay inside project root"
             )
-        path = (root / relative_path).resolve()
+        unresolved_path = root / relative_path
+        unresolved_missing = False
+        try:
+            unresolved_path.lstat()
+        except FileNotFoundError:
+            unresolved_missing = True
+        except OSError as exc:
+            raise ContractError(
+                f"cannot inspect digest artifact: {artifact_id} ({unresolved_path})"
+            ) from exc
+        path = unresolved_path.resolve(strict=False)
         if not path.is_relative_to(root):
             raise ContractError(
                 f"digest artifact {artifact_id} must stay inside project root"
+            )
+        if unresolved_missing:
+            if artifact.get("required_for_profiles") == []:
+                continue
+            raise ContractError(
+                f"digest artifact is missing: {artifact_id} ({unresolved_path})"
             )
         if artifact.get("format") == "source_tree":
             if relative_path != Path("."):

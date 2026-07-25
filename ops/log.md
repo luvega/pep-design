@@ -1,5 +1,59 @@
 # Project Log
 
+## [2026-07-25] documentation | GitHub 主页、方法来源与评价框架
+- 重写 `README.md`，以当前证据状态、T1/T2/T3 方法分类、标准 I/O、v0.34 代表性 fixture、评价标准和复核命令为主页主线。
+- 新增 10 方法主页来源表，逐项记录上游仓库、固定 commit、论文链接、persistent ID、任务和输入输出契约；其边界为来源与接口导航，不支持运行或性能结论。
+- 使用 ImageGen 生成透明项目图标和 protocol-first 流程图，保留提示词、色键去背景命令、尺寸与人工标签/边界 QC。
+- 扩展 validator 与 focused tests，覆盖来源表完整性、URL/pin/date/boundary 约束、主页关键边界和图像属性。
+- 保持 `VERSION=1.2.21`、v0.35 Docker API 基础设施失败、`current.v035_bounded_connectivity` Critical `FAIL`、schema-only target set 和未评分状态。本次未执行外部方法、下载、生成、评分或排名。
+
+## [2026-07-14] execution | PepGLAD v0.35 基础设施启动失败
+- 将 `ops/plans/updated_plan_v0.35.md` 设为当前计划；v0.34 保持 6/7 历史状态，`VERSION` 保持 `1.2.21`。
+- 为 PepGLAD 增加 mixed L/D report-only 连通性通道、固定 baseline warning policy、唯一 seed42 job、exact-schema parser、独立 Harness/validator 和 fail-closed scoring guard。
+- 设计、RED tests、编码和独立复审由不同 subagents 完成；执行前核心 v0.34/v0.35 回归为 501 passed，额外 Harness/validator focused tests、`py_compile` 与 `git diff --check` 通过。
+- 唯一授权的 `attempt_001` 在容器启动前因无法访问 Docker API socket 失败：`runtime_seconds=0.026`、`exit_code=1`、parser/QC=`not_run`。host 侧 source/model/target 前检已通过，但容器内 PepGLAD、OpenMM、parser 和 QC 均未执行。
+- `raw/` 中没有 candidate 或 runtime evidence，解析器拒绝发布 v0.35 connectivity bundle。该记录不支持 PepGLAD 方法失败、mixed L/D、连通性、scoring 或 ranking 结论。
+- 新增 `ops/audits/v035_pepglad_connectivity_audit.md`。`attempt_001` 不得覆盖或自动重试；新的执行需要再次明确授权并更新 attempt 政策。
+- 验收引擎现将尚未生成的 v0.35 条件性 bundle 交给对应 gate 判定，而不是报 Harness 程序错误；最终 `current.v035_bounded_connectivity` 为 Critical `FAIL`，项目为 `not_accepted`。全量测试 `1361 passed`，KB validator 为 0 errors、0 warnings，`git diff --check` 通过。
+
+## [2026-07-12] evidence | PepGLAD failure-only 诊断留痕
+- 新增 `benchmark/results/pilot_failure_diagnostics_v0.34.json`，只保存 PepGLAD seed42 `attempt_003` 的 1 条 tracked failure-only diagnostic provenance。原有计数保持为 13 条 method-output manifest、12 条 candidate/QC、12 条 candidate runtime provenance 和 14 条 run rows，主运行仍为 6/7。
+- 该记录绑定 `AWHITLLIFTH` sequence summary、OpenMM 前 SHA-256 `b17784a92a782f3d84c077952d6bd8b999bcf943dc6fe5dd6b0938c3a47bf71b` 与 L6/D5、OpenMM 后 SHA-256 `e8501460a0fa0d59420a253bb26412b661d8213f6d76eb5ed15d40cf6167abd6` 与 L4/D7、固定 baseline mismatch，以及 source/model/target/observer/patch/wrapper 等 producer pins。
+- 这 1 条记录不计入 12 条 candidate runtime provenance，也不是候选、QC、评分、排名或完整复现证据。它不证明模型根因，也不排除 OpenMM 的影响。
+
+## [2026-07-12] documentation | PepGLAD seed42 诊断与 v0.34 claim surface 校正
+- 最新 compact merge 包含 13 条 method-output manifest、12 条 candidate、12 条 candidate QC、12 条 runtime provenance 和 14 条 run rows；6 个 primary 与对应的 6 个 eligible seed43 extensions 获得 `supported`。PepGLAD 最新候选缺席，seed43 未运行。
+- PepGLAD seed42 `attempt_003` 的 target preflight 与 source/model/observer/patch/wrapper/instrumented-source pins 通过，进程退出码为 0；parser=`pepglad_seed42_replay_mismatch`，merge=`evidence_incomplete`。sequence summary 仍为 `AWHITLLIFTH`，但未晋升候选。
+- OpenMM 前 B 链 SHA-256 为 `b17784a92a782f3d84c077952d6bd8b999bcf943dc6fe5dd6b0938c3a47bf71b`、手性为 L6/D5；OpenMM 后 SHA-256 为 `e8501460a0fa0d59420a253bb26412b661d8213f6d76eb5ed15d40cf6167abd6`、手性为 L4/D7，且不同于固定 baseline `dc358b2e64c31c16a649627e1f75a71c77c558b62affa6c50b20d3ac25b3fa26`。历史 `attempt_002` 为 `AWHITLLIFTH`、L4/D7，文件 SHA-256 与 baseline 相同。
+- `first_observed_chirality_failure_stage=pre_openmm_snapshot` 支持混合手性在本 attempt 的 OpenMM 前已可观察，但不证明模型根因，也不排除 OpenMM 的影响；L/D 计数从 6/5 变为 4/7。
+- 现有官方入口没有符合当前协议的 method-native skip-relax 或 idealize 选项。按已批准的停止条件，本轮不再发起第二个诊断 attempt，也不运行 PepGLAD seed43。继续执行需另行批准协议/source-policy 变更，或接受 PepGLAD 在当前 fixture 上失败；均不能直接进入评分。
+- 保留 D-Flow 3EQS 训练重叠、RFdiffusion all-Gly backbone 与独立 ProteinMPNN FASTA、PepMLM `WWX`/`X` 边界。`current.v034_bounded_connectivity` 仍为 6/7 Critical `FAIL`；没有 scoring、ranking、frozen target 或 wet-lab，`VERSION` 保持 `1.2.21`。
+
+## [2026-07-11] engineering | v0.34 Harness evidence hardening
+- 将 13 条 compact runtime provenance 绑定到原始 JSON SHA-256 和 canonical semantic SHA-256；额外、重复或未绑定 candidate 的 provenance 现在 fail closed。
+- 在 merge 层把缺失的 method-specific QC status 显式归一为 `not_applicable`，保留 PepGLAD parsed-but-QC-failed 行，并用 `supported_candidate` 区分 13 条 parsed rows 与 12 条 supported rows。
+- 加强 D-Flow source/checkpoint/host-environment 绑定、PepMirror source/image/checkpoint/pre-run/mirror-geometry 绑定，以及 RFdiffusion TRB 安全语义解析、source/environment/path 和未线程化 backbone-to-FASTA handoff 绑定。
+- scoring guard 新增常见结构置信度、能量和亲和力字段拦截；claim surface 分开记录解析/QC、RF 结构限制、provenance 限制和 D-Flow leakage 边界。
+- 未启动 scoring、ranking、frozen target 或 wet-lab；`VERSION` 保持 `1.2.21`。
+
+## [2026-07-11] documentation | v0.34 读者事实边界校正
+- 明确 7 个 seed42 primary 输出均可解析，其中 6 个通过基础 QC。PepGLAD 序列为 `AWHITLLIFTH`，手性统计为 L4/D7，因此为 `qc_failed`；PepGLAD seed43 未运行。
+- 记录 6 个 eligible seed43 extensions 均通过，13 个已执行 job 均有 runtime provenance。
+- 明确 RFdiffusion 输出是未线程化 all-Gly backbone，ProteinMPNN FASTA 是独立 handoff，当前没有 sequence-resolved structure。
+- 明确历史 DiffPepBuilder 和 PepGLAD attempt 缺少新增 target preflight 字段，13 条 provenance 不能支持完整可复现声明。
+- 保留 D-Flow 3EQS 已知 train overlap 边界；没有 scoring、ranking、frozen target 或 wet-lab 证据。
+- 更新项目总览、Benchmark 结果说明、索引、release notes、v0.34 审计和 claim-evidence map；`VERSION` 保持 `1.2.21`。
+
+## [2026-07-11] execution | v0.34 受限生成连通性
+- 将 `ops/plans/updated_plan_v0.34.md` 设为当前科研与执行计划；v0.33 保留为历史 blocker 基线，`VERSION` 保持 `1.2.21`。
+- 为 PepMLM、DiffPepBuilder、PepGLAD、D-Flow、PepMirror、AfCycDesign / ColabDesign 和 RFdiffusion + ProteinMPNN 接入受限生成 adapter、不可覆盖 attempt、标准 parser 与公共 QC。
+- 7 个 seed42 主运行中 6 个通过。PepGLAD 输出可解析且为 11 aa，但 11 个可判定残基中有 4 个 L、7 个 D，不符合 L-peptide 合同，因此为 `qc_failed`。
+- 只有 6 个主运行通过的方法进入 seed43；这 6 个扩展运行全部通过，PepGLAD seed43 未运行。
+- PepMLM 两个 seed 均为 `WWX`，状态为 `pass_with_warning`。D-Flow 的 3EQS fixture 有已知训练重叠，只支持连通性检查。
+- 写入 v0.34 job/execution 清单和 compact execution、method-output、candidate、QC、run、merge-summary 证据；原始结构与日志留在 gitignored `benchmark_runs/v0.34/`。
+- `current.v034_bounded_connectivity` 要求主运行 7/7 通过，当前为 Critical `FAIL`，所以 `current_phase` 不能签核。人工批准不能跳过该失败。
+- 下一步检查 PepGLAD 生成坐标、链映射和手性处理，修复后新建 attempt 重跑 seed42；通过后才执行 seed43。未开始 scoring、ranking、target freeze 或 wet-lab。
+
 ## [2026-07-11] governance | 对话签核安全收口（待实际批准）
 - 将 source manifest 的 SHA-256 绑定到 Git clean 后实际进入 commit 的 blob；CRLF/text normalization 与 binary blob 均按提交字节验证。
 - Transport、staging、history、diff-check 与 clean-checkout materialization 改用受控配置或隔离 gitdir，阻断 late hooks、clean/smudge/process filters、fsmonitor、external diff/textconv、URL rewrite、replacement refs 与 deprecated grafts。

@@ -1,0 +1,29 @@
+{
+  "evidence_boundary": "bounded_connectivity_only_not_scoring_or_ranking",
+  "extension_complete": false,
+  "extension_passed": 6,
+  "extension_total": 7,
+  "job_status": {
+    "v034_colabdesign_7zkr_seed42": "supported",
+    "v034_colabdesign_7zkr_seed43": "supported",
+    "v034_dflow_3eqs_seed42": "supported",
+    "v034_dflow_3eqs_seed43": "supported",
+    "v034_diffpepbuilder_3eqs_seed42": "supported",
+    "v034_diffpepbuilder_3eqs_seed43": "supported",
+    "v034_pepglad_3eqs_seed42": "evidence_incomplete",
+    "v034_pepglad_3eqs_seed43": "not_run",
+    "v034_pepmirror_3eqs_seed42": "supported",
+    "v034_pepmirror_3eqs_seed43": "supported",
+    "v034_pepmlm_sequence_seed42": "supported",
+    "v034_pepmlm_sequence_seed43": "supported",
+    "v034_rfdiffusion_mpnn_7zkr_seed42": "supported",
+    "v034_rfdiffusion_mpnn_7zkr_seed43": "supported"
+  },
+  "parsed_candidate_rows": 12,
+  "primary_complete": false,
+  "primary_passed": 6,
+  "primary_total": 7,
+  "qc_failed_rows": 0,
+  "runtime_provenance_rows": 12,
+  "schema_version": "v0.34"
+}

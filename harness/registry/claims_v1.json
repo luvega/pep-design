@@ -2,9 +2,9 @@
   "registry_id": "pep_design_claims",
   "registry_version": "1.0.0",
   "claim_surface_path": "manuscript/support/benchmark_manuscript_claim_evidence_map.csv",
-  "claim_surface_sha256": "411f6e08de894624e59e337e269618e5b1e8941497a8d63e0add36528fdb96dd",
-  "claim_surface_row_count": 73,
-  "claim_semantic_binding_sha256": "efed4f159fa54c3919aee0183f7ebe10843f51b146a180d3db181ab2e5b11f7a",
+  "claim_surface_sha256": "3ef4d2fef84cc85c6af0be58a35f32fec42d3ee598e52fb509d997f4935ebfc9",
+  "claim_surface_row_count": 78,
+  "claim_semantic_binding_sha256": "8c8f988437ce4a6550c37069e34f6162b7d90f5048e83ca74087d879af2f2f53",
   "status_taxonomy": {
     "supported": "promotion",
     "supported as action-gate boundary": "non_promotional",
@@ -57,9 +57,9 @@
       "label": "A method generated a candidate",
       "required_evidence_classes": ["parsed_candidate_output", "execution_provenance"],
       "forbidden_evidence_classes": ["failed_candidate_rows", "planning", "parser_fixture"],
-      "allowed_wording": ["generated candidate", "产生可解析候选"],
-      "forbidden_wording": ["generated from a failed row", "失败行视为生成结果"],
-      "promotion_patterns": ["generated candidate", "产生可解析候选", "产生可评分候选"],
+      "allowed_wording": ["generated candidate", "产生可解析候选", "输出均可解析", "bounded generation produced a parseable candidate"],
+      "forbidden_wording": ["generated from a failed row", "失败行视为生成结果", "产生可评分候选", "方法性能可排名", "best-performing"],
+      "promotion_patterns": ["generated candidate", "产生可解析候选", "输出均可解析", "bounded generation produced a parseable candidate"],
       "wet_lab_required": false
     },
     {

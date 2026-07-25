@@ -109,6 +109,10 @@ class FakeVerifier:
 class SignoffValidatingVerifier(FakeVerifier):
     """Use real role/supersession semantics while keeping Git I/O bounded."""
 
+    def __init__(self, calls: list[str], *, production: bool = False) -> None:
+        super().__init__(calls)
+        self.production = production
+
     def accepted(self, root: Path) -> VerificationSnapshot:
         snapshot = super().accepted(root)
         for profile_id in ("governance", "current_phase"):
@@ -122,6 +126,7 @@ class SignoffValidatingVerifier(FakeVerifier):
                     evaluation_id=snapshot.evaluation_id,
                     evidence_digest=snapshot.evidence_digest,
                     required_roles=("governance_owner",),
+                    repository_root=str(root) if self.production else None,
                 ),
             )
             if not result.is_complete:
@@ -659,7 +664,7 @@ def test_prepare_uses_max_plus_one_and_only_newest_committed_same_context(
     ]
 
 
-def test_second_cycle_prefers_older_current_signoff_over_newer_stale_signoff(
+def test_second_cycle_rejects_untrusted_newer_stale_dialog_signoff(
     tmp_path: Path,
 ) -> None:
     calls: list[str] = []
@@ -733,36 +738,33 @@ def test_second_cycle_prefers_older_current_signoff_over_newer_stale_signoff(
         "signoff_current_phase_v3.json"
     )
 
-    second_result = approve(
-        tmp_path,
-        second,
-        backend,
-        verifier,
-        now=REVIEWED_AT + timedelta(minutes=20),
-        event_id_factory=lambda: "approval_event_" + "2" * 24,
-    )
-
-    assert second_result.state is TransactionState.PUSHED
-    for profile_id in ("governance", "current_phase"):
-        validation = validate_signoff_directory(
-            tmp_path / "harness/signoffs",
-            SignoffContext(
-                contract_id=CONTRACT_ID,
-                contract_version="1.0.0",
-                contract_digest=verifier.snapshot.contract_digest,
-                profile_id=profile_id,
-                evaluation_id=verifier.snapshot.evaluation_id,
-                evidence_digest=verifier.snapshot.evidence_digest,
-                required_roles=("governance_owner",),
-            ),
+    with pytest.raises(ApprovalError, match="signoff validation failed"):
+        approve(
+            tmp_path,
+            second,
+            backend,
+            verifier,
+            now=REVIEWED_AT + timedelta(minutes=20),
+            event_id_factory=lambda: "approval_event_" + "2" * 24,
         )
-        assert validation.valid_roles == ("governance_owner",)
-        assert validation.duplicate_roles == ()
-        assert validation.invalid_signoffs == ()
-        if profile_id == "current_phase":
-            assert stale_current_filename in {
-                issue.path for issue in validation.stale_signoffs
-            }
+
+    validation = validate_signoff_directory(
+        tmp_path / "harness/signoffs",
+        SignoffContext(
+            contract_id=CONTRACT_ID,
+            contract_version="1.0.0",
+            contract_digest=verifier.snapshot.contract_digest,
+            profile_id="current_phase",
+            evaluation_id=verifier.snapshot.evaluation_id,
+            evidence_digest=verifier.snapshot.evidence_digest,
+            required_roles=("governance_owner",),
+        ),
+    )
+    assert [
+        issue.reason_code
+        for issue in validation.invalid_signoffs
+        if issue.path == stale_current_filename
+    ] == ["signoff_approval_binding_invalid"]
 
 
 def test_approve_card_uses_callback_clean_checkout_and_renders_after_accepted(
@@ -1859,6 +1861,87 @@ class LocalTransportBackend:
         return git_backend_module.push_exact(
             self.root, final_commit_oid, local_expected
         )
+
+
+def test_real_second_cycle_supersedes_dialog_history_after_evaluation_changes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fixture = init_repo_with_bare_remote(tmp_path)
+    install_sanitized_git_environment(monkeypatch, fixture.environment)
+    write_minimal_contract(fixture.work)
+    calls: list[str] = []
+    verifier = SignoffValidatingVerifier(calls, production=True)
+    backend = LocalTransportBackend(fixture)
+
+    first = prepared_card(
+        prepare_review(
+            fixture.work,
+            backend=backend,
+            verifier=verifier,
+            now=PREPARED_AT,
+            nonce=b"0" * 16,
+        )
+    )
+    first_result = approve(
+        fixture.work,
+        first,
+        backend,
+        verifier,
+        now=REVIEWED_AT,
+        event_id_factory=lambda: "approval_event_" + "1" * 24,
+    )
+    assert first_result.state is TransactionState.PUSHED
+
+    verifier.snapshot = replace(
+        verifier.snapshot,
+        evaluation_id="evaluation_" + "e" * 24,
+        evidence_digest="f" * 64,
+    )
+    second = prepared_card(
+        prepare_review(
+            fixture.work,
+            backend=backend,
+            verifier=verifier,
+            now=PREPARED_AT + timedelta(minutes=20),
+            nonce=b"1" * 16,
+        )
+    )
+    first_profiles = profile_map(first)
+    second_profiles = profile_map(second)
+    for profile_id in ("governance", "current_phase"):
+        assert second_profiles[profile_id].supersedes == (
+            first_profiles[profile_id].signoff_filename
+        )
+
+    second_result = approve(
+        fixture.work,
+        second,
+        backend,
+        verifier,
+        now=REVIEWED_AT + timedelta(minutes=20),
+        event_id_factory=lambda: "approval_event_" + "2" * 24,
+    )
+
+    assert second_result.state is TransactionState.PUSHED
+    for profile_id in ("governance", "current_phase"):
+        validation = validate_signoff_directory(
+            fixture.work / "harness/signoffs",
+            SignoffContext(
+                contract_id=CONTRACT_ID,
+                contract_version="1.0.0",
+                contract_digest=verifier.snapshot.contract_digest,
+                profile_id=profile_id,
+                evaluation_id=verifier.snapshot.evaluation_id,
+                evidence_digest=verifier.snapshot.evidence_digest,
+                required_roles=("governance_owner",),
+                repository_root=str(fixture.work),
+            ),
+        )
+        assert validation.valid_roles == ("governance_owner",)
+        assert validation.invalid_signoffs == ()
+        assert first_profiles[profile_id].signoff_filename in {
+            issue.path for issue in validation.stale_signoffs
+        }
 
 
 def prepare_real_staged_signoff_failure(

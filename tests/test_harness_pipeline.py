@@ -11,6 +11,7 @@ from pathlib import Path
 
 import pytest
 
+from harness.domains.project_state import evaluate_gate
 from harness.engine.evaluator import exit_code_for, resolve_gate_dependencies, roll_up_profile
 from harness.engine.loader import ContractError
 from harness.engine.models import (
@@ -30,6 +31,7 @@ from harness.engine.report import (
 
 ROOT = Path(__file__).resolve().parents[1]
 CURRENT_PHASE_LIFECYCLE = {
+    ProjectVerdict.NOT_ACCEPTED: ((), (), 1),
     ProjectVerdict.PENDING_HUMAN_SIGNOFF: ((), ("governance_owner",), 1),
     ProjectVerdict.ACCEPTED: (("governance_owner",), (), 0),
 }
@@ -351,6 +353,105 @@ def test_evidence_digest_rejects_path_escape_before_reading(tmp_path: Path) -> N
 
     with pytest.raises(ContractError, match="must stay inside project root"):
         collect_evidence_digests(tmp_path, registry)
+
+
+def test_optional_tracked_evidence_enters_digest_only_after_creation(
+    tmp_path: Path,
+) -> None:
+    artifact = {
+        "artifact_id": "future_evidence",
+        "path": "results/future.json",
+        "format": "json",
+        "verification_scope": "tracked",
+        "include_in_evidence_digest": True,
+        "required_for_profiles": [],
+    }
+    registry = {"artifacts": [artifact]}
+    evidence_path = tmp_path / artifact["path"]
+
+    missing_digests = collect_evidence_digests(tmp_path, registry)
+    assert artifact["artifact_id"] not in missing_digests
+
+    payload = b"future conditional evidence\n"
+    evidence_path.parent.mkdir(parents=True)
+    evidence_path.write_bytes(payload)
+    present_digests = collect_evidence_digests(tmp_path, registry)
+
+    assert present_digests[artifact["artifact_id"]] == hashlib.sha256(
+        payload
+    ).hexdigest()
+
+
+def test_optional_tracked_evidence_rejects_dangling_symlink(
+    tmp_path: Path,
+) -> None:
+    artifact = {
+        "artifact_id": "future_evidence",
+        "path": "results/future.json",
+        "format": "json",
+        "verification_scope": "tracked",
+        "include_in_evidence_digest": True,
+        "required_for_profiles": [],
+    }
+    registry = {"artifacts": [artifact]}
+    evidence_path = tmp_path / artifact["path"]
+    evidence_path.parent.mkdir(parents=True)
+    evidence_path.symlink_to("missing.json")
+
+    with pytest.raises(ContractError):
+        collect_evidence_digests(tmp_path, registry)
+
+
+def test_current_phase_missing_conditional_bundle_returns_gate_failure(
+    tmp_path: Path,
+) -> None:
+    repository, _ = make_isolated_repository(tmp_path)
+    registry_path = repository / "harness/registry/artifacts_v1.json"
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    artifact = next(
+        row
+        for row in registry["artifacts"]
+        if row["artifact_id"] == "v035_pepglad_connectivity_bundle"
+    )
+    artifact["required_for_profiles"] = []
+    registry_path.write_text(
+        json.dumps(registry, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    evidence_path = repository / artifact["path"]
+    evidence_path.unlink(missing_ok=True)
+
+    contract = json.loads(
+        (repository / "harness/contracts/project_acceptance_v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    gate_contract = next(
+        row
+        for row in contract["gates"]
+        if row["gate_id"] == "current.v035_bounded_connectivity"
+    )
+    artifact_index = {
+        row["artifact_id"]: row for row in registry["artifacts"]
+    }
+    raw_gate = evaluate_gate(repository, gate_contract, artifact_index)
+
+    assert raw_gate.verdict is GateVerdict.FAIL
+    assert raw_gate.reason_code == "v035_bounded_connectivity_incomplete"
+
+    evaluation = evaluate_project(
+        repository,
+        "current_phase",
+        require_fresh_generated=False,
+    )
+    gate = next(
+        row
+        for row in evaluation.gate_results
+        if row.gate_id == "current.v035_bounded_connectivity"
+    )
+    assert evaluation.profile.harness_status is HarnessStatus.VALID
+    assert gate.verdict in {GateVerdict.FAIL, GateVerdict.PENDING}
+    assert gate.verdict is not GateVerdict.ERROR
 
 
 def test_workspace_digest_tracks_evaluator_code_but_excludes_reports_and_signoffs(

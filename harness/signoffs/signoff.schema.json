@@ -2,6 +2,48 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "pep-design-signoff-v1",
   "title": "Pep Design acceptance signoff",
+  "$defs": {
+    "dialog_governance_current": {
+      "title": "Current governance dialog rationale",
+      "properties": {
+        "profile_id": {"const": "governance"},
+        "rationale": {
+          "const": "仅批准 contract/registry/migration/validator 的治理完整性；不豁免任何失败 gate，也不批准 release_checkpoint 或 full_project。"
+        }
+      },
+      "required": ["profile_id", "rationale"]
+    },
+    "dialog_current_phase_v034": {
+      "title": "Current phase v0.34 dialog rationale",
+      "properties": {
+        "profile_id": {"const": "current_phase"},
+        "rationale": {
+          "const": "接受 v0.34 的诚实边界：7 条主运行候选均已解析，其中 6 条通过 QC；PepGLAD 因混合手性失败；没有 scoring、ranking、frozen target 或 wet-lab 验证。"
+        }
+      },
+      "required": ["profile_id", "rationale"]
+    },
+    "dialog_current_phase_historical_v033": {
+      "title": "Exact historical current phase v0.33 dialog signoff",
+      "const": {
+        "approval_card_digest": "2382d541b3b6a15c32c7c4a95b0fa947e63ea33fd8a92f194d5efd8ba537c071",
+        "approval_card_id": "approval_2382d541b3b6a15c32c7c4a9",
+        "approval_event_id": "approval_event_d3aaf51e94ace4eeec6129af",
+        "contract_digest": "1a80f7b6b407a941eb5ba6f36c023fd24b2b6cb9186afbb6d2654f9de99d4b15",
+        "contract_id": "pep_design_project_acceptance",
+        "contract_version": "1.0.0",
+        "decision": "approved",
+        "evaluation_id": "evaluation_c275edb91f1b6b2f980d470b",
+        "evidence_digest": "7f99796e174d02bb9391990cfce3a0fb40b78ec2b92e6be0c6b8385e5eb3e79e",
+        "profile_id": "current_phase",
+        "rationale": "接受 v0.33 的诚实边界：10 条 method-specific blockers，0 个 parsed/generated candidates，target/control 尚未冻结，scoring/ranking 尚未启动。",
+        "reviewed_at": "2026-07-11T11:09:58.780862+00:00",
+        "reviewer_id": "project_owner",
+        "role": "governance_owner",
+        "supersedes": null
+      }
+    }
+  },
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -60,33 +102,10 @@
           "reviewer_id": {"const": "project_owner"},
           "profile_id": {"enum": ["governance", "current_phase"]}
         },
-        "allOf": [
-          {
-            "if": {
-              "properties": {"profile_id": {"const": "governance"}},
-              "required": ["profile_id"]
-            },
-            "then": {
-              "properties": {
-                "rationale": {
-                  "const": "仅批准 contract/registry/migration/validator 的治理完整性；不豁免任何失败 gate，也不批准 release_checkpoint 或 full_project。"
-                }
-              }
-            }
-          },
-          {
-            "if": {
-              "properties": {"profile_id": {"const": "current_phase"}},
-              "required": ["profile_id"]
-            },
-            "then": {
-              "properties": {
-                "rationale": {
-                  "const": "接受 v0.33 的诚实边界：10 条 method-specific blockers，0 个 parsed/generated candidates，target/control 尚未冻结，scoring/ranking 尚未启动。"
-                }
-              }
-            }
-          }
+        "oneOf": [
+          {"$ref": "#/$defs/dialog_governance_current"},
+          {"$ref": "#/$defs/dialog_current_phase_v034"},
+          {"$ref": "#/$defs/dialog_current_phase_historical_v033"}
         ]
       }
     }

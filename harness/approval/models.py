@@ -11,8 +11,8 @@ GOVERNANCE_RATIONALE = (
     "gate，也不批准 release_checkpoint 或 full_project。"
 )
 CURRENT_PHASE_RATIONALE = (
-    "接受 v0.33 的诚实边界：10 条 method-specific blockers，0 个 "
-    "parsed/generated candidates，target/control 尚未冻结，scoring/ranking 尚未启动。"
+    "接受 v0.34 的诚实边界：7 条主运行候选均已解析，其中 6 条通过 QC；"
+    "PepGLAD 因混合手性失败；没有 scoring、ranking、frozen target 或 wet-lab 验证。"
 )
 PROFILE_RATIONALES = {
     "governance": GOVERNANCE_RATIONALE,

@@ -1,244 +1,236 @@
-# Pep Design Benchmark Knowledge Base
+<p align="center">
+  <img src="docs/assets/readme/pep_design_icon_v1.png" width="168" alt="Pep Design Benchmark KB 图标">
+</p>
 
-This repository hosts a peptide-design method knowledge base and a protocol-first benchmark design layer.
+<h1 align="center">Pep Design Benchmark KB</h1>
 
-Release `1.2.21` packages a repository checkpoint for the protocol, manuscript, preflight control, minimal execution-evidence, adapter/parser planning, pilot-gate, parser-replay fixture, external method install/example-smoke readiness, v0.20 method-unblock readiness, v0.21 adapter-smoke/parser-fixture readiness, v0.22 controlled multi-case fixture pilot planning, v0.23 external dry-run package readiness, v0.24 D-Flow fixture-level input-contract readiness, v0.25 D-Flow full PepMerge download/load readiness, v0.26 D-Flow/ColabDesign/BindCraft gate-update layer, v0.27 ColabDesign/DexDesign gate layer, v0.28 external asset rescue layer, v0.29 bounded generation/parser layer, v0.30 pilot benchmark design layer, v0.31 bounded Wave A pilot execution/parser layer, v0.32 Supervisor-Skills installation/memory layer, and v0.33 Wave A adapter/parser completion attempt layer rather than benchmark results. It includes claim gates, source/code/image readiness audits, target/control schema design, scoring protocol design, manuscript support artifacts, external source checkouts kept outside the KB, observed Docker image inventory under `/mnt/ssd4t/protein-design`, small execution summaries from `/data/protein-design`, v0.18 replay parser artifacts, v0.19/v0.20 method runtime summaries, v0.21 bounded adapter smoke plus parser fixture summaries, v0.22 standardized target/control/job/gate manifests, v0.23 notebook CLI plus project-local D-Flow readiness evidence, a v0.24 D-Flow PepDataset LMDB fixture load test, v0.25 verified PepMerge archive/LMDB load evidence, v0.26 bounded D-Flow dry-run plus ColabDesign/BindCraft adapter evidence, v0.27 ColabDesign asset-gate plus DexDesign route-audit evidence, v0.28 ColabDesign AF parameter/target rescue, DexDesign input-contract extraction, BindCraft accepted-final classification, v0.29 ColabDesign one-case bounded generation/parser plus DexDesign/BindCraft parser-contract fixtures, v0.30 controlled pilot target/control/job manifests plus a prospective wet-lab panel, v0.31 compact Wave A execution/candidate/run parser tables, v0.32 Supervisor-Skills routing memory, and v0.33 compact adapter/parser blocker rows for the 10 v0.31 placeholder-failed jobs.
+<p align="center">
+  面向近期多肽设计方法的 protocol-first Benchmark 知识库
+</p>
 
-## Acceptance Harness
+<p align="center">
+  方法证据管理 · 输入输出契约 · 连通性审计 · 评价协议 · 稿件规划
+</p>
 
-Project acceptance is governed by [`harness/contracts/project_acceptance_v1.json`](harness/contracts/project_acceptance_v1.json). The generated reader view is [`harness/PROJECT_ACCEPTANCE.md`](harness/PROJECT_ACCEPTANCE.md), the current machine/human reports are under [`ops/acceptance/`](ops/acceptance/), and the implementation plan is [`ops/plans/harness_engineering_plan_v1.0.md`](ops/plans/harness_engineering_plan_v1.0.md).
+> **当前结论（2026-07-25）**：知识库校验通过，但项目验收尚未通过。v0.35 唯一授权的 PepGLAD 执行在容器启动前因 Docker API socket 权限不足失败，未产生候选。当前材料不支持统一评分、方法排名、完整复现或生物学有效性结论。
 
-Run read-only preflight with `python scripts/run_project_acceptance.py check --profile current_phase`. The unsigned harness checkpoint does not change the v0.33 evidence boundary and does not promote `VERSION` beyond `1.2.21`.
+## 项目定位
 
-### 对话内签核
+本仓库不是“最优多肽生成器”排行榜，也不是第三方模型或数据的镜像。它以可审计协议为中心，管理 10 类纳入方法的文献来源、代码固定点、任务归类、标准输入输出、执行门禁和证据边界。项目将“方法可找到”“接口可描述”“候选可解析”“可评分”“可比较”“获得实验验证”视为彼此独立的证据层。
 
-运行 `prepare-review` 和展示审批卡前，必须停止全部 subagents 并确认其 quiescent。Agent 只能在当前受信任 Codex 会话中先展示一张未过期审批卡，再接受一条经 Unicode NFC 规范化并 trim 首尾空白后完整内容恰好为 `批准` 的回复；这是一项会话授权，不是 cryptographic identity。卡片展示后任何介入的非精确 `批准` 用户消息都会使卡失效，必须重新 prepare 并展示新卡。固定审批 bundle 同时覆盖 `governance` 与 `current_phase`，但会生成两份独立的 profile-bound `governance_owner` signoff，不能 waiver Critical/Major failure，也不批准 `release_checkpoint` 或 `full_project`。
+当前科学计划为 [`updated_plan_v0.35.md`](ops/plans/updated_plan_v0.35.md)，Harness 工程计划为 [`harness_engineering_plan_v1.0.md`](ops/plans/harness_engineering_plan_v1.0.md)。机器可读约束以 [`project_acceptance_v1.json`](harness/contracts/project_acceptance_v1.json)、[`artifacts_v1.json`](harness/registry/artifacts_v1.json) 和 [`claims_v1.json`](harness/registry/claims_v1.json) 为准。
 
-批准后仅在 source manifest 非空时于当前 `main` 创建 source checkpoint；manifest 记录 Git clean 后实际进入 commit 的 blob SHA-256，空 manifest 复用卡片 HEAD，随后只创建一个 signoff commit。Transport、staging、history 与 clean-checkout materialization 均在受控 Git 配置/隔离 gitdir 中执行；重验后以显式 refspec、真实 ancestry 检查和 card-bound expected-old-OID lease 对 `git@github.com:luvega/pep-design.git` 的 `refs/heads/main` 执行 fast-forward push。该 lease 不授权 non-fast-forward 或无条件 force-push。Generated report、审批卡和 journal 是 non-evidence 控制面状态；production signoff 只有作为 `harness/signoffs/` 下 committed、clean、非 symlink 的直接 regular file 才有效。
+`render` 命令生成的本地读者视图为 `harness/PROJECT_ACCEPTANCE.md`；它属于 generated non-evidence，不作为 GitHub 主页的固定来源链接。
 
-Durable `local_committed_push_failed` 或 `verified` 只通过 `resume-push --card-id <card_id>` 恢复。已有 final OID 时直接复用且不重复 commits/signoffs；只有 source OID 时在该 source 的临时 clean checkout 中重验，再创建或复用缺失 signoff，并至多新建一个 signoff commit，且不重复 source。若失败点已留下 staged signoff，恢复只接受与卡片派生 manifest 在路径、mode 和 blob SHA-256 上完全一致的 index；任何 extra/different staged 状态均 fail closed。`verified` 可在 remote 已是 final OID 时协调不明确但实际成功的 push，仅推进 journal 而不再次 push。
+**English summary.** Pep Design Benchmark KB is a protocol-first knowledge base for recent peptide-design methods. It separates literature provenance, source pinning, input contracts, parser evidence, scoring readiness and biological validation so that progress at one layer is not mistaken for success at another. Ten included method routes are organized into sequence-conditioned peptide design, structure-conditioned peptide design and miniprotein-binder baselines, with chirality, cyclization and non-canonical residues treated as cross-cutting constraints. The current repository contains bounded connectivity evidence and explicit failure records, not a completed head-to-head benchmark. In particular, the authorized v0.35 PepGLAD attempt failed before container start because the execution environment could not access the Docker API. No candidate, score or ranking was produced. Large runtime assets remain external and gitignored.
 
-该简化流程由不同 subagents 分别承担设计、测试、编码、文档与独立复审。它没有授权 clone、install、download、GPU generation、scoring 或 ranking；v0.33 仍为 10 条 blocker rows 和 0 parsed/generated candidates，`VERSION` 继续保持 `1.2.21`，直至实际 digest 获得 governance approval 后才可准备后续 release candidate。
+## 当前证据状态
 
-## Current Version
+| 项目 | 当前状态 | 可支持的解释 |
+|:---|:---|:---|
+| 版本 | `1.2.21` | unsigned harness checkpoint；未准备 `1.2.22` |
+| KB 校验 | `0 errors / 0 warnings` | 结构、表格、引用和边界规则通过现有 validator |
+| `current_phase` 验收 | `not_accepted` | Critical gate `current.v035_bounded_connectivity` 仍为 `FAIL` |
+| v0.34 bounded connectivity | 14 条 run rows；12 条 candidate/QC；6 个 seed42 主任务及其 6 个 seed43 扩展为 `supported` | 支持指定 fixture 上的入口、解析和基础 QC 状态 |
+| v0.35 PepGLAD | `attempt_001` 在容器启动前失败；无 candidate bundle | 仅支持基础设施失败的事实 |
+| 目标集 | [`target_set_v0.csv`](benchmark/input_sets/target_set_v0.csv) 仅含表头 | 尚无 frozen target set |
+| 评分与排名 | `not_run` | 尚未开展统一评分或方法排名 |
+| 生物学验证 | `not_available` | 无 wet-lab、亲和力、细胞功能或 PK/PD 结论 |
 
-- Version: `1.2.21`
-- Manuscript outline layer: `v1.0`
-- Supplementary-source synthesis layer: `v1.1`
-- Chinese manuscript figure/table embedding layer: `v1.2`
-- Grant-style mock review layer: `v1.3` planning supplement
-- Source/I/O/smoke-test interface layer: `v0.11` planning supplement
-- Source-code clone audit layer: `v0.12` external checkout supplement
-- Docker image/environment assignment layer: `v0.13` workbench scaffold supplement
-- Academic-search target/case planning layer: `v0.14` candidate supplement
-- Run preflight and Batch A evidence layer: `v0.15` external minimal smoke supplement
-- Adapter/parser hardening layer: `v0.16` planning supplement
-- Batch B pilot gate layer: `v0.17` planning supplement
-- Adapter replay fixture layer: `v0.18` parser supplement
-- Method install/example smoke layer: `v0.19` external readiness supplement
-- Method unblock layer: `v0.20` external readiness supplement
-- Adapter smoke/parser fixture layer: `v0.21` external readiness supplement
-- Multi-case fixture pilot planning layer: `v0.22` planning supplement
-- External dry-run package readiness layer: `v0.23` project-local readiness supplement
-- D-Flow input-contract fixture layer: `v0.24` project-local readiness supplement
-- D-Flow full PepMerge download/load layer: `v0.25` project-local readiness supplement
-- D-Flow/ColabDesign/BindCraft gate update layer: `v0.26` project-local readiness supplement
-- ColabDesign/DexDesign gate layer: `v0.27` project-local readiness supplement
-- External asset rescue layer: `v0.28` project-local readiness supplement
-- Bounded generation/parser layer: `v0.29` project-local readiness supplement
-- Pilot benchmark design layer: `v0.30` planning supplement
-- Bounded Wave A pilot execution/parser layer: `v0.31` project-local bounded evidence supplement
-- Supervisor-Skills installation/memory layer: `v0.32` manuscript-support supplement
-- Wave A adapter/parser completion attempt layer: `v0.33` project-local bounded blocker supplement
-- Repository checkpoint: `v1.2.21`
-- Evidence/release checkpoint build date: 2026-07-09（当前对话 harness workflow 更新于 2026-07-10）
-- Literature window: 2021-06-03 to 2026-06-03
-- Included first-wave candidate methods: 10
-- Watchlist methods: 2
+> [!CAUTION]
+> v0.35 的失败是基础设施失败，不是 PepGLAD 方法失败。容器未启动，parser 与 QC 未运行，`raw/` 中没有 candidate。该记录不能用于判断 mixed L/D 连通性、PepGLAD 方法表现或 OpenMM 影响。`attempt_001` 不得覆盖或重试；任何新执行均需新的明确授权和更新后的 attempt 政策。详见 [`v035_pepglad_connectivity_audit.md`](ops/audits/v035_pepglad_connectivity_audit.md)。
 
-## What Is Included
+### 快速导航
 
-- `kb/references/`: BibTeX export, Zotero-to-BibTeX key map, search log, dedupe report.
-- `kb/tables/`: master literature manifest, method evidence matrix, candidate method scorecard, expert review action items, v1.0 candidate method classification, v1.1 supplementary-material action matrix, scoring rationale matrix, method-landscape patch candidates, and v1.3 grant review action items.
-- `kb/wiki/`: literature cards, method cards, concept pages, benchmark candidate pages.
-- `benchmark/`: protocol, run.csv schema, target/control schema, scoring schema, dataset readiness scorecard, target candidate matrix, v1.0 reference dataset sources, method source routes, source pin audits, availability audits, server readiness checklist, server smoke-test contract, method contracts, artificial example run table, download manifest template, environment feasibility matrix, and smoke-test planning layer.
-- v0.11 adds `job_manifest.csv` and adapter-output schemas plus artificial Batch A example manifests for PepMLM and RFdiffusion + ProteinMPNN.
-- v0.12 adds `benchmark/deployment/source_clone_manifest_v0.12.csv` and `ops/audits/source_code_clone_audit_v0.12.md` to record external source checkouts for 11 first-wave method repositories.
-- v0.13 adds Docker image inventory and method-environment assignment manifests for reusing existing `/mnt/ssd4t/protein-design` images and defining a shared multi-conda benchmark image scaffold.
-- v0.14 adds method-paper case and academic-search target candidate matrices for NCAM1, AMHR2, DiffPepBuilder PDB cases, pMHC, PepBench/LNR, PepMerge, PEPBI, GPCR and Chang ranking sources.
-- v0.15 adds import-level shared-image preflight results and three external minimal Batch A smoke-test summaries for PepMLM, ProteinMPNN and RFpeptide/RFdiffusion.
-- v0.16 adds adapter/parser hardening and Batch B target-control review planning through an adapter matrix, replay contract and target review queue.
-- v0.17 adds controlled Batch B pilot target gates, method scope and planned fixture job manifest without target-set promotion.
-- v0.18 adds a parser replay script and three small replay fixture result tables parsed from v0.15 Batch A outputs.
-- v0.19 adds source/doc verification, install smoke manifests and method smoke-test result summaries for the 10 first-wave methods using external `/data/protein-design` workbench logs.
-- v0.20 adds method-unblock manifests and result summaries for the 10 first-wave methods, including an independent PyRosetta image route and unresolved blockers.
-- v0.21 adds adapter-smoke manifests, blocker asset status, parser output manifests, candidate rows and run rows for the 10 first-wave methods using bounded external workbench examples.
-- v0.22 converts v0.21 method-example adapter evidence into focused multi-case fixture target/control/job manifests and priority gate reviews for D-Flow, ColabDesign and BindCraft without execution or scoring.
-- v0.23 records project-local notebook CLI tooling, D-Flow source/env/weight/import readiness evidence, and updated dry-run gates while keeping PepMerge/LMDB unresolved.
-- v0.24 adds a D-Flow PepMerge-style fixture builder and records a passing `PepDataset(reset=False)` LMDB load test for one 3EQS fixture.
-- v0.25 records verified full PepMerge archive download, extraction, official LMDB extraction and `PepDataset(reset=False)` loading for D-Flow train/test splits while keeping all large assets gitignored.
-- v0.26 records one bounded D-Flow dry-run, a standard ColabDesign job-row CLI adapter package and a BindCraft accepted-final classifier while keeping runtime outputs gitignored.
-- v0.27 records a ColabDesign bounded execute asset gate and a DexDesign D-peptide/L-protein route audit while keeping outputs gitignored.
-- v0.28 records ColabDesign AF parameter/target PDB route discovery, DexDesign input-contract extraction and BindCraft accepted-final classification from external outputs while keeping runtime outputs gitignored.
-- v0.29 records one ColabDesign bounded GPU generation/parser row, a DexDesign synthetic prepared D-L input-contract fixture and a BindCraft accepted-final standard candidate parser fixture while keeping raw PDB outputs and logs gitignored.
-- v0.30 records controlled pilot target/control/job manifests, an execution matrix for Wave A/Wave B/blocked lanes, and a prospective wet-lab candidate panel while keeping `target_set_v0.csv` empty and runtime outputs gitignored.
-- v0.31 records bounded Wave A pilot execution/parser summaries for 14 Wave A jobs, with 4 parsed/generated rows and 10 placeholder-failed adapter rows, while keeping raw outputs and generated PDB files gitignored.
-- v0.32 records installation and project-memory routing for selected Supervisor-Skills manuscript-support skills while preserving the boundary that these skills are not Benchmark-result or scoring evidence.
-- v0.33 records method-specific adapter/parser completion attempts for the 10 v0.31 placeholder-failed Wave A jobs, with 10 no-supported-output blocker rows and no generated candidates.
-- `sources/raw_snapshots/`: read-only local snapshots copied into the project for provenance.
-- `manuscript/`: Benchmark outlines, claim map, figure/table plan, bibliography planning, manuscript figures, and manuscript-facing support reports.
-- `ops/`: current and historical plans, audits, validation report, build summary, migration records, and project log.
-- `scripts/`: reproducible build and validation scripts.
+- [方法与论文来源表](benchmark/method_sources/method_homepage_source_map_v0.35.csv)
+- [Benchmark 协议](benchmark/protocols/benchmark_protocol_v0.md)
+- [标准 job manifest](benchmark/input_sets/pilot_benchmark_job_manifest_v0.34.csv)
+- [v0.34 候选输出](benchmark/results/pilot_candidate_outputs_v0.34.csv)
+- [v0.34 候选 QC](benchmark/results/pilot_candidate_qc_v0.34.csv)
+- [评分协议](benchmark/scoring/scoring_protocol_v0.md)
+- [v0.34 连通性审计](ops/audits/v034_bounded_connectivity_audit.md)
+- [当前验收合同](harness/contracts/project_acceptance_v1.json)
+- [当前科学计划](ops/plans/updated_plan_v0.35.md)
 
-## Current Directory Architecture
+## 项目流程
 
-- `sources/raw_snapshots/`: read-only source snapshots only.
-- `kb/`: generated references, structured tables, and wiki cards.
-- `benchmark/`: protocol, schemas, input-set governance, method-source readiness, deployment manifests, and smoke-test planning interfaces.
-- `manuscript/`: paper outlines, figures, claim gates, citation planning, and manuscript-facing support.
-- `ops/`: plans, audits, migration records, validation outputs, build summaries, and the project log.
+![Pep Design Benchmark KB 从来源核验到 claim gate 的流程图](docs/assets/readme/pep_design_homepage_workflow_v1.png)
 
-v0.10/v0.11 preflight planning adds approval/status/source-freshness/adapter files for future server execution, v0.12 records source-only external checkouts, v0.13 records Docker image/environment assignment, v0.14 records academic-search target/case candidates, v0.15 records small external preflight/smoke-test summaries, v0.16 records adapter/parser plus target-control review planning, v0.17 records pilot gates, v0.18 records parser replay fixtures, v0.19 records external method install/example-smoke readiness summaries, v0.20 records method-unblock readiness summaries, v0.21 records bounded adapter-smoke/parser fixture summaries, v0.22 records controlled multi-case fixture pilot planning, v0.23 records external dry-run package readiness, v0.24 records D-Flow fixture-level LMDB input-contract readiness, v0.25 records D-Flow full PepMerge download/load readiness, v0.26 records D-Flow/ColabDesign/BindCraft gate updates, v0.27 records ColabDesign/DexDesign gate updates, v0.28 records external asset rescue updates, v0.29 records bounded generation/parser-contract updates, v0.30 records controlled pilot input/job planning, v0.31 records bounded Wave A execution/parser summaries, v0.32 records Supervisor-Skills manuscript-support memory, and v0.33 records method-specific no-supported-output adapter/parser blockers for the v0.31 placeholder-failed jobs. Model weights, datasets, installations, built image layers, raw logs, generated structures, GPU outputs and large run artifacts remain outside tracked KB files.
+图中将来源核验、T1/T2/T3 任务归类、标准输入、方法适配、候选解析与 QC、当前 readiness 和未来 scoring 分开。它是主页导航图，不是运行结果或性能证据。生成记录与边界检查见 [`readme_imagegen_record_v1.md`](docs/assets/readme/readme_imagegen_record_v1.md)。
 
-## First-Wave Candidate Methods
+## 方法分类与来源
 
-The `include` set is:
+### 分类原则
 
-- PepMLM
-- SaLT&PepPr
-- DiffPepBuilder
-- PepGLAD
-- D-Flow / PeptideDesign
-- PepMirror
-- AfCycDesign / ColabDesign cyclic peptide
-- DexDesign / OSPREY3
-- RFdiffusion + ProteinMPNN
-- BindCraft
+| 任务 | 主要输入 | 预期输出 | 比较边界 |
+|:---|:---|:---|:---|
+| `T1_sequence_binder` | 靶蛋白序列、长度或界面上下文 | 候选肽序列 | 只与序列条件生成任务比较 |
+| `T2_structure_peptide_binder` | 靶结构、链、口袋或参考配体约束 | 多肽序列及/或复合物结构 | 需区分 L、D、mixed、linear 与 cyclic |
+| `T3_miniprotein_binder_baseline` | 靶结构、hotspot、binder 长度 | miniprotein backbone 与序列 | 作为邻近任务基线，不与短肽直接合并排名 |
 
-PepFlow and BoltzDesign1 are retained as watchlist methods until their executable route, checkpoint use, and peptide/miniprotein task fit are confirmed.
+手性、环化和非标准残基是跨任务约束，不构成第四个任务。不同拓扑、长度和输出模态不能用单一总分掩盖。
 
-## Rebuild And Validate
+### T1：序列条件多肽设计
 
-Run from the repository root on Windows PowerShell:
+| 方法 | 输入 → 输出 | 代码与固定点 | 论文来源 | 当前项目证据 |
+|:---|:---|:---|:---|:---|
+| **PepMLM** | 靶序列、长度 → 多肽序列 | [repo](https://github.com/programmablebio/pepmlm) · [3169c49](https://github.com/programmablebio/pepmlm/commit/3169c4920f8c383948e0a5d3a7c8f87e5e7d2436) | [Nature Biotechnology, 2025](https://www.nature.com/articles/s41587-025-02761-2) | v0.34 两个 seed 均为 `WWX`；连通性 `supported`，保留非标准残基警告 |
+| **SaLT&PepPr** | 靶序列与界面上下文 → guide-peptide 序列 | [repo](https://github.com/programmablebio/saltnpeppr) · [fba9d02](https://github.com/programmablebio/saltnpeppr/commit/fba9d029f34638fe87277f69b5d6a5797273c5a5) | [Communications Biology, 2023](https://www.nature.com/articles/s42003-023-05464-z) | 已记录来源与接口；不在 v0.34 pilot，既有 license gate 未关闭 |
 
-```powershell
-$env:PYTHONUTF8='1'
-python scripts/build_benchmark_kb.py
-python scripts/validate_benchmark_kb.py
+### T2：结构条件多肽设计
+
+| 方法 | 输入 → 输出 | 代码与固定点 | 论文来源 | 当前项目证据 |
+|:---|:---|:---|:---|:---|
+| **DiffPepBuilder** | 靶 PDB、位点 → L-peptide 序列与结构 | [repo](https://github.com/YuzheWangPKU/DiffPepBuilder) · [c19eb4f](https://github.com/YuzheWangPKU/DiffPepBuilder/commit/c19eb4f0cd2419d3bcc116184c0868243b6c4169) | [JCIM, 2024](https://pubs.acs.org/doi/10.1021/acs.jcim.4c00975) | v0.34 两个 fixture job 的候选解析与基础 QC 为 `supported` |
+| **PepGLAD** | 靶 PDB、口袋 → full-atom 多肽序列与结构 | [repo](https://github.com/THUNLP-MT/PepGLAD) · [bad015c](https://github.com/THUNLP-MT/PepGLAD/commit/bad015ca50c312a89482adb5220c3d907f13df5c) | [NeurIPS, 2024](https://proceedings.neurips.cc/paper_files/paper/2024/hash/88ad9774ffcb7a272457e9396f793a07-Abstract-Conference.html) | v0.34 replay mismatch；v0.35 容器前基础设施失败；无当前候选 |
+| **D-Flow / PeptideDesign** | 靶或镜像靶结构 → D-peptide 序列与结构 | [repo](https://github.com/smiles724/PeptideDesign) · [3e3e9f5](https://github.com/smiles724/PeptideDesign/commit/3e3e9f501ee16db318e9bf52643513636a07699a) | [arXiv:2411.10618](https://arxiv.org/abs/2411.10618) | v0.34 `supported`；3EQS fixture 有已知训练重叠，仅用于连通性 |
+| **PepMirror** | 靶结构、手性上下文 → heterochiral 复合物与序列 | [repo](https://github.com/YZY010418/PepMirror) · [41cb31f](https://github.com/YZY010418/PepMirror/commit/41cb31f3974d91e1a2ca88f0db060405833e4a9c) | [arXiv:2602.20176](https://arxiv.org/abs/2602.20176) | v0.34 两个 D-peptide fixture job 为 `supported` |
+| **AfCycDesign / ColabDesign cyclic peptide** | 靶结构、cyclic offset → 环肽序列与结构 | [repo](https://github.com/sokrypton/ColabDesign) · [e31a56f](https://github.com/sokrypton/ColabDesign/commit/e31a56fe1d9b4de25c8697f3a28b75892941cc72) | [Nature Communications, 2025](https://www.nature.com/articles/s41467-025-59940-7) | v0.34 两个 7ZKR cyclic fixture job 为 `supported` |
+| **DexDesign / OSPREY3** | 靶结构、能量搜索约束 → D-peptide inhibitor 序列与结构 | [repo](https://github.com/donaldlab/OSPREY3) · [3d53244](https://github.com/donaldlab/OSPREY3/commit/3d53244851f0388db9e01b288bbd330145935aa7) | [Protein Engineering, Design and Selection, 2024](https://academic.oup.com/peds/article/doi/10.1093/protein/gzae007/7670946) | v0.29 仅有 synthetic input-contract fixture；不构成生成证据 |
+
+### T3：miniprotein binder 邻近基线
+
+| 方法 | 输入 → 输出 | 代码与固定点 | 论文来源 | 当前项目证据 |
+|:---|:---|:---|:---|:---|
+| **RFdiffusion + ProteinMPNN** | 靶 PDB、hotspot、长度 → backbone 与序列 | [RFdiffusion](https://github.com/RosettaCommons/RFdiffusion) · [2d0c003](https://github.com/RosettaCommons/RFdiffusion/commit/2d0c003df46b9db41d119321f15403dec3716cd9)；[ProteinMPNN](https://github.com/dauparas/ProteinMPNN) · [8907e66](https://github.com/dauparas/ProteinMPNN/commit/8907e6671bfbfc92303b5f79c4b5e6ce47cdef57) | [Nature, 2023](https://www.nature.com/articles/s41586-023-06415-8)；[Science, 2022](https://www.science.org/doi/10.1126/science.add2187) | v0.34 `supported`；当前为未线程化 all-Gly backbone 与独立 FASTA handoff |
+| **BindCraft** | 靶 PDB、hotspot、长度范围 → backbone 与序列 | [repo](https://github.com/martinpacesa/BindCraft) · [b971db4](https://github.com/martinpacesa/BindCraft/commit/b971db42ba6e091afab63ccb30ae02215150a990) | [Nature, 2025](https://www.nature.com/articles/s41586-025-09429-6) | v0.29 仅有 external accepted-final parser fixture；不构成受控 Benchmark 结果 |
+
+上述外链于 2026-07-25 核对。机器可读来源、完整提交 SHA、论文题名、persistent ID 和统一边界见 [`method_homepage_source_map_v0.35.csv`](benchmark/method_sources/method_homepage_source_map_v0.35.csv)。该表的证据边界固定为 `source_and_interface_navigation_only_not_runnability_or_performance`。
+
+![纳入方法的任务与证据矩阵](manuscript/assets/figures/benchmark_figure2_task_method_matrix_v1.png)
+
+该矩阵用于解释任务覆盖、方法门禁和空目标集边界。它不表示方法优劣。
+
+## 标准输入与输出
+
+方法先接收统一 job 描述，再由 adapter 转换为 method-specific 输入。原始输出必须先进入 parser 和 QC，不能直接写入评分表。
+
+| 层 | 必要字段或对象 | 规则 |
+|:---|:---|:---|
+| Job 身份 | `job_id`, `method`, `task_id`, `target_id`, `random_seed`, `attempt_id` | ID 不复用；失败 attempt 不覆盖 |
+| 序列输入 | `target_sequence`, `length_min`, `length_max` | 适用于 T1 或 hybrid；缺失时 fail closed |
+| 结构输入 | `target_pdb`, `target_chains`, `binder_chain`, `pocket_definition` | PDB 路径、链和 hash 必须可审计 |
+| 化学与拓扑 | `peptide_type`, `chirality`, `cyclic`, `noncanonical_policy` | L、D、mixed、cyclic、ncAA 分别记录 |
+| 方法原始输出 | external `raw_output_root`, command, environment, source/model pin, runtime, exit code | 大文件、日志、权重和结构留在外部或 gitignored root |
+| 标准候选 | `design_id`, sequence, structure path, parse status, source output ID | 每个候选一行；与 job 和原始输出可追溯连接 |
+| 基础 QC | 长度、链、手性、环化、非标准残基、文件 hash、handoff | `supported` 仅表示约定检查通过 |
+| 评分输出 | metric-family CSV，统一以 `design_id` 合并 | 当前尚未运行；不得用空值补 0 |
+
+完整接口见 [`job_manifest_schema_v0.11.md`](benchmark/protocols/job_manifest_schema_v0.11.md)、[`adapter_output_schema_v0.11.md`](benchmark/protocols/adapter_output_schema_v0.11.md)、[`run_csv_schema.md`](benchmark/protocols/run_csv_schema.md) 和 [`scoring_outputs_schema.md`](benchmark/protocols/scoring_outputs_schema.md)。
+
+### 失败状态
+
+状态值需要保留失败发生的位置。常用值包括 `planned`、`not_run`、`execution_failed`、`parse_failed`、`not_applicable` 和 `unknown`。没有候选时，不创建伪候选；没有可评估结构时，不把结构指标写为 0。
+
+## 代表性测试数据
+
+以下为 v0.34 seed42 的紧凑展示。它们是受限连通性 fixture，不是冻结测试集或性能样本。完整 14 条运行记录见 [`pilot_run_v0.34.csv`](benchmark/results/pilot_run_v0.34.csv)。
+
+| 方法 | fixture / 任务 | 代表性输出 | 基础状态 | 解释限制 |
+|:---|:---|:---|:---|:---|
+| PepMLM | `pepmlm_sequence_contract_fixture` / T1 | `WWX`，3 aa | `passed` | 含非标准残基 `X` 警告 |
+| DiffPepBuilder | `3EQS` / T2 | `PPPTGPFPPYW`，11 aa | `passed` | 仅解析、长度、链与基础 QC |
+| PepGLAD | `3EQS` / T2 | 无候选 | `parse_failed` | v0.34 replay mismatch；seed43 未运行 |
+| D-Flow | `3EQS` / T2 | `RIKKKKRKKRR`，11 aa，D | `passed` | 训练重叠使其不具备公平评分资格 |
+| PepMirror | `3EQS` / T2 | `SLRAELRKMGP`，11 aa，D | `passed` | 仅镜像 round-trip 与基础手性检查 |
+| AfCycDesign | `7ZKR` / T2 | `WDRKFVVENINITF`，14 aa，cyclic | `passed` | 检查 cyclic offset 与 terminal bond |
+| RFdiffusion + ProteinMPNN | `7ZKR` / T3 | 90 aa FASTA | `passed` | 未线程化 backbone 与序列分离，非 sequence-resolved structure |
+
+数据路径：
+
+- 输入 job：[`pilot_benchmark_job_manifest_v0.34.csv`](benchmark/input_sets/pilot_benchmark_job_manifest_v0.34.csv)
+- 执行摘要：[`pilot_execution_results_v0.34.csv`](benchmark/deployment/pilot_execution_results_v0.34.csv)
+- 候选序列与结构索引：[`pilot_candidate_outputs_v0.34.csv`](benchmark/results/pilot_candidate_outputs_v0.34.csv)
+- 基础 QC：[`pilot_candidate_qc_v0.34.csv`](benchmark/results/pilot_candidate_qc_v0.34.csv)
+- runtime provenance：[`pilot_runtime_provenance_v0.34.json`](benchmark/results/pilot_runtime_provenance_v0.34.json)
+- PepGLAD failure-only 记录：[`pilot_failure_diagnostics_v0.34.json`](benchmark/results/pilot_failure_diagnostics_v0.34.json)
+
+PepGLAD v0.34 `attempt_003` 虽以进程退出码 0 结束，但 parser 返回 `pepglad_seed42_replay_mismatch`，merge 返回 `evidence_incomplete`。诊断中的 `AWHITLLIFTH` 不是候选，也未进入 12 条 candidate provenance。OpenMM 前后的手性变化提示该 attempt 中 mixed chirality 可观察，但不证明模型是根因，也不排除 OpenMM 影响。v0.35 随后的唯一授权 attempt 又在容器启动前失败，因此没有 v0.35 connectivity bundle。
+
+## 评价标准
+
+评价采用分层指标，而不是先设单一总分。生成能力和 ranking/rescoring 能力分别报告；实验结果不能由计算代理指标替代。
+
+| 指标族 | 计划指标 | 适用对象 | 当前状态与限制 |
+|:---|:---|:---|:---|
+| `structure_confidence` | pLDDT、pTM、ipTM、PAE/iPAE、ipSAE | 预测结构与复合物 | `not_run`；需外部结构预测环境 |
+| `interface_geometry` | contacts、interface area、H-bonds、clash count | 复合物结构 | `not_run`；sequence-only 输出为 `not_applicable` |
+| `structure_similarity` | DockQ、backbone RMSD、interface RMSD | 有参考结构的任务 | `not_run`；需合法 reference |
+| `design_feasibility` | 长度、链、手性、环化、parseability | 全部方法 | 当前仅有部分 fixture-level 基础 QC |
+| `developability` | 分子量、净电荷、疏水性、芳香性、Cys、聚集与合成复杂度代理 | 多肽输出 | 仅允许 metadata-level proxy |
+| `negative_design` | off-target panel、cross-reactivity、expected nonbinder | binder 任务 | `not_run`；controls 尚未冻结 |
+| `leakage_homology` | 序列/结构聚类、motif overlap、training leakage risk | 全部目标 | 尚未闭环；D-Flow 3EQS 已标记 overlap |
+| 实验验证 | affinity、结构、稳定性、细胞功能、PK/PD、CMC | 最终候选 | `not_available`；仍需验证 |
+
+![生成与排序双轨评价框架](manuscript/assets/figures/benchmark_figure3_dual_track_v1.png)
+
+评分定义见 [`scoring_protocol_v0.md`](benchmark/scoring/scoring_protocol_v0.md)。所有 metric CSV 以 `design_id` 连接，最终才可合并至 `merged_run.csv`。缺失、不可适用和失败必须分别编码，不允许以 0 代替。
+
+<details>
+<summary>查看评分架构图</summary>
+
+![评分架构与证据边界](manuscript/assets/figures/benchmark_figure4_scoring_architecture_v1.png)
+
+</details>
+
+## 复核与复现边界
+
+### 只读检查
+
+```bash
+python scripts/run_project_acceptance.py check --profile current_phase
+PYTHONUTF8=1 python scripts/validate_benchmark_kb.py --no-write-report
+pytest -q
+git diff --check
 ```
 
-Expected validation for the current working layer covers the v0.33 current plan, v1.0 manuscript-outline layer, v1.1 supplementary-source synthesis layer, v1.2 Chinese manuscript figure/table embedding layer, v1.3 grant-style mock review planning layer, v0.11 source/I-O/smoke-test interface planning layer, v0.13 image/environment assignment layer, v0.14 academic-search target/case planning layer, v0.15 external preflight plus Batch A minimal smoke-test evidence layer, v0.16 adapter/parser hardening plus Batch B target review planning layer, v0.17 pilot gate layer, v0.18 adapter replay fixture layer, v0.19 external method install/example-smoke readiness layer, v0.20 external method-unblock readiness layer, v0.21 external adapter-smoke/parser fixture layer, v0.22 multi-case fixture pilot planning layer, v0.23 external dry-run package readiness layer, v0.24 D-Flow input-contract fixture layer, v0.25 D-Flow full PepMerge download/load layer, v0.26 D-Flow/ColabDesign/BindCraft gate-update layer, v0.27 ColabDesign/DexDesign gate layer, v0.28 external asset rescue layer, v0.29 bounded generation/parser layer, v0.30 pilot benchmark design layer, v0.31 bounded Wave A execution/parser layer, and v0.33 adapter/parser completion attempt layer:
+在当前 v0.35 状态下，第一条命令预期返回非零退出码，因为 `current.v035_bounded_connectivity` 是未关闭的 Critical gate。这是项目事实，不应通过删改失败证据“修复”。validator 应以 `0 errors / 0 warnings` 结束。
 
-- `status`: `pass`
-- `master_rows`: 432
-- `included_methods`: 10
-- `runnability_rows`: 10
-- `benchmark_literature_rows`: 8
-- `candidate_dataset_rows`: 7
-- `method_source_rows`: 10
-- `environment_rows`: 10
-- `expert_review_rows`: 15
-- `dataset_readiness_rows`: 7
-- `target_candidate_rows`: 9
-- `target_candidate_v05_rows`: 9
-- `source_pin_rows`: 4
-- `source_pin_v05_rows`: 10
-- `link_availability_rows`: 23
-- `data_access_rows`: 7
-- `ars_review_action_rows`: 11
-- `dataset_watchlist_v06_rows`: 6
-- `example_run_rows`: 2
-- `download_manifest_rows`: 1
-- `dataset_schema_review_v07_rows`: 6
-- `dataset_schema_review_v08_rows`: 6
-- `download_manifest_v08_rows`: 8
-- `preflight_download_v010_rows`: 8
-- `source_freshness_v011_rows`: 4
-- `method_readiness_v08_rows`: 4
-- `method_preflight_v010_rows`: 3
-- `adapter_preflight_v011_rows`: 3
-- `source_clone_v012_rows`: 11
-- `docker_image_inventory_v013_rows`: 8
-- `method_environment_assignment_v013_rows`: 10
-- `method_paper_case_v014_rows`: 13
-- `target_academic_search_v014_rows`: 16
-- `run_preflight_v015_rows`: 5
-- `batch_a_smoke_test_v015_rows`: 3
-- `adapter_parser_hardening_v016_rows`: 8
-- `batch_b_target_review_v016_rows`: 6
-- `batch_b_pilot_target_gate_v017_rows`: 4
-- `batch_b_pilot_method_scope_v017_rows`: 8
-- `batch_b_pilot_job_manifest_v017_rows`: 5
-- `adapter_replay_fixture_v018_rows`: 3
-- `batch_a_replay_method_output_v018_rows`: 3
-- `batch_a_replay_candidate_v018_rows`: 3
-- `batch_a_replay_run_v018_rows`: 3
-- `method_source_doc_v019_rows`: 10
-- `method_install_smoke_manifest_v019_rows`: 10
-- `method_smoke_test_v019_rows`: 10
-- `method_unblock_manifest_v020_rows`: 10
-- `method_unblock_smoke_v020_rows`: 10
-- `adapter_smoke_manifest_v021_rows`: 10
-- `adapter_smoke_results_v021_rows`: 10
-- `blocker_asset_manifest_v021_rows`: 4
-- `adapter_method_output_v021_rows`: 10
-- `adapter_candidate_output_v021_rows`: 6
-- `adapter_run_rows_v021_rows`: 6
-- `dflow_bounded_candidate_v026_rows`: 1
-- `bindcraft_classification_v026_rows`: 1
-- `bindcraft_accepted_final_v028_rows`: 1
-- `method_example_fixture_v022_rows`: 10
-- `multi_case_fixture_target_v022_rows`: 5
-- `multi_case_fixture_control_v022_rows`: 7
-- `multi_case_fixture_job_v022_rows`: 8
-- `priority_gate_review_v022_rows`: 4
-- `notebook_cli_smoke_v023_rows`: 1
-- `dflow_project_install_v023_rows`: 1
-- `external_dry_run_package_v023_rows`: 5
-- `priority_gate_review_v023_rows`: 5
-- `dflow_input_contract_fixture_v024_rows`: 1
-- `dflow_full_pepmerge_download_v025_rows`: 1
-- `dflow_colab_bindcraft_v026_rows`: 3
-- `colabdesign_dexdesign_gate_v027_rows`: 2
-- `external_asset_rescue_v028_rows`: 3
-- `bounded_generation_parser_v029_rows`: 3
-- `pilot_benchmark_target_v030_rows`: 7
-- `pilot_benchmark_control_v030_rows`: 8
-- `pilot_benchmark_job_v030_rows`: 17
-- `pilot_execution_matrix_v030_rows`: 17
-- `wet_lab_candidate_panel_v030_rows`: 4
-- `pilot_execution_results_v031_rows`: 14
-- `pilot_method_output_v031_rows`: 14
-- `pilot_candidate_output_v031_rows`: 14
-- `pilot_run_v031_rows`: 14
-- `supervisor_skills_installation_v032_files`: 1
-- `pilot_execution_results_v033_rows`: 10
-- `pilot_method_output_v033_rows`: 10
-- `pilot_candidate_output_v033_rows`: 10
-- `pilot_run_v033_rows`: 10
-- `example_job_manifest_v011_rows`: 2
-- `method_output_manifest_v011_rows`: 2
-- `candidate_output_v011_rows`: 2
-- `method_landscape_v09_rows`: 27
-- `bilingual_sync_rows`: 19
-- `method_classification_v1_rows`: 27
-- `reference_dataset_sources_v1_rows`: 8
-- `manuscript_todo_v1_rows`: 18
-- `manuscript_claim_rows`: 73
-- `supplementary_material_rows`: 6
-- `scoring_rationale_rows`: 10
-- `method_landscape_patch_v11_rows`: 8
-- `grant_review_action_v13_rows`: 12
-- `migration_v010_rows`: 23
-- `smoke_test_readmes`: 10
-- `method_cards`: 12
-- `literature_cards`: 120
-- `bibtex_entries`: 432
-- `markdown_links_checked`: 219
-- `tracked_files_checked`: 463
+### Readiness 顺序
 
-## Source Boundary
+```text
+metadata_ready
+  → source_pinned
+  → license_checked
+  → weights_manifested
+  → input_contract_ready
+  → dry_run_ready
+  → smoke_test_ready
+```
 
-This repository is the working project layer. Zotero, EndNote, and the prior PD-wiki remain upstream source systems. The files under `sources/raw_snapshots/` are local project snapshots used for provenance and should be treated as read-only.
+前一层通过不自动授予后一层状态。规划表、fixture、parser row 和 bounded example 均不能单独证明 `smoke_test_ready`、`benchmark_ready` 或完整复现。
 
-This release excludes model weights, downloaded PDFs, EndNote libraries, third-party source trees, large datasets and raw benchmark execution outputs. v0.5 source pinning and data availability checks are metadata-only snapshots. v1.1 supplementary-source synthesis provides source discovery and framing, not primary-source verified evidence or runnability evidence. v1.2 manuscript figures and embedded Markdown tables are planning/reporting artifacts, not benchmark results. v1.3 grant-style mock review is a simulated review and preflight-planning layer, not a funding decision, execution record, code-quality confirmation, or local reproducibility claim. v0.12 source-code clone evidence records external Git checkouts only; it is not installation, environment validation, smoke-test execution, model-weight download, or local reproducibility evidence. v0.13 image/environment assignment records observed existing images and a workbench Dockerfile scaffold; it is not by itself proof that a method is runnable. v0.14 academic-search target/case matrices record literature-derived candidates only; they are not target-set promotion, data-download, assay validation, leakage clearance, or Benchmark performance evidence. v0.15 records one external shared-image import preflight layer and three minimal smoke tests only; it is not complete Benchmark evidence, target-set evidence, scoring evidence, or method-performance evidence. v0.16 records adapter/parser hardening and Batch B target review planning only; it is not a new run, target freeze, scoring result, or performance finding. v0.17 records pilot gates only; it does not freeze `target_set_v0.csv` or execute jobs. v0.18 records parser replay fixtures from v0.15 outputs only; it is not new method execution, scoring evidence or Benchmark results. v0.19 records external method install/example-smoke readiness summaries only; it is not head-to-head Benchmark evidence, scoring evidence, method-ranking evidence, or proof that every method is free of unresolved issues. v0.20 records external method-unblock readiness summaries only; it is not target-set evidence, scoring evidence, method-ranking evidence, or proof that every blocker is resolved. v0.21 records bounded adapter smoke and parser fixture rows only; it is not target-set evidence, scoring evidence, method-ranking evidence, complete reproducibility evidence, or proof that every blocker is resolved. v0.22 records multi-case fixture pilot target/control/job manifests and priority gates only; it is not frozen target-set evidence, execution evidence, scoring evidence, method-ranking evidence, or proof that D-Flow, ColabDesign or BindCraft gates are resolved. v0.23 records project-local notebook CLI and D-Flow readiness findings only; it is not target-set evidence, scoring evidence, method-ranking evidence, complete reproducibility evidence, or proof that ColabDesign or BindCraft gates are resolved. v0.24 records one D-Flow fixture-level PepDataset LMDB load test only; it is not scoring evidence, method-ranking evidence, complete reproducibility evidence, or `smoke_test_ready` promotion. v0.25 records D-Flow full PepMerge download and official LMDB load evidence only; it is not a generation run, target-set evidence, scoring evidence, method-ranking evidence, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence. v0.26 records one D-Flow bounded dry-run, one ColabDesign CLI adapter package and one BindCraft wrapper classification only; it is not frozen target-set evidence, scoring evidence, method-ranking evidence, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence. v0.27 records one ColabDesign bounded execute asset gate and one DexDesign route audit only; it is not generation evidence, scoring evidence, method-ranking evidence, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence. v0.28 records external asset rescue only; it is not controlled multi-case evidence, scoring evidence, method-ranking evidence, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence. v0.29 records one ColabDesign single-case bounded generation/parser row, one DexDesign synthetic D-L fixture, and one BindCraft external accepted candidate parser fixture only; it is not controlled multi-case evidence, scoring evidence, method-ranking evidence, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence. v0.30 records pilot target/control/job manifests, execution routing, and prospective wet-lab candidates only; it is not execution evidence, scoring evidence, frozen target-set evidence, wet-lab validation, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence. v0.31 records bounded Wave A execution/parser summaries only; it is not scoring evidence, method-ranking evidence, frozen target-set evidence, wet-lab validation, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence. v0.32 records Supervisor-Skills installation and routing memory only; it is not Benchmark-result evidence, scoring evidence, method-ranking evidence, or biological validation evidence. v0.33 records method-specific adapter/parser no-supported-output blocker rows only; it is not generated-candidate evidence, scoring evidence, method-ranking evidence, `smoke_test_ready`, `benchmark_ready`, or complete Benchmark evidence. Future server-side downloads and large artifacts must live outside this repository or in gitignored paths.
+### 仓库结构
+
+```text
+benchmark/          协议、输入、部署接口、紧凑结果与评分定义
+harness/            验收合同、artifact/claim registry 与签核规则
+kb/                 结构化参考文献、表格和方法知识页
+manuscript/         Benchmark 稿件结构、证据表和规划图
+ops/                当前计划、审计、验证报告与日志
+scripts/            只读验收、校验、adapter/runner/parser 工具
+sources/            只读来源快照与来源索引
+tests/              协议、parser、validator 与 Harness 回归测试
+docs/assets/readme/  主页图标、流程图和 ImageGen 生成记录
+```
+
+### 来源、许可与外部资产
+
+- 本项目不修改 EndNote、Zotero 或上游 PD-wiki；`sources/raw_snapshots/` 只读。
+- 第三方源代码、数据集、模型权重、Docker layers、原始日志和批量结构不进入 tracked KB。
+- 代码固定点用于来源和接口复核，不代表依赖已安装、方法可运行或结果已复现。
+- 各方法的软件与数据许可由其上游仓库和发布页决定。本仓库当前没有项目级 `LICENSE`，因此不得推定第三方内容可被重新分发。
+- 新的 clone、install、large download、GPU generation、scoring 或 ranking 阶段均需明确授权。
+
+## 维护入口
+
+- 项目版本：[`VERSION`](VERSION)
+- 主页索引：[`index.md`](index.md)
+- 发布说明：[`RELEASE_NOTES.md`](RELEASE_NOTES.md)
+- 方法来源目录：[`benchmark/method_sources/README.md`](benchmark/method_sources/README.md)
+- Benchmark 目录：[`benchmark/README.md`](benchmark/README.md)
+- 验收与对话签核：[`harness/signoffs/README.md`](harness/signoffs/README.md)
+- 当前验证报告：[`wiki_validation_report.md`](ops/validation/wiki_validation_report.md)
+- 变更日志：[`ops/log.md`](ops/log.md)
+
+本主页以证据可追溯和边界可复核为首要原则。任何性能、优越性、复现性或生物学有效性结论，都必须由相应的合同要求和完整证据链支持。

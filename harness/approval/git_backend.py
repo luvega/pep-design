@@ -9,6 +9,7 @@ import stat
 import subprocess
 import tempfile
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import Callable, Mapping, TypeVar
 
@@ -24,6 +25,28 @@ _OID_PATTERN = re.compile(r"[0-9a-f]{40}")
 _CARD_ID_PATTERN = re.compile(r"approval_[0-9a-f]{24}")
 _SIGNOFF_PATH_PATTERN = re.compile(
     r"harness/signoffs/signoff_(governance|current_phase)_v[0-9]+\.json"
+)
+_SIGNOFF_FILENAME_PATTERN = re.compile(
+    r"signoff_(governance|current_phase)_v[0-9]+\.json"
+)
+_DIALOG_SIGNOFF_FIELDS = frozenset(
+    {
+        "contract_id",
+        "contract_version",
+        "contract_digest",
+        "profile_id",
+        "evaluation_id",
+        "evidence_digest",
+        "role",
+        "reviewer_id",
+        "decision",
+        "rationale",
+        "reviewed_at",
+        "supersedes",
+        "approval_card_id",
+        "approval_card_digest",
+        "approval_event_id",
+    }
 )
 _ZERO_OID = "0" * 40
 _SAFE_OPERATION_CONFIG = (
@@ -1622,6 +1645,68 @@ def temporary_clean_worktree(
         shutil.rmtree(holder, ignore_errors=True)
 
 
+def _valid_dialog_signoff_envelope(
+    payload: Mapping[str, object], *, filename: str
+) -> bool:
+    filename_match = _SIGNOFF_FILENAME_PATTERN.fullmatch(filename)
+    profile_id = payload.get("profile_id")
+    supersedes = payload.get("supersedes")
+    supersedes_match = (
+        _SIGNOFF_FILENAME_PATTERN.fullmatch(supersedes)
+        if isinstance(supersedes, str)
+        else None
+    )
+    reviewed_at = payload.get("reviewed_at")
+    try:
+        timestamp = (
+            datetime.fromisoformat(reviewed_at.replace("Z", "+00:00"))
+            if isinstance(reviewed_at, str)
+            else None
+        )
+    except ValueError:
+        timestamp = None
+    return bool(
+        set(payload) == _DIALOG_SIGNOFF_FIELDS
+        and filename_match is not None
+        and isinstance(profile_id, str)
+        and profile_id == filename_match.group(1)
+        and isinstance(payload.get("contract_id"), str)
+        and bool(payload["contract_id"])
+        and isinstance(payload.get("contract_version"), str)
+        and bool(payload["contract_version"])
+        and isinstance(payload.get("contract_digest"), str)
+        and re.fullmatch(r"[0-9a-f]{64}", str(payload["contract_digest"]))
+        and isinstance(payload.get("evaluation_id"), str)
+        and re.fullmatch(r"evaluation_[0-9a-f]{24}", str(payload["evaluation_id"]))
+        and isinstance(payload.get("evidence_digest"), str)
+        and re.fullmatch(r"[0-9a-f]{64}", str(payload["evidence_digest"]))
+        and payload.get("role") == "governance_owner"
+        and payload.get("reviewer_id") == "project_owner"
+        and payload.get("decision") == "approved"
+        and isinstance(payload.get("rationale"), str)
+        and bool(str(payload["rationale"]).strip())
+        and timestamp is not None
+        and timestamp.tzinfo is not None
+        and timestamp.utcoffset() is not None
+        and (
+            supersedes is None
+            or (
+                supersedes_match is not None
+                and supersedes_match.group(1) == profile_id
+                and supersedes != filename
+            )
+        )
+        and isinstance(payload.get("approval_card_id"), str)
+        and _CARD_ID_PATTERN.fullmatch(str(payload["approval_card_id"]))
+        and isinstance(payload.get("approval_card_digest"), str)
+        and re.fullmatch(r"[0-9a-f]{64}", str(payload["approval_card_digest"]))
+        and isinstance(payload.get("approval_event_id"), str)
+        and re.fullmatch(
+            r"approval_event_[0-9a-f]{24}", str(payload["approval_event_id"])
+        )
+    )
+
+
 def latest_committed_signoffs(
     root: Path,
     *,
@@ -1700,18 +1785,39 @@ def latest_committed_signoffs(
                 continue
             if present.returncode != 0:
                 _raise_git_error(present)
-            raw = run_git(
-                root,
-                "show",
-                f"{head_oid}:{path}",
-                safe_transport=True,
-            ).stdout
+            tree_entry = _tree_entry(root, head_oid, path)
+            if tree_entry is None or tree_entry[0] != "100644":
+                raise GitApprovalError(
+                    f"committed signoff is not a regular stable blob: {path}"
+                )
+            working_path = root / path
             try:
-                payload = json.loads(raw)
-            except (TypeError, json.JSONDecodeError) as exc:
+                working_mode = working_path.lstat().st_mode
+                working_payload = working_path.read_bytes()
+            except OSError as exc:
+                raise GitApprovalError(
+                    f"committed signoff is not clean in the worktree: {path}"
+                ) from exc
+            committed_payload = run_git_bytes(
+                root, "cat-file", "blob", tree_entry[1]
+            ).stdout
+            if (
+                not stat.S_ISREG(working_mode)
+                or working_payload != committed_payload
+            ):
+                raise GitApprovalError(
+                    f"committed signoff is not clean in the worktree: {path}"
+                )
+            try:
+                payload = json.loads(committed_payload)
+            except (TypeError, UnicodeDecodeError, json.JSONDecodeError) as exc:
                 raise GitApprovalError(f"committed signoff is not valid JSON: {path}") from exc
             if not isinstance(payload, dict):
                 raise GitApprovalError(f"committed signoff must be a JSON object: {path}")
+            if not _valid_dialog_signoff_envelope(
+                payload, filename=Path(path).name
+            ):
+                continue
             if (
                 payload.get("contract_id") == contract_id
                 and payload.get("profile_id") == profile_id

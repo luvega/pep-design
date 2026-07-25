@@ -98,6 +98,50 @@ def _is_generated_metadata(path: Path) -> bool:
     )
 
 
+def _read_regular_file_once(path: Path) -> bytes | None:
+    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0)
+    flags |= getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(path, flags)
+    except OSError:
+        return None
+    try:
+        before = os.fstat(descriptor)
+        if not stat.S_ISREG(before.st_mode):
+            return None
+        chunks: list[bytes] = []
+        while True:
+            chunk = os.read(descriptor, 64 * 1024)
+            if not chunk:
+                break
+            chunks.append(chunk)
+        after = os.fstat(descriptor)
+    except OSError:
+        return None
+    finally:
+        os.close(descriptor)
+    before_identity = (
+        before.st_dev,
+        before.st_ino,
+        before.st_mode,
+        before.st_size,
+        before.st_mtime_ns,
+        before.st_ctime_ns,
+    )
+    after_identity = (
+        after.st_dev,
+        after.st_ino,
+        after.st_mode,
+        after.st_size,
+        after.st_mtime_ns,
+        after.st_ctime_ns,
+    )
+    payload = b"".join(chunks)
+    if before_identity != after_identity or len(payload) != after.st_size:
+        return None
+    return payload
+
+
 def _contains_override(value: Any) -> bool:
     if isinstance(value, Mapping):
         for key, nested in value.items():
@@ -149,7 +193,28 @@ def _valid_review_timestamp(value: Any) -> bool:
     return timestamp.tzinfo is not None and timestamp.utcoffset() is not None
 
 
-def _valid_approval_binding(value: Mapping[str, Any]) -> bool:
+def _matches_current_sibling_dialog_context(
+    value: Mapping[str, Any], expected_context: Mapping[str, str]
+) -> bool:
+    profile_id = value.get("profile_id")
+    expected_profile_id = expected_context["profile_id"]
+    return bool(
+        isinstance(profile_id, str)
+        and profile_id in PROFILE_RATIONALES
+        and expected_profile_id in PROFILE_RATIONALES
+        and profile_id != expected_profile_id
+        and value.get("rationale") == PROFILE_RATIONALES[profile_id]
+        and all(
+            value.get(field) == expected_context[field]
+            for field in _CONTEXT_FIELDS
+            if field != "profile_id"
+        )
+    )
+
+
+def _valid_approval_binding(
+    value: Mapping[str, Any], *, require_current_rationale: bool = True
+) -> bool:
     present = tuple(field in value for field in _APPROVAL_BINDING_FIELDS)
     if not any(present):
         return True
@@ -158,6 +223,13 @@ def _valid_approval_binding(value: Mapping[str, Any]) -> bool:
     card_id = value["approval_card_id"]
     card_digest = value["approval_card_digest"]
     event_id = value["approval_event_id"]
+    raw_profile_id = value.get("profile_id")
+    profile_id = raw_profile_id if isinstance(raw_profile_id, str) else ""
+    rationale = value.get("rationale")
+    rationale_valid = isinstance(rationale, str) and (
+        not require_current_rationale
+        or rationale == PROFILE_RATIONALES.get(profile_id)
+    )
     return bool(
         isinstance(card_id, str)
         and re.fullmatch(r"approval_[0-9a-f]{24}", card_id)
@@ -166,7 +238,7 @@ def _valid_approval_binding(value: Mapping[str, Any]) -> bool:
         and isinstance(event_id, str)
         and re.fullmatch(r"approval_event_[0-9a-f]{24}", event_id)
         and value.get("reviewer_id") == "project_owner"
-        and value.get("rationale") == PROFILE_RATIONALES.get(value.get("profile_id"))
+        and rationale_valid
     )
 
 
@@ -323,8 +395,9 @@ def _relative_signoff_path(
     repository: _RawGitRepository, path: Path
 ) -> Path | None:
     try:
-        relative = path.resolve().relative_to(repository.root)
-    except (OSError, ValueError):
+        absolute = Path(os.path.abspath(path))
+        relative = absolute.relative_to(repository.root)
+    except ValueError:
         return None
     if relative.parts[:2] != ("harness", "signoffs"):
         return None
@@ -332,21 +405,55 @@ def _relative_signoff_path(
 
 
 def _git_signoff_is_committed_clean(
-    repository: _RawGitRepository, path: Path
+    repository: _RawGitRepository, path: Path, working_payload: bytes
 ) -> bool:
     relative = _relative_signoff_path(repository, path)
     if relative is None:
-        return False
-    try:
-        working_payload = path.read_bytes()
-    except OSError:
         return False
     committed = _run_raw_git(
         repository,
         ("cat-file", "blob", f"{repository.head_oid}:{relative.as_posix()}"),
         text=False,
     )
-    return committed.returncode == 0 and committed.stdout == working_payload
+    if committed.returncode != 0 or committed.stdout != working_payload:
+        return False
+    history_commits = _git_path_history_commits(repository, path)
+    if history_commits is None or len(history_commits) != 1:
+        return False
+    addition_commit = _git_first_addition_commit(repository, path)
+    if addition_commit is None or addition_commit != history_commits[0]:
+        return False
+    original = _run_raw_git(
+        repository,
+        ("cat-file", "blob", f"{addition_commit}:{relative.as_posix()}"),
+        text=False,
+    )
+    return original.returncode == 0 and original.stdout == working_payload
+
+
+def _git_path_history_commits(
+    repository: _RawGitRepository, path: Path
+) -> tuple[str, ...] | None:
+    relative = _relative_signoff_path(repository, path)
+    if relative is None:
+        return None
+    completed = _run_raw_git(
+        repository,
+        (
+            "log",
+            "--full-history",
+            "--no-renames",
+            "--format=%H",
+            repository.head_oid,
+            "--",
+            relative.as_posix(),
+        ),
+    )
+    if completed.returncode != 0:
+        return None
+    return tuple(
+        line.strip() for line in completed.stdout.splitlines() if line.strip()
+    )
 
 
 def _git_first_addition_commit(
@@ -359,6 +466,8 @@ def _git_first_addition_commit(
         repository,
         (
             "log",
+            "--full-history",
+            "--no-renames",
             "--reverse",
             "--diff-filter=A",
             "--format=%H",
@@ -433,11 +542,16 @@ def validate_signoff_directory(
     )
 
     for path in signoff_paths:
-        if not regular_files[path] or (
+        captured_payload = (
+            _read_regular_file_once(path) if regular_files[path] else None
+        )
+        if captured_payload is None or (
             repository_root is not None
             and (
                 git_repository is None
-                or not _git_signoff_is_committed_clean(git_repository, path)
+                or not _git_signoff_is_committed_clean(
+                    git_repository, path, captured_payload
+                )
             )
         ):
             invalid.append(
@@ -453,8 +567,8 @@ def validate_signoff_directory(
             )
             continue
         try:
-            value = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+            value = json.loads(captured_payload)
+        except (UnicodeError, json.JSONDecodeError) as exc:
             invalid.append(
                 _issue(
                     path,
@@ -501,7 +615,7 @@ def validate_signoff_directory(
             )
             continue
 
-        if not _valid_approval_binding(value):
+        if not _valid_approval_binding(value, require_current_rationale=False):
             invalid.append(
                 _issue(
                     path,
@@ -509,7 +623,8 @@ def validate_signoff_directory(
                     reason_code="signoff_approval_binding_invalid",
                     message=(
                         "Dialog signoffs require a canonical approval card ID, "
-                        "full card digest, and non-empty approval event ID together."
+                        "full card digest, approval event ID, project owner, "
+                        "and string rationale."
                     ),
                 )
             )
@@ -551,14 +666,35 @@ def validate_signoff_directory(
             )
             continue
 
-        validated_values[path] = value
-
         mismatched_fields = tuple(
             field
             for field in _CONTEXT_FIELDS
             if value.get(field) != expected_context[field]
         )
         if mismatched_fields:
+            has_dialog_binding = any(
+                field in value for field in _APPROVAL_BINDING_FIELDS
+            )
+            known_stale_dialog = bool(
+                git_repository is not None
+                or _matches_current_sibling_dialog_context(value, expected_context)
+            )
+            if has_dialog_binding and not known_stale_dialog:
+                invalid.append(
+                    _issue(
+                        path,
+                        role=role,
+                        reason_code="signoff_approval_binding_invalid",
+                        message=(
+                            "A stale dialog signoff must be committed-clean in "
+                            "the production repository or exactly match the "
+                            "current sibling profile context and rationale."
+                        ),
+                    )
+                )
+                continue
+
+            validated_values[path] = value
             stale.append(
                 _issue(
                     path,
@@ -569,6 +705,22 @@ def validate_signoff_directory(
                 )
             )
             continue
+
+        if not _valid_approval_binding(value):
+            invalid.append(
+                _issue(
+                    path,
+                    role=role,
+                    reason_code="signoff_approval_binding_invalid",
+                    message=(
+                        "Dialog signoffs for the current evaluation require the "
+                        "fixed profile rationale."
+                    ),
+                )
+            )
+            continue
+
+        validated_values[path] = value
 
         if role not in required_role_set:
             invalid.append(

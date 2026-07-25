@@ -1,5 +1,15 @@
 # 多肽设计方法 Benchmark 知识库
 
+## Homepage
+
+- [GitHub 项目主页与完整说明](README.md)
+- [方法归类、输入输出和来源链接表](benchmark/method_sources/method_homepage_source_map_v0.35.csv)
+- [主页图标与流程图生成记录](docs/assets/readme/readme_imagegen_record_v1.md)
+- [Benchmark protocol](benchmark/protocols/benchmark_protocol_v0.md)
+- [Scoring protocol](benchmark/scoring/scoring_protocol_v0.md)
+
+主页按 T1 sequence binder、T2 structure-conditioned peptide binder 和 T3 miniprotein binder baseline 组织 10 个纳入方法，并明确 v0.34 fixture、v0.35 PepGLAD 基础设施失败、尚未评分和未冻结目标集的边界。
+
 ## Current Status
 - Project version: 1.2.21
 - Manuscript outline layer: v1.0
@@ -28,14 +38,32 @@
 - Bounded Wave A pilot execution/parser layer: v0.31 project-local bounded evidence supplement
 - Supervisor-Skills installation/memory layer: v0.32 manuscript-support supplement
 - Wave A adapter/parser completion attempt layer: v0.33 project-local bounded blocker supplement
+- Seven-method bounded connectivity layer: v0.34 project-local generation/QC supplement; latest merge has 6 supported primary candidates, 12 candidate runtime provenance records, and 1 separate failure-only diagnostic record
+- PepGLAD mixed-chirality connectivity layer: v0.35 prospective policy plus one container-start infrastructure failure; no candidate bundle
 - Repository checkpoint: v1.2.21
-- Evidence/release checkpoint build date: 2026-07-09（当前对话 harness workflow 更新于 2026-07-10）
+- Evidence/release checkpoint build date: 2026-07-09（v0.35 工作层更新于 2026-07-14）
 - Time window: 2021-06-03 to 2026-06-03
 - Unique Zotero-derived records after dedupe: 432
 - First-wave included methods: 10
 - Project boundary: this folder is the working KB; Zotero/EndNote/PD-wiki remain source systems.
-- Acceptance contract: v1.0.0; unsigned current-phase report is machine-valid and pending `governance_owner` signoff.
-- Full-project acceptance: not accepted; controlled generation, target/control, scoring, and empirical findings remain incomplete.
+- Acceptance contract: v1.0.0; `current.v035_bounded_connectivity` is a Critical `FAIL`, so `current_phase` cannot be signed off.
+- Full-project acceptance: not accepted; PepGLAD QC、target/control、scoring 和 empirical findings 仍未完成。
+
+## v0.35 当前状态
+
+v0.35 允许同一候选肽包含 L 和 D 残基，并将固定 baseline mismatch 记为 warning。唯一授权的 PepGLAD seed42 `attempt_001` 在容器启动前因 Docker API socket 权限不足退出：`exit_code=1`、`runtime_seconds=0.026`、parser/QC=`not_run`。容器未启动，`raw/` 中没有 candidate 或 runtime evidence，也没有发布 v0.35 connectivity bundle。
+
+这是一项基础设施启动失败，不是 PepGLAD 方法失败，不能用于判断 mixed L/D、连通性或方法表现。审计见 [`v035_pepglad_connectivity_audit.md`](ops/audits/v035_pepglad_connectivity_audit.md)。`attempt_001` 不得覆盖或自动重试；再次执行需要新的明确授权和更新后的 attempt 政策。
+
+## v0.34 历史结果边界
+
+最新 compact merge 有 13 条 method-output manifest、12 条 candidate/QC、12 条 runtime provenance 和 14 条 run rows。6 个 seed42 primary 与对应的 6 个 eligible seed43 extensions 获得 `supported`。PepGLAD 最新候选缺席，seed43 未运行。
+
+[`pilot_failure_diagnostics_v0.34.json`](benchmark/results/pilot_failure_diagnostics_v0.34.json) 另存 1 条 tracked failure-only diagnostic provenance。它绑定 `attempt_003` 的 `AWHITLLIFTH`、OpenMM 前后 SHA-256 与 L6/D5、L4/D7、固定 baseline mismatch，以及 producer pins。它不计入 12 条 candidate runtime provenance，也不是候选、评分或完整复现证据。
+
+PepGLAD seed42 `attempt_003` 进程退出码为 0，但 parser 返回 `pepglad_seed42_replay_mismatch`，merge 返回 `evidence_incomplete`。sequence summary 仍为 `AWHITLLIFTH`，但未晋升候选。OpenMM 前 B 链为 L6/D5，SHA-256 为 `b17784a92a782f3d84c077952d6bd8b999bcf943dc6fe5dd6b0938c3a47bf71b`；OpenMM 后为 L4/D7，SHA-256 为 `e8501460a0fa0d59420a253bb26412b661d8213f6d76eb5ed15d40cf6167abd6`，不同于固定 baseline `dc358b2e64c31c16a649627e1f75a71c77c558b62affa6c50b20d3ac25b3fa26`。`first_observed_chirality_failure_stage=pre_openmm_snapshot` 支持混合手性在本 attempt 的 OpenMM 前已可观察，但不证明模型根因，也不排除 OpenMM 的影响。
+
+RFdiffusion 记录的是未线程化 all-Gly backbone 与独立 ProteinMPNN FASTA handoff，当前没有 sequence-resolved structure。PepMLM 保留 `WWX`/非标准残基边界，D-Flow 的 3EQS fixture 保留已知训练重叠边界。当前没有 scoring、ranking、frozen target 或 wet-lab 证据。
 
 ## 对话签核
 
@@ -45,7 +73,7 @@
 
 Durable `local_committed_push_failed` 或 `verified` 只通过 `resume-push --card-id <card_id>` 恢复。已有 final OID 时复用且不重复 commits/signoffs；仅有 source OID 时在 source 的临时 clean checkout 中重验，再创建或复用缺失 signoff，并至多创建一个 signoff commit。若 index 已暂存 signoff，只接受与 card-derived manifest 的路径、mode、blob SHA-256 完全一致的状态；extra/different staged 内容一律拒绝。`verified` 在 remote 已为 final OID 时可协调实际成功但结果不明确的 push，仅推进 journal 而不重复 push。
 
-该流程不授权 clone、install、download、GPU generation、scoring 或 ranking。v0.33 仍记录 10 条 blockers 和 0 parsed/generated candidates；版本保持 `1.2.21`，直到实际 digest 获 governance approval 后才可准备后续 release candidate。
+对话签核流程本身不授权 clone、install、download、GPU generation、scoring 或 ranking；v0.34 与 v0.35 执行使用了各自的明确授权。v0.35 没有 candidate bundle，Critical gate 尚未关闭，不能签核 `current_phase`。版本保持 `1.2.21`。
 
 ## Navigation
 - [Project acceptance contract](harness/PROJECT_ACCEPTANCE.md)
@@ -92,7 +120,9 @@ Durable `local_committed_push_failed` 或 `verified` 只通过 `resume-push --ca
 - [ARS review v0.6](ops/audits/academic_research_suite_review_v0.6.md)
 - [Updated plan v0.6](ops/plans/updated_plan_v0.6.md)
 - [Historical updated plan v0.9](ops/plans/updated_plan_v0.9.md)
-- [Current updated plan v0.33](ops/plans/updated_plan_v0.33.md)
+- [Current updated plan v0.35](ops/plans/updated_plan_v0.35.md)
+- [Historical updated plan v0.34](ops/plans/updated_plan_v0.34.md)
+- [Historical updated plan v0.33](ops/plans/updated_plan_v0.33.md)
 - [Grant-style mock review v1.3](ops/audits/grant_style_mock_review_v1.3.md)
 - [Updated plan v1.3](ops/plans/updated_plan_v1.3.md)
 - [Grant review action items v1.3](kb/tables/grant_review_action_items_v1.3.csv)
@@ -139,6 +169,9 @@ Durable `local_committed_push_failed` 或 `verified` 只通过 `resume-push --ca
 - [Pilot benchmark execution matrix v0.30](benchmark/deployment/pilot_execution_matrix_v0.30.csv)
 - [Pilot Wave A execution results v0.31](benchmark/deployment/pilot_execution_results_v0.31.csv)
 - [Pilot Wave A adapter/parser execution results v0.33](benchmark/deployment/pilot_execution_results_v0.33.csv)
+- [Pilot bounded execution matrix v0.34](benchmark/deployment/pilot_execution_matrix_v0.34.csv)
+- [Pilot bounded execution results v0.34](benchmark/deployment/pilot_execution_results_v0.34.csv)
+- [PepGLAD single-run execution matrix v0.35](benchmark/deployment/pilot_pepglad_execution_matrix_v0.35.csv)
 - [Batch A replay method output manifest v0.18](benchmark/results/batch_a_replay_method_output_manifest_v0.18.csv)
 - [Batch A replay candidate outputs v0.18](benchmark/results/batch_a_replay_candidate_outputs_v0.18.csv)
 - [Batch A replay run rows v0.18](benchmark/results/batch_a_replay_run_v0.18.csv)
@@ -159,12 +192,21 @@ Durable `local_committed_push_failed` 或 `verified` 只通过 `resume-push --ca
 - [Pilot candidate outputs v0.33](benchmark/results/pilot_candidate_outputs_v0.33.csv)
 - [Pilot run rows v0.33](benchmark/results/pilot_run_v0.33.csv)
 - [Pilot merge summary v0.33](benchmark/results/pilot_v033_merge_summary.json)
+- [Pilot method output manifest v0.34](benchmark/results/pilot_method_output_manifest_v0.34.csv)
+- [Pilot candidate outputs v0.34](benchmark/results/pilot_candidate_outputs_v0.34.csv)
+- [Pilot candidate QC v0.34](benchmark/results/pilot_candidate_qc_v0.34.csv)
+- [Pilot run rows v0.34](benchmark/results/pilot_run_v0.34.csv)
+- [Pilot runtime provenance v0.34](benchmark/results/pilot_runtime_provenance_v0.34.json)
+- [Pilot failure-only diagnostics v0.34](benchmark/results/pilot_failure_diagnostics_v0.34.json)
+- [Pilot merge summary v0.34](benchmark/results/pilot_v034_merge_summary.json)
 - [Multi-case fixture target manifest v0.22](benchmark/input_sets/multi_case_fixture_target_manifest_v0.22.csv)
 - [Multi-case fixture control manifest v0.22](benchmark/input_sets/multi_case_fixture_control_manifest_v0.22.csv)
 - [Multi-case fixture job manifest v0.22](benchmark/input_sets/multi_case_fixture_job_manifest_v0.22.csv)
 - [Pilot benchmark target manifest v0.30](benchmark/input_sets/pilot_benchmark_target_manifest_v0.30.csv)
 - [Pilot benchmark control manifest v0.30](benchmark/input_sets/pilot_benchmark_control_manifest_v0.30.csv)
 - [Pilot benchmark job manifest v0.30](benchmark/input_sets/pilot_benchmark_job_manifest_v0.30.csv)
+- [Pilot benchmark job manifest v0.34](benchmark/input_sets/pilot_benchmark_job_manifest_v0.34.csv)
+- [PepGLAD single-run job manifest v0.35](benchmark/input_sets/pilot_pepglad_job_manifest_v0.35.csv)
 - [Prospective wet-lab candidate panel v0.30](benchmark/input_sets/wet_lab_candidate_panel_v0.30.csv)
 - [Adapter preflight status v0.11](benchmark/deployment/adapter_preflight_status_v0.11.csv)
 - [Target/control freeze checklist v0.10](benchmark/input_sets/target_control_freeze_checklist_v0.10.md)
@@ -205,6 +247,8 @@ Durable `local_committed_push_failed` 或 `verified` 只通过 `resume-push --ca
 - [Pilot Wave A execution audit v0.31](ops/audits/pilot_wave_a_execution_audit_v0.31.md)
 - [Supervisor-Skills installation audit v0.32](ops/audits/supervisor_skills_installation_v0.32.md)
 - [Wave A adapter/parser completion audit v0.33](ops/audits/wave_a_adapter_parser_completion_audit_v0.33.md)
+- [v0.34 bounded connectivity audit](ops/audits/v034_bounded_connectivity_audit.md)
+- [v0.35 PepGLAD connectivity audit](ops/audits/v035_pepglad_connectivity_audit.md)
 - [Target candidate academic-search audit v0.14](ops/audits/target_candidate_academic_search_audit_v0.14.md)
 - [Target candidate academic-search plan v0.14](ops/plans/target_candidate_academic_search_plan_v0.14.md)
 - [Dataset supplement schema review v0.8](benchmark/input_sets/dataset_supplement_schema_review_v0.8.csv)
@@ -235,6 +279,7 @@ Durable `local_committed_push_failed` 或 `verified` 只通过 `resume-push --ca
 - [Method landscape patch candidates v1.1](kb/tables/method_landscape_patch_candidates_v1.1.csv)
 
 ## Next Phase
-`ops/plans/updated_plan_v0.33.md` is the current plan. The manuscript layer now contains separate Chinese and English v1.0 outlines, v1.1 supplementary-source synthesis, v1.2 Chinese figure/table embedding, and v1.3 grant-style mock review planning. v0.12 records external source-only checkouts, v0.13 records Docker image reuse/environment assignment, v0.14 records academic-search-derived method-paper cases and target candidates, v0.15 records external import-level preflight and three minimal Batch A smoke-test summaries, v0.16 records adapter/parser hardening and Batch B target review planning, v0.17 records controlled Batch B pilot gates, v0.18 parses v0.15 outputs into replay fixtures, v0.19 records external method install/example-smoke readiness, v0.20 records method-unblock readiness, v0.21 records bounded adapter smoke plus parser fixture rows for the 10 first-wave methods, v0.22 converts those examples into controlled multi-case fixture target/control/job manifests and priority gates, v0.23 records project-local notebook CLI plus D-Flow readiness findings, v0.24 records one D-Flow fixture-level PepDataset LMDB load test, v0.25 records full PepMerge download plus official LMDB load readiness, v0.26 records D-Flow bounded dry-run plus ColabDesign/BindCraft gate updates, v0.27 records ColabDesign bounded execute asset gate plus DexDesign route audit, v0.28 records ColabDesign AF parameter/target route rescue, DexDesign input-contract extraction and BindCraft accepted-final classification, v0.29 records one ColabDesign single-case bounded generation/parser row, one DexDesign synthetic prepared D-L fixture, and one BindCraft accepted-final standard candidate parser fixture, v0.30 records controlled pilot target/control/job manifests, execution routing, and a prospective wet-lab panel, v0.31 records bounded Wave A execution/parser rows, v0.32 records Supervisor-Skills installation/memory for manuscript support, and v0.33 records method-specific no-supported-output adapter/parser blocker rows for the 10 v0.31 placeholder-failed jobs. These layers keep the 10-method include set unchanged, leave `target_set_v0.csv` unfrozen, perform no scoring or performance comparison, and make no complete Benchmark claim.
 
-The next execution phase should implement real generation entrypoints for the v0.33 no-supported-output blockers, keep DexDesign/BindCraft as Wave B control routes, and restrict scoring until parseable candidates, target controls and negative panels are reviewed.
+`ops/plans/updated_plan_v0.35.md` 是当前计划。v0.34 历史合并仍支持 6 个 seed42 primary 和对应的 6 个 seed43 extensions；v0.35 没有新增 supported candidate。
+
+下一步需要用户决定：授权一个新的、不可覆盖且具备 Docker API 权限的执行阶段，并先更新 attempt 政策；或接受本次基础设施失败并保持 Critical gate 打开。当前不得重试 `attempt_001`、创建 `attempt_002`、运行 PepGLAD seed43 或进入评分。即使后续获得第 7 个连通性候选，仍须先完成 target/control、license、leakage 和 provenance 审批。

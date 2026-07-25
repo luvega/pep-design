@@ -5,10 +5,10 @@
 This repository is an independent protocol-first Benchmark knowledge base for recent peptide-design methods. It supports literature evidence management, readiness audits, Benchmark manuscript planning, and bounded server-side preparation.
 
 - Current project version: `1.2.21` (unsigned harness checkpoint).
-- Current scientific/execution plan: `ops/plans/updated_plan_v0.33.md`.
+- Current scientific/execution plan: `ops/plans/updated_plan_v0.35.md`.
 - Harness engineering plan: `ops/plans/harness_engineering_plan_v1.0.md`.
-- Historical baselines include `ops/plans/updated_plan_v0.9.md` and `ops/plans/updated_plan_v0.6.md`; neither is current.
-- Next scientific phase: implement real generation entrypoints for the v0.33 method-specific no-supported-output blockers before scoring.
+- Historical baselines include `ops/plans/updated_plan_v0.34.md`, `ops/plans/updated_plan_v0.33.md`, `ops/plans/updated_plan_v0.9.md`, and `ops/plans/updated_plan_v0.6.md`; none is current.
+- Next scientific phase: obtain a new user decision on authorizing a fresh, non-overwriting PepGLAD execution after the v0.35 Docker API permission failure, or accept the infrastructure failure. Do not retry `attempt_001`, create `attempt_002`, run seed43, or start scoring without new authorization and an updated attempt policy.
 
 Do not start clone, install, large download, broad GPU execution, generation, scoring, or ranking unless the user explicitly authorizes that phase. Large assets and runtime outputs stay in gitignored external roots.
 
@@ -55,7 +55,12 @@ For broad research-to-paper work, route through `academic-research-suite`, then 
 Readiness order is fixed: `metadata_ready` -> `source_pinned` -> `license_checked` -> `weights_manifested` -> `input_contract_ready` -> `dry_run_ready` -> `smoke_test_ready`.
 
 - Planning, source pins, imports, fixtures, parser rows, and bounded examples do not imply later gates.
-- v0.33 contains 10 method-specific failed blocker rows and zero parsed/generated candidates. It is not generation success, scoring, ranking, frozen-target, wet-lab, `smoke_test_ready`, `benchmark_ready`, or full reproducibility evidence.
+- The latest v0.34 compact merge contains 13 method-manifest rows, 12 candidate/QC rows, 12 runtime-provenance records, and 14 run rows. Six primary jobs and their six eligible seed43 extensions are supported; the latest PepGLAD candidate is absent and PepGLAD seed43 was not run.
+- PepGLAD seed42 `attempt_003` exited 0 but failed closed as parser `pepglad_seed42_replay_mismatch` and merge `evidence_incomplete`. Mixed chirality was observable in the pre-OpenMM snapshot (L6/D5) and changed after OpenMM (L4/D7); this does not establish the model as root cause or exclude an OpenMM effect.
+- v0.35 prospectively permits mixed L/D residues for connectivity and records baseline mismatch as a warning, but its only authorized `attempt_001` failed before container startup because the execution environment could not access the Docker API socket. The host preflight passed; `exit_code=1`, parser/QC were not run, `raw/` contains no candidate, and no v0.35 connectivity bundle exists. This is infrastructure failure evidence, not PepGLAD method-failure or mixed-chirality evidence.
+- Per the approved stop condition, `attempt_001` is immutable and cannot be retried. Further PepGLAD execution requires new explicit authorization and an updated execution/attempt policy; accepting the infrastructure failure leaves the Critical gate open.
+- PepMLM produces `WWX` for both seeds and therefore passes with a noncanonical-residue warning. D-Flow uses a 3EQS fixture with known training overlap, so its rows are connectivity evidence only and are ineligible for fair scoring.
+- Neither v0.34 nor v0.35 supports scoring, ranking, frozen-target, wet-lab, `smoke_test_ready`, `benchmark_ready`, or full reproducibility claims. `current.v035_bounded_connectivity` remains a Critical failure because no supported v0.35 PepGLAD candidate bundle exists.
 - Generation ability, ranking/rescoring ability, developability proxies, structural confidence, and biological validation are separate evidence layers.
 - `target_set_v0.csv` remains schema-only until controls, assay, license, leakage, and provenance are complete.
 - `example_run.csv` rows remain `status=not_real_benchmark`.
@@ -69,7 +74,7 @@ Prefer `提示`, `支持`, `表明`, `拟评估`, `仍需验证`, `metadata-leve
 
 ## Update Order
 
-1. Inspect `index.md`, `ops/plans/updated_plan_v0.33.md`, the relevant acceptance report, and `ops/validation/wiki_validation_report.md`.
+1. Inspect `index.md`, `ops/plans/updated_plan_v0.35.md`, the relevant acceptance report, and `ops/validation/wiki_validation_report.md`.
 2. Refresh external metadata only when requested or required by current-state verification.
 3. Update source tables before wiki/manuscript/ops derivatives; preserve historic paths.
 4. Update Benchmark protocol/input/deployment/result interfaces within their registered evidence boundaries.
@@ -86,7 +91,7 @@ git diff --check
 git status -sb
 ```
 
-The existing validator must finish with 0 errors and 0 warnings. `ops/validation/wiki_validation_report.md` is generated; do not hand-edit its counts. Human signoff cannot waive a Critical/Major failure. A production signoff counts only as a committed, clean, regular file under `harness/signoffs/`. Keep `VERSION=1.2.21` until digest-bound governance approval authorizes preparation of the 1.2.22 release candidate; engineering/scientific signoff is then repeated against the final 1.2.22 digest.
+The existing validator must finish with 0 errors and 0 warnings. `ops/validation/wiki_validation_report.md` is generated; do not hand-edit its counts. Human signoff cannot waive a Critical/Major failure. The current v0.35 Critical failure blocks `current_phase` signoff. A production signoff counts only as a committed, clean, regular file under `harness/signoffs/`. Keep `VERSION=1.2.21` until digest-bound governance approval authorizes preparation of the 1.2.22 release candidate; engineering/scientific signoff is then repeated against the final 1.2.22 digest.
 
 ## Git And Safety
 
