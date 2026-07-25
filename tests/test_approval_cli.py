@@ -32,6 +32,15 @@ from harness.approval.service import (
 )
 from harness.engine import cli
 from harness.engine.bounded_process import BoundedProcessError
+from harness.engine.models import (
+    EvaluationResult,
+    GateResult,
+    GateVerdict,
+    HarnessStatus,
+    ProfileResult,
+    ProjectVerdict,
+    Severity,
+)
 from harness.engine.report import _git_workspace_paths
 
 
@@ -43,8 +52,8 @@ GOVERNANCE_RATIONALE = (
     "gate，也不批准 release_checkpoint 或 full_project。"
 )
 CURRENT_PHASE_RATIONALE = (
-    "接受 v0.33 的诚实边界：10 条 method-specific blockers，0 个 "
-    "parsed/generated candidates，target/control 尚未冻结，scoring/ranking 尚未启动。"
+    "接受 v0.34 的诚实边界：7 条主运行候选均已解析，其中 6 条通过 QC；"
+    "PepGLAD 因混合手性失败；没有 scoring、ranking、frozen target 或 wet-lab 验证。"
 )
 
 
@@ -1094,10 +1103,48 @@ def test_report_git_enumeration_disables_repository_fsmonitor(
 
 
 def test_profile_snapshot_ignores_ambient_git_python_and_pytest_overrides(
+    tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    root = Path(__file__).resolve().parents[1]
-    baseline = approval_service._profile_snapshot(root, accepted=False)
+    def passing_evaluation(
+        root: Path,
+        profile_id: str,
+        *,
+        require_fresh_generated: bool,
+    ) -> EvaluationResult:
+        assert root == tmp_path
+        assert require_fresh_generated is False
+        return EvaluationResult(
+            evaluation_id="evaluation_" + "a" * 24,
+            contract_id="pep_design_project_acceptance",
+            contract_version="1.0.0",
+            evaluator_version="1.0.0",
+            profile=ProfileResult(
+                profile_id=profile_id,
+                harness_status=HarnessStatus.VALID,
+                project_status=ProjectVerdict.PENDING_HUMAN_SIGNOFF,
+                missing_signoff_roles=("governance_owner",),
+            ),
+            gate_results=(
+                GateResult(
+                    gate_id=f"{profile_id}.test_gate",
+                    domain="test",
+                    severity=Severity.CRITICAL,
+                    verdict=GateVerdict.PASS,
+                    reason_code="test_gate_passed",
+                    message="Deterministic passing evaluation.",
+                    evidence=(),
+                ),
+            ),
+            contract_digest="b" * 64,
+            registry_digest="c" * 64,
+            evidence_digest="d" * 64,
+            evidence_digests=(("test_source", "e" * 64),),
+            required_signoff_roles=("governance_owner",),
+        )
+
+    monkeypatch.setattr(approval_service, "evaluate_project", passing_evaluation)
+    baseline = approval_service._profile_snapshot(tmp_path, accepted=False)
     monkeypatch.setenv("GIT_DIR", "/tmp/hostile-git-dir")
     monkeypatch.setenv("GIT_WORK_TREE", "/tmp/hostile-work-tree")
     monkeypatch.setenv("GIT_CONFIG_GLOBAL", "/tmp/hostile-git-config")
@@ -1105,7 +1152,7 @@ def test_profile_snapshot_ignores_ambient_git_python_and_pytest_overrides(
     monkeypatch.setenv("PYTEST_ADDOPTS", "--pdb")
     monkeypatch.setenv("PYTEST_PLUGINS", "hostile_plugin")
 
-    assert approval_service._profile_snapshot(root, accepted=False) == baseline
+    assert approval_service._profile_snapshot(tmp_path, accepted=False) == baseline
 
 
 def _write_durable_journal(root: Path, state: TransactionState) -> None:

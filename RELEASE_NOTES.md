@@ -1,8 +1,68 @@
 # Release Notes
 
+## Unreleased v0.35 PepGLAD Mixed-Chirality Connectivity Work Layer (`VERSION=1.2.21`) - 2026-07-14
+
+当前计划已切换到 `ops/plans/updated_plan_v0.35.md`。本层为 PepGLAD 定义一条前瞻性连通性通道：同一候选肽可包含 L 和 D 残基，手性只做 report-only 检查，固定 seed42 baseline mismatch 只记 warning。v0.34 的 6/7 历史结果不回写。
+
+### 实际结果
+
+- 新增 v0.35 单行 job manifest、execution matrix、adapter、runner、parser、Harness gate 和独立 validator。
+- adapter、runner、parser、治理约束和 v0.34 回归在执行前共 501 项核心测试通过；独立 focused 审查未发现 Critical/Major/Minor 问题。
+- 唯一授权的 PepGLAD `attempt_001` 已执行，但 `docker run` 在容器启动前因 Docker API socket 权限不足退出：`runtime_seconds=0.026`、`exit_code=1`、`status=execution_failed`、parser/QC=`not_run`。
+- host 侧 source、model 和 3EQS target 前检通过；容器内 instrumentation、pocket detection、PepGLAD inference、OpenMM/finalize、parser 和 QC 均未执行。
+- `raw/` 中没有 candidate、summary 或 runtime evidence。解析器 fail closed，没有生成 `benchmark/results/pilot_pepglad_connectivity_v0.35.json`。
+- 新增 `ops/audits/v035_pepglad_connectivity_audit.md` 记录本次基础设施失败和证据边界。
+
+### 当前阻断
+
+- 该失败不是 PepGLAD 方法失败，不能用于评价 mixed L/D policy、连通性或方法表现。
+- `current.v035_bounded_connectivity` 缺少可重放的 candidate bundle，仍为 Critical `FAIL`；`current_phase` 不能签核。
+- `attempt_001` 不得覆盖或自动重试。新的执行需要用户再次明确授权并先更新 execution/attempt 政策；当前不授权 `attempt_002`、seed43、scoring 或 ranking。
+
+### Boundary
+
+- `VERSION` 保持 `1.2.21`。
+- v0.34 compact 计数和 6/7 历史结论保持不变。
+- 本层没有生成候选、scoring、ranking、frozen target、wet-lab、`smoke_test_ready`、`benchmark_ready` 或完整 Benchmark 结论。
+
+## Unreleased v0.34 Bounded Connectivity Work Layer (`VERSION=1.2.21`) - 2026-07-12
+
+当前计划已切换到 `ops/plans/updated_plan_v0.34.md`。本工作层接入 7 种方法的真实、受限生成入口，统一记录不可覆盖 attempt、parser 输出、基础 QC 和小型证据表。原始结构与日志保留在 gitignored `benchmark_runs/v0.34/`。
+
+### 结果
+
+- 最新 compact merge 有 13 条 method-output manifest、12 条 candidate/QC、12 条 runtime provenance 和 14 条 run rows。6 个 seed42 primary 与对应的 6 个 eligible seed43 extensions 获得 `supported`；PepGLAD 最新候选缺席，seed43 未运行。
+- 新增 `benchmark/results/pilot_failure_diagnostics_v0.34.json`，只保存 1 条 tracked failure-only diagnostic provenance。该记录绑定 `attempt_003` 的 `AWHITLLIFTH`、OpenMM 前后 SHA-256 与 L6/D5、L4/D7、固定 baseline mismatch，以及 source/model/target/observer/patch/wrapper 等 producer pins。
+- PepGLAD seed42 `attempt_003` 的 target preflight 与 source/model/observer/patch/wrapper/instrumented-source pins 通过，进程退出码为 0；parser=`pepglad_seed42_replay_mismatch`，merge=`evidence_incomplete`。sequence summary 仍为 `AWHITLLIFTH`，但未晋升候选。
+- OpenMM 前 B 链为 L6/D5，SHA-256 为 `b17784a92a782f3d84c077952d6bd8b999bcf943dc6fe5dd6b0938c3a47bf71b`；OpenMM 后为 L4/D7，SHA-256 为 `e8501460a0fa0d59420a253bb26412b661d8213f6d76eb5ed15d40cf6167abd6`，不同于固定 baseline `dc358b2e64c31c16a649627e1f75a71c77c558b62affa6c50b20d3ac25b3fa26`。历史 `attempt_002` 为 `AWHITLLIFTH`、L4/D7，文件 SHA-256 与 baseline 相同。
+- `first_observed_chirality_failure_stage=pre_openmm_snapshot` 支持混合手性在本 attempt 的 OpenMM 前已可观察，但不证明模型根因，也不排除 OpenMM 的影响；L/D 计数从 6/5 变为 4/7。
+- PepMLM 两个 seed 均生成 `WWX`，保留非标准残基 `X` 警告。D-Flow 的 3EQS fixture 有已知训练重叠，只保留连通性用途。
+- RFdiffusion 保留未线程化 all-Gly backbone 与独立 ProteinMPNN FASTA handoff，当前没有 sequence-resolved structure。
+
+### Added
+
+- Added the v0.34 job manifest, execution matrix, seven method adapters, bounded runner, merge script and focused tests.
+- Added compact execution, method-output, candidate, QC, run, runtime-provenance and merge-summary artifacts under `benchmark/deployment/` and `benchmark/results/`.
+- Added one tracked failure-only diagnostic provenance record for the non-promoted PepGLAD `attempt_003`.
+- Added `ops/plans/updated_plan_v0.34.md` and `ops/audits/v034_bounded_connectivity_audit.md`.
+
+### 当前阻断
+
+- `current.v034_bounded_connectivity` 要求 7/7 个 seed42 主运行通过；当前只有 6/7，因此该 Critical gate 为 `FAIL`。
+- `current_phase` 不能签核。人工批准不能跳过 Critical failure。
+- 现有官方入口没有符合当前协议的 method-native skip-relax 或 idealize 选项。按已批准的停止条件，本轮不再发起第二个诊断 attempt，也不运行 PepGLAD seed43。
+- 继续执行需要用户另行批准协议/source-policy 变更，或接受 PepGLAD 在该 fixture 上失败；两种选择都不能直接进入评分。
+
+### Boundary
+
+- `VERSION` 保持 `1.2.21`。
+- 本层没有 scoring、ranking、frozen target、wet-lab、`smoke_test_ready` 或完整 Benchmark 结论。
+- 6/7 通过不能解释为方法性能比较；当前数据只说明指定 fixture 上的入口、解析与基础 QC 状态。
+- 12 条 compact runtime provenance 只绑定已晋升的 12 条候选。另存的 1 条 PepGLAD failure-only diagnostic record 不计入这 12 条，也不是候选、评分或完整复现证据。
+
 ## Unreleased Harness Engineering Workflow (`VERSION=1.2.21`) - 2026-07-10
 
-This unsigned checkpoint introduces contract-driven project acceptance without changing the v0.33 scientific evidence state.
+This section records the unsigned contract-driven acceptance workflow introduced against the v0.33 checkpoint. The current scientific work layer is v0.35, described above.
 
 ### Added
 
@@ -18,15 +78,15 @@ This unsigned checkpoint introduces contract-driven project acceptance without c
 ### Pending
 
 - `VERSION` remains `1.2.21` until digest-bound governance signoff authorizes a 1.2.22 candidate; engineering/scientific signoff must then be repeated against the final 1.2.22 digest.
-- `governance` and `current_phase` are expected to remain `pending_human_signoff`; `full_project` remains `not_accepted`.
+- The fixed `governance` + `current_phase` approval bundle cannot proceed while `current.v035_bounded_connectivity` has a Critical failure; `full_project` remains `not_accepted`.
 - 实际批准前，审批卡与 journal 仅是 generated non-evidence；production signoff 必须是 `harness/signoffs/` 下 committed、clean、非 symlink 的直接 regular file。
 - Durable `local_committed_push_failed` 或 `verified` 只允许 `resume-push --card-id <card_id>` 恢复且无需重新批准。已有 final OID 时复用且不重复 commits/signoffs；仅有 source OID 时在临时 clean source checkout 中重验。若失败已留下 staged signoff，只接受与 card-derived manifest 的 path/mode/blob SHA-256 完全一致的 index，再创建或复用至多一个 signoff commit；extra/different staged 状态 fail closed。`verified` 可在 remote 已是 final OID 时协调实际成功但结果不明确的 push，而不重复 push。
 
 ### Boundary
 
-- No clone, install, download, GPU generation, scoring, ranking, target freeze, or wet-lab evidence was added.
-- The v0.33 baseline remains 10 method-specific blocker rows and 0 parsed/generated candidates.
-- 对话 signoff 不能 waiver Critical/Major failure，也不批准 `release_checkpoint`、`full_project` 或发布；当前目标仍是实际 digest 的 governance approval，而非 release/full acceptance。
+- The harness transaction itself does not authorize clone, install, download, GPU generation, scoring, ranking, target freeze, or wet-lab work. The v0.34 bounded generation runs used separate explicit authorization.
+- v0.33 remains a historical baseline with 10 method-specific blocker rows and 0 parsed/generated candidates; current evidence is recorded only in v0.34 artifacts.
+- 对话 signoff 不能 waiver Critical/Major failure，也不批准 `release_checkpoint`、`full_project` 或发布。当前先解决 v0.35 基础设施执行阻断并取得可重放 candidate bundle，再重新准备审批卡。
 
 ## v1.2.21 Wave A Adapter/Parser Completion Attempt - 2026-07-10
 

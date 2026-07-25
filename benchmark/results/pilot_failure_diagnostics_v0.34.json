@@ -1,0 +1,109 @@
+{
+  "evidence_boundary": "failure_diagnostic_only_not_candidate_or_scoring",
+  "records": [
+    {
+      "attempt_dir": "/mnt/ssd4t/Pep_design/benchmark_runs/v0.34/pepglad/v034_pepglad_3eqs_seed42/attempt_003",
+      "attempt_id": "attempt_003",
+      "baseline": {
+        "expected_sha256": "dc358b2e64c31c16a649627e1f75a71c77c558b62affa6c50b20d3ac25b3fa26",
+        "failure_stage": "pre_openmm_snapshot",
+        "observed_sha256": "e8501460a0fa0d59420a253bb26412b661d8213f6d76eb5ed15d40cf6167abd6",
+        "status": "mismatch"
+      },
+      "candidate_eligible": false,
+      "job_id": "v034_pepglad_3eqs_seed42",
+      "merge": {
+        "status": "evidence_incomplete"
+      },
+      "method": "PepGLAD",
+      "parser": {
+        "status": "failed",
+        "status_reason": "pepglad_seed42_replay_mismatch"
+      },
+      "post_openmm": {
+        "chirality": {
+          "calculation_status": "pass",
+          "chain": "B",
+          "d_count": 7,
+          "evaluable": 11,
+          "gly_count": 0,
+          "l_count": 4,
+          "unknown_count": 0
+        },
+        "path": "raw/pepglad_candidate.pdb",
+        "sha256": "e8501460a0fa0d59420a253bb26412b661d8213f6d76eb5ed15d40cf6167abd6"
+      },
+      "pre_openmm": {
+        "chirality": {
+          "calculation_status": "pass",
+          "chain": "B",
+          "d_count": 5,
+          "evaluable": 11,
+          "gly_count": 0,
+          "l_count": 6,
+          "unknown_count": 0
+        },
+        "path": "raw/pepglad_pre_relax.pdb",
+        "sha256": "b17784a92a782f3d84c077952d6bd8b999bcf943dc6fe5dd6b0938c3a47bf71b"
+      },
+      "process": {
+        "exit_code": 0
+      },
+      "producer_bindings": {
+        "container": {
+          "image": "pd-benchmark-methods-gpu:0.21"
+        },
+        "environment": {
+          "conda_environment": "bench-pepglad"
+        },
+        "instrumented_source": {
+          "path": "work/api/run.py",
+          "prepatch_sha256": "af888f4e441cf2b051cfa52df60920fdb55cb89c25bb319d08ccdf10dd073dac",
+          "sha256": "c3b127e39be1b335ff6046bb2435451acfc1b323839377033bf438ccd4a32954"
+        },
+        "model": {
+          "weights_sha256": "5f05dc0f678ed7a75c2ce8fc19f63cc145bd4568f75cbfc7f15aeacdddbd3cfe"
+        },
+        "observer": {
+          "path": "pepglad_observer.py",
+          "sha256": "a0a98420dd2fd5382479abe77526fb8fc206ffb1e69a8780912fb821dded0c61"
+        },
+        "patch": {
+          "evidence_path": "observer_patch_evidence.json",
+          "evidence_sha256": "0342297b2094fe43fe2e7bf49d720e58eccdc3103b0a02e943c0861ca160a9aa",
+          "injection_status": "applied",
+          "instrumenter_path": "pepglad_instrument_source.py",
+          "instrumenter_sha256": "cd9ec19f6605fd2b067824d4e02971b3a203e827b6398a4ffd1c68c64464311a",
+          "source_copy_mode": "attempt_local_copy"
+        },
+        "source": {
+          "commit": "bad015ca50c312a89482adb5220c3d907f13df5c",
+          "entrypoint_sha256": "af888f4e441cf2b051cfa52df60920fdb55cb89c25bb319d08ccdf10dd073dac"
+        },
+        "target": {
+          "path": "/data/input/3EQS.pdb",
+          "preflight_verified": true,
+          "sha256": "7086cf2bc4723ccbb4be5ff7f86a50d9db59bc307f4fbb0395a3c6ce3569827d"
+        },
+        "wrapper": {
+          "path": "pepglad_seeded_entry.py",
+          "sha256": "6a9b4c9012205d27526e13dbccbd7d11c010eddc3c85acdb2796c2fa6668aaba"
+        }
+      },
+      "random_seed": 42,
+      "runtime_evidence": {
+        "path": "raw/runtime_evidence.json",
+        "semantic_sha256": "e0db9a3380984fb8232ce36e5dae7bc4cea91612a0f6529c3e950dfe58e92fae",
+        "sha256": "06d65928279969e0289038c2f0d1801459a698ceccf1cc87b6a0474a68eb3e85"
+      },
+      "seed43_status": "not_run",
+      "seed_stage": "primary",
+      "summary": {
+        "path": "raw/pepglad_summary.jsonl",
+        "sequence": "AWHITLLIFTH",
+        "sha256": "2f6fdc775c44e0ab525fbe26f9baf7d44760fcedc041a302a86d6529b634b76c"
+      }
+    }
+  ],
+  "schema_version": "v0.34"
+}

@@ -7,6 +7,7 @@ from dataclasses import replace
 from pathlib import Path
 
 import pytest
+from jsonschema import Draft202012Validator
 
 import harness.engine.signoffs as signoff_engine
 from harness.engine.signoffs import SignoffContext, validate_signoff_directory
@@ -23,6 +24,10 @@ GOVERNANCE_RATIONALE = (
     "gate，也不批准 release_checkpoint 或 full_project。"
 )
 CURRENT_PHASE_RATIONALE = (
+    "接受 v0.34 的诚实边界：7 条主运行候选均已解析，其中 6 条通过 QC；"
+    "PepGLAD 因混合手性失败；没有 scoring、ranking、frozen target 或 wet-lab 验证。"
+)
+V033_STALE_RATIONALE = (
     "接受 v0.33 的诚实边界：10 条 method-specific blockers，0 个 "
     "parsed/generated candidates，target/control 尚未冻结，scoring/ranking 尚未启动。"
 )
@@ -345,6 +350,84 @@ def test_current_phase_dialog_binding_requires_its_own_exact_rationale(
     )
 
 
+@pytest.mark.parametrize(
+    ("signoff_profile", "validation_profile", "rationale"),
+    [
+        ("governance", "current_phase", GOVERNANCE_RATIONALE),
+        ("current_phase", "governance", CURRENT_PHASE_RATIONALE),
+    ],
+)
+def test_current_canonical_sibling_dialog_is_stale_when_only_profile_differs(
+    tmp_path: Path,
+    signoff_profile: str,
+    validation_profile: str,
+    rationale: str,
+) -> None:
+    write_json(
+        tmp_path / "sibling.json",
+        signoff(
+            profile_id=signoff_profile,
+            reviewer_id="project_owner",
+            rationale=rationale,
+            **VALID_APPROVAL_BINDING,
+        ),
+    )
+
+    result = validate_signoff_directory(
+        tmp_path, context(profile_id=validation_profile)
+    )
+
+    assert result.invalid_signoffs == ()
+    assert result.valid_roles == ()
+    assert result.missing_roles == ("governance_owner",)
+    assert [issue.reason_code for issue in result.stale_signoffs] == [
+        "signoff_context_mismatch"
+    ]
+    assert result.stale_signoffs[0].mismatched_fields == ("profile_id",)
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {
+            "profile_id": "current_phase",
+            "evaluation_id": "evaluation_old",
+            "rationale": CURRENT_PHASE_RATIONALE,
+        },
+        {
+            "profile_id": "release_checkpoint",
+            "rationale": CURRENT_PHASE_RATIONALE,
+        },
+        {
+            "profile_id": "current_phase",
+            "rationale": GOVERNANCE_RATIONALE,
+        },
+    ],
+    ids=("old-context", "fabricated-profile", "wrong-sibling-rationale"),
+)
+def test_sibling_dialog_stale_exception_rejects_cross_mixes(
+    tmp_path: Path,
+    overrides: dict[str, str],
+) -> None:
+    write_json(
+        tmp_path / "cross-mix.json",
+        signoff(
+            reviewer_id="project_owner",
+            **VALID_APPROVAL_BINDING,
+            **overrides,
+        ),
+    )
+
+    result = validate_signoff_directory(tmp_path, context())
+
+    assert result.stale_signoffs == ()
+    assert result.valid_roles == ()
+    assert result.missing_roles == ("governance_owner",)
+    assert [issue.reason_code for issue in result.invalid_signoffs] == [
+        "signoff_approval_binding_invalid"
+    ]
+
+
 def test_signoff_schema_applies_dialog_constraints_only_with_card_binding() -> None:
     schema = json.loads(
         (ROOT / "harness/signoffs/signoff.schema.json").read_text(encoding="utf-8")
@@ -366,23 +449,52 @@ def test_signoff_schema_applies_dialog_constraints_only_with_card_binding() -> N
         "approval_event_id": ["approval_card_id", "approval_card_digest"],
     }
 
-    dialog_rule = schema["allOf"][0]
-    assert dialog_rule["if"] == {"required": ["approval_card_id"]}
-    then = dialog_rule["then"]
-    assert then["properties"]["reviewer_id"] == {"const": "project_owner"}
-    assert then["properties"]["profile_id"] == {
-        "enum": ["governance", "current_phase"]
-    }
-    rationales = {
-        rule["if"]["properties"]["profile_id"]["const"]: rule["then"][
-            "properties"
-        ]["rationale"]["const"]
-        for rule in then["allOf"]
-    }
-    assert rationales == {
-        "governance": GOVERNANCE_RATIONALE,
-        "current_phase": CURRENT_PHASE_RATIONALE,
-    }
+    assert {
+        "dialog_governance_current",
+        "dialog_current_phase_v034",
+        "dialog_current_phase_historical_v033",
+    } <= set(schema["$defs"])
+
+    validator = Draft202012Validator(schema)
+    historical = json.loads(
+        (ROOT / "harness/signoffs/signoff_current_phase_v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    current = signoff(
+        contract_digest="a" * 64,
+        profile_id="current_phase",
+        evaluation_id="evaluation_" + "b" * 24,
+        evidence_digest="c" * 64,
+        reviewer_id="project_owner",
+        rationale=CURRENT_PHASE_RATIONALE,
+        **VALID_APPROVAL_BINDING,
+    )
+
+    assert list(validator.iter_errors(historical)) == []
+    assert list(validator.iter_errors(current)) == []
+
+    historical_near_miss = dict(historical)
+    historical_near_miss["evidence_digest"] = "d" * 64
+    arbitrary = dict(current)
+    arbitrary["rationale"] = "Arbitrary dialog rationale."
+    assert list(validator.iter_errors(historical_near_miss))
+    assert list(validator.iter_errors(arbitrary))
+
+
+def test_signoff_readme_documents_v034_rationale_and_preserves_v033_history() -> None:
+    readme = (ROOT / "harness/signoffs/README.md").read_text(encoding="utf-8")
+    historical = json.loads(
+        (ROOT / "harness/signoffs/signoff_current_phase_v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+    assert CURRENT_PHASE_RATIONALE in readme
+    assert "signoff_current_phase_v1.json" in readme
+    assert "stale" in readme
+    assert historical["rationale"] == V033_STALE_RATIONALE
+    assert historical["rationale"] != CURRENT_PHASE_RATIONALE
 
 
 def test_context_mismatch_is_stale_and_role_remains_missing(tmp_path: Path) -> None:
@@ -402,6 +514,142 @@ def test_context_mismatch_is_stale_and_role_remains_missing(tmp_path: Path) -> N
         "evaluation_id",
         "evidence_digest",
     )
+
+
+def test_historical_dialog_copy_without_production_trust_is_invalid(
+    tmp_path: Path,
+) -> None:
+    historical = json.loads(
+        (ROOT / "harness/signoffs/signoff_current_phase_v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    write_json(
+        tmp_path / "old-current.json",
+        historical,
+    )
+
+    result = validate_signoff_directory(
+        tmp_path, context(profile_id="current_phase")
+    )
+
+    assert result.stale_signoffs == ()
+    assert result.valid_roles == ()
+    assert result.missing_roles == ("governance_owner",)
+    assert [issue.reason_code for issue in result.invalid_signoffs] == [
+        "signoff_approval_binding_invalid"
+    ]
+
+
+def test_historical_context_with_current_rationale_is_invalid_not_stale(
+    tmp_path: Path,
+) -> None:
+    historical = json.loads(
+        (ROOT / "harness/signoffs/signoff_current_phase_v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    historical["rationale"] = CURRENT_PHASE_RATIONALE
+    write_json(tmp_path / "mixed-context-rationale.json", historical)
+
+    result = validate_signoff_directory(
+        tmp_path, context(profile_id="current_phase")
+    )
+
+    assert result.stale_signoffs == ()
+    assert result.valid_roles == ()
+    assert result.missing_roles == ("governance_owner",)
+    assert [issue.reason_code for issue in result.invalid_signoffs] == [
+        "signoff_approval_binding_invalid"
+    ]
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("contract_id", "fabricated_contract"),
+        ("contract_version", "1.0.1"),
+        ("contract_digest", "0" * 64),
+        ("profile_id", "governance"),
+        ("evaluation_id", "evaluation_fabricated"),
+        ("evidence_digest", "1" * 64),
+    ],
+)
+def test_near_miss_historical_dialog_context_is_invalid_not_stale(
+    tmp_path: Path,
+    field: str,
+    value: str,
+) -> None:
+    historical = json.loads(
+        (ROOT / "harness/signoffs/signoff_current_phase_v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    historical[field] = value
+    write_json(tmp_path / "near-miss-old-current.json", historical)
+
+    result = validate_signoff_directory(
+        tmp_path, context(profile_id="current_phase")
+    )
+
+    assert result.stale_signoffs == ()
+    assert result.valid_roles == ()
+    assert result.missing_roles == ("governance_owner",)
+    assert [issue.reason_code for issue in result.invalid_signoffs] == [
+        "signoff_approval_binding_invalid"
+    ]
+
+
+def test_unknown_historical_dialog_rationale_is_invalid_not_stale(
+    tmp_path: Path,
+) -> None:
+    write_json(
+        tmp_path / "unknown-old-current.json",
+        signoff(
+            profile_id="current_phase",
+            evaluation_id="evaluation_old",
+            evidence_digest="sha256:old",
+            reviewer_id="project_owner",
+            rationale="Arbitrary historical approval text.",
+            **VALID_APPROVAL_BINDING,
+        ),
+    )
+
+    result = validate_signoff_directory(
+        tmp_path, context(profile_id="current_phase")
+    )
+
+    assert result.stale_signoffs == ()
+    assert result.valid_roles == ()
+    assert result.missing_roles == ("governance_owner",)
+    assert [issue.reason_code for issue in result.invalid_signoffs] == [
+        "signoff_approval_binding_invalid"
+    ]
+
+
+def test_non_string_historical_dialog_rationale_is_invalid_not_an_error(
+    tmp_path: Path,
+) -> None:
+    write_json(
+        tmp_path / "malformed-old-current.json",
+        signoff(
+            profile_id="current_phase",
+            evaluation_id="evaluation_old",
+            evidence_digest="sha256:old",
+            reviewer_id="project_owner",
+            rationale=[V033_STALE_RATIONALE],
+            **VALID_APPROVAL_BINDING,
+        ),
+    )
+
+    result = validate_signoff_directory(
+        tmp_path, context(profile_id="current_phase")
+    )
+
+    assert result.stale_signoffs == ()
+    assert [issue.reason_code for issue in result.invalid_signoffs] == [
+        "signoff_approval_binding_invalid"
+    ]
 
 
 def test_profile_mismatch_is_stale(tmp_path: Path) -> None:
@@ -535,6 +783,40 @@ def test_current_signoff_can_supersede_stale_prior_evaluation(tmp_path: Path) ->
     assert result.valid_roles == ("governance_owner",)
     assert result.invalid_signoffs == ()
     assert tuple(issue.path for issue in result.stale_signoffs) == ("old.json",)
+
+
+def test_untrusted_dialog_history_stays_invalid_even_when_superseded(
+    tmp_path: Path,
+) -> None:
+    write_json(
+        tmp_path / "prior.json",
+        signoff(
+            evaluation_id="evaluation_old",
+            evidence_digest="sha256:old",
+            reviewer_id="project_owner",
+            rationale=GOVERNANCE_RATIONALE,
+            **VALID_APPROVAL_BINDING,
+        ),
+    )
+    write_json(
+        tmp_path / "current.json",
+        signoff(
+            reviewer_id="project_owner",
+            rationale=GOVERNANCE_RATIONALE,
+            supersedes="prior.json",
+            **VALID_APPROVAL_BINDING,
+        ),
+    )
+
+    result = validate_signoff_directory(tmp_path, context())
+
+    assert result.stale_signoffs == ()
+    assert {
+        (issue.path, issue.reason_code) for issue in result.invalid_signoffs
+    } == {
+        ("current.json", "signoff_supersedes_invalid"),
+        ("prior.json", "signoff_approval_binding_invalid"),
+    }
 
 
 @pytest.mark.parametrize(
@@ -685,6 +967,38 @@ def test_uncommitted_signoff_cannot_grant_production_approval(
     assert result.invalid_signoffs[0].reason_code == "signoff_file_untrusted"
 
 
+def test_production_validation_parses_bytes_captured_before_path_replacement(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    sanitized_git_process_environment: None,
+) -> None:
+    directory = init_git_repository(tmp_path)
+    approval = directory / "approval.json"
+    write_json(approval, signoff(decision="rejected"))
+    commit_paths(tmp_path, "add rejected decision", "harness/signoffs/approval.json")
+    real_trust_check = signoff_engine._git_signoff_is_committed_clean
+
+    def replace_after_trust_check(*args: object) -> bool:
+        trusted = real_trust_check(*args)
+        write_json(approval, signoff())
+        return trusted
+
+    monkeypatch.setattr(
+        signoff_engine,
+        "_git_signoff_is_committed_clean",
+        replace_after_trust_check,
+    )
+
+    result = validate_signoff_directory(
+        directory, replace(context(), repository_root=str(tmp_path))
+    )
+
+    assert result.valid_roles == ()
+    assert [issue.reason_code for issue in result.invalid_signoffs] == [
+        "signoff_decision_not_approved"
+    ]
+
+
 def test_production_supersedes_rejects_target_added_in_same_commit(
     tmp_path: Path, sanitized_git_process_environment: None
 ) -> None:
@@ -738,6 +1052,129 @@ def test_production_supersedes_accepts_target_from_prior_commit(
     assert result.missing_roles == ()
     assert result.duplicate_roles == ()
     assert result.invalid_signoffs == ()
+
+
+def test_production_supersedes_rejects_rewritten_prior_path(
+    tmp_path: Path, sanitized_git_process_environment: None
+) -> None:
+    directory = init_git_repository(tmp_path)
+    write_json(directory / "prior.json", signoff(reviewer_id="reviewer-old"))
+    commit_paths(tmp_path, "add prior signoff", "harness/signoffs/prior.json")
+    write_json(directory / "prior.json", signoff(reviewer_id="rewritten"))
+    write_json(
+        directory / "current.json",
+        signoff(reviewer_id="reviewer-new", supersedes="prior.json"),
+    )
+    commit_paths(
+        tmp_path,
+        "rewrite and supersede prior",
+        "harness/signoffs/prior.json",
+        "harness/signoffs/current.json",
+    )
+
+    result = validate_signoff_directory(
+        directory, replace(context(), repository_root=str(tmp_path))
+    )
+
+    assert result.valid_roles == ()
+    assert {
+        (issue.path, issue.reason_code) for issue in result.invalid_signoffs
+    } == {
+        ("current.json", "signoff_supersedes_invalid"),
+        ("prior.json", "signoff_file_untrusted"),
+    }
+
+
+def test_production_signoff_rejects_rewrite_then_restore_history(
+    tmp_path: Path, sanitized_git_process_environment: None
+) -> None:
+    directory = init_git_repository(tmp_path)
+    original = signoff(reviewer_id="reviewer-original")
+    write_json(directory / "approval.json", original)
+    commit_paths(tmp_path, "add approval", "harness/signoffs/approval.json")
+    write_json(
+        directory / "approval.json",
+        signoff(reviewer_id="reviewer-rewritten"),
+    )
+    commit_paths(tmp_path, "rewrite approval", "harness/signoffs/approval.json")
+    write_json(directory / "approval.json", original)
+    commit_paths(tmp_path, "restore approval", "harness/signoffs/approval.json")
+
+    result = validate_signoff_directory(
+        directory, replace(context(), repository_root=str(tmp_path))
+    )
+
+    assert result.valid_roles == ()
+    assert result.missing_roles == ("governance_owner",)
+    assert [issue.reason_code for issue in result.invalid_signoffs] == [
+        "signoff_file_untrusted"
+    ]
+
+
+def test_production_supersedes_accepts_prior_dialog_from_changed_evaluation(
+    tmp_path: Path, sanitized_git_process_environment: None
+) -> None:
+    directory = init_git_repository(tmp_path)
+    write_json(
+        directory / "prior.json",
+        signoff(
+            evaluation_id="evaluation_old",
+            evidence_digest="sha256:old",
+            reviewer_id="project_owner",
+            rationale=GOVERNANCE_RATIONALE,
+            **VALID_APPROVAL_BINDING,
+        ),
+    )
+    commit_paths(tmp_path, "add prior dialog", "harness/signoffs/prior.json")
+    write_json(
+        directory / "current.json",
+        signoff(
+            reviewer_id="project_owner",
+            rationale=GOVERNANCE_RATIONALE,
+            supersedes="prior.json",
+            **VALID_APPROVAL_BINDING,
+        ),
+    )
+    commit_paths(
+        tmp_path,
+        "supersede prior dialog",
+        "harness/signoffs/current.json",
+    )
+
+    result = validate_signoff_directory(
+        directory, replace(context(), repository_root=str(tmp_path))
+    )
+
+    assert result.valid_roles == ("governance_owner",)
+    assert result.missing_roles == ()
+    assert result.invalid_signoffs == ()
+    assert tuple(issue.path for issue in result.stale_signoffs) == ("prior.json",)
+
+
+def test_production_prior_dialog_is_stale_but_cannot_grant_current_approval(
+    tmp_path: Path, sanitized_git_process_environment: None
+) -> None:
+    directory = init_git_repository(tmp_path)
+    write_json(
+        directory / "prior.json",
+        signoff(
+            evaluation_id="evaluation_old",
+            evidence_digest="sha256:old",
+            reviewer_id="project_owner",
+            rationale=GOVERNANCE_RATIONALE,
+            **VALID_APPROVAL_BINDING,
+        ),
+    )
+    commit_paths(tmp_path, "add prior dialog", "harness/signoffs/prior.json")
+
+    result = validate_signoff_directory(
+        directory, replace(context(), repository_root=str(tmp_path))
+    )
+
+    assert result.valid_roles == ()
+    assert result.missing_roles == ("governance_owner",)
+    assert result.invalid_signoffs == ()
+    assert tuple(issue.path for issue in result.stale_signoffs) == ("prior.json",)
 
 
 @pytest.mark.parametrize("spoof", ["replace", "graft"])

@@ -61,6 +61,30 @@ APPROVAL_EVENT_ID = "approval_event_" + "c" * 24
 REVIEWED_AT = "2026-07-10T12:00:00+00:00"
 
 
+def dialog_signoff_payload(
+    *, profile_id: str = "governance", **overrides: object
+) -> dict[str, object]:
+    payload: dict[str, object] = {
+        "contract_id": "pep_design_project_acceptance",
+        "contract_version": "1.0.0",
+        "contract_digest": "a" * 64,
+        "profile_id": profile_id,
+        "evaluation_id": "evaluation_" + "c" * 24,
+        "evidence_digest": "d" * 64,
+        "role": "governance_owner",
+        "reviewer_id": "project_owner",
+        "decision": "approved",
+        "rationale": PROFILE_RATIONALES[profile_id],
+        "reviewed_at": REVIEWED_AT,
+        "supersedes": None,
+        "approval_card_id": CARD_ID,
+        "approval_card_digest": CARD_SHA256,
+        "approval_event_id": APPROVAL_EVENT_ID,
+    }
+    payload.update(overrides)
+    return payload
+
+
 @pytest.fixture
 def repository(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
@@ -1745,17 +1769,8 @@ def test_latest_committed_signoffs_prefers_current_context_over_newer_stale(
     signoff_root = repository.work / "harness" / "signoffs"
     signoff_root.mkdir(parents=True)
 
-    def write_signoff(filename: str, **overrides: str) -> None:
-        payload = {
-            "contract_id": "pep_design_project_acceptance",
-            "contract_version": "1.0.0",
-            "contract_digest": "a" * 64,
-            "profile_id": "governance",
-            "evaluation_id": "evaluation_" + "c" * 24,
-            "evidence_digest": "d" * 64,
-            "role": "governance_owner",
-        }
-        payload.update(overrides)
+    def write_signoff(filename: str, **overrides: object) -> None:
+        payload = dialog_signoff_payload(**overrides)
         (signoff_root / filename).write_text(
             json.dumps(payload) + "\n",
             encoding="utf-8",
@@ -1800,15 +1815,11 @@ def test_latest_committed_signoffs_falls_back_to_newest_stale_context(
         relative = f"harness/signoffs/signoff_current_phase_v{version}.json"
         (repository.work / relative).write_text(
             json.dumps(
-                {
-                    "contract_id": "pep_design_project_acceptance",
-                    "contract_version": "1.0.0",
-                    "contract_digest": "a" * 64,
-                    "profile_id": "current_phase",
-                    "evaluation_id": "evaluation_" + evaluation_suffix * 24,
-                    "evidence_digest": evaluation_suffix * 64,
-                    "role": "governance_owner",
-                }
+                dialog_signoff_payload(
+                    profile_id="current_phase",
+                    evaluation_id="evaluation_" + evaluation_suffix * 24,
+                    evidence_digest=evaluation_suffix * 64,
+                )
             )
             + "\n",
             encoding="utf-8",
@@ -1827,6 +1838,53 @@ def test_latest_committed_signoffs_falls_back_to_newest_stale_context(
         "signoff_current_phase_v2.json",
         "signoff_current_phase_v1.json",
     )
+
+
+def test_latest_committed_signoffs_rejects_non_dialog_envelope(
+    repository: ApprovalGitFixture,
+) -> None:
+    relative = "harness/signoffs/signoff_current_phase_v1.json"
+    path = repository.work / relative
+    path.parent.mkdir(parents=True)
+    payload = dialog_signoff_payload(profile_id="current_phase")
+    payload.pop("approval_event_id")
+    path.write_text(json.dumps(payload) + "\n", encoding="utf-8")
+    commit_all(repository, repository.work, "incomplete signoff", [relative])
+
+    assert GitBackend(repository.work).latest_committed_signoffs(
+        contract_id="pep_design_project_acceptance",
+        contract_version="1.0.0",
+        contract_digest="a" * 64,
+        profile_id="current_phase",
+        evaluation_id="evaluation_" + "c" * 24,
+        evidence_digest="d" * 64,
+        role="governance_owner",
+    ) == ()
+
+
+def test_latest_committed_signoffs_rejects_modified_worktree_payload(
+    repository: ApprovalGitFixture,
+) -> None:
+    relative = "harness/signoffs/signoff_current_phase_v1.json"
+    path = repository.work / relative
+    path.parent.mkdir(parents=True)
+    path.write_text(
+        json.dumps(dialog_signoff_payload(profile_id="current_phase")) + "\n",
+        encoding="utf-8",
+    )
+    commit_all(repository, repository.work, "current signoff", [relative])
+    path.write_text('{"modified":true}\n', encoding="utf-8")
+
+    with pytest.raises(GitApprovalError, match="committed|clean|stable|signoff"):
+        GitBackend(repository.work).latest_committed_signoffs(
+            contract_id="pep_design_project_acceptance",
+            contract_version="1.0.0",
+            contract_digest="a" * 64,
+            profile_id="current_phase",
+            evaluation_id="evaluation_" + "c" * 24,
+            evidence_digest="d" * 64,
+            role="governance_owner",
+        )
 
 
 def test_latest_committed_signoffs_keeps_malformed_candidate_fail_closed(

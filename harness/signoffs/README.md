@@ -39,6 +39,17 @@ profile-bound `governance_owner` signoff，各自使用固定 rationale 和独�
 的最新前序签核，没有 current predecessor 时才回退到最新 stale 审计链。它不批准 `release_checkpoint` 或 `full_project`，也不表示发布、
 完整 Benchmark、生成、评分或排名已经完成。
 
+固定 rationale 为：
+
+- `governance`：仅批准 contract/registry/migration/validator 的治理完整性；不豁免任何失败 gate，也不批准 release_checkpoint 或 full_project。
+- `current_phase`：接受 v0.34 的诚实边界：7 条主运行候选均已解析，其中 6 条通过 QC；PepGLAD 因混合手性失败；没有 scoring、ranking、frozen target 或 wet-lab 验证。
+
+历史文件 `signoff_current_phase_v1.json` 保留 v0.33 rationale，作为 stale 审计记录不修改、
+不删除；它不满足 v0.34 `current_phase` 的固定 rationale，也不能替代新 evaluation 的签核。
+Schema 将它建模为精确 full-object 的 v0.33 历史分支；当前 `current_phase` dialog 仍只能
+使用 v0.34 rationale。历史分支的任一字段发生变化都不再匹配，不能借此接受任意旧
+rationale。
+
 审批卡绑定完整 evaluation/digest、proposed Git tree、文件 manifest、既有待推送
 commits、remote OID 与 push 目标。只有 source manifest 非空时，事务才在当前
 `main` 创建 source checkpoint commit；manifest 为空时直接复用卡片绑定的 HEAD。
@@ -62,7 +73,8 @@ signoff commit，不重复 source commit。`verified` 恢复还会核对 remote�
 Production validation 只接受 `harness/signoffs/` 下已 committed、clean、非 symlink
 的直接 regular JSON file。Untracked、staged-only、modified 或 symlinked 文件均不能
 产生 approval；新 signoff 可通过 `supersedes` 指向 Git 历史中的旧文件，旧记录不
-删除。
+删除。已 committed-clean 但 context 过期的 dialog 只能作为 stale 审计记录或
+`supersedes` 目标，绝不能成为当前有效签核；当前 context 仍须使用当前固定 rationale。
 
 Generated report、审批卡与 transaction journal 是控制面状态，不是科学证据，也
 不进入 evidence digest。Signoff 同样不改变被审 machine evaluation 的 evidence

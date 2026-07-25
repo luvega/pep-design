@@ -5,11 +5,11 @@
   "legacy_agents_sha256": "c5955cbd72e706c075185603b07da182395e1afc0be54a64c36ef7cc29a2533d",
   "legacy_agents_line_count": 209,
   "legacy_artifact_role_count": 89,
-  "active_agents_sha256": "64f83176396f0801a9e11c9cbdd37676e41dfc6ddd8260f55e5025ee17184427",
+  "active_agents_sha256": "6f487bf9bf383dd1ded631d8988bf9e53633a8fc47cfd7e3ebf08ba496c8188d",
   "active_policy_map": {
     "purpose_and_current_plan": [
       "## Purpose",
-      "ops/plans/updated_plan_v0.33.md",
+      "ops/plans/updated_plan_v0.35.md",
       "ops/plans/harness_engineering_plan_v1.0.md"
     ],
     "source_boundaries": [
@@ -78,7 +78,7 @@
     {"path_pattern": "kb/tables/*", "policy": "structured_knowledge_artifact"}
   ],
   "required_operating_tokens": [
-    "updated_plan_v0.33.md",
+    "updated_plan_v0.35.md",
     "building-llm-wiki",
     "academic-research-suite",
     "benchmark-paper-template",

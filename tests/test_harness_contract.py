@@ -105,6 +105,32 @@ def test_contract_rejects_unknown_evaluator() -> None:
         validate_contract(invalid)
 
 
+def test_contract_rejects_v034_gate_rebound_to_a_generic_evaluator() -> None:
+    contract = load_contract(CONTRACT_PATH)
+    invalid = deepcopy(contract)
+    gate = next(
+        row
+        for row in invalid["gates"]
+        if row["gate_id"] == "current.v034_bounded_connectivity"
+    )
+    gate["evaluator"] = "v033_baseline"
+
+    with pytest.raises(ContractError, match="engine gate specification"):
+        validate_contract(invalid)
+
+
+def test_contract_rejects_removing_v035_gate_from_current_profile() -> None:
+    contract = load_contract(CONTRACT_PATH)
+    invalid = deepcopy(contract)
+    profile = next(
+        row for row in invalid["profiles"] if row["profile_id"] == "current_phase"
+    )
+    profile["required_gate_ids"].remove("current.v035_bounded_connectivity")
+
+    with pytest.raises(ContractError, match="required gate taxonomy"):
+        validate_contract(invalid)
+
+
 def test_contract_rejects_dependency_cycle() -> None:
     contract = load_contract(CONTRACT_PATH)
     invalid = deepcopy(contract)
@@ -125,6 +151,22 @@ def test_artifact_registry_distinguishes_tracked_external_and_generated() -> Non
     assert {"tracked", "external_pointer", "generated"} <= scopes
     assert len(artifact_ids) == len(artifacts)
     assert "v033_candidate_outputs" in artifact_ids
+    assert {
+        "v034_job_manifest",
+        "v034_execution_matrix",
+        "v034_execution_results",
+        "v034_method_output_manifest",
+        "v034_candidate_outputs",
+        "v034_candidate_qc",
+        "v034_run_rows",
+        "v034_runtime_provenance",
+        "v034_failure_diagnostics",
+        "v034_merge_summary",
+        "v035_plan",
+        "v035_pepglad_job_manifest",
+        "v035_pepglad_execution_matrix",
+        "v035_pepglad_connectivity_bundle",
+    } <= artifact_ids
     assert "dflow_3eqs_train_overlap" in artifact_ids
     assert all(
         row["include_in_evidence_digest"] is False
@@ -151,6 +193,105 @@ def test_claim_registry_preserves_separate_evidence_layers() -> None:
         "benchmark_pillar_evaluation_framework",
         "benchmark_pillar_empirical_findings",
     } <= claim_ids
+
+
+def test_v035_gate_is_current_while_v034_failure_remains_historical() -> None:
+    contract = load_contract(CONTRACT_PATH)
+    artifact_registry = load_json(ARTIFACTS_PATH)
+    profiles = {row["profile_id"]: row for row in contract["profiles"]}
+    gates = {row["gate_id"]: row for row in contract["gates"]}
+    artifacts = {row["artifact_id"]: row for row in artifact_registry["artifacts"]}
+
+    for profile_id in ("current_phase", "release_checkpoint", "full_project"):
+        assert "current.v035_bounded_connectivity" in profiles[profile_id][
+            "required_gate_ids"
+        ]
+        assert "current.v034_bounded_connectivity" not in profiles[profile_id][
+            "required_gate_ids"
+        ]
+        assert "current.v033_baseline_truth" in profiles[profile_id][
+            "required_gate_ids"
+        ]
+        assert "current.rf_conditioning_blocker_recorded" not in profiles[profile_id][
+            "required_gate_ids"
+        ]
+        assert "current.pepmirror_chirality_blocker_recorded" not in profiles[
+            profile_id
+        ]["required_gate_ids"]
+
+    assert "v0.35" in profiles["current_phase"]["description"]
+    assert gates["current.rf_conditioning_blocker_recorded"]["profiles"] == []
+    assert gates["current.pepmirror_chirality_blocker_recorded"]["profiles"] == []
+    assert "Historical v0.33" in gates["current.rf_conditioning_blocker_recorded"][
+        "title"
+    ]
+    assert "Historical v0.33" in gates[
+        "current.pepmirror_chirality_blocker_recorded"
+    ]["title"]
+    assert gates["current.v034_bounded_connectivity"]["evaluator"] == (
+        "v034_bounded_connectivity"
+    )
+    assert gates["current.v034_bounded_connectivity"]["profiles"] == []
+    assert gates["current.v035_bounded_connectivity"]["evaluator"] == (
+        "v035_bounded_connectivity"
+    )
+    assert "current.v034_bounded_connectivity" not in gates[
+        "current.v035_bounded_connectivity"
+    ]["requires"]
+    assert "v034_runtime_provenance" in gates["current.v035_bounded_connectivity"][
+        "inputs"
+    ]
+    assert "v034_failure_diagnostics" in gates[
+        "current.v035_bounded_connectivity"
+    ]["inputs"]
+    assert "v035_pepglad_connectivity_bundle" in gates[
+        "current.v035_bounded_connectivity"
+    ]["inputs"]
+    assert {
+        "v034_execution_results",
+        "v034_method_output_manifest",
+        "v034_candidate_qc",
+        "v034_runtime_provenance",
+        "v034_failure_diagnostics",
+    } <= set(gates["current.scoring_guard"]["inputs"])
+    assert artifacts["current_plan"]["path"] == "ops/plans/updated_plan_v0.35.md"
+    assert gates["current.scoring_guard"]["requires"] == [
+        "current.v035_bounded_connectivity"
+    ]
+    assert gates["release.checkpoint_integrity"]["requires"] == []
+    assert "generated_candidate_only_when_supported_candidate_yes" in artifacts[
+        "v034_candidate_outputs"
+    ]["allowed_uses"]
+    assert "bounded_generated_candidate" not in artifacts["v034_candidate_outputs"][
+        "allowed_uses"
+    ]
+    diagnostic = artifacts["v034_failure_diagnostics"]
+    assert diagnostic["evidence_class"] == "failure_diagnostic_provenance"
+    assert diagnostic["allowed_uses"] == [
+        "bounded_failure_diagnosis",
+        "claim_caveat",
+    ]
+    assert {
+        "generated_candidate",
+        "scoring_evidence",
+        "method_ranking",
+        "smoke_test_ready",
+        "full_reproducibility",
+    } <= set(diagnostic["forbidden_uses"])
+
+
+def test_generated_candidate_policy_does_not_promote_scoring_or_ranking() -> None:
+    registry = load_json(CLAIMS_PATH)
+    policy = next(
+        row for row in registry["claims"] if row["claim_id"] == "generated_candidate"
+    )
+
+    assert "parsed_candidate_output" in policy["required_evidence_classes"]
+    assert "execution_provenance" in policy["required_evidence_classes"]
+    assert "产生可解析候选" in policy["allowed_wording"]
+    assert "产生可评分候选" in policy["forbidden_wording"]
+    assert "方法性能可排名" in policy["forbidden_wording"]
+    assert "best-performing" in policy["forbidden_wording"]
 
 
 def test_migration_registry_covers_every_legacy_policy_category() -> None:
@@ -210,3 +351,22 @@ def test_json_sources_are_canonicalizable() -> None:
     ]:
         value = load_json(path)
         assert json.loads(json.dumps(value, sort_keys=True)) == value
+
+
+def test_current_profiles_route_connectivity_through_v035() -> None:
+    from harness.engine import loader
+
+    assert "v035_bounded_connectivity" in loader.ENGINE_EVALUATOR_IDS
+    assert "current.v035_bounded_connectivity" in loader.ENGINE_GATE_IDS
+    assert "current.v035_bounded_connectivity" in loader.ENGINE_PROFILE_GATE_IDS[
+        "current_phase"
+    ]
+    assert "current.v034_bounded_connectivity" not in loader.ENGINE_PROFILE_GATE_IDS[
+        "current_phase"
+    ]
+    assert "current.v035_bounded_connectivity" in loader.ENGINE_PROFILE_GATE_IDS[
+        "release_checkpoint"
+    ]
+    assert "current.v035_bounded_connectivity" in loader.ENGINE_PROFILE_GATE_IDS[
+        "full_project"
+    ]

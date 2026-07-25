@@ -1,6 +1,6 @@
 # Input Sets
 
-本目录用于后续保存小型标准输入集合说明。当前阶段不加入真实 PDB、FASTA 或大规模 benchmark targets。
+本目录保存小型输入合同、候选清单和 job manifest。运行时 PDB、FASTA 与大规模 benchmark targets 留在外部或 gitignored 路径。
 
 ## Planned Files
 
@@ -20,6 +20,12 @@
 | `multi_case_fixture_target_manifest_v0.22.csv` | active | v0.22 multi-case fixture target manifest；不是 frozen target set |
 | `multi_case_fixture_control_manifest_v0.22.csv` | active | v0.22 fixture control manifest；不是 assay validation 或 scoring evidence |
 | `multi_case_fixture_job_manifest_v0.22.csv` | active | v0.22 planned/blocked fixture jobs；不是运行证据 |
+| `pilot_benchmark_target_manifest_v0.30.csv` | active | v0.30 pilot target fixture 清单；不是 frozen target set |
+| `pilot_benchmark_control_manifest_v0.30.csv` | active | v0.30 pilot control 清单；不是 assay 或 scoring evidence |
+| `pilot_benchmark_job_manifest_v0.30.csv` | historical | v0.30 Wave A/Wave B 计划任务；运行状态由后续版本记录 |
+| `pilot_benchmark_job_manifest_v0.34.csv` | historical | v0.34 七种方法的 seed42 主运行与 seed43 条件扩展合同；不是评分资格清单 |
+| `pilot_pepglad_job_manifest_v0.35.csv` | current | v0.35 唯一授权的 PepGLAD seed42 mixed L/D report-only 连通性合同；不是候选或评分证据 |
+| `wet_lab_candidate_panel_v0.30.csv` | prospective | 后续候选类别；不是 wet-lab 结果 |
 | `dataset_supplement_schema_review_v0.7.csv` | active | v0.7 数据集补充材料 schema-review 队列，记录 license/schema/controls/leakage 的下一步审查状态 |
 | `dataset_supplement_schema_review_v0.8.csv` | active | v0.8 数据源 license/schema/controls/leakage 审计结果；仍不代表 target-set promotion |
 | `example_run.csv` | active | v0.7 人工 run.csv placeholder，用于服务器 dry-run 输入合同检查；不是 benchmark target 或结果 |
@@ -39,6 +45,10 @@ v0.14 的 `target_candidate_academic_search_v0.14.csv` 只记录方法论文案�
 v0.17 的 `batch_b_pilot_target_gate_v0.17.csv` 和 `batch_b_pilot_job_manifest_v0.17.csv` 只记录 pilot gate 和 planned fixture jobs。它们不冻结 `target_set_v0.csv`，不证明 target/control 已闭环，也不是运行或性能证据。
 
 v0.22 的 `multi_case_fixture_target_manifest_v0.22.csv`、`multi_case_fixture_control_manifest_v0.22.csv` 和 `multi_case_fixture_job_manifest_v0.22.csv` 只把 v0.21 method-example adapter 证据标准化为 multi-case fixture pilot 计划。它们不冻结 `target_set_v0.csv`，不代表 D-Flow、ColabDesign 或 BindCraft gate 已解决，也不是运行、scoring、ranking 或 Benchmark result。
+
+v0.34 的 `pilot_benchmark_job_manifest_v0.34.csv` 固定 7 种方法的主运行与条件扩展合同。它只约束 fixture、链、长度、手性、拓扑、seed 和输出接口；它不把 3EQS、7ZKR 或序列 fixture 晋升为 frozen target set，也不授予 scoring 或 ranking 资格。D-Flow 3EQS 有已知训练重叠，只能用于连通性检查。Manifest 中的 target 字段不能追溯补齐历史 DiffPepBuilder/PepGLAD attempt 缺少的新增 target preflight 证据。
+
+v0.35 的 `pilot_pepglad_job_manifest_v0.35.csv` 只授权 `v035_pepglad_3eqs_seed42` 的一个 `attempt_001`。该 attempt 因 Docker API 权限不足在容器启动前失败，没有候选或 QC。Manifest 仍是输入合同，不得据此声称 mixed L/D policy 已获得运行验证；`attempt_001` 不得覆盖或自动重试。
 
 ## Required Target Classes
 

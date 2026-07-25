@@ -24,6 +24,8 @@ ENGINE_EVALUATOR_IDS = frozenset(
         "semantic_rf_target_conditioning",
         "target_controls",
         "v033_baseline",
+        "v034_bounded_connectivity",
+        "v035_bounded_connectivity",
     }
 )
 
@@ -51,6 +53,8 @@ ENGINE_GATE_IDS = frozenset(
         "governance.migration_parity",
         "repository.kb_validator",
         "current.v033_baseline_truth",
+        "current.v034_bounded_connectivity",
+        "current.v035_bounded_connectivity",
         "current.target_control_boundary",
         "current.dflow_leakage_recorded",
         "current.rf_conditioning_blocker_recorded",
@@ -73,6 +77,8 @@ ENGINE_GATE_SPECS = {
     "governance.migration_parity": ("repository_provenance", "Critical", "migration_parity", "governance_owner", False),
     "repository.kb_validator": ("repository_provenance", "Critical", "kb_validator", "engineering_reviewer", False),
     "current.v033_baseline_truth": ("execution_provenance", "Critical", "v033_baseline", "engineering_reviewer", False),
+    "current.v034_bounded_connectivity": ("execution_provenance", "Critical", "v034_bounded_connectivity", "engineering_reviewer", False),
+    "current.v035_bounded_connectivity": ("execution_provenance", "Critical", "v035_bounded_connectivity", "engineering_reviewer", False),
     "current.target_control_boundary": ("target_control_governance", "Critical", "target_controls", "scientific_reviewer", False),
     "current.dflow_leakage_recorded": ("target_control_governance", "Critical", "semantic_dflow_leakage", "scientific_reviewer", False),
     "current.rf_conditioning_blocker_recorded": ("method_dataset_readiness", "Major", "semantic_rf_target_conditioning", "engineering_reviewer", False),
@@ -99,10 +105,9 @@ _GOVERNANCE_GATES = frozenset(
 _CURRENT_GATES = _GOVERNANCE_GATES | frozenset(
     {
         "current.v033_baseline_truth",
+        "current.v035_bounded_connectivity",
         "current.target_control_boundary",
         "current.dflow_leakage_recorded",
-        "current.rf_conditioning_blocker_recorded",
-        "current.pepmirror_chirality_blocker_recorded",
         "current.scoring_guard",
         "current.manuscript_claim_boundary",
     }
