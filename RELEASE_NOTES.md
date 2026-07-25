@@ -1,5 +1,26 @@
 # Release Notes
 
+## Unreleased GitHub Homepage Documentation (`VERSION=1.2.21`) - 2026-07-25
+
+重写 GitHub README，使方法来源、任务归类、标准输入输出、代表性 fixture 和评价标准可以从项目主页直接复核。
+
+### Added
+
+- 新增 `benchmark/method_sources/method_homepage_source_map_v0.35.csv`，记录 10 个纳入方法的代码仓库、固定 commit、论文、persistent ID、任务类型和 I/O 契约。
+- 使用 ImageGen 生成项目图标和 protocol-first 工作流图，并保存提示词、透明背景处理和人工 QC 记录。
+- 新增主页来源表、来源校验逻辑、图像属性和 README 边界测试。
+
+### Changed
+
+- README 改为证据分层结构，区分 T1/T2/T3、chirality/cyclization/ncAA 约束、生成与 ranking/rescoring，以及计算代理指标与生物学验证。
+- 展示 v0.34 seed42 代表性输入输出，并链接 compact job、candidate、QC、runtime provenance 和 failure-only artifacts。
+- 保留 `VERSION=1.2.21`、v0.35 Critical failure、schema-only `target_set_v0.csv` 和 `not_run` scoring 状态。
+
+### Boundary
+
+- 来源链接表和主页插图只用于导航与解释，不构成安装、可运行、完整复现、方法性能或实验验证证据。
+- 本次更新未执行 clone、install、download、GPU generation、scoring、ranking、target freeze 或 wet-lab。
+
 ## Unreleased v0.35 PepGLAD Mixed-Chirality Connectivity Work Layer (`VERSION=1.2.21`) - 2026-07-14
 
 当前计划已切换到 `ops/plans/updated_plan_v0.35.md`。本层为 PepGLAD 定义一条前瞻性连通性通道：同一候选肽可包含 L 和 D 残基，手性只做 report-only 检查，固定 seed42 baseline mismatch 只记 warning。v0.34 的 6/7 历史结果不回写。

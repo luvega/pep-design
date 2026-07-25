@@ -12,6 +12,7 @@
 - target_set_rows: 0
 - candidate_dataset_rows: 7
 - method_source_rows: 10
+- homepage_method_source_rows: 10
 - environment_rows: 10
 - expert_review_rows: 15
 - dataset_readiness_rows: 7
@@ -123,8 +124,8 @@
 - method_cards: 12
 - literature_cards: 120
 - bibtex_entries: 432
-- markdown_links_checked: 249
-- tracked_files_checked: 561
+- markdown_links_checked: 291
+- tracked_files_checked: 567
 
 ## Errors
 - None
@@ -148,6 +149,7 @@
     "target_set_rows": 0,
     "candidate_dataset_rows": 7,
     "method_source_rows": 10,
+    "homepage_method_source_rows": 10,
     "environment_rows": 10,
     "expert_review_rows": 15,
     "dataset_readiness_rows": 7,
@@ -259,8 +261,8 @@
     "method_cards": 12,
     "literature_cards": 120,
     "bibtex_entries": 432,
-    "markdown_links_checked": 249,
-    "tracked_files_checked": 561
+    "markdown_links_checked": 291,
+    "tracked_files_checked": 567
   },
   "errors": [],
   "warnings": []

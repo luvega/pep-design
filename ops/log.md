@@ -1,5 +1,12 @@
 # Project Log
 
+## [2026-07-25] documentation | GitHub 主页、方法来源与评价框架
+- 重写 `README.md`，以当前证据状态、T1/T2/T3 方法分类、标准 I/O、v0.34 代表性 fixture、评价标准和复核命令为主页主线。
+- 新增 10 方法主页来源表，逐项记录上游仓库、固定 commit、论文链接、persistent ID、任务和输入输出契约；其边界为来源与接口导航，不支持运行或性能结论。
+- 使用 ImageGen 生成透明项目图标和 protocol-first 流程图，保留提示词、色键去背景命令、尺寸与人工标签/边界 QC。
+- 扩展 validator 与 focused tests，覆盖来源表完整性、URL/pin/date/boundary 约束、主页关键边界和图像属性。
+- 保持 `VERSION=1.2.21`、v0.35 Docker API 基础设施失败、`current.v035_bounded_connectivity` Critical `FAIL`、schema-only target set 和未评分状态。本次未执行外部方法、下载、生成、评分或排名。
+
 ## [2026-07-14] execution | PepGLAD v0.35 基础设施启动失败
 - 将 `ops/plans/updated_plan_v0.35.md` 设为当前计划；v0.34 保持 6/7 历史状态，`VERSION` 保持 `1.2.21`。
 - 为 PepGLAD 增加 mixed L/D report-only 连通性通道、固定 baseline warning policy、唯一 seed42 job、exact-schema parser、独立 Harness/validator 和 fail-closed scoring guard。

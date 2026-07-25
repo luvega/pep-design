@@ -1,5 +1,15 @@
 # 多肽设计方法 Benchmark 知识库
 
+## Homepage
+
+- [GitHub 项目主页与完整说明](README.md)
+- [方法归类、输入输出和来源链接表](benchmark/method_sources/method_homepage_source_map_v0.35.csv)
+- [主页图标与流程图生成记录](docs/assets/readme/readme_imagegen_record_v1.md)
+- [Benchmark protocol](benchmark/protocols/benchmark_protocol_v0.md)
+- [Scoring protocol](benchmark/scoring/scoring_protocol_v0.md)
+
+主页按 T1 sequence binder、T2 structure-conditioned peptide binder 和 T3 miniprotein binder baseline 组织 10 个纳入方法，并明确 v0.34 fixture、v0.35 PepGLAD 基础设施失败、尚未评分和未冻结目标集的边界。
+
 ## Current Status
 - Project version: 1.2.21
 - Manuscript outline layer: v1.0

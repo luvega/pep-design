@@ -205,6 +205,39 @@ METHOD_SOURCE_HEADERS = [
     "next_action",
 ]
 
+HOMEPAGE_METHOD_SOURCE_HEADERS = [
+    "method",
+    "task_id",
+    "method_family",
+    "input_contract",
+    "output_contract",
+    "repo_url",
+    "pinned_commit",
+    "publication_title",
+    "publication_url",
+    "persistent_id",
+    "publication_status",
+    "verified_on",
+    "evidence_boundary",
+]
+
+HOMEPAGE_INCLUDED_METHODS = {
+    "PepMLM",
+    "SaLT&PepPr",
+    "DiffPepBuilder",
+    "PepGLAD",
+    "D-Flow / PeptideDesign",
+    "PepMirror",
+    "AfCycDesign / ColabDesign cyclic peptide",
+    "DexDesign / OSPREY3",
+    "RFdiffusion + ProteinMPNN",
+    "BindCraft",
+}
+
+HOMEPAGE_SOURCE_BOUNDARY = (
+    "source_and_interface_navigation_only_not_runnability_or_performance"
+)
+
 ENVIRONMENT_HEADERS = [
     "method",
     "task_id",
@@ -2053,6 +2086,9 @@ REQUIRED_FILES = [
     "harness/signoffs/README.md",
     "harness/signoffs/signoff.schema.json",
     "index.md",
+    "docs/assets/readme/pep_design_icon_v1.png",
+    "docs/assets/readme/pep_design_homepage_workflow_v1.png",
+    "docs/assets/readme/readme_imagegen_record_v1.md",
     "ops/log.md",
     "ops/plans/harness_engineering_plan_v1.0.md",
     "scripts/run_project_acceptance.py",
@@ -2130,6 +2166,7 @@ REQUIRED_FILES = [
     "benchmark/input_sets/negative_design_panel_schema.md",
     "benchmark/method_sources/README.md",
     "benchmark/method_sources/method_source_manifest.csv",
+    "benchmark/method_sources/method_homepage_source_map_v0.35.csv",
     "benchmark/method_sources/source_pin_audit_v0.4.csv",
     "benchmark/method_sources/source_pin_audit_v0.5.csv",
     "benchmark/method_sources/method_paper_case_matrix_v0.14.csv",
@@ -2410,6 +2447,112 @@ def check_headers(errors: list[str], rel: str, expected: list[str], delimiter: s
     if headers != expected:
         errors.append(f"{rel}: header mismatch: {headers}")
     return rows
+
+
+def check_homepage_method_sources(errors: list[str]) -> int:
+    rel = "benchmark/method_sources/method_homepage_source_map_v0.35.csv"
+    rows = check_headers(errors, rel, HOMEPAGE_METHOD_SOURCE_HEADERS)
+    by_method: dict[str, dict[str, str]] = {}
+    for row in rows:
+        method = row.get("method", "")
+        if not method:
+            errors.append(
+                "method_homepage_source_map_v0.35.csv row missing method"
+            )
+            continue
+        if method in by_method:
+            errors.append(
+                "method_homepage_source_map_v0.35.csv duplicate method: "
+                + method
+            )
+        by_method[method] = row
+
+    missing = sorted(HOMEPAGE_INCLUDED_METHODS - set(by_method))
+    if missing:
+        errors.append(
+            "method_homepage_source_map_v0.35.csv missing included methods: "
+            + ", ".join(missing)
+        )
+    unexpected = sorted(set(by_method) - HOMEPAGE_INCLUDED_METHODS)
+    if unexpected:
+        errors.append(
+            "method_homepage_source_map_v0.35.csv has unexpected methods: "
+            + ", ".join(unexpected)
+        )
+
+    for method, row in by_method.items():
+        for field in (
+            "method_family",
+            "input_contract",
+            "output_contract",
+            "publication_title",
+            "persistent_id",
+            "publication_status",
+        ):
+            if not row.get(field):
+                errors.append(
+                    f"{method}: homepage source map missing {field}"
+                )
+
+        task_id = row.get("task_id", "")
+        if task_id not in REQUIRED_PROTOCOL_TASKS:
+            errors.append(
+                f"{method}: homepage source map has invalid task_id {task_id}"
+            )
+
+        repo_urls = [
+            value.strip()
+            for value in row.get("repo_url", "").split(";")
+            if value.strip()
+        ]
+        if not repo_urls or any(
+            not value.startswith("https://github.com/")
+            for value in repo_urls
+        ):
+            errors.append(
+                f"{method}: homepage source map repo_url must use GitHub HTTPS routes"
+            )
+
+        pins = [
+            value.strip()
+            for value in row.get("pinned_commit", "").split(";")
+            if value.strip()
+        ]
+        if not pins:
+            errors.append(
+                f"{method}: homepage source map missing pinned_commit"
+            )
+        elif any(not re.fullmatch(r"[0-9a-f]{40}", value) for value in pins):
+            errors.append(
+                f"{method}: homepage source map pinned_commit must use 40-character lowercase Git SHAs"
+            )
+
+        publication_urls = [
+            value.strip()
+            for value in row.get("publication_url", "").split(";")
+            if value.strip()
+        ]
+        if not publication_urls or any(
+            not value.startswith("https://") for value in publication_urls
+        ):
+            errors.append(
+                f"{method}: homepage source map publication_url must use HTTPS"
+            )
+
+        verified_on = row.get("verified_on", "")
+        try:
+            datetime.strptime(verified_on, "%Y-%m-%d")
+        except ValueError:
+            errors.append(
+                f"{method}: homepage source map verified_on must be YYYY-MM-DD"
+            )
+
+        if row.get("evidence_boundary") != HOMEPAGE_SOURCE_BOUNDARY:
+            errors.append(
+                f"{method}: homepage source map has invalid evidence_boundary"
+            )
+
+    return len(rows)
 
 
 def _v034_rows_by_job(
@@ -5155,6 +5298,7 @@ def main(argv: list[str] | None = None) -> int:
         "benchmark/method_sources/method_source_manifest.csv",
         METHOD_SOURCE_HEADERS,
     )
+    homepage_method_source_count = check_homepage_method_sources(errors)
     environment_rows = check_headers(
         errors,
         "benchmark/environments/environment_feasibility_matrix.csv",
@@ -9125,6 +9269,7 @@ def main(argv: list[str] | None = None) -> int:
             "target_set_rows": len(target_set_rows),
             "candidate_dataset_rows": len(dataset_candidate_rows),
             "method_source_rows": len(method_source_rows),
+            "homepage_method_source_rows": homepage_method_source_count,
             "environment_rows": len(environment_rows),
             "expert_review_rows": len(expert_review_rows),
             "dataset_readiness_rows": len(dataset_readiness_rows),
