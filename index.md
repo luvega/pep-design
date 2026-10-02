@@ -1,23 +1,22 @@
-# 多肽设计方法 Benchmark 知识库
+# Pep Design Benchmark KB · 文档目录
 
-> **当前阶段（2026-10-02）：10/10 方法已完成有边界的小规模原生运行验收。** 用户明确先跑通代码和环境，后续再大量比较；候选完整性质量仍为 9/10，D-Flow 质量失败保留，不追加运行。
+本项目整理多肽设计方法的论文、代码与环境记录，核查真实原生任务的执行证据，并准备后续 Benchmark 协议。项目概况和方法总览见 [README](README.md)。
 
-- [本轮方法验收报告](ops/acceptance/method_runtime_acceptance_v1.md)与[逐项检查 JSON](ops/acceptance/method_runtime_acceptance_v1.json)
-- [10 方法验收矩阵](benchmark/results/method_acceptance_matrix_v1.csv)与[执行证据索引](benchmark/results/method_acceptance_execution_index_v1.json)
-- [当前计划、已确认预算与停止条件](ops/plans/method_runtime_acceptance_plan_v1.md)
-- [只读复核命令与本机重放案例](README.md#只读检查)
+**当前阶段：先跑通代码与环境，后续再大量比较。** 截至 2026-10-02，10/10 方法已完成各自的小规模原生任务；适用候选完整性质量检查为 9/10。D-Flow 的质量失败单列保留，DexDesign 的完成范围限定为一个独立 IAS 搜索。
 
-通过范围限于各方法声明的原生任务与执行证据，候选质量单列；本轮未完成公平 Benchmark、统一评分、方法排名、完整复现或生物学验证。历史 v0.35 PepGLAD 基础设施失败保留，后续 [fresh PepGLAD 独立验收](ops/acceptance/pepglad_method_acceptance_v1.md)已通过并在本轮复用。
+| 阅读目的 | 入口 |
+|:---|:---|
+| 了解项目与 10 种方法 | [项目主页](README.md) · [方法知识页](kb/wiki/methods/_index.md) |
+| 查看当前验收及失败记录 | [验收报告](ops/acceptance/method_runtime_acceptance_v1.md) · [矩阵](benchmark/results/method_acceptance_matrix_v1.csv) · [逐项 JSON](ops/acceptance/method_runtime_acceptance_v1.json) |
+| 复核本机代码环境与输出 | [只读命令](README.md#只读检查) · [证据索引](benchmark/results/method_acceptance_execution_index_v1.json) |
+| 查原文和方法来源 | [参考文献](kb/references/search_log.md) · [文献卡](kb/wiki/literature/_index.md) · [代码与论文表](benchmark/method_sources/method_homepage_source_map_v0.35.csv) |
+| 准备后续实验 | [当前计划](ops/plans/method_runtime_acceptance_plan_v1.md) · [Benchmark 工作层](benchmark/README.md) · [评分协议](benchmark/scoring/scoring_protocol_v0.md) |
+| 维护规则与版本 | [AGENTS.md](AGENTS.md) · [验收合同](harness/contracts/project_acceptance_v1.json) · [发布说明](RELEASE_NOTES.md) |
 
-## Homepage
+运行完成、候选质量、性能比较与实验验证分别记录。当前机器门禁通过，正式签核待完成；未开展统一评分、方法排名或生物学验证。版本保持 `1.2.21`。
 
-- [GitHub 项目主页与完整说明](README.md)
-- [方法归类、输入输出和来源链接表](benchmark/method_sources/method_homepage_source_map_v0.35.csv)
-- [主页图标与流程图生成记录](docs/assets/readme/readme_imagegen_record_v1.md)
-- [Benchmark protocol](benchmark/protocols/benchmark_protocol_v0.md)
-- [Scoring protocol](benchmark/scoring/scoring_protocol_v0.md)
-
-主页按 T1 sequence binder、T2 structure-conditioned peptide binder 和 T3 miniprotein binder baseline 组织 10 个纳入方法，并区分本轮 10/10 运行验收与 9/10 候选质量、历史 v0.34 fixture、v0.35 PepGLAD 基础设施失败与尚未评分、未冻结目标集的边界。
+<details>
+<summary>版本沿革、历史证据与对话签核规则</summary>
 
 ## Current Status
 
@@ -87,6 +86,9 @@ PepGLAD seed42 `attempt_003` 进程退出码为 0，但 parser 返回 `pepglad_s
 Durable `local_committed_push_failed` 或 `verified` 只通过 `resume-push --card-id <card_id>` 恢复。已有 final OID 时复用且不重复 commits/signoffs；仅有 source OID 时在 source 的临时 clean checkout 中重验，再创建或复用缺失 signoff，并至多创建一个 signoff commit。若 index 已暂存 signoff，只接受与 card-derived manifest 的路径、mode、blob SHA-256 完全一致的状态；extra/different staged 内容一律拒绝。`verified` 在 remote 已为 final OID 时可协调实际成功但结果不明确的 push，仅推进 journal 而不重复 push。
 
 对话签核流程本身不授权 clone、install、download、GPU generation、scoring 或 ranking；历史执行与本轮方法验收各有明确授权。本轮运行验收为 10/10；质量检查为 9/10。范围修订不授权新增执行、人工签核或发布。版本保持 `1.2.21`。
+
+
+</details>
 
 ## Navigation
 
@@ -304,7 +306,7 @@ Durable `local_committed_push_failed` 或 `verified` 只通过 `resume-push --ca
 
 ## Next Phase
 
-[当前计划](ops/plans/method_runtime_acceptance_plan_v1.md)已按用户确认实施至停止条件。本轮 9 种方法通过；D-Flow 的 3 次尝试产生 17 个候选，适用质量检查均未通过。后续需要通过 `grilling` 决定是否增加范围或预算；在新的明确决定前，不追加耗尽额度的方法尝试，也不进入统一评分或排名。
+[当前计划](ops/plans/method_runtime_acceptance_plan_v1.md)的初期代码与环境目标已完成：运行验收 10/10，候选完整性质量另列 9/10。D-Flow 的几何问题保留为后续研究项。下一阶段按用户需要，通过 `grilling` 明确可比较方法、目标/对照、指标和预算，再开展大量比较；当前不新增方法任务。
 
 SaLT&PepPr 已在用户确认的非商业方法评测用途内，完成作者 Notebook 的原生 PPI 界面预测、guide-peptide 提取与优先化。BindCraft 的 2 条 97 aa 候选通过实际原生过滤、来源绑定及适用结构 QC。DexDesign 的通过范围仅为单个 ALA5 IAS 原生搜索及 1 个候选，其余 10 组未完成。详细范围与原始证据见[方法报告](ops/acceptance/method_runtime_acceptance_v1.md)，旧归档不覆盖。
 

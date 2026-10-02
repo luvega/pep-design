@@ -1,14 +1,17 @@
-# Method Sources
+# 方法来源与论文导航
 
-This directory records source-code routes for candidate methods. v0.3 did not clone third-party repositories, install methods, download weights, or vendor external code into this project.
+本目录保存方法的论文、上游代码、来源固定点及历史审计。优先从 [10 方法来源表](method_homepage_source_map_v0.35.csv)查看任务归类和原始出处，再到[当前验收报告](../../ops/acceptance/method_runtime_acceptance_v1.json)核查实际执行使用的 source/model/environment pin。
 
-`method_source_manifest.csv` is the authoritative table for future clone/install planning. Any later local source mirror should live outside the tracked KB or in a gitignored directory, with the exact path and commit recorded here before smoke tests run.
+当前 10 种方法均有完整的小规模原生运行证据。来源表的旧固定点和 `method_source_manifest.csv` 属于来源/规划记录，不能单独用于判断当前运行状态；第三方源码继续保存在外部或 gitignored 目录。
 
 ## v0.35 Homepage Source Map
 
 `method_homepage_source_map_v0.35.csv` 为 GitHub 主页提供 10 个纳入方法的任务归类、标准输入输出、上游代码、固定 commit、论文链接和 persistent ID。外链核对日期为 2026-07-25。
 
 该表只承担来源和接口导航，固定边界为 `source_and_interface_navigation_only_not_runnability_or_performance`。它不替代 `method_source_manifest.csv`、部署 source pin、license gate、运行证据或性能评价。
+
+<details>
+<summary>历史来源审计与方法观察清单</summary>
 
 ## v0.4 Source Pin Audit
 
@@ -27,3 +30,5 @@ Source pinning means commit/license/README/environment route inspection only. It
 ## v0.14 Method Paper Case Matrix
 
 `method_paper_case_matrix_v0.14.csv` records academic-search evidence for method-paper cases and benchmark panels used by PepMLM, DiffPepBuilder, PepGLAD, D-Flow and RFdiffusion + ProteinMPNN pMHC work. It is a literature/case mapping layer only. It does not mean any method has been installed, run, reproduced or compared in this repository, and it does not promote any case into `target_set_v0.csv`.
+
+</details>

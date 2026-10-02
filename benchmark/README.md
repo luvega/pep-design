@@ -1,22 +1,44 @@
-# Benchmark Workspace
+# Benchmark 工作层
 
-本目录是 Pep_design 后续 Benchmark 的工作层。当前阶段定义协议、schema、审计表、smoke-test 计划和少量已批准的 bounded/parser 证据摘要；不保存大模型权重、不保存大规模 GPU 输出、不声称正式 benchmark 完成或本地完整复现。
+本目录组织多肽设计方法的输入契约、执行记录、验收摘要和后续评分协议。当前已完成 10 种方法的小规模原生运行验收；各方法按自身任务运行，统一目标和大量比较尚未开展。
 
-## Governance Harness
+## 当前入口
 
-Benchmark artifact 的证据用途由 [`../harness/registry/artifacts_v1.json`](../harness/registry/artifacts_v1.json) 约束，profile/gate 由 [`../harness/contracts/project_acceptance_v1.json`](../harness/contracts/project_acceptance_v1.json) 定义。当前报告见 [`../ops/acceptance/project_acceptance_report.md`](../ops/acceptance/project_acceptance_report.md)。v0.35 没有可重放的 PepGLAD candidate bundle，`current.v035_bounded_connectivity` 为 Critical `FAIL`，不能签核 `current_phase`。
+| 内容 | 文件或目录 | 当前用途 |
+|:---|:---|:---|
+| 运行与质量状态 | [验收矩阵](results/method_acceptance_matrix_v1.csv) · [方法报告](../ops/acceptance/method_runtime_acceptance_v1.md) | 运行 10/10、候选完整性质量 9/10，分别记录 |
+| 来源与证据重放 | [执行索引](results/method_acceptance_execution_index_v1.json) · [方法来源](method_sources/README.md) | 绑定实际任务、输出与来源；原始资产留在本机 |
+| 阶段范围与预算 | [范围修订](deployment/method_runtime_scope_v2.json) · [执行政策](deployment/method_acceptance_policy_v1.json) | 先完成代码与环境验收，质量问题留作后续研究 |
+| 标准输入 | [job schema](protocols/job_manifest_schema_v0.11.md) · [input_sets/](input_sets/README.md) | 约定字段；目标集尚未冻结 |
+| 标准输出 | [adapter schema](protocols/adapter_output_schema_v0.11.md) · [results/](results/README.md) | 紧凑候选、QC、来源与失败索引 |
+| 后续评价 | [评分协议](scoring/scoring_protocol_v0.md) | 统一评分与排名尚未运行 |
 
-## Directory Map
+D-Flow 的后两次原生运行证据完整，产物质量仍未通过。DexDesign 仅完成一个独立 IAS 搜索。序列、结构与 miniprotein 任务的输出模态不同，当前通过数不能用于性能排序。
 
-| path | purpose |
+## 目录职责
+
+| 目录 | 存放内容 |
 |:---|:---|
-| `protocols/` | run.csv、任务协议和评分输出 schema |
-| `smoke_tests/` | 每个候选方法的最小运行计划 |
-| `input_sets/` | 后续标准输入集合说明和小型示例 |
-| `availability/` | 方法仓库和数据入口的 metadata/API/HEAD 可用性审计 |
-| `deployment/` | 后续服务器部署、外部目录、许可证准备清单、download manifest template 和方法级 server contract |
-| `scoring/` | 评分协议和后续评分脚本位置 |
-| `results/` | 后续小型示例输出或结果索引；真实大结果不进入 git |
+| `protocols/` | 任务协议、输入输出及评分 schema |
+| `method_sources/`、`availability/` | 文献/代码入口、来源固定点与历史可用性审计 |
+| `environments/`、`deployment/` | 环境契约、部署记录、许可和资源政策 |
+| `smoke_tests/` | 各方法历史最小运行计划；最新状态以当前验收报告为准 |
+| `input_sets/` | 小型输入清单、目标与对照审查表 |
+| `results/` | 小型摘要、索引及机器可重放证据绑定 |
+| `scoring/` | 统一评价定义与后续评分接口 |
+
+## 验收与资产边界
+
+本机复核命令见[项目主页](../README.md#只读检查)。当前合同 v1.2.0 通过 `current.native_method_acceptance` 重放运行终点、来源和预算；项目状态为 `pending_human_signoff`。证据用途由[artifact registry](../harness/registry/artifacts_v1.json)和[机器合同](../harness/contracts/project_acceptance_v1.json)限定。
+
+权重、第三方源码、容器层、原始日志及批量结构保存在 gitignored 或外部路径。公开目录保留来源、配置、SHA 和紧凑结果；不分发整个运行环境。
+
+v0.35 PepGLAD 的容器启动失败属于历史记录，`current.v035_bounded_connectivity` 已无活动 profile。后续 [fresh PepGLAD](../ops/acceptance/pepglad_method_acceptance_v1.md) 与本轮 10 方法验收各自使用独立证据，不覆盖历史失败。
+
+<details>
+<summary>历史 v0.3–v0.35 的文件含义与边界</summary>
+
+以下按当时阶段记录，不能用于替代当前方法状态。
 
 ## Source Boundary
 
@@ -85,3 +107,5 @@ PepGLAD seed42 `attempt_003` 的 target preflight 与 source/model/observer/patc
 RFdiffusion 保存未线程化 all-Gly backbone 与独立 ProteinMPNN FASTA handoff，当前没有 sequence-resolved structure。PepMLM 两个 seed 均为 `WWX`，保留非标准残基警告；D-Flow 3EQS 有已知训练重叠。现有官方入口没有符合当前协议的 method-native skip-relax 或 idealize 选项；按停止条件，本轮不再运行第二个 PepGLAD 诊断 attempt 或 seed43。继续执行需要另行批准协议/source-policy 变更，或接受该 fixture 失败；均不能直接进入 scoring、ranking、frozen target、wet-lab、`smoke_test_ready` 或完整 Benchmark 阶段。
 
 v0.35 通过 `input_sets/pilot_pepglad_job_manifest_v0.35.csv`、`deployment/pilot_pepglad_execution_matrix_v0.35.csv` 和 `ops/plans/updated_plan_v0.35.md` 定义一条 mixed L/D report-only 连通性通道。唯一授权的 `attempt_001` 在容器启动前因 Docker API socket 权限不足失败，parser/QC 均未运行，没有 raw candidate，也没有 `results/pilot_pepglad_connectivity_v0.35.json`。这不是 PepGLAD 方法失败，不能用于评价 mixed L/D、连通性或方法表现。详细记录见 `ops/audits/v035_pepglad_connectivity_audit.md`；新的执行需要再次明确授权并更新 attempt 政策。
+
+</details>
