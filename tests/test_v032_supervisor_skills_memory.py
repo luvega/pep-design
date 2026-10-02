@@ -30,6 +30,10 @@ def test_supervisor_skills_memory_records_installation_and_boundaries() -> None:
     ]:
         assert token in combined
 
-    assert "benchmark-paper-template is the primary route" in agents_text
+    assert "grilling is the primary route" in agents_text
+    assert "superpowers workflow constraints are disabled" in agents_text
+    assert "academic-research-suite is the primary route" not in agents_text
+    assert "benchmark-paper-template is disabled" in agents_text
+    assert "benchmark-paper-template is the primary route" not in agents_text
     assert "intro-drafter is consistency-check only" in agents_text
     assert "Restart Codex to pick up new skills" in install_audit_text

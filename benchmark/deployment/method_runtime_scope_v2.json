@@ -1,0 +1,43 @@
+{
+  "schema_version": "method_runtime_scope_v2",
+  "decision_date": "2026-10-02",
+  "user_instruction": "我初步只需要跑通代码和环境，后续再大量比较",
+  "supersedes": "D5 quality-qualified-candidate prerequisite for initial runtime acceptance only",
+  "runtime_required": true,
+  "quality_required_for_runtime": false,
+  "runtime_requirement": "Complete a bounded native task with independently replayed source/environment/input/output provenance and parseable expected endpoint outputs; import, fixture and exit code alone are insufficient.",
+  "quality_requirement": "Retain original checks and failures as a separate nonblocking assessment; no quality, affinity or Benchmark claim follows from runtime completion.",
+  "execution_policy_sha256": "75f36a55b45df25c9eb8ff5b8cc57131b1db62e0705d3c569abb34142b8829dd",
+  "new_execution_authorized": false,
+  "historical_quality_assessment": {
+    "passed_count": 9,
+    "method_count": 10,
+    "artifacts": [
+      {
+        "path": "benchmark_runs/method_acceptance_v1/audit/quality_scope_v1_closed/method_runtime_acceptance_v1.json",
+        "sha256": "453253a747e0c45194a2f64787c83068f01cb2b3abdf511109f7aad7ae4a6b22"
+      },
+      {
+        "path": "benchmark_runs/method_acceptance_v1/audit/quality_scope_v1_closed/method_runtime_acceptance_v1.md",
+        "sha256": "8e8c64a15e3cfafd88fda3097442c745d32e97d3cb6ddbe11868560d13c1e6c9"
+      },
+      {
+        "path": "benchmark_runs/method_acceptance_v1/audit/quality_scope_v1_closed/method_acceptance_matrix_v1.csv",
+        "sha256": "16a57f096202ea5b3ef053cbecb21eba60aaf63f1960b4d5a515eeb957c05cec"
+      },
+      {
+        "path": "benchmark_runs/method_acceptance_v1/audit/quality_scope_v1_closed/method_acceptance_execution_index_v1.json",
+        "sha256": "4beef816e38cca8da4b873c1ef8da49124a557ceb65ac7827f5a17087848d30c"
+      },
+      {
+        "path": "benchmark_runs/method_acceptance_v1/audit/quality_scope_v1_closed/method_runtime_acceptance_plan_v1.md",
+        "sha256": "fb30b480c4c733aa2f7626b93a978901aa245f9d38814146bfabd895e1d0e3c4"
+      },
+      {
+        "path": "benchmark_runs/method_acceptance_v1/audit/quality_scope_v1_closed/project_acceptance_v1.json",
+        "sha256": "6c4e64c43caf69e1a8ea202b529f80d095bc12ca49980f7c4e12b9fc3643f1dd"
+      }
+    ]
+  },
+  "limits_unchanged": true
+}

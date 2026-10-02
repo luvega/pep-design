@@ -1,7 +1,7 @@
 {
   "contract_id": "pep_design_project_acceptance",
-  "contract_version": "1.0.0",
-  "evaluator_version": "1.0.0",
+  "contract_version": "1.2.0",
+  "evaluator_version": "1.2.0",
   "severities": ["Critical", "Major", "Advisory"],
   "allowed_evaluators": [
     "contract_integrity",
@@ -18,7 +18,8 @@
     "scoring_guard",
     "manuscript_claims",
     "benchmark_pillars",
-    "release_integrity"
+    "release_integrity",
+    "native_method_acceptance"
   ],
   "profiles": [
     {
@@ -35,7 +36,7 @@
     },
     {
       "profile_id": "current_phase",
-      "description": "v0.35 bounded generation connectivity checkpoint with scoring disabled",
+      "description": "Ten bounded native runtime endpoints; candidate quality reported separately, with no scientific scoring or method ranking",
       "applicable": true,
       "required_gate_ids": [
         "governance.contract_integrity",
@@ -45,7 +46,7 @@
         "current.v033_baseline_truth",
         "current.target_control_boundary",
         "current.dflow_leakage_recorded",
-        "current.v035_bounded_connectivity",
+        "current.native_method_acceptance",
         "current.scoring_guard",
         "current.manuscript_claim_boundary"
       ],
@@ -63,7 +64,7 @@
         "current.v033_baseline_truth",
         "current.target_control_boundary",
         "current.dflow_leakage_recorded",
-        "current.v035_bounded_connectivity",
+        "current.native_method_acceptance",
         "current.scoring_guard",
         "current.manuscript_claim_boundary",
         "release.checkpoint_integrity"
@@ -82,7 +83,7 @@
         "current.v033_baseline_truth",
         "current.target_control_boundary",
         "current.dflow_leakage_recorded",
-        "current.v035_bounded_connectivity",
+        "current.native_method_acceptance",
         "current.scoring_guard",
         "current.manuscript_claim_boundary",
         "release.checkpoint_integrity",
@@ -240,13 +241,57 @@
         "v035_pepglad_connectivity_bundle"
       ],
       "requires": ["current.dflow_leakage_recorded"],
-      "profiles": ["current_phase", "release_checkpoint", "full_project"],
+      "profiles": [],
       "pass_condition": "The strict v0.34 historical state remains six supported primaries and one independently replayed v0.35 PepGLAD primary raises bounded connectivity coverage to seven",
       "failure_reason_code": "v035_bounded_connectivity_incomplete",
       "claim_effects": [
         {"claim_id": "generated_candidate", "effect": "allow"},
         {"claim_id": "scoring_evidence", "effect": "prohibit"},
         {"claim_id": "method_ranking", "effect": "prohibit"}
+      ],
+      "owner_role": "engineering_reviewer",
+      "signoff_required": false
+    },
+    {
+      "gate_id": "current.native_method_acceptance",
+      "domain": "execution_provenance",
+      "title": "All ten methods complete bounded native tasks with replayable code/environment and endpoint evidence",
+      "severity": "Critical",
+      "evaluator": "native_method_acceptance",
+      "inputs": [
+        "method_runtime_acceptance_plan_v1",
+        "method_acceptance_policy_v1",
+        "method_acceptance_quality_criteria_v1",
+        "method_acceptance_resource_ledger_v1",
+        "method_acceptance_auxiliary_cpu_v1",
+        "method_acceptance_matrix_v1",
+        "method_acceptance_existing_v1",
+        "method_acceptance_execution_index_v1",
+        "method_runtime_scope_v2"
+      ],
+      "requires": [
+        "current.dflow_leakage_recorded"
+      ],
+      "profiles": [
+        "current_phase",
+        "release_checkpoint",
+        "full_project"
+      ],
+      "pass_condition": "Independently replay complete native tasks and input/output provenance for all ten methods under runtime scope v2; enforce unchanged resource and attempt budgets. Report candidate quality separately without blocking this runtime phase.",
+      "failure_reason_code": "native_method_acceptance_incomplete",
+      "claim_effects": [
+        {
+          "claim_id": "generated_candidate",
+          "effect": "allow"
+        },
+        {
+          "claim_id": "scoring_evidence",
+          "effect": "prohibit"
+        },
+        {
+          "claim_id": "method_ranking",
+          "effect": "prohibit"
+        }
       ],
       "owner_role": "engineering_reviewer",
       "signoff_required": false
@@ -318,7 +363,7 @@
       "severity": "Critical",
       "evaluator": "scoring_guard",
       "inputs": ["current_plan", "pilot_control_manifest", "v034_execution_results", "v034_method_output_manifest", "v034_candidate_outputs", "v034_candidate_qc", "v034_run_rows", "v034_runtime_provenance", "v034_failure_diagnostics", "v034_merge_summary", "v035_pepglad_connectivity_bundle"],
-      "requires": ["current.v035_bounded_connectivity"],
+      "requires": ["current.native_method_acceptance"],
       "profiles": ["current_phase", "release_checkpoint", "full_project"],
       "pass_condition": "v0.34 candidates contain no scoring or ranking evidence and the current plan prohibits both",
       "failure_reason_code": "scoring_started_before_eligibility",

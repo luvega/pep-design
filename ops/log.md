@@ -524,3 +524,58 @@
 - Read Zotero through local API only; no Zotero writes were performed.
 - Mirrored selected `PD-wiki` and `_kb` evidence files into `sources/raw_snapshots/pd_wiki`.
 - Generated literature manifest, method evidence matrix, candidate scorecard, method cards, concept pages, and reports.
+
+## [2026-10-02] governance | 已有证据归档与推进计划同步
+- 用户明确停用 benchmark-paper-template，并授权在 building-llm-wiki 缺失时改用 academic-research-suite 与现行机器合同，推进文档、证据归档和治理更新。同步 AGENTS、active migration map/digest、校验要求和既有路由测试；原 legacy snapshot 不改写。
+- 先生成 SaLT&PepPr local source map 与 existing inference observation 表，再生成归档审计：小文件 hash、20 条逐残基概率和缺失 runtime 信息均有明确边界；未重算大型 checkpoint hash、未重新推理，不将现存 wrapper hash 补写为执行时身份。
+- 新增项目推进计划、7 项 review-only target/control 工作表、待授权 PepGLAD 新执行提案及未实现的 next-phase acceptance design；登记 7 个补充 artifacts，不晋升 generation/scoring/readiness，也不更改现行科学合同或 claim surface。
+- Harness 工程说明同步到 v0.35；v0.33 历史 blocker、v0.34 6/7 和原 v0.35 基础设施失败保留。导航与 release notes 同步，VERSION 保持 1.2.21。
+- 当前授权仅用于文档和治理；本次没有模型执行、新 attempt、seed43、评分、下载、签核、commit 或 push。生成报告和校验结果通过项目脚本更新。
+- 本次 focused regression：88 passed（Supervisor-Skills 路由记忆、migration parity、registry security、contract 和 generated reports）；补充表格、小文件 hash 绑定、用途边界和空 target set 检查通过。初次只读 KB 校验为 0 errors、0 warnings；最终生成报告与验收结果由脚本复核。
+
+## 2026-10-02 — PepGLAD 方法级执行验收优先
+
+- 用户要求先验收、后考虑 README/说明/运行案例/全项目更新；新增独立单次 attempt policy、job/root 与验收入口，保留原 v0.35 失败 attempt。
+- 新 seed42 作业执行 25.119 s、exit 0，parsed、pass_with_warning；五项独立验收通过，mixed chirality L5/D6 和历史 baseline mismatch 按既定政策记录提示。
+- 相关回归 632 passed、最终 focused tests 17 passed；6 个内存反例被拒绝；18 个受保护历史文件哈希不变。
+- 证据：ops/acceptance/pepglad_method_acceptance_v1.md / .json、benchmark/results/pepglad_fresh_connectivity_v1.json；原始产物留在 gitignored 新根。
+- 未补装或下载、未运行 seed43/评分/排名、未提交 Git；当前 v0.35 项目 gate 不迁移、不豁免，VERSION 保持 1.2.21。
+
+## 2026-10-02 — 用户决定改用 grilling 规划路线
+
+- 停用原 superpowers 系列工作流约束和历史 REQUIRED SUB-SKILL 指令的现行效力，计划与下一步工作改用 grilling；academic-research-suite 等作为按需支持，benchmark-paper-template 继续停用。
+- 同步 AGENTS、active migration map/digest、validator 与既有路由测试，更新技能路线、当前/工程计划提示、导航和 release notes；不修改全局技能或历史 docs/superpowers 文件。
+- 封住 legacy KB bootstrap 覆盖现行规则的入口：已有 AGENTS 或机器合同时，main 在目录/网络/写入前拒绝，直接根文档生成入口也拒绝。
+- 已确认决策：先补齐全部 10 种方法的运行验收；按各方法自身任务真实端到端验收；复用合格证据、只补缺项；阶段内自主执行，关键变化再讨论。质量门槛、执行预算与最终共同理解继续按 grilling 澄清，未据推荐选项启动任务。
+- 本次规则回归 88 passed，bootstrap 防覆盖回归 5 passed；只读 KB validator 为 0 errors/0 warnings。Pytest 清理历史临时目录时报告既存权限警告，5 项防覆盖断言全部通过；未改动这些历史目录。
+- 12 个受保护文件 SHA 保持一致，包括原机器合同、legacy policy、VERSION、fresh PepGLAD bundle/方法报告和 6 份历史 superpowers 文档。保留当前 v0.35 Critical failure；本次未安装、下载、运行方法、签核、commit 或 push。
+
+- grilling 后续回答已确定：必须质量达标候选才通过；手性按方法声明分别检查；采用 GPU 24 小时、CPU 密集任务累计墙钟 24 小时/24 线程/256 GiB、下载 50 GiB/磁盘 200 GiB、每方法最多 3 次新尝试的阶段预算。新增并登记 10 方法验收计划，等待最终整体理解确认后实施，未启动阶段任务。
+- 新计划登记后，registry/contract/migration 回归 62 passed；保持原 registry 条目顺序，新规划仅追加登记为 planning，不进入科学通过结论。
+
+## 2026-10-02 — 已确认的 10 方法原生运行与候选质量验收
+
+- 用户确认 grilling D1–D7 及整体计划后，在固定 GPU/CPU/下载/磁盘和每方法最多 3 次新尝试的预算内自主执行。SaLT&PepPr 用途另经用户确认为仅非商业方法评测、与药物开发无关，并接受现存许可条款。
+- 最终 9/10 通过：复用 PepGLAD、PepMirror、RFdiffusion + ProteinMPNN 的合格执行链；新增 PepMLM、SaLT&PepPr、DiffPepBuilder、AfCycDesign、DexDesign 和 BindCraft 的合格任务。运行完成与候选质量分别核查，不把原生过滤拒绝或未完成中间步骤计为通过。
+- D-Flow 用满 3 次尝试，共保留并诊断 17 个候选，0 个质量合格；后两次完整执行与来源通过，全部产物仍有几何缺陷。按停止条件停止生成，未创建 attempt004、追加外部 relax 或改变质量阈值；不推断模型为根因。
+- DexDesign 仅覆盖真实 3LNJ 输入的独立 ALA5 IAS 原生搜索与后续收集：19 个序列结果中 1 个具有完整构象，11-Ala 候选仅修正 PDB 残基标签后通过，坐标及原始文件保持；父批处理 exit127 与其余 10 组未完成均保留。BindCraft 完整优化、MPNN、验证与原生过滤产出 2 条合格 97 aa 候选。
+- 引入共享执行器的不可覆盖 attempt、预算预留、离线 immutable-image 执行、进程组/容器清理确认，以及序列、结构、原生过滤和来源的独立重放。首次 D-Flow 隐式下载另记 3 GiB 保守额度扣款，不将其写成实测流量；Dex 最早误分类 preparation 的方法调用通过追加凭据计入尝试数，原记录未覆盖。
+- 原生任务和准备账本记录 GPU 3635.677 s、CPU 墙钟 1250.435 s；只读审计与回归开销另列，不将方法账本冒称全阶段 CPU 总计。原始文件、日志、模型及依赖留在 gitignored 外部目录。
+- 机器合同升级为 1.1.0，活动 Critical gate 改为 current.native_method_acceptance；历史 v0.35 evaluator 无活动 profile，但原失败与证据保持。因 D-Flow 未达标，项目不得通过 current_phase 或以人工签核豁免。VERSION 仍为 1.2.21，没有评分、排名、目标冻结、实验验证、签核、commit/push 或新 release。
+- 阶段计算与逐方法验收结果稳定后，才同步 README、索引、当前规则和只读回放案例；最终生成报告与验证由脚本执行。
+- 验证：Harness 选中 451 项，初跑 450 passed / 1 failed；文件稳定后，同 profile 报告新鲜度失败项单独复跑通过（136.24 s），未放宽断言。隔离工作副本的逐字节只读检查另通过。新增资源补记/门禁回归 21 passed，合同/路由/旧 bootstrap 29 passed，README 来源与图片回归 12 passed；最终 KB validator 为 0 errors / 0 warnings。主要方法/执行器/输出重放分别完成相关回归，原始记录与边界反例保留。
+- 资源补记：主 Harness 回归实测墙钟 2523.032 s；其余未统一逐命令计时的四 agent 辅助检查与最终检查另按 7200 s 保守估计扣款，明确不是实测。含方法/准备后 CPU 额度累计 10973.466 s，GPU 3635.677 s；所有方法任务已结束，25 个受保护历史文件 SHA 保持一致。
+
+## 2026-10-02：初期验收范围修订 D9
+
+用户明确“我初步只需要跑通代码和环境，后续再大量比较”。本决定替代 D5 的初期质量通过前提：运行验收需真实原生终点及完整执行证据；候选质量另列。现有证据支持运行 10/10、候选完整性质量 9/10。D-Flow 质量失败与 DexDesign 单 IAS 范围保留；原政策、预算、阈值、账本及 attempt 不变。修订前计划/合同/质量报告已独立归档并记录 SHA，见 `benchmark/deployment/method_runtime_scope_v2.json`。不启动额外 D-Flow 诊断或新模型运行，大量比较延期。合同更新为 v1.2.0，项目 VERSION 保持 1.2.21，不签核、commit/push 或发布。
+
+范围修订验证：运行报告实际重放为 10/10，候选质量仍为 9/10；54 项范围/合同/路由检查及 12 项 README 检查通过。原执行政策与资源账本 SHA 不变，25/25 历史保护文件及修订前归档 SHA 均一致。KB validator 为 0 errors / 0 warnings，git diff --check 通过。项目级状态由随后 render/check 的同源生成报告记录；不将机器运行门禁通过等同于人工签核。
+
+## 2026-10-02：用户授权更新并推送当前项目
+
+用户明确要求“更新并推送当前项目”，现授权将既有项目改动作为源码与有界验收检查点提交至 origin/main。纳入 grilling 规则迁移、fresh PepGLAD 证据、10/10 原生运行验收、单列 9/10 候选质量结果及配套检查器和文档。原始运行目录、日志、权重、环境和第三方来源继续留在 gitignored 外部路径；本地生成的项目验收视图按既有忽略规则保留。本次 Git 同步不构成人工验收签核，不启动方法运行或大量比较，VERSION 保持 1.2.21。
+
+推送前字节核对发现既有 CSV 文本属性会将 6 个新增证据/验收 CSV 的 CRLF 规范化为 LF；为这些明确路径设置 -text，保持已固定的执行矩阵、job manifest 及生成矩阵原始字节。原始 CSV 内容和 SHA 未修改，并核对暂存 blob 与工作区逐字节一致。
+
+推送检查：72 个暂存文件的 blob 与工作区逐字节一致；6 个 CRLF CSV 在隔离 checkout-index 检出后仍保持原始字节。文件级 whitespace 属性仅将 CRLF 识别为行尾，继续检查其他尾随空白。git diff --cached --check 通过；未纳入生成的项目签核视图，也未新增签核文件。

@@ -12,17 +12,21 @@
   方法证据管理 · 输入输出契约 · 连通性审计 · 评价协议 · 稿件规划
 </p>
 
-> **当前结论（2026-07-25）**：知识库校验通过，但项目验收尚未通过。v0.35 唯一授权的 PepGLAD 执行在容器启动前因 Docker API socket 权限不足失败，未产生候选。当前材料不支持统一评分、方法排名、完整复现或生物学有效性结论。
+> **当前结论（2026-10-02）：10/10 方法已完成各自小规模原生任务的代码与环境运行验收。** 按用户“初步只需要跑通代码和环境，后续再大量比较”的修订，候选质量单列，仍为 9/10；D-Flow 的几何问题保留，当前不追加运行。此结论不支持公平 Benchmark、统一评分、方法排名、完整复现或生物学有效性。
+
+本轮入口：[方法验收报告](ops/acceptance/method_runtime_acceptance_v1.md) · [10 方法矩阵](benchmark/results/method_acceptance_matrix_v1.csv) · [当前执行计划与停止条件](ops/plans/method_runtime_acceptance_plan_v1.md) · [只读复核命令](#只读检查)。
 
 ## 项目定位
 
 本仓库不是“最优多肽生成器”排行榜，也不是第三方模型或数据的镜像。它以可审计协议为中心，管理 10 类纳入方法的文献来源、代码固定点、任务归类、标准输入输出、执行门禁和证据边界。项目将“方法可找到”“接口可描述”“候选可解析”“可评分”“可比较”“获得实验验证”视为彼此独立的证据层。
 
-当前科学计划为 [`updated_plan_v0.35.md`](ops/plans/updated_plan_v0.35.md)，Harness 工程计划为 [`harness_engineering_plan_v1.0.md`](ops/plans/harness_engineering_plan_v1.0.md)。机器可读约束以 [`project_acceptance_v1.json`](harness/contracts/project_acceptance_v1.json)、[`artifacts_v1.json`](harness/registry/artifacts_v1.json) 和 [`claims_v1.json`](harness/registry/claims_v1.json) 为准。
+当前阶段计划为 [`method_runtime_acceptance_plan_v1.md`](ops/plans/method_runtime_acceptance_plan_v1.md)，[`updated_plan_v0.35.md`](ops/plans/updated_plan_v0.35.md) 保留为历史计划。Harness 工程计划为 [`harness_engineering_plan_v1.0.md`](ops/plans/harness_engineering_plan_v1.0.md)。机器可读约束以 [`project_acceptance_v1.json`](harness/contracts/project_acceptance_v1.json)、[`artifacts_v1.json`](harness/registry/artifacts_v1.json) 和 [`claims_v1.json`](harness/registry/claims_v1.json) 为准。
+
+2026-10-02 协作规则已改为 `grilling`：分轮明确计划与取舍，确认共同理解后实施。本轮计划与阶段执行已获确认，并完成至停止条件；进一步改变预算或范围仍需新的决定。原 superpowers 系列不再施加强制工作流，`benchmark-paper-template` 继续停用。具体规则与历史边界见 [AGENTS.md](AGENTS.md) 和 [技能路线记录](ops/audits/skill_selection.md)。
 
 `render` 命令生成的本地读者视图为 `harness/PROJECT_ACCEPTANCE.md`；它属于 generated non-evidence，不作为 GitHub 主页的固定来源链接。
 
-**English summary.** Pep Design Benchmark KB is a protocol-first knowledge base for recent peptide-design methods. It separates literature provenance, source pinning, input contracts, parser evidence, scoring readiness and biological validation so that progress at one layer is not mistaken for success at another. Ten included method routes are organized into sequence-conditioned peptide design, structure-conditioned peptide design and miniprotein-binder baselines, with chirality, cyclization and non-canonical residues treated as cross-cutting constraints. The current repository contains bounded connectivity evidence and explicit failure records, not a completed head-to-head benchmark. In particular, the authorized v0.35 PepGLAD attempt failed before container start because the execution environment could not access the Docker API. No candidate, score or ranking was produced. Large runtime assets remain external and gitignored.
+**English summary.** Pep Design Benchmark KB is a protocol-first knowledge base for recent peptide-design methods. It separates literature provenance, source pinning, input contracts, native execution, candidate quality, scoring readiness and biological validation. All 10 methods have completed their bounded native runtime tasks. The user has deferred large comparisons and removed candidate quality as an initial runtime prerequisite; 9 of 10 methods separately meet the existing integrity checks. D-Flow completed native execution but has zero quality-qualified candidates among 17 outputs; those failures and the three-attempt limit remain unchanged. A separately authorized fresh PepGLAD run passed; the old v0.35 container-start failure remains immutable historical evidence. This phase does not establish a fair benchmark, method ranking, full reproducibility or biological efficacy. Large runtime assets remain external and gitignored.
 
 ## 当前证据状态
 
@@ -30,18 +34,30 @@
 |:---|:---|:---|
 | 版本 | `1.2.21` | unsigned harness checkpoint；未准备 `1.2.22` |
 | KB 校验 | `0 errors / 0 warnings` | 结构、表格、引用和边界规则通过现有 validator |
-| `current_phase` 验收 | `not_accepted` | Critical gate `current.v035_bounded_connectivity` 仍为 `FAIL` |
+| 本轮运行验收 | **10/10** | 各方法小规模原生任务和执行证据通过，不是性能比较 |
+| 候选完整性质量检查 | **9/10** | 单列记录，不阻塞初期运行验收 |
+| D-Flow | 3 次尝试，17 个候选，0 个合格 | 尝试额度耗尽，保留质量失败记录并停止 |
+| 运行门禁 | `current.native_method_acceptance` 按运行范围重放 | 项目总体状态及人工签核另见生成的 acceptance report |
 | v0.34 bounded connectivity | 14 条 run rows；12 条 candidate/QC；6 个 seed42 主任务及其 6 个 seed43 扩展为 `supported` | 支持指定 fixture 上的入口、解析和基础 QC 状态 |
 | v0.35 PepGLAD | `attempt_001` 在容器启动前失败；无 candidate bundle | 仅支持基础设施失败的事实 |
+| fresh PepGLAD | 后续独立授权的运行通过方法验收，本轮复用并重放 | 不改写 v0.34/v0.35 失败，也不授权再次执行 |
 | 目标集 | [`target_set_v0.csv`](benchmark/input_sets/target_set_v0.csv) 仅含表头 | 尚无 frozen target set |
 | 评分与排名 | `not_run` | 尚未开展统一评分或方法排名 |
 | 生物学验证 | `not_available` | 无 wet-lab、亲和力、细胞功能或 PK/PD 结论 |
 
+运行验收通过全部 10 种方法（含 D-Flow）；另行通过候选完整性质量检查的方法为 PepMLM、SaLT&PepPr、DiffPepBuilder、PepGLAD、PepMirror、AfCycDesign、DexDesign、RFdiffusion + ProteinMPNN 和 BindCraft。证据包括经重放合格的既有运行及本轮新增原生任务；具体输入、原生终点、执行链、质量检查和失败记录见[方法报告 JSON](ops/acceptance/method_runtime_acceptance_v1.json)与[执行证据索引](benchmark/results/method_acceptance_execution_index_v1.json)。
+
+通过范围按方法区分：序列方法只支持序列终点；DexDesign 仅完成单个 ALA5 IAS 的原生搜索及 1 个候选，其他 10 组未完成；RFdiffusion + ProteinMPNN 的 backbone 与 FASTA handoff 不等于序列解析后的结构。BindCraft 的 2 条 97 aa 候选通过实际启用的原生过滤、来源一致性及适用结构 QC。这些结果不证明亲和力或生物学有效性。
+
 > [!CAUTION]
-> v0.35 的失败是基础设施失败，不是 PepGLAD 方法失败。容器未启动，parser 与 QC 未运行，`raw/` 中没有 candidate。该记录不能用于判断 mixed L/D 连通性、PepGLAD 方法表现或 OpenMM 影响。`attempt_001` 不得覆盖或重试；任何新执行均需新的明确授权和更新后的 attempt 政策。详见 [`v035_pepglad_connectivity_audit.md`](ops/audits/v035_pepglad_connectivity_audit.md)。
+> v0.35 的失败是基础设施失败，不是 PepGLAD 方法失败。容器未启动，parser 与 QC 未运行，`raw/` 中没有 candidate。该记录不能用于判断 mixed L/D 连通性、PepGLAD 方法表现或 OpenMM 影响。旧 `attempt_001` 与历史 gate `current.v035_bounded_connectivity` 保留；后续 [fresh PepGLAD 独立验收](ops/acceptance/pepglad_method_acceptance_v1.md)已通过，不覆盖旧记录。进一步执行需要新的授权与 attempt 政策。历史审计见 [`v035_pepglad_connectivity_audit.md`](ops/audits/v035_pepglad_connectivity_audit.md)。
 
 ### 快速导航
 
+- [本轮方法验收报告与未通过原因](ops/acceptance/method_runtime_acceptance_v1.md)
+- [本轮 10 方法验收矩阵](benchmark/results/method_acceptance_matrix_v1.csv)
+- [当前计划、已确认预算与停止条件](ops/plans/method_runtime_acceptance_plan_v1.md)
+- [阶段资源与尝试策略](benchmark/deployment/method_acceptance_policy_v1.json)
 - [方法与论文来源表](benchmark/method_sources/method_homepage_source_map_v0.35.csv)
 - [Benchmark 协议](benchmark/protocols/benchmark_protocol_v0.md)
 - [标准 job manifest](benchmark/input_sets/pilot_benchmark_job_manifest_v0.34.csv)
@@ -50,7 +66,11 @@
 - [评分协议](benchmark/scoring/scoring_protocol_v0.md)
 - [v0.34 连通性审计](ops/audits/v034_bounded_connectivity_audit.md)
 - [当前验收合同](harness/contracts/project_acceptance_v1.json)
-- [当前科学计划](ops/plans/updated_plan_v0.35.md)
+- [历史 v0.35 科学计划](ops/plans/updated_plan_v0.35.md)
+- [项目推进计划与阶段条件](ops/plans/project_progression_plan_v1.md)
+- [目标与对照审查工作表](benchmark/input_sets/target_governance_worklist_v1.csv)
+- [历史 PepGLAD 新执行提案](ops/plans/pepglad_next_execution_proposal_v1.md)
+- [fresh PepGLAD 独立验收](ops/acceptance/pepglad_method_acceptance_v1.md)
 
 ## 项目流程
 
@@ -70,16 +90,18 @@
 
 手性、环化和非标准残基是跨任务约束，不构成第四个任务。不同拓扑、长度和输出模态不能用单一总分掩盖。
 
+以下来源表保留 v0.34/v0.35 及 v0.36 归档阶段的历史证据描述和来源固定点。本轮方法状态、实际执行固定点与质量结论以[当前验收矩阵](benchmark/results/method_acceptance_matrix_v1.csv)和[方法报告](ops/acceptance/method_runtime_acceptance_v1.md)为准；旧表的 `supported` 不自动等于本轮质量通过。
+
 ### T1：序列条件多肽设计
 
-| 方法 | 输入 → 输出 | 代码与固定点 | 论文来源 | 当前项目证据 |
+| 方法 | 输入 → 输出 | 代码与固定点 | 论文来源 | 历史项目证据（不代表本轮状态） |
 |:---|:---|:---|:---|:---|
 | **PepMLM** | 靶序列、长度 → 多肽序列 | [repo](https://github.com/programmablebio/pepmlm) · [3169c49](https://github.com/programmablebio/pepmlm/commit/3169c4920f8c383948e0a5d3a7c8f87e5e7d2436) | [Nature Biotechnology, 2025](https://www.nature.com/articles/s41587-025-02761-2) | v0.34 两个 seed 均为 `WWX`；连通性 `supported`，保留非标准残基警告 |
-| **SaLT&PepPr** | 靶序列与界面上下文 → guide-peptide 序列 | [repo](https://github.com/programmablebio/saltnpeppr) · [fba9d02](https://github.com/programmablebio/saltnpeppr/commit/fba9d029f34638fe87277f69b5d6a5797273c5a5) | [Communications Biology, 2023](https://www.nature.com/articles/s42003-023-05464-z) | 已记录来源与接口；不在 v0.34 pilot，既有 license gate 未关闭 |
+| **SaLT&PepPr** | 靶序列与界面上下文 → guide-peptide 序列 | [repo](https://github.com/programmablebio/saltnpeppr) · [fba9d02](https://github.com/programmablebio/saltnpeppr/commit/fba9d029f34638fe87277f69b5d6a5797273c5a5) | [Communications Biology, 2023](https://www.nature.com/articles/s42003-023-05464-z) | 不在 v0.34 pilot，既有 license gate 未关闭；v0.36 仅归档 [20 个合成残基的界面概率观察](ops/audits/saltnpeppr_local_inference_audit_v0.36.md)，无生成/评分晋升 |
 
 ### T2：结构条件多肽设计
 
-| 方法 | 输入 → 输出 | 代码与固定点 | 论文来源 | 当前项目证据 |
+| 方法 | 输入 → 输出 | 代码与固定点 | 论文来源 | 历史项目证据（不代表本轮状态） |
 |:---|:---|:---|:---|:---|
 | **DiffPepBuilder** | 靶 PDB、位点 → L-peptide 序列与结构 | [repo](https://github.com/YuzheWangPKU/DiffPepBuilder) · [c19eb4f](https://github.com/YuzheWangPKU/DiffPepBuilder/commit/c19eb4f0cd2419d3bcc116184c0868243b6c4169) | [JCIM, 2024](https://pubs.acs.org/doi/10.1021/acs.jcim.4c00975) | v0.34 两个 fixture job 的候选解析与基础 QC 为 `supported` |
 | **PepGLAD** | 靶 PDB、口袋 → full-atom 多肽序列与结构 | [repo](https://github.com/THUNLP-MT/PepGLAD) · [bad015c](https://github.com/THUNLP-MT/PepGLAD/commit/bad015ca50c312a89482adb5220c3d907f13df5c) | [NeurIPS, 2024](https://proceedings.neurips.cc/paper_files/paper/2024/hash/88ad9774ffcb7a272457e9396f793a07-Abstract-Conference.html) | v0.34 replay mismatch；v0.35 容器前基础设施失败；无当前候选 |
@@ -90,7 +112,7 @@
 
 ### T3：miniprotein binder 邻近基线
 
-| 方法 | 输入 → 输出 | 代码与固定点 | 论文来源 | 当前项目证据 |
+| 方法 | 输入 → 输出 | 代码与固定点 | 论文来源 | 历史项目证据（不代表本轮状态） |
 |:---|:---|:---|:---|:---|
 | **RFdiffusion + ProteinMPNN** | 靶 PDB、hotspot、长度 → backbone 与序列 | [RFdiffusion](https://github.com/RosettaCommons/RFdiffusion) · [2d0c003](https://github.com/RosettaCommons/RFdiffusion/commit/2d0c003df46b9db41d119321f15403dec3716cd9)；[ProteinMPNN](https://github.com/dauparas/ProteinMPNN) · [8907e66](https://github.com/dauparas/ProteinMPNN/commit/8907e6671bfbfc92303b5f79c4b5e6ce47cdef57) | [Nature, 2023](https://www.nature.com/articles/s41586-023-06415-8)；[Science, 2022](https://www.science.org/doi/10.1126/science.add2187) | v0.34 `supported`；当前为未线程化 all-Gly backbone 与独立 FASTA handoff |
 | **BindCraft** | 靶 PDB、hotspot、长度范围 → backbone 与序列 | [repo](https://github.com/martinpacesa/BindCraft) · [b971db4](https://github.com/martinpacesa/BindCraft/commit/b971db42ba6e091afab63ccb30ae02215150a990) | [Nature, 2025](https://www.nature.com/articles/s41586-025-09429-6) | v0.29 仅有 external accepted-final parser fixture；不构成受控 Benchmark 结果 |
@@ -149,14 +171,14 @@ PepGLAD v0.34 `attempt_003` 虽以进程退出码 0 结束，但 parser 返回 `
 
 ## 评价标准
 
-评价采用分层指标，而不是先设单一总分。生成能力和 ranking/rescoring 能力分别报告；实验结果不能由计算代理指标替代。
+评价采用分层指标，而不是先设单一总分。生成能力和 ranking/rescoring 能力分别报告；实验结果不能由计算代理指标替代。下表为统一评价协议的状态；本轮原生过滤及候选 QC 已执行，但不等于开展了跨方法统一评分。
 
 | 指标族 | 计划指标 | 适用对象 | 当前状态与限制 |
 |:---|:---|:---|:---|
 | `structure_confidence` | pLDDT、pTM、ipTM、PAE/iPAE、ipSAE | 预测结构与复合物 | `not_run`；需外部结构预测环境 |
 | `interface_geometry` | contacts、interface area、H-bonds、clash count | 复合物结构 | `not_run`；sequence-only 输出为 `not_applicable` |
 | `structure_similarity` | DockQ、backbone RMSD、interface RMSD | 有参考结构的任务 | `not_run`；需合法 reference |
-| `design_feasibility` | 长度、链、手性、环化、parseability | 全部方法 | 当前仅有部分 fixture-level 基础 QC |
+| `design_feasibility` | 长度、链、手性、环化、parseability | 全部方法 | 本轮 9 种方法通过适用候选 QC；D-Flow 无合格候选，其他可合成性结论未评估 |
 | `developability` | 分子量、净电荷、疏水性、芳香性、Cys、聚集与合成复杂度代理 | 多肽输出 | 仅允许 metadata-level proxy |
 | `negative_design` | off-target panel、cross-reactivity、expected nonbinder | binder 任务 | `not_run`；controls 尚未冻结 |
 | `leakage_homology` | 序列/结构聚类、motif overlap、training leakage risk | 全部目标 | 尚未闭环；D-Flow 3EQS 已标记 overlap |
@@ -178,13 +200,22 @@ PepGLAD v0.34 `attempt_003` 虽以进程退出码 0 结束，但 parser 返回 `
 ### 只读检查
 
 ```bash
+python scripts/evaluate_method_acceptance.py check
 python scripts/run_project_acceptance.py check --profile current_phase
 PYTHONUTF8=1 python scripts/validate_benchmark_kb.py --no-write-report
-pytest -q
 git diff --check
 ```
 
-在当前 v0.35 状态下，第一条命令预期返回非零退出码，因为 `current.v035_bounded_connectivity` 是未关闭的 Critical gate。这是项目事实，不应通过删改失败证据“修复”。validator 应以 `0 errors / 0 warnings` 结束。
+前两条命令只读重放现有证据：方法运行验收预期为 10/10、退出 0；项目命令还检查其他门禁与人工签核，其状态及退出码须按报告解释。候选质量仍为 9/10，不因范围修订变为合格。validator 应以 `0 errors / 0 warnings` 结束。检查失败不授权重跑已耗尽尝试的 D-Flow、DexDesign 或 DiffPepBuilder，也不能通过修改原生过滤或删除失败证据消除。
+
+已有本机原始资产时，可单独只读重放 BindCraft 的最终候选与来源链：
+
+```bash
+python scripts/method_acceptance_bindcraft_replay.py verify \
+  benchmark_runs/method_acceptance_v1/bindcraft/ma_bindcraft_pdl1_native02_seed42/attempt_002
+```
+
+该命令应报告 `passed: true` 与 `qualified_candidate_count: 2`；它不启动模型、下载或新的 attempt。原始资产未分发在 Git 中，仅克隆知识库不能完成该重放。
 
 ### Readiness 顺序
 

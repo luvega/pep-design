@@ -299,9 +299,11 @@ def _job_target(job: Mapping[str, str]) -> Path:
     return target
 
 
-def _validate_job_policy(job: Mapping[str, str]) -> None:
+def _validate_job_policy(job: Mapping[str, str], *, authorized_job_id: str = "v035_pepglad_3eqs_seed42") -> None:
+    if authorized_job_id not in {"v035_pepglad_3eqs_seed42", "pepglad_fresh_v1_3eqs_seed42"}:
+        raise ValueError("unknown PepGLAD execution policy identity")
     expected = {
-        "job_id": "v035_pepglad_3eqs_seed42",
+        "job_id": authorized_job_id,
         "method": METHOD,
         "random_seed": "42",
         "seed_stage": "primary",
@@ -470,16 +472,18 @@ def _validate_actual_producer_files(
 
 
 def prepare(
-    job: Mapping[str, str], execution: Mapping[str, str], attempt_dir: Path
+    job: Mapping[str, str], execution: Mapping[str, str], attempt_dir: Path,
+    *, authorized_job_id: str = "v035_pepglad_3eqs_seed42"
 ) -> list[str]:
-    _validate_job_policy(job)
+    _validate_job_policy(job, authorized_job_id=authorized_job_id)
     return v034.prepare(job, execution, attempt_dir)
 
 
 def parse(
-    job: Mapping[str, str], attempt_dir: Path
+    job: Mapping[str, str], attempt_dir: Path,
+    *, authorized_job_id: str = "v035_pepglad_3eqs_seed42"
 ) -> tuple[dict[str, str], dict[str, Any]]:
-    _validate_job_policy(job)
+    _validate_job_policy(job, authorized_job_id=authorized_job_id)
     attempt = Path(attempt_dir)
     raw = attempt / "raw"
     runtime_path = bound_attempt_file(attempt, "raw/runtime_evidence.json")
@@ -594,8 +598,9 @@ def evaluate_candidate(
     candidate: Mapping[str, str],
     runtime: Mapping[str, Any],
     raw_root: Path,
+    *, authorized_job_id: str = "v035_pepglad_3eqs_seed42",
 ) -> dict[str, Any]:
-    _validate_job_policy(job)
+    _validate_job_policy(job, authorized_job_id=authorized_job_id)
     if set(runtime) != RUNTIME_FIELDS:
         raise ValueError("PepGLAD runtime evidence has an invalid exact schema")
     _validate_runtime_semantics(runtime)

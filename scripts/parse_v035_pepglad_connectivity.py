@@ -190,6 +190,27 @@ _FORBIDDEN_RE = re.compile(
 
 
 @dataclass(frozen=True)
+class ConnectivityPolicy:
+    job_id: str = JOB_ID
+    schema_version: str = SCHEMA_VERSION
+    output_name: str = "pilot_pepglad_connectivity_v0.35.json"
+    runner_module: str = "scripts.run_v035_pepglad_connectivity"
+
+    @property
+    def design_id(self) -> str:
+        return f"{self.job_id}_candidate_1"
+
+
+LEGACY_POLICY = ConnectivityPolicy()
+FRESH_POLICY = ConnectivityPolicy(
+    job_id="pepglad_fresh_v1_3eqs_seed42",
+    schema_version="pepglad_fresh_v1",
+    output_name="pepglad_fresh_connectivity_v1.json",
+    runner_module="scripts.run_pepglad_fresh_acceptance",
+)
+
+
+@dataclass(frozen=True)
 class CapturedFile:
     path: Path
     payload: bytes
@@ -289,11 +310,11 @@ def _reject_forbidden_semantics(value: Any, path: tuple[str, ...] = ()) -> None:
             raise ValueError(f"forbidden result semantics at {'.'.join(path)}")
 
 
-def validate_bundle(bundle: Mapping[str, Any]) -> None:
+def validate_bundle(bundle: Mapping[str, Any], *, policy: ConnectivityPolicy = LEGACY_POLICY) -> None:
     """Validate the exact one-candidate bounded-connectivity bundle schema."""
 
     root = _exact_object(bundle, TOP_LEVEL_FIELDS, "v0.35 bundle")
-    if root["schema_version"] != SCHEMA_VERSION:
+    if root["schema_version"] != policy.schema_version:
         raise ValueError("v0.35 bundle schema version mismatch")
     if root["evidence_boundary"] != EVIDENCE_BOUNDARY:
         raise ValueError("v0.35 evidence boundary mismatch")
@@ -316,7 +337,7 @@ def validate_bundle(bundle: Mapping[str, Any]) -> None:
 
     job = _exact_object(root["job"], JOB_FIELDS, "job")
     fixed_job = {
-        "job_id": JOB_ID,
+        "job_id": policy.job_id,
         "method": "PepGLAD",
         "random_seed": 42,
         "seed_stage": "primary",
@@ -341,7 +362,7 @@ def validate_bundle(bundle: Mapping[str, Any]) -> None:
         or type(attempt_dir) is not str
         or not Path(attempt_dir).is_absolute()
         or Path(attempt_dir).name != ATTEMPT_ID
-        or Path(attempt_dir).parent.name != JOB_ID
+        or Path(attempt_dir).parent.name != policy.job_id
         or Path(attempt_dir).parent.parent.name != "pepglad"
         or type(execution.get("exit_code")) is not int
         or execution.get("exit_code") != 0
@@ -353,7 +374,7 @@ def validate_bundle(bundle: Mapping[str, Any]) -> None:
 
     candidate = _exact_object(root["candidate"], CANDIDATE_FIELDS, "candidate")
     if (
-        candidate.get("design_id") != DESIGN_ID
+        candidate.get("design_id") != policy.design_id
         or type(candidate.get("sequence")) is not str
         or _SEQUENCE_RE.fullmatch(candidate["sequence"]) is None
         or candidate.get("structure_path") != "raw/pepglad_candidate.pdb"
@@ -621,18 +642,19 @@ def snapshot_attempt(capture: AttemptCapture) -> Iterator[Path]:
         yield attempt
 
 
-def replay_attempt(capture: AttemptCapture, job: Mapping[str, str]) -> ReplayResult:
+def replay_attempt(capture: AttemptCapture, job: Mapping[str, str], *, policy: ConnectivityPolicy = LEGACY_POLICY) -> ReplayResult:
     """Run the v0.35 adapter and QC only against the private snapshot."""
 
     from scripts.v035_adapters import pepglad
 
     with snapshot_attempt(capture) as snapshot:
-        candidate_value, runtime_value = pepglad.parse(job, snapshot)
+        identity = {} if policy == LEGACY_POLICY else {"authorized_job_id": policy.job_id}
+        candidate_value, runtime_value = pepglad.parse(job, snapshot, **identity)
         candidate = dict(candidate_value)
         runtime = dict(runtime_value)
         qc = dict(
             pepglad.evaluate_candidate(
-                job, candidate, runtime, snapshot / "raw"
+                job, candidate, runtime, snapshot / "raw", **identity
             )
         )
         structure = Path(str(candidate.get("structure_path", "")))
@@ -677,7 +699,7 @@ def validate_historical_bindings(
         raise ValueError("historical v0.34 artifact binding is stale")
 
 
-def _validate_run_result(result: Mapping[str, Any], attempt: Path) -> None:
+def _validate_run_result(result: Mapping[str, Any], attempt: Path, *, policy: ConnectivityPolicy = LEGACY_POLICY) -> None:
     from scripts import run_v034_wave_a_generation as v034_runner
 
     if type(result) is not dict or set(result) != v034_runner.PASSED_RESULT_FIELDS:
@@ -687,8 +709,8 @@ def _validate_run_result(result: Mapping[str, Any], attempt: Path) -> None:
         raise ValueError("v0.35 run_result has an invalid field type")
     expected = {
         "attempt_dir": str(attempt),
-        "design_id": DESIGN_ID,
-        "job_id": JOB_ID,
+        "design_id": policy.design_id,
+        "job_id": policy.job_id,
         "method": "PepGLAD",
         "parser_status": "parsed",
         "status": "passed",
@@ -718,7 +740,7 @@ def _validate_run_result(result: Mapping[str, Any], attempt: Path) -> None:
 
 
 def _validate_run_result_replay(
-    result: Mapping[str, Any], replay: ReplayResult
+    result: Mapping[str, Any], replay: ReplayResult, *, policy: ConnectivityPolicy = LEGACY_POLICY
 ) -> None:
     from scripts import run_v034_wave_a_generation as v034_runner
 
@@ -738,7 +760,7 @@ def _validate_run_result_replay(
         else "bounded_connectivity_candidate_qc_passed"
     )
     expected = {
-        "design_id": DESIGN_ID,
+        "design_id": policy.design_id,
         "overall_qc_status": qc_status,
         "parser_status": parser_status,
         "status": status,
@@ -834,9 +856,9 @@ def _attempt_directories_under(run_root: Path) -> tuple[Path, ...]:
     return tuple(attempts)
 
 
-def _single_attempt(run_root: Path) -> Path:
+def _single_attempt(run_root: Path, *, policy: ConnectivityPolicy = LEGACY_POLICY) -> Path:
     logical_root = _absolute_no_symlink_path(Path(run_root))
-    expected = logical_root / "pepglad" / JOB_ID / ATTEMPT_ID
+    expected = logical_root / "pepglad" / policy.job_id / ATTEMPT_ID
     attempts = _attempt_directories_under(logical_root)
     if attempts != (expected,):
         raise ValueError(
@@ -851,15 +873,17 @@ def build_bundle(
     job_manifest: Path = DEFAULT_JOB_MANIFEST,
     execution_matrix: Path = DEFAULT_EXECUTION_MATRIX,
     historical_paths: Sequence[Path] = DEFAULT_HISTORICAL_ARTIFACTS,
+    policy: ConnectivityPolicy = LEGACY_POLICY,
 ) -> dict[str, Any]:
     """Build one evidence bundle from an immutable, passing attempt replay."""
 
-    from scripts import run_v035_pepglad_connectivity as runner
+    from importlib import import_module
+    runner = import_module(policy.runner_module)
     from scripts.v035_adapters import pepglad
 
     job = runner.load_authorized_job(Path(job_manifest))
     execution_row = runner.load_authorized_execution(Path(execution_matrix))
-    attempt = _single_attempt(Path(run_root))
+    attempt = _single_attempt(Path(run_root), policy=policy)
     initial = capture_attempt(attempt)
     captured_job = _strict_json_bytes(initial.files["job.json"].payload, "attempt job")
     captured_execution = _strict_json_bytes(
@@ -870,7 +894,7 @@ def build_bundle(
     )
     if captured_job != job or captured_execution != execution_row:
         raise ValueError("attempt job or execution differs from the authorized CSV row")
-    _validate_run_result(run_result, initial.attempt_dir)
+    _validate_run_result(run_result, initial.attempt_dir, policy=policy)
 
     target_text = job["target_pdb_path"]
     target_path = Path(target_text)
@@ -880,12 +904,12 @@ def build_bundle(
     if target_before.sha256 != job["target_pdb_sha256"]:
         raise ValueError("v0.35 target input digest mismatch")
 
-    replay = replay_attempt(initial, job)
+    replay = replay_attempt(initial, job, policy=policy)
     repeated = capture_attempt(attempt)
     _assert_capture_unchanged(initial, repeated)
-    if _single_attempt(Path(run_root)) != attempt:
+    if _single_attempt(Path(run_root), policy=policy) != attempt:
         raise ValueError("v0.35 run root attempt topology changed during replay")
-    _validate_run_result_replay(run_result, replay)
+    _validate_run_result_replay(run_result, replay, policy=policy)
     target_after = _capture_path(target_path, root=ROOT)
     if (
         target_before.identity != target_after.identity
@@ -923,11 +947,11 @@ def build_bundle(
     validate_historical_bindings(historical, historical_paths)
 
     bundle: dict[str, Any] = {
-        "schema_version": SCHEMA_VERSION,
+        "schema_version": policy.schema_version,
         "evidence_boundary": EVIDENCE_BOUNDARY,
         "historical_v034_bindings": historical,
         "job": {
-            "job_id": JOB_ID,
+            "job_id": policy.job_id,
             "method": "PepGLAD",
             "random_seed": 42,
             "seed_stage": "primary",
@@ -947,7 +971,7 @@ def build_bundle(
             "supported_candidate": True,
         },
         "candidate": {
-            "design_id": DESIGN_ID,
+            "design_id": policy.design_id,
             "sequence": candidate.get("sequence"),
             "structure_path": "raw/pepglad_candidate.pdb",
             "file_sha256": candidate_digest,
@@ -976,18 +1000,19 @@ def build_bundle(
             "producer_bindings": producer,
         },
     }
-    validate_bundle(bundle)
+    validate_bundle(bundle, policy=policy)
     return bundle
 
 
 def publish_bundle(
-    bundle: Mapping[str, Any], *, output_path: Path = DEFAULT_OUTPUT
+    bundle: Mapping[str, Any], *, output_path: Path = DEFAULT_OUTPUT,
+    policy: ConnectivityPolicy = LEGACY_POLICY
 ) -> None:
     """Atomically publish canonical JSON without modifying historical inputs."""
 
-    validate_bundle(bundle)
+    validate_bundle(bundle, policy=policy)
     output = Path(output_path)
-    if output.name != "pilot_pepglad_connectivity_v0.35.json":
+    if output.name != policy.output_name:
         raise ValueError("v0.35 bundle must use the canonical output filename")
     if output.name in HISTORICAL_ARTIFACT_NAMES or any(
         part in {"v0.34", "v034"} for part in output.parts
@@ -997,6 +1022,8 @@ def publish_bundle(
     output = _absolute_no_symlink_path(output)
     if output.exists() and not output.is_file():
         raise ValueError("v0.35 output target is not a regular file")
+    if policy == FRESH_POLICY and output.exists():
+        raise ValueError("fresh acceptance publication cannot overwrite existing evidence")
 
     payload = _canonical_json_bytes(bundle)
     descriptor, temporary_name = tempfile.mkstemp(

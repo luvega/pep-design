@@ -1,0 +1,11 @@
+method_id,method,endpoint,status,runtime_status,candidate_quality_status,evidence_origin,new_attempt_count,runtime_job_ids,qualified_job_ids,detail
+pepmlm,PepMLM,原生目标序列条件生成；合法序列、指定长度及原生 PPL,pass,pass,pass,new_native_execution,1,pepmlm_native_6vme_seed42_v1,pepmlm_native_6vme_seed42_v1,执行链、原生终点与候选质量检查通过
+saltnpeppr,SaLT&PepPr,原生 PPI 界面预测、guide-peptide 提取和优先化,pass,pass,pass,new_native_execution,2,saltnpeppr_native_eif4e_seed42_v2,saltnpeppr_native_eif4e_seed42_v2,执行链、原生终点与候选质量检查通过
+diffpepbuilder,DiffPepBuilder,原生生成、SS 与 Amber/Rosetta 后处理；最终 full-atom complex,pass,pass,pass,new_native_execution,3,ma_diffpepbuilder_native03_postprocess_seed42,ma_diffpepbuilder_native03_postprocess_seed42,执行链、原生终点与候选质量检查通过
+pepglad,PepGLAD,原生 full-atom 生成及后处理；允许声明范围内 mixed L/D,pass,pass,pass,reused,0,pepglad_fresh_v1_3eqs_seed42,pepglad_fresh_v1_3eqs_seed42,执行链、原生终点与候选质量检查通过
+dflow,D-Flow / PeptideDesign,原生 D-peptide 生成、angle purification 与 inverse mirror；输入分别记录来源与重叠边界,pass,pass,not_passed,new_native_execution,3,ma_dflow_native02_seed43;ma_dflow_native03_three_inputs_seed44,,运行验收 pass；3 次原生运行退出 0；已重放 17 个候选，尚无质量合格候选；剩余 0 次尝试，未追加外部算法
+pepmirror,PepMirror,原生 mirror generation 与 mirror-back 的 D-peptide complex,pass,pass,pass,reused,0,v034_pepmirror_3eqs_seed42,v034_pepmirror_3eqs_seed42,执行链、原生终点与候选质量检查通过
+colabdesign,AfCycDesign / ColabDesign cyclic peptide,原生三阶段优化、cyclic offset 及闭环结构,pass,pass,pass,new_native_execution,2,ma_afcycdesign_native01_seed42;ma_afcycdesign_native02_seed43,ma_afcycdesign_native02_seed43,执行链、原生终点与候选质量检查通过
+dexdesign,DexDesign / OSPREY3,单个独立 IAS 的原生 preprocess→confspace→K* 搜索及序列/构象；明确限定任务范围,pass,pass,pass,new_native_execution,3,dexdesign_native_ala5_collect_v3,dexdesign_native_ala5_collect_v3,ALA5 单个原生 IAS 搜索通过；1 个候选仅修正残基标签后通过质量检查，序列为 11 个 Ala；其余 10 组未完成
+rfdiffusion_proteinmpnn,RFdiffusion + ProteinMPNN,target-conditioned backbone/TRB → ProteinMPNN FASTA,pass,pass,pass,reused,0,v034_rfdiffusion_mpnn_7zkr_seed43,v034_rfdiffusion_mpnn_7zkr_seed43,执行链、原生终点与候选质量检查通过
+bindcraft,BindCraft,原生完整优化及验证；实际 native filters 接受的候选,pass,pass,pass,new_native_execution,2,ma_bindcraft_pdl1_native02_seed42,ma_bindcraft_pdl1_native02_seed42,执行链、原生终点与候选质量检查通过

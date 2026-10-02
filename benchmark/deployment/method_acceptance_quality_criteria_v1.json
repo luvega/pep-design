@@ -1,0 +1,64 @@
+{
+  "criteria": {
+    "version": "method_candidate_integrity_v1",
+    "scope": "sequence_legality_and_structural_integrity_only",
+    "sequence": "nonempty uppercase canonical amino acids; requested length; no X",
+    "structure": "finite single-model coordinates, unique atoms, endpoint atom completeness",
+    "full_atom_sequence": "exact binder PDB sequence equality",
+    "rf_endpoint": "unthreaded backbone + separately verified FASTA; length equality only",
+    "diffpepbuilder_endpoint": "native N/CA/C/O/CB backbone and sequence; Gly CB is virtual and excluded from physical clashes; no complete-sidechain claim",
+    "diffpepbuilder_endpoint_source": "DiffPepBuilder/data/all_atom.py:152-174 compute_backbone; experiments/train.py:984-1004",
+    "chirality": "Gly achiral; non-Gly normalized signed volume abs>0.05; method-specific L/D/mixed",
+    "cn_ideal_angstrom": [
+      1.329,
+      1.341
+    ],
+    "cn_sd_angstrom": [
+      0.014,
+      0.016
+    ],
+    "ca_c_n_cosine": [
+      -0.4473,
+      0.0311
+    ],
+    "c_n_ca_cosine": [
+      -0.5203,
+      0.0353
+    ],
+    "between_residue_tolerance_factor": 12.0,
+    "native_geometry_source": "ColabDesign@e31a56fe1d9b4de25c8697f3a28b75892941cc72/colabdesign/af/alphafold/common/residue_constants.py:481-486; model/config.py:347,366",
+    "other_covalent_bond_angstrom": [
+      0.9,
+      2.0
+    ],
+    "sulfur_covalent_bond_angstrom": [
+      1.6,
+      2.2
+    ],
+    "n_ca_c_angle_degrees": [
+      80.0,
+      140.0
+    ],
+    "gross_geometry_basis": "prospective project integrity bounds, not method-native efficacy filters",
+    "vdw_radii_angstrom": {
+      "C": 1.7,
+      "N": 1.55,
+      "O": 1.52,
+      "S": 1.8
+    },
+    "severe_clash_overlap_angstrom": 1.5,
+    "clash_exclusions": "covalent graph distance <=2; plausible SG-SG disulfide 1.8..2.3 Angstrom",
+    "clash_scope": "binder internal and binder-target heavy atoms; not target internal",
+    "cyclic": "same inter-residue C-N bond and angle criteria at closure, plus replayed cyclic offset",
+    "pass": "zero failed checks and independently replayable provenance",
+    "not_evaluated": [
+      "binding_affinity",
+      "biological_activity",
+      "experimental_stability",
+      "synthetic_feasibility",
+      "full_stereochemical_validation",
+      "fair_benchmark"
+    ]
+  },
+  "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774"
+}

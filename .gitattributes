@@ -6,3 +6,11 @@
 *.md text eol=lf
 *.py text eol=lf
 *.bib text eol=lf
+
+# Preserve exact bytes of retained evidence and generated acceptance CSVs.
+benchmark/deployment/pepglad_fresh_execution_matrix_v1.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+benchmark/deployment/saltnpeppr_local_inference_evidence_v0.36.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+benchmark/input_sets/pepglad_fresh_job_manifest_v1.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+benchmark/input_sets/target_governance_worklist_v1.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+benchmark/method_sources/saltnpeppr_local_source_map_v0.36.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+benchmark/results/method_acceptance_matrix_v1.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

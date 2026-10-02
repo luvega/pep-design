@@ -2,7 +2,8 @@
 """Build the peptide-design benchmark background knowledge base.
 
 The script is intentionally read-only toward Zotero, EndNote, and the existing
-PD-wiki. It writes only under the current Pep_design project root.
+PD-wiki. It writes only under the current Pep_design project root. This legacy
+bootstrap must not overwrite an existing project's rules or harness.
 """
 
 from __future__ import annotations
@@ -1383,7 +1384,19 @@ PepFlow 和 BoltzDesign1 目前保留为观察名单，主要原因是可运行�
     )
 
 
+def require_uninitialized_project() -> None:
+    """Keep the legacy bootstrap from replacing current governance documents."""
+    for relative in ("AGENTS.md", "harness/contracts/project_acceptance_v1.json"):
+        path = PROJECT_ROOT / relative
+        if path.exists() or path.is_symlink():
+            raise RuntimeError(
+                f"Legacy KB bootstrap cannot overwrite an initialized project ({relative}); "
+                "update current project artifacts individually under AGENTS.md."
+            )
+
+
 def write_root_docs(rows: list[dict[str, Any]], score_rows: list[dict[str, Any]]) -> None:
+    require_uninitialized_project()
     include_count = sum(1 for row in score_rows if row["decision"] == "include")
     write_text(
         "AGENTS.md",
@@ -1524,6 +1537,7 @@ This project stores snapshots and derived notes only. Do not move, delete, or re
 
 
 def main() -> None:
+    require_uninitialized_project()
     ensure_dirs()
     rows, _bibtex_map = collect_zotero()
     imported = import_pd_wiki_sources()

@@ -1,0 +1,11 @@
+{
+  "all_methods_accepted": true,
+  "assessment_scope_sha256": "56b0dad8f110bcc8a441834d42f6d581c191a63ddffbcee0c9ce625be470b2c3",
+  "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774",
+  "passed_count": 10,
+  "policy_sha256": "75f36a55b45df25c9eb8ff5b8cc57131b1db62e0705d3c569abb34142b8829dd",
+  "quality_passed_count": 9,
+  "replay_sha256": "96e273d677592d516247dd94637f7796cb06d03eee3d1a8c878ffda52d9124ca",
+  "resource_ledger_sha256": "b2002b879dcda855f6475abf05be6a80d19305cdec342bc585610f910088484d",
+  "schema_version": "native_method_acceptance_v2"
+}

@@ -5,7 +5,7 @@
   "legacy_agents_sha256": "c5955cbd72e706c075185603b07da182395e1afc0be54a64c36ef7cc29a2533d",
   "legacy_agents_line_count": 209,
   "legacy_artifact_role_count": 89,
-  "active_agents_sha256": "6f487bf9bf383dd1ded631d8988bf9e53633a8fc47cfd7e3ebf08ba496c8188d",
+  "active_agents_sha256": "46346360bc6e26323a5c3a181fecc75927ef5aeadace2248a4117f80d69f192d",
   "active_policy_map": {
     "purpose_and_current_plan": [
       "## Purpose",
@@ -19,8 +19,9 @@
     ],
     "skill_routing": [
       "## Skill Routing",
-      "academic-research-suite",
-      "benchmark-paper-template is the primary route"
+      "grilling is the primary route",
+      "superpowers workflow constraints are disabled",
+      "benchmark-paper-template is disabled"
     ],
     "artifact_roles": [
       "## Harness Authority",
@@ -66,23 +67,55 @@
     "git_and_safety"
   ],
   "legacy_artifact_role_patterns": [
-    {"path_pattern": "ops/plans/*.md", "policy": "planning_only"},
-    {"path_pattern": "ops/audits/*.md", "policy": "audit_boundary_only"},
-    {"path_pattern": "ops/validation/*.md", "policy": "machine_validation_only"},
-    {"path_pattern": "benchmark/deployment/*.csv", "policy": "readiness_or_execution_summary_only"},
-    {"path_pattern": "benchmark/results/*", "policy": "version_specific_evidence_boundary"},
-    {"path_pattern": "benchmark/input_sets/*", "policy": "target_control_or_fixture_boundary"},
-    {"path_pattern": "benchmark/protocols/*", "policy": "protocol_not_execution"},
-    {"path_pattern": "benchmark/method_sources/*", "policy": "source_or_literature_evidence_only"},
-    {"path_pattern": "manuscript/support/*", "policy": "manuscript_support_not_result"},
-    {"path_pattern": "kb/tables/*", "policy": "structured_knowledge_artifact"}
+    {
+      "path_pattern": "ops/plans/*.md",
+      "policy": "planning_only"
+    },
+    {
+      "path_pattern": "ops/audits/*.md",
+      "policy": "audit_boundary_only"
+    },
+    {
+      "path_pattern": "ops/validation/*.md",
+      "policy": "machine_validation_only"
+    },
+    {
+      "path_pattern": "benchmark/deployment/*.csv",
+      "policy": "readiness_or_execution_summary_only"
+    },
+    {
+      "path_pattern": "benchmark/results/*",
+      "policy": "version_specific_evidence_boundary"
+    },
+    {
+      "path_pattern": "benchmark/input_sets/*",
+      "policy": "target_control_or_fixture_boundary"
+    },
+    {
+      "path_pattern": "benchmark/protocols/*",
+      "policy": "protocol_not_execution"
+    },
+    {
+      "path_pattern": "benchmark/method_sources/*",
+      "policy": "source_or_literature_evidence_only"
+    },
+    {
+      "path_pattern": "manuscript/support/*",
+      "policy": "manuscript_support_not_result"
+    },
+    {
+      "path_pattern": "kb/tables/*",
+      "policy": "structured_knowledge_artifact"
+    }
   ],
   "required_operating_tokens": [
     "updated_plan_v0.35.md",
     "building-llm-wiki",
     "academic-research-suite",
     "benchmark-paper-template",
-    "benchmark-paper-template is the primary route",
+    "grilling is the primary route",
+    "superpowers workflow constraints are disabled",
+    "benchmark-paper-template is disabled",
     "intro-drafter is consistency-check only",
     "download_performed=no",
     "not_real_benchmark",

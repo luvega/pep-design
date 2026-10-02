@@ -447,7 +447,7 @@ def test_current_phase_missing_conditional_bundle_returns_gate_failure(
     gate = next(
         row
         for row in evaluation.gate_results
-        if row.gate_id == "current.v035_bounded_connectivity"
+        if row.gate_id == "current.native_method_acceptance"
     )
     assert evaluation.profile.harness_status is HarnessStatus.VALID
     assert gate.verdict in {GateVerdict.FAIL, GateVerdict.PENDING}

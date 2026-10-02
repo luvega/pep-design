@@ -1,0 +1,1819 @@
+{
+  "criteria": {
+    "version": "method_candidate_integrity_v1",
+    "scope": "sequence_legality_and_structural_integrity_only",
+    "sequence": "nonempty uppercase canonical amino acids; requested length; no X",
+    "structure": "finite single-model coordinates, unique atoms, endpoint atom completeness",
+    "full_atom_sequence": "exact binder PDB sequence equality",
+    "rf_endpoint": "unthreaded backbone + separately verified FASTA; length equality only",
+    "diffpepbuilder_endpoint": "native N/CA/C/O/CB backbone and sequence; Gly CB is virtual and excluded from physical clashes; no complete-sidechain claim",
+    "diffpepbuilder_endpoint_source": "DiffPepBuilder/data/all_atom.py:152-174 compute_backbone; experiments/train.py:984-1004",
+    "chirality": "Gly achiral; non-Gly normalized signed volume abs>0.05; method-specific L/D/mixed",
+    "cn_ideal_angstrom": [
+      1.329,
+      1.341
+    ],
+    "cn_sd_angstrom": [
+      0.014,
+      0.016
+    ],
+    "ca_c_n_cosine": [
+      -0.4473,
+      0.0311
+    ],
+    "c_n_ca_cosine": [
+      -0.5203,
+      0.0353
+    ],
+    "between_residue_tolerance_factor": 12.0,
+    "native_geometry_source": "ColabDesign@e31a56fe1d9b4de25c8697f3a28b75892941cc72/colabdesign/af/alphafold/common/residue_constants.py:481-486; model/config.py:347,366",
+    "other_covalent_bond_angstrom": [
+      0.9,
+      2.0
+    ],
+    "sulfur_covalent_bond_angstrom": [
+      1.6,
+      2.2
+    ],
+    "n_ca_c_angle_degrees": [
+      80.0,
+      140.0
+    ],
+    "gross_geometry_basis": "prospective project integrity bounds, not method-native efficacy filters",
+    "vdw_radii_angstrom": {
+      "C": 1.7,
+      "N": 1.55,
+      "O": 1.52,
+      "S": 1.8
+    },
+    "severe_clash_overlap_angstrom": 1.5,
+    "clash_exclusions": "covalent graph distance <=2; plausible SG-SG disulfide 1.8..2.3 Angstrom",
+    "clash_scope": "binder internal and binder-target heavy atoms; not target internal",
+    "cyclic": "same inter-residue C-N bond and angle criteria at closure, plus replayed cyclic offset",
+    "pass": "zero failed checks and independently replayable provenance",
+    "not_evaluated": [
+      "binding_affinity",
+      "biological_activity",
+      "experimental_stability",
+      "synthetic_feasibility",
+      "full_stereochemical_validation",
+      "fair_benchmark"
+    ]
+  },
+  "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774",
+  "records": [
+    {
+      "method": "PepMLM",
+      "sequence": "WWX",
+      "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774",
+      "scope": "sequence_legality_and_structural_integrity_only",
+      "checks": {
+        "known_method": true,
+        "canonical_sequence": false,
+        "requested_length": true
+      },
+      "metrics": {},
+      "not_evaluated": [
+        "binding_affinity",
+        "biological_activity",
+        "experimental_stability",
+        "synthetic_feasibility",
+        "full_stereochemical_validation",
+        "fair_benchmark"
+      ],
+      "failed_checks": [
+        "canonical_sequence"
+      ],
+      "candidate_quality_status": "fail",
+      "job_id": "v034_pepmlm_sequence_seed42",
+      "attempt_dir": "/mnt/ssd4t/Pep_design/benchmark_runs/v0.34/pepmlm/v034_pepmlm_sequence_seed42/attempt_002",
+      "provenance_status": "pass",
+      "method_acceptance_status": "not_passed"
+    },
+    {
+      "method": "PepMLM",
+      "sequence": "WWX",
+      "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774",
+      "scope": "sequence_legality_and_structural_integrity_only",
+      "checks": {
+        "known_method": true,
+        "canonical_sequence": false,
+        "requested_length": true
+      },
+      "metrics": {},
+      "not_evaluated": [
+        "binding_affinity",
+        "biological_activity",
+        "experimental_stability",
+        "synthetic_feasibility",
+        "full_stereochemical_validation",
+        "fair_benchmark"
+      ],
+      "failed_checks": [
+        "canonical_sequence"
+      ],
+      "candidate_quality_status": "fail",
+      "job_id": "v034_pepmlm_sequence_seed43",
+      "attempt_dir": "/mnt/ssd4t/Pep_design/benchmark_runs/v0.34/pepmlm/v034_pepmlm_sequence_seed43/attempt_001",
+      "provenance_status": "pass",
+      "method_acceptance_status": "not_passed"
+    },
+    {
+      "method": "DiffPepBuilder",
+      "sequence": "PPPTGPFPPYW",
+      "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774",
+      "scope": "sequence_legality_and_structural_integrity_only",
+      "checks": {
+        "known_method": true,
+        "canonical_sequence": true,
+        "requested_length": true,
+        "structure_readable": true,
+        "unique_atom_identity": true,
+        "binder_present": true,
+        "structure_sequence_consistency": true,
+        "chirality": true,
+        "complete_endpoint_atoms": true,
+        "covalent_geometry": false,
+        "backbone_angles": false,
+        "no_severe_clashes": false
+      },
+      "metrics": {
+        "structure_sha256": "2ee4f22d3fbf1d0444f732de2f1b698e81afca1588de68f5359b7a32e1e21475",
+        "structure_sequence": "PPPTGPFPPYW",
+        "chirality": {
+          "L": 10,
+          "D": 0,
+          "gly_achiral": 1,
+          "unknown": 0
+        },
+        "missing_atoms": [],
+        "covalent_violation_count": 10,
+        "covalent_violations": [
+          {
+            "atoms": [
+              "(('A', '1', ''), 'C')",
+              "(('A', '2', ''), 'N')"
+            ],
+            "distance": 183.45116,
+            "allowed": [
+              1.149,
+              1.533
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '2', ''), 'C')",
+              "(('A', '3', ''), 'N')"
+            ],
+            "distance": 201.95169,
+            "allowed": [
+              1.149,
+              1.533
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '3', ''), 'C')",
+              "(('A', '4', ''), 'N')"
+            ],
+            "distance": 66.95705,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '4', ''), 'C')",
+              "(('A', '5', ''), 'N')"
+            ],
+            "distance": 10.59291,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '5', ''), 'C')",
+              "(('A', '6', ''), 'N')"
+            ],
+            "distance": 131.01764,
+            "allowed": [
+              1.149,
+              1.533
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '6', ''), 'C')",
+              "(('A', '7', ''), 'N')"
+            ],
+            "distance": 114.90445,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '7', ''), 'C')",
+              "(('A', '8', ''), 'N')"
+            ],
+            "distance": 154.7747,
+            "allowed": [
+              1.149,
+              1.533
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '8', ''), 'C')",
+              "(('A', '9', ''), 'N')"
+            ],
+            "distance": 71.90281,
+            "allowed": [
+              1.149,
+              1.533
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '9', ''), 'C')",
+              "(('A', '10', ''), 'N')"
+            ],
+            "distance": 85.456,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '10', ''), 'C')",
+              "(('A', '11', ''), 'N')"
+            ],
+            "distance": 71.11617,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          }
+        ],
+        "angle_violation_count": 9,
+        "angle_violations": [
+          {
+            "residue": "('A', '1', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.40902082289936365
+          },
+          {
+            "residue": "('A', '1', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.5794952014201891
+          },
+          {
+            "residue": "('A', '4', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.4144022739164669
+          },
+          {
+            "residue": "('A', '5', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.4296407516720284
+          },
+          {
+            "residue": "('A', '5', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.29977470341383744
+          },
+          {
+            "residue": "('A', '6', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.8993091001109883
+          },
+          {
+            "residue": "('A', '7', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": -0.9593032346638638
+          },
+          {
+            "residue": "('A', '7', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.2810564352661296
+          },
+          {
+            "residue": "('A', '9', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": -0.052083280524695165
+          }
+        ],
+        "severe_clash_count": 6,
+        "severe_clashes": [
+          {
+            "atoms": [
+              "(('A', '5', ''), 'N')",
+              "(('A', '10', ''), 'C')"
+            ],
+            "distance": 1.44074
+          },
+          {
+            "atoms": [
+              "(('A', '7', ''), 'N')",
+              "(('A', '11', ''), 'N')"
+            ],
+            "distance": 1.25746
+          },
+          {
+            "atoms": [
+              "(('A', '7', ''), 'CA')",
+              "(('A', '11', ''), 'CA')"
+            ],
+            "distance": 1.35602
+          },
+          {
+            "atoms": [
+              "(('A', '7', ''), 'CB')",
+              "(('A', '11', ''), 'CA')"
+            ],
+            "distance": 0.59328
+          },
+          {
+            "atoms": [
+              "(('A', '7', ''), 'CB')",
+              "(('A', '11', ''), 'C')"
+            ],
+            "distance": 1.0402
+          },
+          {
+            "atoms": [
+              "(('A', '7', ''), 'CB')",
+              "(('A', '11', ''), 'CB')"
+            ],
+            "distance": 1.89832
+          }
+        ]
+      },
+      "not_evaluated": [
+        "binding_affinity",
+        "biological_activity",
+        "experimental_stability",
+        "synthetic_feasibility",
+        "full_stereochemical_validation",
+        "fair_benchmark",
+        "complete_sidechain_geometry"
+      ],
+      "representation": "native_backbone_cb_and_sequence",
+      "failed_checks": [
+        "covalent_geometry",
+        "backbone_angles",
+        "no_severe_clashes"
+      ],
+      "candidate_quality_status": "fail",
+      "job_id": "v034_diffpepbuilder_3eqs_seed42",
+      "attempt_dir": "/mnt/ssd4t/Pep_design/benchmark_runs/v0.34/diffpepbuilder/v034_diffpepbuilder_3eqs_seed42/attempt_005",
+      "provenance_status": "pass",
+      "method_acceptance_status": "not_passed"
+    },
+    {
+      "method": "DiffPepBuilder",
+      "sequence": "QTPPPEVGGYP",
+      "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774",
+      "scope": "sequence_legality_and_structural_integrity_only",
+      "checks": {
+        "known_method": true,
+        "canonical_sequence": true,
+        "requested_length": true,
+        "structure_readable": true,
+        "unique_atom_identity": true,
+        "binder_present": true,
+        "structure_sequence_consistency": true,
+        "chirality": true,
+        "complete_endpoint_atoms": true,
+        "covalent_geometry": false,
+        "backbone_angles": false,
+        "no_severe_clashes": false
+      },
+      "metrics": {
+        "structure_sha256": "beecf4a0ba723589f6d0df8ee545d6f6bcacfd64ce2268d27272b1e80f7a722b",
+        "structure_sequence": "QTPPPEVGGYP",
+        "chirality": {
+          "L": 9,
+          "D": 0,
+          "gly_achiral": 2,
+          "unknown": 0
+        },
+        "missing_atoms": [],
+        "covalent_violation_count": 10,
+        "covalent_violations": [
+          {
+            "atoms": [
+              "(('A', '1', ''), 'C')",
+              "(('A', '2', ''), 'N')"
+            ],
+            "distance": 52.33125,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '2', ''), 'C')",
+              "(('A', '3', ''), 'N')"
+            ],
+            "distance": 111.23996,
+            "allowed": [
+              1.149,
+              1.533
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '3', ''), 'C')",
+              "(('A', '4', ''), 'N')"
+            ],
+            "distance": 84.18224,
+            "allowed": [
+              1.149,
+              1.533
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '4', ''), 'C')",
+              "(('A', '5', ''), 'N')"
+            ],
+            "distance": 210.52881,
+            "allowed": [
+              1.149,
+              1.533
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '5', ''), 'C')",
+              "(('A', '6', ''), 'N')"
+            ],
+            "distance": 93.14679,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '6', ''), 'C')",
+              "(('A', '7', ''), 'N')"
+            ],
+            "distance": 6.06483,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '7', ''), 'C')",
+              "(('A', '8', ''), 'N')"
+            ],
+            "distance": 14.35396,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '8', ''), 'C')",
+              "(('A', '9', ''), 'N')"
+            ],
+            "distance": 2.22142,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '9', ''), 'C')",
+              "(('A', '10', ''), 'N')"
+            ],
+            "distance": 13.96165,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('A', '10', ''), 'C')",
+              "(('A', '11', ''), 'N')"
+            ],
+            "distance": 96.11783,
+            "allowed": [
+              1.149,
+              1.533
+            ]
+          }
+        ],
+        "angle_violation_count": 13,
+        "angle_violations": [
+          {
+            "residue": "('A', '1', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.935667616411075
+          },
+          {
+            "residue": "('A', '2', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.5438861224410942
+          },
+          {
+            "residue": "('A', '2', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.8102633856160126
+          },
+          {
+            "residue": "('A', '3', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.6338011421583944
+          },
+          {
+            "residue": "('A', '3', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.9808428245121033
+          },
+          {
+            "residue": "('A', '4', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.29349605027438813
+          },
+          {
+            "residue": "('A', '4', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.8854997999682311
+          },
+          {
+            "residue": "('A', '6', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.8158019413629372
+          },
+          {
+            "residue": "('A', '7', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": -0.9358228368082324
+          },
+          {
+            "residue": "('A', '8', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": -0.9877352864808505
+          },
+          {
+            "residue": "('A', '9', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.6940700462404985
+          },
+          {
+            "residue": "('A', '9', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.897181560242825
+          },
+          {
+            "residue": "('A', '10', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.2619291577698587
+          }
+        ],
+        "severe_clash_count": 2,
+        "severe_clashes": [
+          {
+            "atoms": [
+              "(('A', '2', ''), 'CA')",
+              "(('A', '6', ''), 'O')"
+            ],
+            "distance": 1.58869
+          },
+          {
+            "atoms": [
+              "(('A', '2', ''), 'C')",
+              "(('A', '6', ''), 'O')"
+            ],
+            "distance": 1.20416
+          }
+        ]
+      },
+      "not_evaluated": [
+        "binding_affinity",
+        "biological_activity",
+        "experimental_stability",
+        "synthetic_feasibility",
+        "full_stereochemical_validation",
+        "fair_benchmark",
+        "complete_sidechain_geometry"
+      ],
+      "representation": "native_backbone_cb_and_sequence",
+      "failed_checks": [
+        "covalent_geometry",
+        "backbone_angles",
+        "no_severe_clashes"
+      ],
+      "candidate_quality_status": "fail",
+      "job_id": "v034_diffpepbuilder_3eqs_seed43",
+      "attempt_dir": "/mnt/ssd4t/Pep_design/benchmark_runs/v0.34/diffpepbuilder/v034_diffpepbuilder_3eqs_seed43/attempt_001",
+      "provenance_status": "pass",
+      "method_acceptance_status": "not_passed"
+    },
+    {
+      "method": "D-Flow / PeptideDesign",
+      "sequence": "RIKKKKRKKRR",
+      "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774",
+      "scope": "sequence_legality_and_structural_integrity_only",
+      "checks": {
+        "known_method": true,
+        "canonical_sequence": true,
+        "requested_length": true,
+        "structure_readable": true,
+        "unique_atom_identity": true,
+        "binder_present": true,
+        "structure_sequence_consistency": true,
+        "chirality": true,
+        "complete_endpoint_atoms": true,
+        "covalent_geometry": false,
+        "backbone_angles": false,
+        "no_severe_clashes": false
+      },
+      "metrics": {
+        "structure_sha256": "0bc6c6cf391734a5262a26ea0bdf3edaa0289a697116d4c591757ad1e701f75b",
+        "structure_sequence": "RIKKKKRKKRR",
+        "chirality": {
+          "L": 0,
+          "D": 11,
+          "gly_achiral": 0,
+          "unknown": 0
+        },
+        "missing_atoms": [],
+        "covalent_violation_count": 9,
+        "covalent_violations": [
+          {
+            "atoms": [
+              "(('B', '1', ''), 'C')",
+              "(('B', '2', ''), 'N')"
+            ],
+            "distance": 0.48674,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'C')",
+              "(('B', '3', ''), 'N')"
+            ],
+            "distance": 0.43567,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('B', '3', ''), 'C')",
+              "(('B', '4', ''), 'N')"
+            ],
+            "distance": 0.67675,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('B', '4', ''), 'C')",
+              "(('B', '5', ''), 'N')"
+            ],
+            "distance": 2.23228,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('B', '5', ''), 'C')",
+              "(('B', '6', ''), 'N')"
+            ],
+            "distance": 0.74142,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('B', '6', ''), 'C')",
+              "(('B', '7', ''), 'N')"
+            ],
+            "distance": 1.08844,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('B', '8', ''), 'C')",
+              "(('B', '9', ''), 'N')"
+            ],
+            "distance": 1.13828,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('B', '9', ''), 'C')",
+              "(('B', '10', ''), 'N')"
+            ],
+            "distance": 0.96787,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('B', '10', ''), 'C')",
+              "(('B', '11', ''), 'N')"
+            ],
+            "distance": 0.34793,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          }
+        ],
+        "angle_violation_count": 14,
+        "angle_violations": [
+          {
+            "residue": "('B', '1', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.6817001161237359
+          },
+          {
+            "residue": "('B', '1', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.9449415833198124
+          },
+          {
+            "residue": "('B', '3', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.01914537777285365
+          },
+          {
+            "residue": "('B', '4', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.05116749359691361
+          },
+          {
+            "residue": "('B', '4', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": -0.09564691364015447
+          },
+          {
+            "residue": "('B', '5', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.5017595806264966
+          },
+          {
+            "residue": "('B', '5', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.2389341417405362
+          },
+          {
+            "residue": "('B', '6', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": -0.05195230195849675
+          },
+          {
+            "residue": "('B', '6', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.22913968355410624
+          },
+          {
+            "residue": "('B', '8', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.3499157554883415
+          },
+          {
+            "residue": "('B', '8', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.4447200059120179
+          },
+          {
+            "residue": "('B', '9', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.8286289349629712
+          },
+          {
+            "residue": "('B', '10', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.5406660561126373
+          },
+          {
+            "residue": "('B', '10', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.14754736517884362
+          }
+        ],
+        "severe_clash_count": 40,
+        "severe_clashes": [
+          {
+            "atoms": [
+              "(('B', '1', ''), 'O')",
+              "(('B', '2', ''), 'CA')"
+            ],
+            "distance": 1.40811
+          },
+          {
+            "atoms": [
+              "(('B', '1', ''), 'O')",
+              "(('B', '2', ''), 'C')"
+            ],
+            "distance": 1.49885
+          },
+          {
+            "atoms": [
+              "(('B', '1', ''), 'O')",
+              "(('B', '3', ''), 'N')"
+            ],
+            "distance": 1.49442
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'O')",
+              "(('B', '3', ''), 'CA')"
+            ],
+            "distance": 1.43799
+          },
+          {
+            "atoms": [
+              "(('B', '3', ''), 'O')",
+              "(('B', '4', ''), 'CA')"
+            ],
+            "distance": 0.95177
+          },
+          {
+            "atoms": [
+              "(('B', '3', ''), 'O')",
+              "(('B', '4', ''), 'CB')"
+            ],
+            "distance": 1.60365
+          },
+          {
+            "atoms": [
+              "(('B', '4', ''), 'O')",
+              "(('B', '5', ''), 'CA')"
+            ],
+            "distance": 1.56021
+          },
+          {
+            "atoms": [
+              "(('B', '4', ''), 'CE')",
+              "(('B', '11', ''), 'O')"
+            ],
+            "distance": 1.48214
+          },
+          {
+            "atoms": [
+              "(('B', '4', ''), 'NZ')",
+              "(('B', '11', ''), 'O')"
+            ],
+            "distance": 1.55673
+          },
+          {
+            "atoms": [
+              "(('B', '5', ''), 'O')",
+              "(('B', '6', ''), 'CA')"
+            ],
+            "distance": 1.60368
+          },
+          {
+            "atoms": [
+              "(('B', '6', ''), 'C')",
+              "(('B', '7', ''), 'CB')"
+            ],
+            "distance": 1.85567
+          },
+          {
+            "atoms": [
+              "(('B', '6', ''), 'O')",
+              "(('B', '7', ''), 'CA')"
+            ],
+            "distance": 0.95618
+          },
+          {
+            "atoms": [
+              "(('B', '7', ''), 'CD')",
+              "(('A', '58', ''), 'CA')"
+            ],
+            "distance": 0.94315
+          },
+          {
+            "atoms": [
+              "(('B', '7', ''), 'CD')",
+              "(('A', '58', ''), 'C')"
+            ],
+            "distance": 1.44993
+          },
+          {
+            "atoms": [
+              "(('B', '7', ''), 'NE')",
+              "(('A', '58', ''), 'C')"
+            ],
+            "distance": 1.55364
+          },
+          {
+            "atoms": [
+              "(('B', '7', ''), 'NE')",
+              "(('A', '58', ''), 'O')"
+            ],
+            "distance": 0.82817
+          },
+          {
+            "atoms": [
+              "(('B', '7', ''), 'CZ')",
+              "(('A', '58', ''), 'C')"
+            ],
+            "distance": 1.66765
+          },
+          {
+            "atoms": [
+              "(('B', '7', ''), 'CZ')",
+              "(('A', '58', ''), 'O')"
+            ],
+            "distance": 0.83809
+          },
+          {
+            "atoms": [
+              "(('B', '7', ''), 'NH1')",
+              "(('A', '58', ''), 'C')"
+            ],
+            "distance": 1.57457
+          },
+          {
+            "atoms": [
+              "(('B', '7', ''), 'NH2')",
+              "(('A', '62', ''), 'N')"
+            ],
+            "distance": 1.30228
+          }
+        ]
+      },
+      "not_evaluated": [
+        "binding_affinity",
+        "biological_activity",
+        "experimental_stability",
+        "synthetic_feasibility",
+        "full_stereochemical_validation",
+        "fair_benchmark"
+      ],
+      "failed_checks": [
+        "covalent_geometry",
+        "backbone_angles",
+        "no_severe_clashes"
+      ],
+      "candidate_quality_status": "fail",
+      "job_id": "v034_dflow_3eqs_seed42",
+      "attempt_dir": "/mnt/ssd4t/Pep_design/benchmark_runs/v0.34/dflow/v034_dflow_3eqs_seed42/attempt_003",
+      "provenance_status": "pass",
+      "method_acceptance_status": "not_passed"
+    },
+    {
+      "method": "D-Flow / PeptideDesign",
+      "sequence": "RRKGKKGGTRR",
+      "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774",
+      "scope": "sequence_legality_and_structural_integrity_only",
+      "checks": {
+        "known_method": true,
+        "canonical_sequence": true,
+        "requested_length": true,
+        "structure_readable": true,
+        "unique_atom_identity": true,
+        "binder_present": true,
+        "structure_sequence_consistency": true,
+        "chirality": true,
+        "complete_endpoint_atoms": true,
+        "covalent_geometry": false,
+        "backbone_angles": false,
+        "no_severe_clashes": false
+      },
+      "metrics": {
+        "structure_sha256": "b6847d6ba731d870bc073bb5f2dd1ee269d5c48cdfedd291b2589c0373c366c2",
+        "structure_sequence": "RRKGKKGGTRR",
+        "chirality": {
+          "L": 0,
+          "D": 8,
+          "gly_achiral": 3,
+          "unknown": 0
+        },
+        "missing_atoms": [],
+        "covalent_violation_count": 8,
+        "covalent_violations": [
+          {
+            "atoms": [
+              "(('B', '1', ''), 'C')",
+              "(('B', '2', ''), 'N')"
+            ],
+            "distance": 1.76128,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('B', '3', ''), 'C')",
+              "(('B', '4', ''), 'N')"
+            ],
+            "distance": 2.31873,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('B', '4', ''), 'C')",
+              "(('B', '5', ''), 'N')"
+            ],
+            "distance": 1.96938,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('B', '5', ''), 'C')",
+              "(('B', '6', ''), 'N')"
+            ],
+            "distance": 0.40474,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('B', '6', ''), 'C')",
+              "(('B', '7', ''), 'N')"
+            ],
+            "distance": 1.73738,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('B', '7', ''), 'C')",
+              "(('B', '8', ''), 'N')"
+            ],
+            "distance": 2.00997,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('B', '8', ''), 'C')",
+              "(('B', '9', ''), 'N')"
+            ],
+            "distance": 0.16758,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          },
+          {
+            "atoms": [
+              "(('B', '10', ''), 'C')",
+              "(('B', '11', ''), 'N')"
+            ],
+            "distance": 1.65345,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          }
+        ],
+        "angle_violation_count": 11,
+        "angle_violations": [
+          {
+            "residue": "('B', '1', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": -0.9212664910318518
+          },
+          {
+            "residue": "('B', '2', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.9222487001501987
+          },
+          {
+            "residue": "('B', '2', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.818786972869745
+          },
+          {
+            "residue": "('B', '3', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.021815982887640726
+          },
+          {
+            "residue": "('B', '3', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.90904656722662
+          },
+          {
+            "residue": "('B', '4', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.7932372638264765
+          },
+          {
+            "residue": "('B', '4', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.4375074205195213
+          },
+          {
+            "residue": "('B', '6', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": -0.09259815808413767
+          },
+          {
+            "residue": "('B', '7', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": 0.07228043163938541
+          },
+          {
+            "residue": "('B', '7', '')",
+            "kind": "c_n_ca_cosine",
+            "cosine": 0.7027931857190958
+          },
+          {
+            "residue": "('B', '8', '')",
+            "kind": "ca_c_n_cosine",
+            "cosine": -0.8828198116943912
+          }
+        ],
+        "severe_clash_count": 45,
+        "severe_clashes": [
+          {
+            "atoms": [
+              "(('B', '1', ''), 'N')",
+              "(('B', '11', ''), 'O')"
+            ],
+            "distance": 1.46301
+          },
+          {
+            "atoms": [
+              "(('B', '1', ''), 'C')",
+              "(('B', '10', ''), 'NE')"
+            ],
+            "distance": 1.50099
+          },
+          {
+            "atoms": [
+              "(('B', '1', ''), 'O')",
+              "(('B', '10', ''), 'NE')"
+            ],
+            "distance": 1.20085
+          },
+          {
+            "atoms": [
+              "(('B', '1', ''), 'O')",
+              "(('B', '10', ''), 'CZ')"
+            ],
+            "distance": 1.30334
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'N')",
+              "(('B', '3', ''), 'N')"
+            ],
+            "distance": 1.2522
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'N')",
+              "(('B', '10', ''), 'CD')"
+            ],
+            "distance": 0.99285
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'N')",
+              "(('B', '10', ''), 'NE')"
+            ],
+            "distance": 0.63757
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'CA')",
+              "(('B', '3', ''), 'CA')"
+            ],
+            "distance": 1.43038
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'CA')",
+              "(('B', '5', ''), 'N')"
+            ],
+            "distance": 1.73941
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'CA')",
+              "(('B', '10', ''), 'CG')"
+            ],
+            "distance": 1.45004
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'CA')",
+              "(('B', '10', ''), 'CD')"
+            ],
+            "distance": 1.60929
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'C')",
+              "(('B', '3', ''), 'CB')"
+            ],
+            "distance": 1.39217
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'O')",
+              "(('B', '3', ''), 'CA')"
+            ],
+            "distance": 1.36435
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'O')",
+              "(('B', '3', ''), 'CB')"
+            ],
+            "distance": 0.21587
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'O')",
+              "(('B', '3', ''), 'CG')"
+            ],
+            "distance": 1.54087
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'O')",
+              "(('B', '5', ''), 'C')"
+            ],
+            "distance": 1.68609
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'O')",
+              "(('B', '6', ''), 'N')"
+            ],
+            "distance": 1.32956
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'CB')",
+              "(('B', '3', ''), 'C')"
+            ],
+            "distance": 1.4966
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'CB')",
+              "(('B', '10', ''), 'CG')"
+            ],
+            "distance": 0.78728
+          },
+          {
+            "atoms": [
+              "(('B', '2', ''), 'CG')",
+              "(('B', '10', ''), 'CG')"
+            ],
+            "distance": 1.51599
+          }
+        ]
+      },
+      "not_evaluated": [
+        "binding_affinity",
+        "biological_activity",
+        "experimental_stability",
+        "synthetic_feasibility",
+        "full_stereochemical_validation",
+        "fair_benchmark"
+      ],
+      "failed_checks": [
+        "covalent_geometry",
+        "backbone_angles",
+        "no_severe_clashes"
+      ],
+      "candidate_quality_status": "fail",
+      "job_id": "v034_dflow_3eqs_seed43",
+      "attempt_dir": "/mnt/ssd4t/Pep_design/benchmark_runs/v0.34/dflow/v034_dflow_3eqs_seed43/attempt_003",
+      "provenance_status": "pass",
+      "method_acceptance_status": "not_passed"
+    },
+    {
+      "method": "PepMirror",
+      "sequence": "SLRAELRKMGP",
+      "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774",
+      "scope": "sequence_legality_and_structural_integrity_only",
+      "checks": {
+        "known_method": true,
+        "canonical_sequence": true,
+        "requested_length": true,
+        "structure_readable": true,
+        "unique_atom_identity": true,
+        "binder_present": true,
+        "structure_sequence_consistency": true,
+        "chirality": true,
+        "complete_endpoint_atoms": true,
+        "covalent_geometry": true,
+        "backbone_angles": true,
+        "no_severe_clashes": true
+      },
+      "metrics": {
+        "structure_sha256": "4589e105cef00a58e18b1a5c041e073282ff13106aa3d981776124221a5a78ee",
+        "structure_sequence": "SLRAELRKMGP",
+        "chirality": {
+          "L": 0,
+          "D": 10,
+          "gly_achiral": 1,
+          "unknown": 0
+        },
+        "missing_atoms": [],
+        "covalent_violation_count": 0,
+        "covalent_violations": [],
+        "angle_violation_count": 0,
+        "angle_violations": [],
+        "severe_clash_count": 0,
+        "severe_clashes": []
+      },
+      "not_evaluated": [
+        "binding_affinity",
+        "biological_activity",
+        "experimental_stability",
+        "synthetic_feasibility",
+        "full_stereochemical_validation",
+        "fair_benchmark"
+      ],
+      "failed_checks": [],
+      "candidate_quality_status": "pass",
+      "job_id": "v034_pepmirror_3eqs_seed42",
+      "attempt_dir": "/mnt/ssd4t/Pep_design/benchmark_runs/v0.34/pepmirror/v034_pepmirror_3eqs_seed42/attempt_004",
+      "provenance_status": "pass",
+      "method_acceptance_status": "pass"
+    },
+    {
+      "method": "PepMirror",
+      "sequence": "DQGNYQIYNGN",
+      "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774",
+      "scope": "sequence_legality_and_structural_integrity_only",
+      "checks": {
+        "known_method": true,
+        "canonical_sequence": true,
+        "requested_length": true,
+        "structure_readable": true,
+        "unique_atom_identity": true,
+        "binder_present": true,
+        "structure_sequence_consistency": true,
+        "chirality": true,
+        "complete_endpoint_atoms": true,
+        "covalent_geometry": false,
+        "backbone_angles": true,
+        "no_severe_clashes": false
+      },
+      "metrics": {
+        "structure_sha256": "609ec975300ff16255f29cb3717c589edb19f222a7106906c75d5633b0b641c1",
+        "structure_sequence": "DQGNYQIYNGN",
+        "chirality": {
+          "L": 0,
+          "D": 9,
+          "gly_achiral": 2,
+          "unknown": 0
+        },
+        "missing_atoms": [],
+        "covalent_violation_count": 1,
+        "covalent_violations": [
+          {
+            "atoms": [
+              "(('B', '2', ''), 'CD')",
+              "(('B', '2', ''), 'OE1')"
+            ],
+            "distance": 0.51802,
+            "allowed": [
+              0.9,
+              2.0
+            ]
+          }
+        ],
+        "angle_violation_count": 0,
+        "angle_violations": [],
+        "severe_clash_count": 2,
+        "severe_clashes": [
+          {
+            "atoms": [
+              "(('A', '62', ''), 'CA')",
+              "(('B', '5', ''), 'OH')"
+            ],
+            "distance": 1.55059
+          },
+          {
+            "atoms": [
+              "(('A', '62', ''), 'CG')",
+              "(('B', '5', ''), 'CZ')"
+            ],
+            "distance": 1.7478
+          }
+        ]
+      },
+      "not_evaluated": [
+        "binding_affinity",
+        "biological_activity",
+        "experimental_stability",
+        "synthetic_feasibility",
+        "full_stereochemical_validation",
+        "fair_benchmark"
+      ],
+      "failed_checks": [
+        "covalent_geometry",
+        "no_severe_clashes"
+      ],
+      "candidate_quality_status": "fail",
+      "job_id": "v034_pepmirror_3eqs_seed43",
+      "attempt_dir": "/mnt/ssd4t/Pep_design/benchmark_runs/v0.34/pepmirror/v034_pepmirror_3eqs_seed43/attempt_002",
+      "provenance_status": "pass",
+      "method_acceptance_status": "not_passed"
+    },
+    {
+      "method": "AfCycDesign / ColabDesign cyclic peptide",
+      "sequence": "WDRKFVVENINITF",
+      "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774",
+      "scope": "sequence_legality_and_structural_integrity_only",
+      "checks": {
+        "known_method": true,
+        "canonical_sequence": true,
+        "requested_length": true,
+        "structure_readable": true,
+        "unique_atom_identity": true,
+        "binder_present": true,
+        "structure_sequence_consistency": true,
+        "cyclic_has_multiple_residues": true,
+        "chirality": true,
+        "complete_endpoint_atoms": true,
+        "covalent_geometry": true,
+        "backbone_angles": true,
+        "no_severe_clashes": false
+      },
+      "metrics": {
+        "structure_sha256": "87cf542920bc5849d26198976ba255d2b1c9395be054918ff29aa9c441c1633b",
+        "structure_sequence": "WDRKFVVENINITF",
+        "chirality": {
+          "L": 14,
+          "D": 0,
+          "gly_achiral": 0,
+          "unknown": 0
+        },
+        "missing_atoms": [],
+        "covalent_violation_count": 0,
+        "covalent_violations": [],
+        "angle_violation_count": 0,
+        "angle_violations": [],
+        "severe_clash_count": 2,
+        "severe_clashes": [
+          {
+            "atoms": [
+              "(('B', '8', ''), 'OE2')",
+              "(('B', '9', ''), 'OD1')"
+            ],
+            "distance": 1.3524
+          },
+          {
+            "atoms": [
+              "(('B', '10', ''), 'CG2')",
+              "(('B', '11', ''), 'OD1')"
+            ],
+            "distance": 1.5362
+          }
+        ],
+        "closure_cn_angstrom": 1.289022497864175
+      },
+      "not_evaluated": [
+        "binding_affinity",
+        "biological_activity",
+        "experimental_stability",
+        "synthetic_feasibility",
+        "full_stereochemical_validation",
+        "fair_benchmark"
+      ],
+      "failed_checks": [
+        "no_severe_clashes"
+      ],
+      "candidate_quality_status": "fail",
+      "job_id": "v034_colabdesign_7zkr_seed42",
+      "attempt_dir": "/mnt/ssd4t/Pep_design/benchmark_runs/v0.34/colabdesign/v034_colabdesign_7zkr_seed42/attempt_002",
+      "provenance_status": "pass",
+      "method_acceptance_status": "not_passed"
+    },
+    {
+      "method": "AfCycDesign / ColabDesign cyclic peptide",
+      "sequence": "RIIMCYQYEKLPNR",
+      "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774",
+      "scope": "sequence_legality_and_structural_integrity_only",
+      "checks": {
+        "known_method": true,
+        "canonical_sequence": true,
+        "requested_length": true,
+        "structure_readable": true,
+        "unique_atom_identity": true,
+        "binder_present": true,
+        "structure_sequence_consistency": true,
+        "cyclic_has_multiple_residues": true,
+        "chirality": true,
+        "complete_endpoint_atoms": true,
+        "covalent_geometry": false,
+        "backbone_angles": true,
+        "no_severe_clashes": false
+      },
+      "metrics": {
+        "structure_sha256": "31aadfb9591daabfed9b1cbd8ae8fb71c25391d5269d1184b2563fa4e3ce4c13",
+        "structure_sequence": "RIIMCYQYEKLPNR",
+        "chirality": {
+          "L": 14,
+          "D": 0,
+          "gly_achiral": 0,
+          "unknown": 0
+        },
+        "missing_atoms": [],
+        "covalent_violation_count": 1,
+        "covalent_violations": [
+          {
+            "atoms": [
+              "(('B', '12', ''), 'CD')",
+              "(('B', '12', ''), 'N')"
+            ],
+            "distance": 3.10709,
+            "allowed": [
+              0.9,
+              2.0
+            ]
+          }
+        ],
+        "angle_violation_count": 0,
+        "angle_violations": [],
+        "severe_clash_count": 4,
+        "severe_clashes": [
+          {
+            "atoms": [
+              "(('B', '8', ''), 'C')",
+              "(('B', '10', ''), 'NZ')"
+            ],
+            "distance": 1.53394
+          },
+          {
+            "atoms": [
+              "(('B', '9', ''), 'C')",
+              "(('B', '10', ''), 'CD')"
+            ],
+            "distance": 1.05691
+          },
+          {
+            "atoms": [
+              "(('B', '9', ''), 'O')",
+              "(('B', '10', ''), 'CD')"
+            ],
+            "distance": 0.67259
+          },
+          {
+            "atoms": [
+              "(('B', '9', ''), 'O')",
+              "(('B', '10', ''), 'CE')"
+            ],
+            "distance": 1.31455
+          }
+        ],
+        "closure_cn_angstrom": 1.3317259477835528
+      },
+      "not_evaluated": [
+        "binding_affinity",
+        "biological_activity",
+        "experimental_stability",
+        "synthetic_feasibility",
+        "full_stereochemical_validation",
+        "fair_benchmark"
+      ],
+      "failed_checks": [
+        "covalent_geometry",
+        "no_severe_clashes"
+      ],
+      "candidate_quality_status": "fail",
+      "job_id": "v034_colabdesign_7zkr_seed43",
+      "attempt_dir": "/mnt/ssd4t/Pep_design/benchmark_runs/v0.34/colabdesign/v034_colabdesign_7zkr_seed43/attempt_001",
+      "provenance_status": "pass",
+      "method_acceptance_status": "not_passed"
+    },
+    {
+      "method": "RFdiffusion + ProteinMPNN",
+      "sequence": "DEILEKLLKEFKEDVEKKLAPVREAGYTEQAERWRKIIETFTGALIREAAEKLKKKKEGKEETEYEKILKEAEELRDELIAALKAELAAQ",
+      "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774",
+      "scope": "sequence_legality_and_structural_integrity_only",
+      "checks": {
+        "known_method": true,
+        "canonical_sequence": true,
+        "requested_length": true,
+        "structure_readable": true,
+        "unique_atom_identity": true,
+        "binder_present": true,
+        "structure_sequence_consistency": true,
+        "complete_endpoint_atoms": true,
+        "covalent_geometry": false,
+        "backbone_angles": true,
+        "no_severe_clashes": true
+      },
+      "metrics": {
+        "structure_sha256": "75629f0c7facbbf2e2a3f30caea99d89f80df9f1ebabd40d9e3282bd900f100b",
+        "structure_sequence": "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+        "chirality": {
+          "L": 0,
+          "D": 0,
+          "gly_achiral": 90,
+          "unknown": 0
+        },
+        "missing_atoms": [],
+        "covalent_violation_count": 1,
+        "covalent_violations": [
+          {
+            "atoms": [
+              "(('B', '63', ''), 'C')",
+              "(('B', '64', ''), 'N')"
+            ],
+            "distance": 1.10375,
+            "allowed": [
+              1.161,
+              1.4969999999999999
+            ]
+          }
+        ],
+        "angle_violation_count": 0,
+        "angle_violations": [],
+        "severe_clash_count": 0,
+        "severe_clashes": []
+      },
+      "not_evaluated": [
+        "binding_affinity",
+        "biological_activity",
+        "experimental_stability",
+        "synthetic_feasibility",
+        "full_stereochemical_validation",
+        "fair_benchmark",
+        "sequence_resolved_sidechains",
+        "sequence_resolved_chirality"
+      ],
+      "representation": "unthreaded_backbone_and_separate_fasta",
+      "failed_checks": [
+        "covalent_geometry"
+      ],
+      "candidate_quality_status": "fail",
+      "job_id": "v034_rfdiffusion_mpnn_7zkr_seed42",
+      "attempt_dir": "/mnt/ssd4t/Pep_design/benchmark_runs/v0.34/rfdiffusion_proteinmpnn/v034_rfdiffusion_mpnn_7zkr_seed42/attempt_004",
+      "provenance_status": "pass",
+      "method_acceptance_status": "not_passed"
+    },
+    {
+      "method": "RFdiffusion + ProteinMPNN",
+      "sequence": "MEEVEEKLEKREELEKEIEEKEKEAEKKSKEIAKKLGKEKAEKYLEEVKKELEEKKKEAEEIFDELIEEAK",
+      "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774",
+      "scope": "sequence_legality_and_structural_integrity_only",
+      "checks": {
+        "known_method": true,
+        "canonical_sequence": true,
+        "requested_length": true,
+        "structure_readable": true,
+        "unique_atom_identity": true,
+        "binder_present": true,
+        "structure_sequence_consistency": true,
+        "complete_endpoint_atoms": true,
+        "covalent_geometry": true,
+        "backbone_angles": true,
+        "no_severe_clashes": true
+      },
+      "metrics": {
+        "structure_sha256": "de3e240a6e4d1f159e85543afd7b084e40c5b8e7686694d1f5c4c4d45f0e5137",
+        "structure_sequence": "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+        "chirality": {
+          "L": 0,
+          "D": 0,
+          "gly_achiral": 71,
+          "unknown": 0
+        },
+        "missing_atoms": [],
+        "covalent_violation_count": 0,
+        "covalent_violations": [],
+        "angle_violation_count": 0,
+        "angle_violations": [],
+        "severe_clash_count": 0,
+        "severe_clashes": []
+      },
+      "not_evaluated": [
+        "binding_affinity",
+        "biological_activity",
+        "experimental_stability",
+        "synthetic_feasibility",
+        "full_stereochemical_validation",
+        "fair_benchmark",
+        "sequence_resolved_sidechains",
+        "sequence_resolved_chirality"
+      ],
+      "representation": "unthreaded_backbone_and_separate_fasta",
+      "failed_checks": [],
+      "candidate_quality_status": "pass",
+      "job_id": "v034_rfdiffusion_mpnn_7zkr_seed43",
+      "attempt_dir": "/mnt/ssd4t/Pep_design/benchmark_runs/v0.34/rfdiffusion_proteinmpnn/v034_rfdiffusion_mpnn_7zkr_seed43/attempt_002",
+      "provenance_status": "pass",
+      "method_acceptance_status": "pass"
+    },
+    {
+      "method": "PepGLAD",
+      "sequence": "AWHITLLIFTH",
+      "criteria_sha256": "2adc560a90b82fdef980262692c99ea4ac41ec9ffa5cb90b412eeca858957774",
+      "scope": "sequence_legality_and_structural_integrity_only",
+      "checks": {
+        "known_method": true,
+        "canonical_sequence": true,
+        "requested_length": true,
+        "structure_readable": true,
+        "unique_atom_identity": true,
+        "binder_present": true,
+        "structure_sequence_consistency": true,
+        "chirality": true,
+        "complete_endpoint_atoms": true,
+        "covalent_geometry": true,
+        "backbone_angles": true,
+        "no_severe_clashes": true
+      },
+      "metrics": {
+        "structure_sha256": "f35bcbb3fad5ce89a87e9d8e41bdc9142b1794bff3c776f75418ce21625cc94a",
+        "structure_sequence": "AWHITLLIFTH",
+        "chirality": {
+          "L": 5,
+          "D": 6,
+          "gly_achiral": 0,
+          "unknown": 0
+        },
+        "missing_atoms": [],
+        "covalent_violation_count": 0,
+        "covalent_violations": [],
+        "angle_violation_count": 0,
+        "angle_violations": [],
+        "severe_clash_count": 0,
+        "severe_clashes": []
+      },
+      "not_evaluated": [
+        "binding_affinity",
+        "biological_activity",
+        "experimental_stability",
+        "synthetic_feasibility",
+        "full_stereochemical_validation",
+        "fair_benchmark"
+      ],
+      "failed_checks": [],
+      "candidate_quality_status": "pass",
+      "job_id": "pepglad_fresh_v1_3eqs_seed42",
+      "attempt_dir": "/mnt/ssd4t/Pep_design/benchmark_runs/pepglad_fresh_v1/pepglad/pepglad_fresh_v1_3eqs_seed42/attempt_001",
+      "provenance_checks": {
+        "independent_schema": true,
+        "independent_raw_replay": true,
+        "historical_bindings": true,
+        "immutable_image_launch": true,
+        "attempt_policy_binding": true
+      },
+      "provenance_status": "pass",
+      "method_acceptance_status": "pass"
+    }
+  ],
+  "method_pass_count": 3,
+  "limitations": [
+    "Reduced historical sampling schedules are retained; this review does not assert native default-quality equivalence.",
+    "No method-native efficacy filter is inferred from structural integrity.",
+    "D-Flow 3EQS known training overlap remains fixture-only and ineligible for fair scoring."
+  ]
+}

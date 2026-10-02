@@ -3377,7 +3377,8 @@ def _v035_forbidden_result_content(
     return False
 
 
-def _v035_bundle_schema_valid(bundle: object) -> bool:
+def _v035_bundle_schema_valid(bundle: object, *, policy=None) -> bool:
+    job_id = policy.job_id if policy is not None else "v035_pepglad_3eqs_seed42"
     if (
         type(bundle) is not dict
         or set(bundle) != _V035_BUNDLE_FIELDS
@@ -3418,14 +3419,14 @@ def _v035_bundle_schema_valid(bundle: object) -> bool:
         return False
     if not all(
         (
-            bundle.get("schema_version") == "v0.35",
+            bundle.get("schema_version") == (policy.schema_version if policy is not None else "v0.35"),
             bundle.get("evidence_boundary")
             == "bounded_connectivity_only_not_scoring_or_ranking",
             type(historical.get("primary_supported")) is int,
             historical.get("primary_supported") == 6,
             historical.get("pepglad_status")
             == "historical_failure_not_promoted",
-            job.get("job_id") == "v035_pepglad_3eqs_seed42",
+            job.get("job_id") == job_id,
             job.get("method") == "PepGLAD",
             type(job.get("random_seed")) is int,
             job.get("random_seed") == 42,
@@ -3450,7 +3451,7 @@ def _v035_bundle_schema_valid(bundle: object) -> bool:
             Path(attempt_dir).name == "attempt_001"
             if type(attempt_dir) is str
             else False,
-            Path(attempt_dir).parent.name == "v035_pepglad_3eqs_seed42"
+            Path(attempt_dir).parent.name == job_id
             if type(attempt_dir) is str
             else False,
             Path(attempt_dir).parent.parent.name == "pepglad"
@@ -3468,7 +3469,7 @@ def _v035_bundle_schema_valid(bundle: object) -> bool:
     if not all(
         (
             candidate.get("design_id")
-            == "v035_pepglad_3eqs_seed42_candidate_1",
+            == f"{job_id}_candidate_1",
             type(sequence) is str,
             re.fullmatch(r"[A-Z]{11}", sequence) is not None
             if type(sequence) is str
@@ -3768,7 +3769,9 @@ def _v035_run_result_valid(
     qc: dict[str, object],
     replay_candidate: dict[str, object],
     replay_qc: dict[str, object],
+    policy=None,
 ) -> bool:
+    job_id = policy.job_id if policy is not None else "v035_pepglad_3eqs_seed42"
     if type(result) is not dict or set(result) != _V035_RUN_RESULT_FIELDS:
         return False
     string_fields = _V035_RUN_RESULT_FIELDS - {"exit_code"}
@@ -3806,7 +3809,7 @@ def _v035_run_result_valid(
     return all(
         (
             result["design_id"]
-            == "v035_pepglad_3eqs_seed42_candidate_1",
+            == f"{job_id}_candidate_1",
             replay_candidate.get("parse_status") == result["parser_status"],
             replay_qc.get("overall_qc_status") == result["overall_qc_status"],
             result["exit_code"] == 0,
@@ -3816,13 +3819,14 @@ def _v035_run_result_valid(
     )
 
 
-def _v035_authorized_attempt_is_unique(attempt: Path) -> bool:
+def _v035_authorized_attempt_is_unique(attempt: Path, *, policy=None) -> bool:
     logical = Path(attempt)
+    job_id = policy.job_id if policy is not None else "v035_pepglad_3eqs_seed42"
     if (
         not logical.is_absolute()
         or Path(os.path.abspath(logical)) != logical
         or logical.name != "attempt_001"
-        or logical.parent.name != "v035_pepglad_3eqs_seed42"
+        or logical.parent.name != job_id
         or logical.parent.parent.name != "pepglad"
     ):
         return False
@@ -3903,13 +3907,14 @@ def _v035_authorized_attempt_is_unique(attempt: Path) -> bool:
 
 
 def _v035_capture_attempt(
-    attempt: Path,
+    attempt: Path, *, policy=None,
 ) -> dict[str, tuple[Path, bytes, str, tuple[int, ...]]] | None:
+    job_id = policy.job_id if policy is not None else "v035_pepglad_3eqs_seed42"
     if (
         not attempt.is_absolute()
         or Path(os.path.abspath(attempt)) != attempt
         or attempt.name != "attempt_001"
-        or attempt.parent.name != "v035_pepglad_3eqs_seed42"
+        or attempt.parent.name != job_id
         or attempt.parent.parent.name != "pepglad"
     ):
         return None
@@ -3930,13 +3935,14 @@ def _v035_capture_attempt(
     return captured
 
 
-def _v035_raw_replay_valid(bundle: object) -> bool:
-    if not _v035_bundle_schema_valid(bundle):
+def _v035_raw_replay_valid(bundle: object, *, policy=None) -> bool:
+    job_id = policy.job_id if policy is not None else "v035_pepglad_3eqs_seed42"
+    if not _v035_bundle_schema_valid(bundle, policy=policy):
         return False
-    from scripts.run_v035_pepglad_connectivity import (
-        AUTHORIZED_EXECUTION,
-        AUTHORIZED_JOB,
-    )
+    from importlib import import_module
+    runner = import_module(policy.runner_module if policy is not None else "scripts.run_v035_pepglad_connectivity")
+    AUTHORIZED_JOB = runner.AUTHORIZED_JOB
+    AUTHORIZED_EXECUTION = runner.AUTHORIZED_EXECUTION
     from scripts.v035_adapters import pepglad
 
     execution = bundle["execution"]
@@ -3945,9 +3951,9 @@ def _v035_raw_replay_valid(bundle: object) -> bool:
     provenance = bundle["runtime_provenance"]
     job_summary = bundle["job"]
     attempt = Path(execution["attempt_dir"])
-    if not _v035_authorized_attempt_is_unique(attempt):
+    if not _v035_authorized_attempt_is_unique(attempt, policy=policy):
         return False
-    captured = _v035_capture_attempt(attempt)
+    captured = _v035_capture_attempt(attempt, policy=policy)
     if captured is None:
         return False
     captured_job = _v035_strict_json_bytes(captured["job.json"][1])
@@ -4037,7 +4043,7 @@ def _v035_raw_replay_valid(bundle: object) -> bool:
             snapshot = (
                 Path(temporary)
                 / "pepglad"
-                / "v035_pepglad_3eqs_seed42"
+                / job_id
                 / "attempt_001"
             )
             snapshot.mkdir(parents=True)
@@ -4049,9 +4055,10 @@ def _v035_raw_replay_valid(bundle: object) -> bool:
             snapshot_target.parent.mkdir()
             snapshot_target.write_bytes(target_capture[1])
             replay_job = {**job, "target_pdb_path": str(snapshot_target)}
-            replay_candidate, replay_runtime = pepglad.parse(replay_job, snapshot)
+            identity = {} if policy is None else {"authorized_job_id": policy.job_id}
+            replay_candidate, replay_runtime = pepglad.parse(replay_job, snapshot, **identity)
             replay_qc = pepglad.evaluate_candidate(
-                replay_job, replay_candidate, replay_runtime, snapshot / "raw"
+                replay_job, replay_candidate, replay_runtime, snapshot / "raw", **identity
             )
             structure = Path(replay_candidate.get("structure_path", ""))
             structure_relative = structure.resolve(strict=True).relative_to(
@@ -4083,6 +4090,7 @@ def _v035_raw_replay_valid(bundle: object) -> bool:
                 qc=qc,
                 replay_candidate=replay_candidate,
                 replay_qc=replay_qc,
+                policy=policy,
             ):
                 return False
     except (
@@ -4094,13 +4102,13 @@ def _v035_raw_replay_valid(bundle: object) -> bool:
         ValueError,
     ):
         return False
-    repeated = _v035_capture_attempt(attempt)
+    repeated = _v035_capture_attempt(attempt, policy=policy)
     repeated_target = _v035_stable_file(target_path, confined_root=ROOT)
     return all(
         (
             repeated == captured,
             repeated_target == target_capture,
-            _v035_authorized_attempt_is_unique(attempt),
+            _v035_authorized_attempt_is_unique(attempt, policy=policy),
         )
     )
 
@@ -5267,7 +5275,9 @@ def main(argv: list[str] | None = None) -> int:
         "academic-research-suite",
         "benchmark-paper-template",
         "Supervisor-Skills",
-        "benchmark-paper-template is the primary route",
+        "grilling is the primary route",
+        "superpowers workflow constraints are disabled",
+        "benchmark-paper-template is disabled",
         "intro-drafter is consistency-check only",
         "Execution Gates",
         "download_performed=no",
@@ -8821,8 +8831,12 @@ def main(argv: list[str] | None = None) -> int:
     ]:
         if token not in supervisor_memory_text:
             errors.append(f"Supervisor-Skills memory missing token {token}")
-    if "benchmark-paper-template is the primary route" not in agents_text:
-        errors.append("AGENTS.md must record Supervisor-Skills benchmark-paper-template primary route")
+    if "grilling is the primary route" not in agents_text:
+        errors.append("AGENTS.md must record the user-selected grilling primary route")
+    if "superpowers workflow constraints are disabled" not in agents_text:
+        errors.append("AGENTS.md must preserve the user-disabled superpowers workflow constraints")
+    if "benchmark-paper-template is disabled" not in agents_text:
+        errors.append("AGENTS.md must preserve the user-disabled benchmark-paper-template route")
     if "intro-drafter is consistency-check only" not in agents_text:
         errors.append("AGENTS.md must record Supervisor-Skills intro-drafter consistency-check boundary")
     if "Restart Codex to pick up new skills" not in supervisor_skills_installation_v032_text:

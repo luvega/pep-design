@@ -56,11 +56,11 @@ def test_contract_defines_complete_acceptance_surface() -> None:
     contract = load_contract(CONTRACT_PATH)
 
     assert contract["contract_id"] == "pep_design_project_acceptance"
-    assert contract["contract_version"] == "1.0.0"
+    assert contract["contract_version"] == "1.2.0"
     assert {row["profile_id"] for row in contract["profiles"]} == EXPECTED_PROFILES
     assert set(contract["domains"]) == EXPECTED_DOMAINS
     assert set(contract["severities"]) == {"Critical", "Major", "Advisory"}
-    assert contract["evaluator_version"] == "1.0.0"
+    assert contract["evaluator_version"] == "1.2.0"
 
 
 def test_contract_gates_are_unique_complete_allowlisted_and_acyclic() -> None:
@@ -119,13 +119,13 @@ def test_contract_rejects_v034_gate_rebound_to_a_generic_evaluator() -> None:
         validate_contract(invalid)
 
 
-def test_contract_rejects_removing_v035_gate_from_current_profile() -> None:
+def test_contract_rejects_removing_native_method_gate_from_current_profile() -> None:
     contract = load_contract(CONTRACT_PATH)
     invalid = deepcopy(contract)
     profile = next(
         row for row in invalid["profiles"] if row["profile_id"] == "current_phase"
     )
-    profile["required_gate_ids"].remove("current.v035_bounded_connectivity")
+    profile["required_gate_ids"].remove("current.native_method_acceptance")
 
     with pytest.raises(ContractError, match="required gate taxonomy"):
         validate_contract(invalid)
@@ -195,7 +195,7 @@ def test_claim_registry_preserves_separate_evidence_layers() -> None:
     } <= claim_ids
 
 
-def test_v035_gate_is_current_while_v034_failure_remains_historical() -> None:
+def test_native_method_gate_is_current_while_connectivity_failures_remain_historical() -> None:
     contract = load_contract(CONTRACT_PATH)
     artifact_registry = load_json(ARTIFACTS_PATH)
     profiles = {row["profile_id"]: row for row in contract["profiles"]}
@@ -203,7 +203,7 @@ def test_v035_gate_is_current_while_v034_failure_remains_historical() -> None:
     artifacts = {row["artifact_id"]: row for row in artifact_registry["artifacts"]}
 
     for profile_id in ("current_phase", "release_checkpoint", "full_project"):
-        assert "current.v035_bounded_connectivity" in profiles[profile_id][
+        assert "current.native_method_acceptance" in profiles[profile_id][
             "required_gate_ids"
         ]
         assert "current.v034_bounded_connectivity" not in profiles[profile_id][
@@ -219,7 +219,9 @@ def test_v035_gate_is_current_while_v034_failure_remains_historical() -> None:
             profile_id
         ]["required_gate_ids"]
 
-    assert "v0.35" in profiles["current_phase"]["description"]
+    assert "native runtime endpoints" in profiles["current_phase"]["description"]
+    assert "method_runtime_scope_v2" in gates["current.native_method_acceptance"]["inputs"]
+    assert gates["current.v035_bounded_connectivity"]["profiles"] == []
     assert gates["current.rf_conditioning_blocker_recorded"]["profiles"] == []
     assert gates["current.pepmirror_chirality_blocker_recorded"]["profiles"] == []
     assert "Historical v0.33" in gates["current.rf_conditioning_blocker_recorded"][
@@ -256,7 +258,7 @@ def test_v035_gate_is_current_while_v034_failure_remains_historical() -> None:
     } <= set(gates["current.scoring_guard"]["inputs"])
     assert artifacts["current_plan"]["path"] == "ops/plans/updated_plan_v0.35.md"
     assert gates["current.scoring_guard"]["requires"] == [
-        "current.v035_bounded_connectivity"
+        "current.native_method_acceptance"
     ]
     assert gates["release.checkpoint_integrity"]["requires"] == []
     assert "generated_candidate_only_when_supported_candidate_yes" in artifacts[
@@ -353,20 +355,20 @@ def test_json_sources_are_canonicalizable() -> None:
         assert json.loads(json.dumps(value, sort_keys=True)) == value
 
 
-def test_current_profiles_route_connectivity_through_v035() -> None:
+def test_current_profiles_route_native_method_acceptance() -> None:
     from harness.engine import loader
 
     assert "v035_bounded_connectivity" in loader.ENGINE_EVALUATOR_IDS
     assert "current.v035_bounded_connectivity" in loader.ENGINE_GATE_IDS
-    assert "current.v035_bounded_connectivity" in loader.ENGINE_PROFILE_GATE_IDS[
+    assert "current.native_method_acceptance" in loader.ENGINE_PROFILE_GATE_IDS[
         "current_phase"
     ]
     assert "current.v034_bounded_connectivity" not in loader.ENGINE_PROFILE_GATE_IDS[
         "current_phase"
     ]
-    assert "current.v035_bounded_connectivity" in loader.ENGINE_PROFILE_GATE_IDS[
+    assert "current.native_method_acceptance" in loader.ENGINE_PROFILE_GATE_IDS[
         "release_checkpoint"
     ]
-    assert "current.v035_bounded_connectivity" in loader.ENGINE_PROFILE_GATE_IDS[
+    assert "current.native_method_acceptance" in loader.ENGINE_PROFILE_GATE_IDS[
         "full_project"
     ]

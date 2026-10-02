@@ -1,5 +1,37 @@
 # Release Notes
 
+## 未发布：初期范围调整为代码与环境运行验收 — 2026-10-02
+
+- 用户明确先跑通代码与环境，后续再大量比较；10/10 原生运行终点已完成，候选完整性质量单列 9/10。
+- 合同 v1.2.0、矩阵和报告区分运行与质量；D-Flow 质量失败、原阈值、执行政策与尝试账本不改写。本次不启动新任务。
+- 以下较早的 9/10 质量验收检查点保留为历史；修订前报告、计划和合同另有带 SHA 的独立归档，见 `benchmark/deployment/method_runtime_scope_v2.json`。
+- 项目版本仍为 `1.2.21`；用户随后授权提交并推送当前项目检查点，此 Git 同步不构成人工验收签核或新版本发布。
+
+## 未发布：10 方法原生任务与候选质量验收（`VERSION=1.2.21`）— 2026-10-02
+
+- 按已确认计划实施，当前 9/10 通过：3 种复用合格证据，6 种补齐真实原生任务；详细边界见 [验收报告](ops/acceptance/method_runtime_acceptance_v1.md)。
+- D-Flow 已完成 3 次新尝试、检查全部 17 个产物，未取得结构质量达标候选；达到尝试上限后停止，保留失败记录及首次隐式下载的保守额度扣款。
+- SaLT&PepPr 经用户确认仅作非商业方法评测、与药物开发无关并接受现存条款后，完成作者原生 Notebook 提取流程。BindCraft 产出 2 条通过原生过滤及独立结构检查的候选。
+- DexDesign 仅验收一个独立 IAS 的完整原生搜索与候选收集；父批处理退出 127、其余 10 组未完成及 PDB 残基标签修正均公开保留，不能称全论文复现。
+- 增加不可覆盖任务、资源账本、候选质量和输出来源重放；合同 v1.1.0 将活动门禁迁至 `current.native_method_acceptance`。9/10 不满足该 Critical gate，项目仍未通过验收。
+- 历史 v0.34/v0.35 与 fresh PepGLAD 文件保持原样；不评分、不排名、不冻结目标集、不作实验有效或完整可复现声明，不签核、commit/push 或发布新版本。
+
+## Unreleased Planning Rule Migration (`VERSION=1.2.21`) - 2026-10-02
+
+- 按用户决定，将项目计划与下一步工作的主路线切换为 `grilling`；停用原 superpowers 系列强制工作流，旧计划中的 `REQUIRED SUB-SKILL` 仅保留为历史记录。
+- 同步 AGENTS、技能路线、迁移映射及其 digest、校验脚本和既有路由测试；研究与写作技能按需使用，`benchmark-paper-template` 继续停用。
+- 旧初始化脚本增加已有项目保护，避免重新生成过时 AGENTS、索引与日志；不会运行 bootstrap 来迁移当前规则。
+- 新计划按决策依赖分轮澄清，事实由 agent 核实，用户确认共同理解后实施；已有明确授权不重复询问。
+- 记录 PepGLAD fresh 方法验收已完成这一后续事实；原科学合同及历史失败不在本次规则切换中迁移，版本保持 `1.2.21`。
+
+## Unreleased Evidence Archival And Planning Synchronization (`VERSION=1.2.21`) - 2026-10-02
+
+- 归档 SaLT&PepPr 已有 local per-residue inference 的来源与观察摘要，登记小文件 hash、20 条合成残基概率记录以及缺失的 producer/environment/time/exit 信息；来源映射和许可审查仍 pending。
+- 新增项目推进计划、7 项目标/对照审查工作表、PepGLAD 新执行提案和下一阶段验收接口设计。执行提案未授权，验收设计未实现，目标表为 review-only。
+- 按用户指令停用 `benchmark-paper-template`；本机缺少 `building-llm-wiki` 时采用已获授权的 `academic-research-suite` 与机器合同，同步 AGENTS、迁移映射和校验要求。
+- 将 Harness 工程计划的当前基线、profile 说明和预期状态同步到 v0.35，保留 v0.33/v0.34 历史事实；新增 7 项补充 artifact 的注册与用途边界。
+- `VERSION=1.2.21`、v0.35 Critical failure、schema-only target set 与未评分状态保留。本次未运行模型、创建新 attempt、下载、签核、commit 或 push。
+
 ## Unreleased GitHub Homepage Documentation (`VERSION=1.2.21`) - 2026-07-25
 
 重写 GitHub README，使方法来源、任务归类、标准输入输出、代表性 fixture 和评价标准可以从项目主页直接复核。

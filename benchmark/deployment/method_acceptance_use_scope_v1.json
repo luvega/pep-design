@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-02",
+  "does_not_rewrite_historical_license_status": true,
+  "execution_scope_cleared": true,
+  "license_path": "/mnt/ssd4t/Pep_design/benchmark_runs/v0.36_saltnpeppr/source/SaLT&PepPr Licence FINAL.pdf",
+  "license_sha256": "e61e91721b0eefc06274b7188abb31285a32f4bb49ef59f727d20bea4fd3db68",
+  "method": "SaLT&PepPr",
+  "phase": "method_acceptance_v1",
+  "remaining_gate": "native_official_peptide_extractor_source_and_real_input_provenance",
+  "scope": "noncommercial_method_evaluation_unrelated_to_drug_development",
+  "user_confirmation": "仅作非商业方法评测，与药物开发无关，并接受现存许可条款"
+}

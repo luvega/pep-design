@@ -2,9 +2,9 @@
 
 ## 1. 目标与边界
 
-本计划在现有 v0.33 项目状态之上建立 contract-driven acceptance harness。其目标是把项目意图、artifact 角色、证据边界、阶段转换和人工签核转为可检查接口，而不是新增生成、评分或性能结论。
+本计划最初在 v0.33 历史状态之上建立 contract-driven acceptance harness。2026-10-02 最新检查点使用合同 v1.2.0 和 `ops/plans/method_runtime_acceptance_plan_v1.md`；v0.35 保留为科学协议与历史执行基线。工程目标仍是把项目意图、artifact 角色、证据边界、阶段转换和人工签核转为可检查接口。
 
-本阶段不执行 clone、install、large download、GPU generation、scoring、ranking 或 wet-lab 工作。v0.33 的机器事实保持不变：10 条 method-specific `no_supported_output_found` blocker rows，0 条 `parse_status=parsed` candidate rows，0 条 `status=generated` run rows。
+最初的工程阶段不授权方法执行；后续独立方法验收阶段已获用户确认，并已按用户后续修订完成 10/10 运行验收，质量仍为 9/10，见 [方法验收报告](../acceptance/method_runtime_acceptance_v1.md)。v0.33 的 10 条 blocker、v0.34 的 6 组 primary/seed43、v0.35 的容器启动失败及 SaLT&PepPr v0.36 的部分观察均保留为历史，不能被后续成功覆盖。评分、排名和 wet-lab 仍未授权。
 
 ## 2. 控制面
 
@@ -20,18 +20,19 @@
 ## 3. 验收 Profiles
 
 - `governance`：验证 contract、registry、migration parity 和既有 KB validator。
-- `current_phase`：验证 v0.33 是否完整、诚实地表示当前 blocker checkpoint。
+- `current_phase`：验证历史真实性、目标/对照及 D-Flow leakage 边界，并通过 `current.native_method_acceptance` 独立重放 10 方法的原生运行终点、来源及预算，另列候选质量；历史 v0.35 gate 保留且无活动 profile，scoring 保持禁用。
 - `release_checkpoint`：验证版本、导航、计划指针、机器检查和双角色签核是否一致。
-- `full_project`：验证受控生成、target/control、representation、scoring、Benchmark-paper pillars 和最终发布条件。
+- `full_project`：现行合同定义受控生成、target/control、representation、scoring、科学结果和最终发布条件；部分 evaluator 尚为历史基线或固定 fail，未来正向验收实现见 `ops/plans/next_phase_acceptance_design_v1.md`。用户停用稿件模板不自动修改现行科学合同。
 
 `harness_status` 与 `project_status` 分开记录。Evaluator exception、缺失结果或无效签核属于 harness error；科学/运营证据不足属于 `not_accepted`、`blocked` 或 `pending_human_signoff`。Critical/Major gate fail closed，Advisory 不单独阻止验收。
 
 ## 4. 当前语义 Gates
 
 1. D-Flow `3eqs_B` 在已核对的 PepMerge train-name source 中出现。该 fixture 只能用于 harness/interface 检查，禁止支持独立测试或 scoring claim。
-2. RFdiffusion `[12-18]` example 是 unconditional generation contract；存在 input PDB 不等于 target-conditioned generation。
-3. PepMirror D-peptide job 在缺少显式 mirror/enantiomer transformation evidence 时必须保持 blocked。
+2. v0.33 RFdiffusion `[12-18]` 历史 example 是 unconditional contract；v0.34 另有 target-conditioned backbone-to-FASTA handoff，但未取得 sequence-resolved structure。
+3. v0.33 PepMirror 历史 job 缺少显式 mirror transformation evidence；v0.34 另有 supported mirror round-trip/基础手性证据，不能将历史 blocker 与新证据混用。
 4. `target_set_v0.csv` 仍为空，控制与 leakage governance 未完成；因此 scoring 和 ranking 继续禁用。
+5. v0.35 `attempt_001` 不得重试或覆盖；新执行须获得明确授权、更新 attempt 政策并完成授权身份全链迁移。前检须在实际执行身份中先于 attempt 创建完成。
 
 以上判断是 input/adapter semantics 和 readiness findings，不是算法性能结果。
 
@@ -86,14 +87,19 @@ git diff --check
 git status -sb
 ```
 
-Unsigned baseline 的预期是：`governance` 与 `current_phase` 为 `harness_status=valid`、`project_status=pending_human_signoff`；`full_project` 为 `harness_status=valid`、`project_status=not_accepted`。这表示治理机制可检查，并不表示科学 Benchmark 已完成。
+当前范围已改为初期代码与环境运行验收；D-Flow 质量失败不再单独阻塞运行门禁。项目状态须按最新生成报告及人工签核状态解释；full-project 科学与评分条件仍未完成。
+
+文档/路由/注册表更新先运行相关 focused tests 和 validator；证据稳定后 `render --profile current_phase`，再只读复核。代码 evaluator 变更时扩大到对应回归或全量测试。历史全量测试数字不能作为本次验证结果。
 
 ## 8. 实施分工
 
-本工作流采用 `subagent-driven-development`：设计与威胁建模、red tests、path/signoff/card/Git transaction 编码、文档以及独立 spec/quality review 分由不同 subagents 承担；每个实现任务在进入下一项前完成测试与双阶段复审。该分工本身不是验收证据，最终状态仍以 contract、机器检查和有效 signoff 为准。
+2026-10-02 用户明确停用原 superpowers 系列工作流约束，改用 `grilling` 对齐计划和下一步工作：按决策依赖分轮提问，agent 自行核实事实，用户确认共同理解后实施新计划。历史 Harness 使用 `subagent-driven-development` 的记录和旧 `REQUIRED SUB-SKILL` 指令保留用于追溯，不再要求其设计、编码、测试、复审或 worktree 顺序。具体实施与验证按任务需要选择；已明确授权的规则切换直接执行。当前科学门禁仍由机器合同和实际证据决定。路线见 [skill_selection.md](../audits/skill_selection.md)。
 
 ## 9. 后续工作
 
-人工完成 governance handoff 后，下一科学阶段仍以 `ops/plans/updated_plan_v0.33.md` 为基线：先为 method-specific blockers 实现真实 generation entrypoints，形成受控、多 case、多 seed、可解析且具有完整 provenance 的输出；只有 target/control/leakage gates 同时满足后，才讨论 scoring layer。
+2026-10-02 最新状态：用户明确先跑通代码与环境、后续再大量比较。当前 10/10
+有边界的原生任务通过运行验收，候选完整性质量仍为 9/10。D-Flow 失败与尝试
+上限保留；DexDesign 限定单个独立 IAS。不因质量问题追加新任务。
 
-当前工作流实施与文档更新不授权 clone、install、large download、GPU generation、scoring 或 ranking。v0.33 仍是 10 条 blocker rows、0 parsed/generated candidates；`VERSION` 保持 `1.2.21`，直到对实际 digest 完成 governance approval 后才可准备 `1.2.22` candidate，并重新执行 engineering/scientific signoff。
+合同 v1.2.0 保留原执行政策与质量检查，以范围修订 v2 区分运行/质量结果。
+完整科学验收设计仍未实施，统一 target/control、评分和分析另行规划。

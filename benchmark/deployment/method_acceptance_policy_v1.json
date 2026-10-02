@@ -1,0 +1,25 @@
+{
+  "schema_version": "method_acceptance_v1",
+  "authorization": {
+    "date": "2026-10-02",
+    "user_confirmation": "确认，按此计划执行",
+    "plan": "ops/plans/method_runtime_acceptance_plan_v1.md",
+    "scope": "ten_native_method_endpoints_with_quality_qualified_candidates",
+    "reuse_qualifying_evidence": true
+  },
+  "limits": {
+    "gpu_seconds": 86400,
+    "cpu_heavy_wall_seconds": 86400,
+    "concurrent_threads": 24,
+    "concurrent_memory_gib": 256,
+    "download_bytes": 53687091200,
+    "new_disk_bytes": 214748364800,
+    "attempts_per_method": 3,
+    "concurrent_gpu_jobs": 1
+  },
+  "methods": ["pepmlm", "saltnpeppr", "diffpepbuilder", "pepglad", "dflow", "pepmirror", "colabdesign", "dexdesign", "rfdiffusion_proteinmpnn", "bindcraft"],
+  "run_root": "benchmark_runs/method_acceptance_v1",
+  "asset_root": "/mnt/ssd4t/protein-design/data/method_acceptance_v1",
+  "stop_conditions": ["budget_exhausted", "three_method_attempts_spent", "access_or_license_unresolved", "native_algorithm_change_required", "scope_change_required"],
+  "prohibited_uses": ["scientific_method_ranking", "frozen_target_set_claim", "biological_validation_claim", "historical_attempt_overwrite", "git_commit_or_push"]
+}

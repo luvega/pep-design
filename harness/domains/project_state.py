@@ -5046,6 +5046,35 @@ def _evaluate_release_integrity(
     )
 
 
+def _evaluate_native_method_acceptance(root, gate, artifacts):
+    """The authorized phase replaces, without rewriting, historical connectivity."""
+    from scripts.evaluate_method_acceptance import evaluate, evidence_index
+    paths = _input_paths(root, gate, artifacts)
+    try:
+        report = evaluate(root)
+        index_valid = load_json(_artifact_path(root, artifacts['method_acceptance_execution_index_v1'])) == evidence_index(report)
+        compute_valid = all(report['resources'][key]['remaining_unreserved'] >= 0
+                            for key in ('gpu_seconds', 'cpu_heavy_wall_seconds'))
+        download = report['resources']['download_bytes']
+        download_valid = download['accounted'] <= download['limit']
+        disk = report['resources']['disk_bytes']
+        disk_valid = disk['used'] <= disk['limit']
+        attempts_valid = all(row['new_attempt_count'] <= 3 for row in report['methods'])
+        passed = report['all_methods_accepted'] and index_valid and compute_valid and download_valid and disk_valid and attempts_valid
+        return _result(gate, GateVerdict.PASS if passed else GateVerdict.FAIL,
+            f"{report['passed_count']}/10 native method endpoints meet runtime and provenance checks; candidate quality is separate, with no Benchmark or biological claim.",
+            paths, details=_details(passed_methods=report['passed_count'], required_methods=10,
+                compute_budget_valid=compute_valid, download_budget_valid=download_valid, disk_budget_valid=disk_valid,
+                compact_evidence_index_replayed=index_valid,
+                attempt_budget_valid=attempts_valid,
+                method_statuses=tuple((r['method_id'], r['status']) for r in report['methods']),
+                resource_ledger_sha256=report['resource_ledger_sha256']))
+    except (OSError, ValueError, KeyError, TypeError, ImportError) as exc:
+        return _result(gate, GateVerdict.FAIL,
+            'Native method evidence is missing or cannot be independently replayed.', paths,
+            details=_details(replay_error=f'{type(exc).__name__}: {exc}'))
+
+
 EVALUATORS = {
     "contract_integrity": _evaluate_contract,
     "artifact_registry_integrity": _evaluate_artifact_registry,
@@ -5054,6 +5083,7 @@ EVALUATORS = {
     "v033_baseline": _evaluate_v033,
     "v034_bounded_connectivity": _evaluate_v034_connectivity,
     "v035_bounded_connectivity": _evaluate_v035_connectivity,
+    "native_method_acceptance": _evaluate_native_method_acceptance,
     "target_controls": _evaluate_target_controls,
     "semantic_dflow_leakage": _evaluate_dflow_leakage,
     "semantic_rf_target_conditioning": _evaluate_rf_conditioning,

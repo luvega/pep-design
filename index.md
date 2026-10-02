@@ -1,5 +1,14 @@
 # 多肽设计方法 Benchmark 知识库
 
+> **当前阶段（2026-10-02）：10/10 方法已完成有边界的小规模原生运行验收。** 用户明确先跑通代码和环境，后续再大量比较；候选完整性质量仍为 9/10，D-Flow 质量失败保留，不追加运行。
+
+- [本轮方法验收报告](ops/acceptance/method_runtime_acceptance_v1.md)与[逐项检查 JSON](ops/acceptance/method_runtime_acceptance_v1.json)
+- [10 方法验收矩阵](benchmark/results/method_acceptance_matrix_v1.csv)与[执行证据索引](benchmark/results/method_acceptance_execution_index_v1.json)
+- [当前计划、已确认预算与停止条件](ops/plans/method_runtime_acceptance_plan_v1.md)
+- [只读复核命令与本机重放案例](README.md#只读检查)
+
+通过范围限于各方法声明的原生任务与执行证据，候选质量单列；本轮未完成公平 Benchmark、统一评分、方法排名、完整复现或生物学验证。历史 v0.35 PepGLAD 基础设施失败保留，后续 [fresh PepGLAD 独立验收](ops/acceptance/pepglad_method_acceptance_v1.md)已通过并在本轮复用。
+
 ## Homepage
 
 - [GitHub 项目主页与完整说明](README.md)
@@ -8,9 +17,10 @@
 - [Benchmark protocol](benchmark/protocols/benchmark_protocol_v0.md)
 - [Scoring protocol](benchmark/scoring/scoring_protocol_v0.md)
 
-主页按 T1 sequence binder、T2 structure-conditioned peptide binder 和 T3 miniprotein binder baseline 组织 10 个纳入方法，并明确 v0.34 fixture、v0.35 PepGLAD 基础设施失败、尚未评分和未冻结目标集的边界。
+主页按 T1 sequence binder、T2 structure-conditioned peptide binder 和 T3 miniprotein binder baseline 组织 10 个纳入方法，并区分本轮 10/10 运行验收与 9/10 候选质量、历史 v0.34 fixture、v0.35 PepGLAD 基础设施失败与尚未评分、未冻结目标集的边界。
 
 ## Current Status
+
 - Project version: 1.2.21
 - Manuscript outline layer: v1.0
 - Supplementary-source synthesis layer: v1.1
@@ -40,20 +50,23 @@
 - Wave A adapter/parser completion attempt layer: v0.33 project-local bounded blocker supplement
 - Seven-method bounded connectivity layer: v0.34 project-local generation/QC supplement; latest merge has 6 supported primary candidates, 12 candidate runtime provenance records, and 1 separate failure-only diagnostic record
 - PepGLAD mixed-chirality connectivity layer: v0.35 prospective policy plus one container-start infrastructure failure; no candidate bundle
+- SaLT&PepPr local inference archival layer: v0.36 existing per-residue probability observations; no readiness promotion
+- Native method acceptance phase: 2026-10-02 user scope amendment: 10/10 bounded runtime tasks passed; quality separately 9/10, D-Flow 3 attempts / 17 candidates / 0 qualified
+- Current phase plan: `ops/plans/method_runtime_acceptance_plan_v1.md`; v0.35 and early progression proposals remain historical
 - Repository checkpoint: v1.2.21
 - Evidence/release checkpoint build date: 2026-07-09（v0.35 工作层更新于 2026-07-14）
 - Time window: 2021-06-03 to 2026-06-03
 - Unique Zotero-derived records after dedupe: 432
 - First-wave included methods: 10
 - Project boundary: this folder is the working KB; Zotero/EndNote/PD-wiki remain source systems.
-- Acceptance contract: v1.0.0; `current.v035_bounded_connectivity` is a Critical `FAIL`, so `current_phase` cannot be signed off.
-- Full-project acceptance: not accepted; PepGLAD QC、target/control、scoring 和 empirical findings 仍未完成。
+- Acceptance contract: `current.native_method_acceptance` evaluates runtime completion under scope v2; quality is separate, and project signoff remains a separate step; `current.v035_bounded_connectivity` remains a historical gate.
+- Full-project acceptance: not accepted; D-Flow candidate quality、target/control、统一 scoring 和 empirical findings 仍未完成。
 
-## v0.35 当前状态
+## v0.35 历史状态
 
 v0.35 允许同一候选肽包含 L 和 D 残基，并将固定 baseline mismatch 记为 warning。唯一授权的 PepGLAD seed42 `attempt_001` 在容器启动前因 Docker API socket 权限不足退出：`exit_code=1`、`runtime_seconds=0.026`、parser/QC=`not_run`。容器未启动，`raw/` 中没有 candidate 或 runtime evidence，也没有发布 v0.35 connectivity bundle。
 
-这是一项基础设施启动失败，不是 PepGLAD 方法失败，不能用于判断 mixed L/D、连通性或方法表现。审计见 [`v035_pepglad_connectivity_audit.md`](ops/audits/v035_pepglad_connectivity_audit.md)。`attempt_001` 不得覆盖或自动重试；再次执行需要新的明确授权和更新后的 attempt 政策。
+这是一项基础设施启动失败，不是 PepGLAD 方法失败，不能用于判断 mixed L/D、连通性或方法表现。审计见 [`v035_pepglad_connectivity_audit.md`](ops/audits/v035_pepglad_connectivity_audit.md)。旧 `attempt_001` 不得覆盖或自动重试。后续独立授权的 fresh PepGLAD 已通过[方法验收](ops/acceptance/pepglad_method_acceptance_v1.md)，不改变旧记录；其额度也已耗尽，进一步执行仍需新授权。
 
 ## v0.34 历史结果边界
 
@@ -63,7 +76,7 @@ v0.35 允许同一候选肽包含 L 和 D 残基，并将固定 baseline mismatc
 
 PepGLAD seed42 `attempt_003` 进程退出码为 0，但 parser 返回 `pepglad_seed42_replay_mismatch`，merge 返回 `evidence_incomplete`。sequence summary 仍为 `AWHITLLIFTH`，但未晋升候选。OpenMM 前 B 链为 L6/D5，SHA-256 为 `b17784a92a782f3d84c077952d6bd8b999bcf943dc6fe5dd6b0938c3a47bf71b`；OpenMM 后为 L4/D7，SHA-256 为 `e8501460a0fa0d59420a253bb26412b661d8213f6d76eb5ed15d40cf6167abd6`，不同于固定 baseline `dc358b2e64c31c16a649627e1f75a71c77c558b62affa6c50b20d3ac25b3fa26`。`first_observed_chirality_failure_stage=pre_openmm_snapshot` 支持混合手性在本 attempt 的 OpenMM 前已可观察，但不证明模型根因，也不排除 OpenMM 的影响。
 
-RFdiffusion 记录的是未线程化 all-Gly backbone 与独立 ProteinMPNN FASTA handoff，当前没有 sequence-resolved structure。PepMLM 保留 `WWX`/非标准残基边界，D-Flow 的 3EQS fixture 保留已知训练重叠边界。当前没有 scoring、ranking、frozen target 或 wet-lab 证据。
+上述 v0.34 的 RFdiffusion 记录是未线程化 all-Gly backbone 与独立 ProteinMPNN FASTA handoff，不是 sequence-resolved structure；PepMLM 的 `WWX`/非标准残基记录保持不变。本轮 PepMLM 已新增符合长度与标准残基要求的原生候选，旧 `WWX` 不计为合格候选。D-Flow 的 3EQS fixture 继续保留已知训练重叠边界。当前没有统一 scoring、ranking、frozen target 或 wet-lab 证据。
 
 ## 对话签核
 
@@ -73,12 +86,23 @@ RFdiffusion 记录的是未线程化 all-Gly backbone 与独立 ProteinMPNN FAST
 
 Durable `local_committed_push_failed` 或 `verified` 只通过 `resume-push --card-id <card_id>` 恢复。已有 final OID 时复用且不重复 commits/signoffs；仅有 source OID 时在 source 的临时 clean checkout 中重验，再创建或复用缺失 signoff，并至多创建一个 signoff commit。若 index 已暂存 signoff，只接受与 card-derived manifest 的路径、mode、blob SHA-256 完全一致的状态；extra/different staged 内容一律拒绝。`verified` 在 remote 已为 final OID 时可协调实际成功但结果不明确的 push，仅推进 journal 而不重复 push。
 
-对话签核流程本身不授权 clone、install、download、GPU generation、scoring 或 ranking；v0.34 与 v0.35 执行使用了各自的明确授权。v0.35 没有 candidate bundle，Critical gate 尚未关闭，不能签核 `current_phase`。版本保持 `1.2.21`。
+对话签核流程本身不授权 clone、install、download、GPU generation、scoring 或 ranking；历史执行与本轮方法验收各有明确授权。本轮运行验收为 10/10；质量检查为 9/10。范围修订不授权新增执行、人工签核或发布。版本保持 `1.2.21`。
 
 ## Navigation
+
+- [当前协作规则：grilling 计划对齐，停用 superpowers 工作流约束](AGENTS.md)
+- [技能路线与决策状态](ops/audits/skill_selection.md)
+- [10 方法代码与环境运行验收计划（质量单列，比较延期）](ops/plans/method_runtime_acceptance_plan_v1.md)
 - [Project acceptance contract](harness/PROJECT_ACCEPTANCE.md)
 - [Current acceptance report](ops/acceptance/project_acceptance_report.md)
 - [Harness engineering plan v1.0](ops/plans/harness_engineering_plan_v1.0.md)
+- [项目推进计划 v1](ops/plans/project_progression_plan_v1.md)
+- [历史 PepGLAD 新执行提案](ops/plans/pepglad_next_execution_proposal_v1.md)
+- [历史下一阶段验收接口设计](ops/plans/next_phase_acceptance_design_v1.md)
+- [SaLT&PepPr 本地来源观察 v0.36](benchmark/method_sources/saltnpeppr_local_source_map_v0.36.csv)
+- [SaLT&PepPr 已有推理观察摘要 v0.36](benchmark/deployment/saltnpeppr_local_inference_evidence_v0.36.csv)
+- [SaLT&PepPr 归档审计 v0.36](ops/audits/saltnpeppr_local_inference_audit_v0.36.md)
+- [目标与对照审查工作表 v1](benchmark/input_sets/target_governance_worklist_v1.csv)
 - [Machine acceptance contract JSON](harness/contracts/project_acceptance_v1.json)
 - [Harness signoff 与对话审批规则](harness/signoffs/README.md)
 - [Raw source snapshots](sources/raw_snapshots/_index.md)
@@ -120,7 +144,7 @@ Durable `local_committed_push_failed` 或 `verified` 只通过 `resume-push --ca
 - [ARS review v0.6](ops/audits/academic_research_suite_review_v0.6.md)
 - [Updated plan v0.6](ops/plans/updated_plan_v0.6.md)
 - [Historical updated plan v0.9](ops/plans/updated_plan_v0.9.md)
-- [Current updated plan v0.35](ops/plans/updated_plan_v0.35.md)
+- [Historical updated plan v0.35](ops/plans/updated_plan_v0.35.md)
 - [Historical updated plan v0.34](ops/plans/updated_plan_v0.34.md)
 - [Historical updated plan v0.33](ops/plans/updated_plan_v0.33.md)
 - [Grant-style mock review v1.3](ops/audits/grant_style_mock_review_v1.3.md)
@@ -280,6 +304,8 @@ Durable `local_committed_push_failed` 或 `verified` 只通过 `resume-push --ca
 
 ## Next Phase
 
-`ops/plans/updated_plan_v0.35.md` 是当前计划。v0.34 历史合并仍支持 6 个 seed42 primary 和对应的 6 个 seed43 extensions；v0.35 没有新增 supported candidate。
+[当前计划](ops/plans/method_runtime_acceptance_plan_v1.md)已按用户确认实施至停止条件。本轮 9 种方法通过；D-Flow 的 3 次尝试产生 17 个候选，适用质量检查均未通过。后续需要通过 `grilling` 决定是否增加范围或预算；在新的明确决定前，不追加耗尽额度的方法尝试，也不进入统一评分或排名。
 
-下一步需要用户决定：授权一个新的、不可覆盖且具备 Docker API 权限的执行阶段，并先更新 attempt 政策；或接受本次基础设施失败并保持 Critical gate 打开。当前不得重试 `attempt_001`、创建 `attempt_002`、运行 PepGLAD seed43 或进入评分。即使后续获得第 7 个连通性候选，仍须先完成 target/control、license、leakage 和 provenance 审批。
+SaLT&PepPr 已在用户确认的非商业方法评测用途内，完成作者 Notebook 的原生 PPI 界面预测、guide-peptide 提取与优先化。BindCraft 的 2 条 97 aa 候选通过实际原生过滤、来源绑定及适用结构 QC。DexDesign 的通过范围仅为单个 ALA5 IAS 原生搜索及 1 个候选，其余 10 组未完成。详细范围与原始证据见[方法报告](ops/acceptance/method_runtime_acceptance_v1.md)，旧归档不覆盖。
+
+[目标与对照工作表](benchmark/input_sets/target_governance_worklist_v1.csv)仍为 review-only；公平 Benchmark 仍需完成 target/control、license、leakage 和 provenance 的相应门禁。`benchmark-paper-template` 与 superpowers 强制工作流继续停用。

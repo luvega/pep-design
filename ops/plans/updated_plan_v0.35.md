@@ -70,3 +70,23 @@ runtime evidence 或 v0.35 connectivity bundle，mixed L/D policy 尚未获得�
 
 不得覆盖或自动重试 `attempt_001`。新的执行需要用户再次明确授权，并先更新
 执行与 attempt 政策；本计划不授权 seed43、scoring 或 ranking。
+
+## 2026-10-02 规划补充（执行前记录）
+
+用户已授权文档、已有证据归档和治理更新，未授权新的 PepGLAD 执行。
+当前计划及原 `attempt_001` 的失败事实保持不变。
+
+- [项目推进计划](project_progression_plan_v1.md)：证据同步、目标/对照审查与后续阶段条件。
+- [PepGLAD 新执行提案](pepglad_next_execution_proposal_v1.md)：新 job/root、单次限额、前检先于 attempt 创建及授权身份迁移清单；状态为 `proposal_not_authorized`。
+- [下一阶段验收接口设计](next_phase_acceptance_design_v1.md)：设计补充，尚未实现或启用。
+- [SaLT&PepPr 已有推理归档](../audits/saltnpeppr_local_inference_audit_v0.36.md)：local interface inference observation，不补填 PepGLAD candidate bundle 或评分证据。
+
+## 2026-10-02 最新决策与规则
+
+上述“未授权”是独立新执行之前的历史状态。后续用户已授权并完成 PepGLAD fresh
+单次方法验收，见 [方法级验收报告](../acceptance/pepglad_method_acceptance_v1.md)；
+原 v0.35 失败与合同 gate 不变，不重跑已耗尽额度的 attempt。
+
+用户现已明确停用 superpowers 系列工作流约束，计划与下一步工作改用 `grilling`。
+旧计划中的强制技能顺序不再适用；当前正在分轮确认下一阶段成果和实施边界，
+确认共同理解后再落实新计划。路线及决策状态见 [技能路线记录](../audits/skill_selection.md)。

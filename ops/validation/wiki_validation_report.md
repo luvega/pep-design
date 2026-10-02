@@ -124,8 +124,8 @@
 - method_cards: 12
 - literature_cards: 120
 - bibtex_entries: 432
-- markdown_links_checked: 291
-- tracked_files_checked: 567
+- markdown_links_checked: 343
+- tracked_files_checked: 613
 
 ## Errors
 - None
@@ -261,8 +261,8 @@
     "method_cards": 12,
     "literature_cards": 120,
     "bibtex_entries": 432,
-    "markdown_links_checked": 291,
-    "tracked_files_checked": 567
+    "markdown_links_checked": 343,
+    "tracked_files_checked": 613
   },
   "errors": [],
   "warnings": []

@@ -1,0 +1,115 @@
+{
+  "schema_version": "pepglad_method_acceptance_v1",
+  "scope": "single_target_single_seed_bounded_connectivity",
+  "status": "accepted_bounded_connectivity",
+  "qc_status": "pass_with_warning",
+  "generated_at": "2026-10-02T09:12:17.769749+00:00",
+  "job_id": "pepglad_fresh_v1_3eqs_seed42",
+  "execution": {
+    "attempt_dir": "/mnt/ssd4t/Pep_design/benchmark_runs/pepglad_fresh_v1/pepglad/pepglad_fresh_v1_3eqs_seed42/attempt_001",
+    "created_at": "2026-10-02T09:05:58+00:00",
+    "design_id": "pepglad_fresh_v1_3eqs_seed42_candidate_1",
+    "exit_code": 0,
+    "job_id": "pepglad_fresh_v1_3eqs_seed42",
+    "method": "PepGLAD",
+    "overall_qc_status": "pass_with_warning",
+    "parser_status": "parsed",
+    "runtime_seconds": "25.119",
+    "status": "passed",
+    "status_reason": "bounded_connectivity_candidate_qc_passed"
+  },
+  "environment": {
+    "docker_server": "29.5.2",
+    "environment": {
+      "biopython": "1.80",
+      "cuda": "11.7",
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "numpy": "1.26.4",
+      "openmm": "8.0",
+      "ray": "2.51.2",
+      "torch": "1.13.1+cu117",
+      "torch_scatter": "2.1.1+pt113cu117"
+    },
+    "image_id": "sha256:4e7936534ca8ec60d9d19ef267d6fb2444e8889973ed17be7cb1adba8d421af2",
+    "model_sha256": "5f05dc0f678ed7a75c2ce8fc19f63cc145bd4568f75cbfc7f15aeacdddbd3cfe",
+    "source_commit": "bad015ca50c312a89482adb5220c3d907f13df5c",
+    "target_sha256": "7086cf2bc4723ccbb4be5ff7f86a50d9db59bc307f4fbb0395a3c6ce3569827d"
+  },
+  "checks": {
+    "independent_schema": true,
+    "independent_raw_replay": true,
+    "historical_bindings": true,
+    "immutable_image_launch": true,
+    "attempt_policy_binding": true
+  },
+  "candidate": {
+    "binder_chain": "B",
+    "chirality": "mixed",
+    "design_id": "pepglad_fresh_v1_3eqs_seed42_candidate_1",
+    "file_sha256": "f35bcbb3fad5ce89a87e9d8e41bdc9142b1794bff3c776f75418ce21625cc94a",
+    "parse_status": "parsed",
+    "sequence": "AWHITLLIFTH",
+    "structure_path": "raw/pepglad_candidate.pdb"
+  },
+  "qc": {
+    "baseline_replay_status": "warn",
+    "chirality_d_count": 6,
+    "chirality_evaluable": 11,
+    "chirality_l_count": 5,
+    "chirality_status": "warn",
+    "chirality_unknown_count": 0,
+    "observed_chirality_class": "mixed",
+    "overall_qc_status": "pass_with_warning"
+  },
+  "pre_openmm_chirality": {
+    "chain": "B",
+    "d_count": 5,
+    "evaluable": 11,
+    "gly_count": 0,
+    "l_count": 6,
+    "status": "pass",
+    "unknown_count": 0
+  },
+  "post_openmm_chirality": {
+    "chain": "B",
+    "d_count": 6,
+    "evaluable": 11,
+    "gly_count": 0,
+    "l_count": 5,
+    "status": "pass",
+    "unknown_count": 0
+  },
+  "evidence_files_sha256": {
+    "benchmark/results/pepglad_fresh_connectivity_v1.json": "5f75e2b8611a1d6413745a6091fc3ca1044c600c9a8a6cd32d127737b6b5ad29",
+    "benchmark/deployment/pepglad_fresh_attempt_policy_v1.json": "35cfee09b066d8aa465a75f66cc02142e602d33c0f0a9c1d7589cdd77a82cca5",
+    "benchmark/input_sets/pepglad_fresh_job_manifest_v1.csv": "ff73a4331e8407cab1f84cf0ed87ee8a72006991dc0c1a2a85f73909c86f2e90",
+    "benchmark/deployment/pepglad_fresh_execution_matrix_v1.csv": "6751a806f37ecf92b8b92e1c5af2ab7a2fe131b21571df886c36ff7d0617ab38",
+    "host_preflight.json": "790633378084c80485c3395f11644f3699eecf3afdf1a5e5eb5f58df2e779871",
+    "command.sh": "0024832597a8cef2350cade81f0d0214e8eb88e98ff0ffef50c9f0e5c993df01"
+  },
+  "verification_code_sha256": {
+    "scripts/run_pepglad_fresh_acceptance.py": "5a51c746534c9df53f923c91ef16c02977e716fb82e7bde1dd78194fcffbbb72",
+    "scripts/parse_v035_pepglad_connectivity.py": "5dfb3dac0abd31ddac7a48a0d2f7a429199138b50f682358d0d7acbafbc41e32",
+    "scripts/v035_adapters/pepglad.py": "ab89a97adbe9051dc8ee56b22969d7d3f4e2031f58ba1c967070c1b284bc1371",
+    "scripts/validate_benchmark_kb.py": "58991e0c637ef22004e3f10f5cfca7607338d7170a74dcde1b5f18d5bcc4f8db"
+  },
+  "regression": {
+    "related_tests_passed": 632,
+    "related_runtime_sec": 226.73,
+    "focused_tests_passed": 17,
+    "in_memory_negative_checks_passed": 6
+  },
+  "limitations": [
+    "mixed_chirality_L5_D6",
+    "historical_baseline_byte_mismatch",
+    "single_target_single_seed_only",
+    "not_chemical_or_biological_validity",
+    "not_full_reproducibility",
+    "not_smoke_test_ready_or_benchmark_ready",
+    "not_project_signoff"
+  ],
+  "current_phase_integration": "deferred_by_user; historical current.v035_bounded_connectivity gate is not replaced",
+  "further_generation_authorized": false,
+  "scoring_authorized": false,
+  "ranking_authorized": false
+}

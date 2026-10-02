@@ -26,6 +26,7 @@ ENGINE_EVALUATOR_IDS = frozenset(
         "v033_baseline",
         "v034_bounded_connectivity",
         "v035_bounded_connectivity",
+        "native_method_acceptance",
     }
 )
 
@@ -55,6 +56,7 @@ ENGINE_GATE_IDS = frozenset(
         "current.v033_baseline_truth",
         "current.v034_bounded_connectivity",
         "current.v035_bounded_connectivity",
+        "current.native_method_acceptance",
         "current.target_control_boundary",
         "current.dflow_leakage_recorded",
         "current.rf_conditioning_blocker_recorded",
@@ -79,6 +81,7 @@ ENGINE_GATE_SPECS = {
     "current.v033_baseline_truth": ("execution_provenance", "Critical", "v033_baseline", "engineering_reviewer", False),
     "current.v034_bounded_connectivity": ("execution_provenance", "Critical", "v034_bounded_connectivity", "engineering_reviewer", False),
     "current.v035_bounded_connectivity": ("execution_provenance", "Critical", "v035_bounded_connectivity", "engineering_reviewer", False),
+    "current.native_method_acceptance": ("execution_provenance", "Critical", "native_method_acceptance", "engineering_reviewer", False),
     "current.target_control_boundary": ("target_control_governance", "Critical", "target_controls", "scientific_reviewer", False),
     "current.dflow_leakage_recorded": ("target_control_governance", "Critical", "semantic_dflow_leakage", "scientific_reviewer", False),
     "current.rf_conditioning_blocker_recorded": ("method_dataset_readiness", "Major", "semantic_rf_target_conditioning", "engineering_reviewer", False),
@@ -105,7 +108,7 @@ _GOVERNANCE_GATES = frozenset(
 _CURRENT_GATES = _GOVERNANCE_GATES | frozenset(
     {
         "current.v033_baseline_truth",
-        "current.v035_bounded_connectivity",
+        "current.native_method_acceptance",
         "current.target_control_boundary",
         "current.dflow_leakage_recorded",
         "current.scoring_guard",
